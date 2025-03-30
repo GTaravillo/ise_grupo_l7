@@ -1,0 +1,19 @@
+#ifndef _RC522_H
+#define _RC522_H
+
+#define RC522_CMD_IDLE         0x00
+#define RC522_CMD_AUTHENT      0x0E
+#define RC522_CMD_RECEIVE      0x08
+#define RC522_CMD_TRANSMIT     0x04
+#define RC522_CMD_TRANSCEIVE   0x0C
+#define RC522_CMD_SOFT_RESET   0x0F
+
+// RC522 Register Addresses
+#define RC522_REG_COMMAND      0x01
+#define RC522_REG_FIFO_DATA    0x09
+#define RC522_REG_FIFO_LEVEL   0x0A
+
+#define RC522_CS_Pin GPIO_PIN_13
+#define RC522_CS_GPIO_Port GPIOA
+
+#endif
