@@ -1,0 +1,26 @@
+--cpu=Cortex-M4.fp.sp
+".\objects\main.o"
+".\objects\stm32f4xx_it.o"
+".\objects\vl6180x_i2c.o"
+".\objects\vl6180x_api.o"
+".\objects\led_32f469idiscovery.o"
+"C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\RTOS2\RTX\Library\ARM\RTX_CM4F.lib"
+".\objects\rtx_lib.o"
+".\objects\rtx_config.o"
+".\objects\stm32f4xx_hal.o"
+".\objects\stm32f4xx_hal_cortex.o"
+".\objects\stm32f4xx_hal_dma.o"
+".\objects\stm32f4xx_hal_dma_ex.o"
+".\objects\stm32f4xx_hal_gpio.o"
+".\objects\stm32f4xx_hal_i2c.o"
+".\objects\stm32f4xx_hal_i2c_ex.o"
+".\objects\stm32f4xx_hal_pwr.o"
+".\objects\stm32f4xx_hal_pwr_ex.o"
+".\objects\stm32f4xx_hal_rcc.o"
+".\objects\stm32f4xx_hal_rcc_ex.o"
+".\objects\startup_stm32f429xx.o"
+".\objects\system_stm32f4xx.o"
+--strict --scatter ".\Objects\P2-DistTest.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\P2-DistTest.map" -o .\Objects\P2-DistTest.axf

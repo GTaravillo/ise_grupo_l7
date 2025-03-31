@@ -1,0 +1,1507 @@
+Component: ARM Compiler 6.16 Tool: armlink [5dfeaa00]
+
+==============================================================================
+
+Section Cross References
+
+    main.o(.text.VL6180x_PollDelay) refers to rtx_delay.o(.text.osDelay) for osDelay
+    main.o(.ARM.exidx.text.VL6180x_PollDelay) refers to main.o(.text.VL6180x_PollDelay) for [Anonymous Symbol]
+    main.o(.text.HAL_GetTick) refers to rtx_kernel.o(.text.osKernelGetState) for osKernelGetState
+    main.o(.text.HAL_GetTick) refers to rtx_kernel.o(.text.osKernelGetTickCount) for osKernelGetTickCount
+    main.o(.text.HAL_GetTick) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    main.o(.text.HAL_GetTick) refers to main.o(.bss.HAL_GetTick.ticks) for HAL_GetTick.ticks
+    main.o(.ARM.exidx.text.HAL_GetTick) refers to main.o(.text.HAL_GetTick) for [Anonymous Symbol]
+    main.o(.text.main) refers to stm32f4xx_hal.o(.text.HAL_Init) for HAL_Init
+    main.o(.text.main) refers to main.o(.text.SystemClock_Config) for SystemClock_Config
+    main.o(.text.main) refers to system_stm32f4xx.o(.text.SystemCoreClockUpdate) for SystemCoreClockUpdate
+    main.o(.text.main) refers to rtx_kernel.o(.text.osKernelInitialize) for osKernelInitialize
+    main.o(.text.main) refers to rtx_kernel.o(.text.osKernelStart) for osKernelStart
+    main.o(.ARM.exidx.text.main) refers to main.o(.text.main) for [Anonymous Symbol]
+    main.o(.text.SystemClock_Config) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_OscConfig) for HAL_RCC_OscConfig
+    main.o(.text.SystemClock_Config) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) for HAL_RCC_ClockConfig
+    main.o(.text.SystemClock_Config) refers to stm32f4xx_hal.o(.text.HAL_GetREVID) for HAL_GetREVID
+    main.o(.ARM.exidx.text.SystemClock_Config) refers to main.o(.text.SystemClock_Config) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.NMI_Handler) refers to stm32f4xx_it.o(.text.NMI_Handler) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.HardFault_Handler) refers to stm32f4xx_it.o(.text.HardFault_Handler) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.MemManage_Handler) refers to stm32f4xx_it.o(.text.MemManage_Handler) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.BusFault_Handler) refers to stm32f4xx_it.o(.text.BusFault_Handler) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.UsageFault_Handler) refers to stm32f4xx_it.o(.text.UsageFault_Handler) for [Anonymous Symbol]
+    stm32f4xx_it.o(.ARM.exidx.text.DebugMon_Handler) refers to stm32f4xx_it.o(.text.DebugMon_Handler) for [Anonymous Symbol]
+    vl6180x_i2c.o(.text.VL6180x_PollDelay) refers to rtx_delay.o(.text.osDelay) for osDelay
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_PollDelay) refers to vl6180x_i2c.o(.text.VL6180x_PollDelay) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_WrByte) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_WrWord) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_WrDWord) refers to vl6180x_i2c.o(.text.VL6180x_WrDWord) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_UpdateByte) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_RdByte) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_RdWord) refers to vl6180x_i2c.o(.text.VL6180x_RdWord) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_RdDWord) refers to vl6180x_i2c.o(.text.VL6180x_RdDWord) for [Anonymous Symbol]
+    vl6180x_i2c.o(.ARM.exidx.text.VL6180x_RdMulti) refers to vl6180x_i2c.o(.text.VL6180x_RdMulti) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_PollDelay) refers to rtx_delay.o(.text.osDelay) for osDelay
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_PollDelay) refers to vl6180x_api.o(.text.VL6180x_PollDelay) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetStatusErrString) refers to vl6180x_api.o(.data.VL6180x_RangeStatusErrString) for VL6180x_RangeStatusErrString
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetStatusErrString) refers to vl6180x_api.o(.text.VL6180x_RangeGetStatusErrString) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_WaitDeviceBooted) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_WaitDeviceBooted) refers to vl6180x_api.o(.text.VL6180x_WaitDeviceBooted) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_api.o(.text._DMax_OneTimeInit) for _DMax_OneTimeInit
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdDWord) for VL6180x_RdDWord
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdWord) for VL6180x_RdWord
+    vl6180x_api.o(.text.VL6180x_InitData) refers to vl6180x_api.o(.text._DMax_InitData) for _DMax_InitData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_InitData) refers to vl6180x_api.o(.text.VL6180x_InitData) for [Anonymous Symbol]
+    vl6180x_api.o(.text._DMax_OneTimeInit) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text._DMax_OneTimeInit) refers to vl6180x_api.o(.text._DMax_OneTimeInit) for [Anonymous Symbol]
+    vl6180x_api.o(.text._DMax_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text._DMax_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdDWord) for VL6180x_RdDWord
+    vl6180x_api.o(.text._DMax_InitData) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._DMax_InitData) refers to vl6180x_i2c.o(.text.VL6180x_RdWord) for VL6180x_RdWord
+    vl6180x_api.o(.text._DMax_InitData) refers to vl6180x_api.o(.text._DMax_RawValueAtRateKCps) for _DMax_RawValueAtRateKCps
+    vl6180x_api.o(.ARM.exidx.text._DMax_InitData) refers to vl6180x_api.o(.text._DMax_InitData) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetOffsetCalibrationData) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetOffsetCalibrationData) refers to vl6180x_api.o(.text.VL6180x_GetOffsetCalibrationData) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetOffsetCalibrationData) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_SetOffsetCalibrationData) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetOffsetCalibrationData) refers to vl6180x_api.o(.text.VL6180x_SetOffsetCalibrationData) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetXTalkCompensationRate) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for VL6180x_WrWord
+    vl6180x_api.o(.text.VL6180x_SetXTalkCompensationRate) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_SetXTalkCompensationRate) refers to vl6180x_api.o(.text._DMax_InitData) for _DMax_InitData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetXTalkCompensationRate) refers to vl6180x_api.o(.text.VL6180x_SetXTalkCompensationRate) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetI2CAddress) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetI2CAddress) refers to vl6180x_api.o(.text.VL6180x_SetI2CAddress) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetUpperLimit) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_GetUpperLimit) refers to vl6180x_api.o(.rodata.UpperLimitLookUP) for UpperLimitLookUP
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetUpperLimit) refers to vl6180x_api.o(.text.VL6180x_GetUpperLimit) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_StaticInit) refers to vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) for VL6180x_UpscaleStaticInit
+    vl6180x_api.o(.text.VL6180x_StaticInit) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text.VL6180x_StaticInit) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_StaticInit) refers to vl6180x_api.o(.text.VL6180x_AlsSetAnalogueGain) for VL6180x_AlsSetAnalogueGain
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_StaticInit) refers to vl6180x_api.o(.text.VL6180x_StaticInit) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) refers to vl6180x_api.o(.text.VL6180x_UpscaleRegInit) for VL6180x_UpscaleRegInit
+    vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) refers to vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) for VL6180x_UpscaleSetScaling
+    vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_UpscaleStaticInit) refers to vl6180x_api.o(.text.VL6180x_UpscaleStaticInit) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsSetAnalogueGain) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text.VL6180x_AlsSetAnalogueGain) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsSetAnalogueGain) refers to vl6180x_api.o(.text.VL6180x_AlsSetAnalogueGain) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetGroupParamHold) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetGroupParamHold) refers to vl6180x_api.o(.text.VL6180x_SetGroupParamHold) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_StaticInit) for VL6180x_StaticInit
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_RangeConfigInterrupt) for VL6180x_RangeConfigInterrupt
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_RangeSetRawThresholds) for VL6180x_RangeSetRawThresholds
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_AlsSetIntegrationPeriod) for VL6180x_AlsSetIntegrationPeriod
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_AlsSetInterMeasurementPeriod) for VL6180x_AlsSetInterMeasurementPeriod
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_AlsSetAnalogueGain) for VL6180x_AlsSetAnalogueGain
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_AlsSetThresholds) for VL6180x_AlsSetThresholds
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_AlsConfigInterrupt) for VL6180x_AlsConfigInterrupt
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text._filter_Init) for _filter_Init
+    vl6180x_api.o(.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_ClearInterrupt) for VL6180x_ClearInterrupt
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_Prepare) refers to vl6180x_api.o(.text.VL6180x_Prepare) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeConfigInterrupt) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeConfigInterrupt) refers to vl6180x_api.o(.text.VL6180x_RangeConfigInterrupt) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetRawThresholds) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetRawThresholds) refers to vl6180x_api.o(.text.VL6180x_RangeSetRawThresholds) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsSetIntegrationPeriod) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for VL6180x_WrWord
+    vl6180x_api.o(.text.VL6180x_AlsSetIntegrationPeriod) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsSetIntegrationPeriod) refers to vl6180x_api.o(.text.VL6180x_AlsSetIntegrationPeriod) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsSetInterMeasurementPeriod) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsSetInterMeasurementPeriod) refers to vl6180x_api.o(.text.VL6180x_AlsSetInterMeasurementPeriod) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsSetThresholds) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsSetThresholds) refers to vl6180x_api.o(.text.VL6180x_AlsSetThresholds) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsConfigInterrupt) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsConfigInterrupt) refers to vl6180x_api.o(.text.VL6180x_AlsConfigInterrupt) for [Anonymous Symbol]
+    vl6180x_api.o(.text._filter_Init) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._filter_Init) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
+    vl6180x_api.o(.ARM.exidx.text._filter_Init) refers to vl6180x_api.o(.text._filter_Init) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_ClearInterrupt) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_ClearInterrupt) refers to vl6180x_api.o(.text.VL6180x_ClearInterrupt) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsGetLux) refers to vl6180x_i2c.o(.text.VL6180x_RdWord) for VL6180x_RdWord
+    vl6180x_api.o(.text.VL6180x_AlsGetLux) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsGetLux) refers to vl6180x_api.o(.text.VL6180x_AlsGetLux) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsGetLux) for VL6180x_AlsGetLux
+    vl6180x_api.o(.text.VL6180x_AlsGetMeasurement) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsGetMeasurement) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsSetSystemMode) for VL6180x_AlsSetSystemMode
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsGetInterruptStatus) for VL6180x_AlsGetInterruptStatus
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to main.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_i2c.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsGetMeasurement) for VL6180x_AlsGetMeasurement
+    vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_ClearInterrupt) for VL6180x_ClearInterrupt
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsPollMeasurement) refers to vl6180x_api.o(.text.VL6180x_AlsPollMeasurement) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsSetSystemMode) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsSetSystemMode) refers to vl6180x_api.o(.text.VL6180x_AlsSetSystemMode) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsGetInterruptStatus) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsGetInterruptStatus) refers to vl6180x_api.o(.text.VL6180x_AlsGetInterruptStatus) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_AlsWaitDeviceReady) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_AlsWaitDeviceReady) refers to vl6180x_api.o(.text.VL6180x_AlsWaitDeviceReady) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangeSetSystemMode) for VL6180x_RangeSetSystemMode
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangeGetInterruptStatus) for VL6180x_RangeGetInterruptStatus
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to main.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_i2c.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_PollDelay) for VL6180x_PollDelay
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) for VL6180x_RangeGetMeasurement
+    vl6180x_api.o(.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_ClearInterrupt) for VL6180x_ClearInterrupt
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangePollMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangePollMeasurement) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetSystemMode) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetSystemMode) refers to vl6180x_api.o(.text.VL6180x_RangeSetSystemMode) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetInterruptStatus) refers to vl6180x_api.o(.text.VL6180x_GetCachedByte) for VL6180x_GetCachedByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetInterruptStatus) refers to vl6180x_api.o(.text.VL6180x_RangeGetInterruptStatus) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text._CachedRegs_Fetch) for _CachedRegs_Fetch
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangeGetResult) for VL6180x_RangeGetResult
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_GetCachedWord) for VL6180x_GetCachedWord
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_GetCachedByte) for VL6180x_GetCachedByte
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text._GetRateResult) for _GetRateResult
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text._filter_GetResult) for _filter_GetResult
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text._DMax_Compute) for _DMax_Compute
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text._CachedRegs_Flush) for _CachedRegs_Flush
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetMeasurement) refers to vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetCachedDWord) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_GetCachedDWord) refers to vl6180x_i2c.o(.text.VL6180x_RdDWord) for VL6180x_RdDWord
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetCachedDWord) refers to vl6180x_api.o(.text.VL6180x_GetCachedDWord) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetCachedWord) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_GetCachedWord) refers to vl6180x_i2c.o(.text.VL6180x_RdWord) for VL6180x_RdWord
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetCachedWord) refers to vl6180x_api.o(.text.VL6180x_GetCachedWord) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetCachedByte) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_GetCachedByte) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetCachedByte) refers to vl6180x_api.o(.text.VL6180x_GetCachedByte) for [Anonymous Symbol]
+    vl6180x_api.o(.text._CachedRegs_Fetch) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._CachedRegs_Fetch) refers to vl6180x_i2c.o(.text.VL6180x_RdMulti) for VL6180x_RdMulti
+    vl6180x_api.o(.ARM.exidx.text._CachedRegs_Fetch) refers to vl6180x_api.o(.text._CachedRegs_Fetch) for [Anonymous Symbol]
+    vl6180x_api.o(.text._CachedRegs_Flush) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text._CachedRegs_Flush) refers to vl6180x_api.o(.text._CachedRegs_Flush) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetResult) refers to vl6180x_api.o(.text.VL6180x_GetCachedByte) for VL6180x_GetCachedByte
+    vl6180x_api.o(.text.VL6180x_RangeGetResult) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetResult) refers to vl6180x_api.o(.text.VL6180x_RangeGetResult) for [Anonymous Symbol]
+    vl6180x_api.o(.text._GetRateResult) refers to vl6180x_api.o(.text.VL6180x_GetCachedDWord) for VL6180x_GetCachedDWord
+    vl6180x_api.o(.ARM.exidx.text._GetRateResult) refers to vl6180x_api.o(.text._GetRateResult) for [Anonymous Symbol]
+    vl6180x_api.o(.text._filter_GetResult) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._filter_GetResult) refers to vl6180x_api.o(.text.VL6180x_GetCachedByte) for VL6180x_GetCachedByte
+    vl6180x_api.o(.text._filter_GetResult) refers to vl6180x_api.o(.text._filter_Start) for _filter_Start
+    vl6180x_api.o(.ARM.exidx.text._filter_GetResult) refers to vl6180x_api.o(.text._filter_GetResult) for [Anonymous Symbol]
+    vl6180x_api.o(.text._DMax_Compute) refers to vl6180x_api.o(.text._DMax_RawValueAtRateKCps) for _DMax_RawValueAtRateKCps
+    vl6180x_api.o(.text._DMax_Compute) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._DMax_Compute) refers to vl6180x_api.o(.rodata.UpperLimitLookUP) for UpperLimitLookUP
+    vl6180x_api.o(.ARM.exidx.text._DMax_Compute) refers to vl6180x_api.o(.text._DMax_Compute) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurementIfReady) refers to vl6180x_api.o(.text.VL6180x_RangeGetInterruptStatus) for VL6180x_RangeGetInterruptStatus
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurementIfReady) refers to vl6180x_api.o(.text.VL6180x_RangeGetMeasurement) for VL6180x_RangeGetMeasurement
+    vl6180x_api.o(.text.VL6180x_RangeGetMeasurementIfReady) refers to vl6180x_api.o(.text.VL6180x_ClearInterrupt) for VL6180x_ClearInterrupt
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetMeasurementIfReady) refers to vl6180x_api.o(.text.VL6180x_RangeGetMeasurementIfReady) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_FilterSetState) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_FilterSetState) refers to vl6180x_api.o(.text.VL6180x_FilterSetState) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_FilterGetState) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_FilterGetState) refers to vl6180x_api.o(.text.VL6180x_FilterGetState) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetThresholds) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeSetThresholds) refers to vl6180x_api.o(.text.VL6180x_SetGroupParamHold) for VL6180x_SetGroupParamHold
+    vl6180x_api.o(.text.VL6180x_RangeSetThresholds) refers to vl6180x_api.o(.text.VL6180x_RangeSetRawThresholds) for VL6180x_RangeSetRawThresholds
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetThresholds) refers to vl6180x_api.o(.text.VL6180x_RangeSetThresholds) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetThresholds) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeGetThresholds) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetThresholds) refers to vl6180x_api.o(.text.VL6180x_RangeGetThresholds) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_GetInterruptStatus) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_GetInterruptStatus) refers to vl6180x_api.o(.text.VL6180x_GetInterruptStatus) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_UpscaleRegInit) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text.VL6180x_UpscaleRegInit) refers to vl6180x_api.o(.text._UpscaleInitPatch0) for _UpscaleInitPatch0
+    vl6180x_api.o(.text.VL6180x_UpscaleRegInit) refers to vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) for VL6180x_RangeSetMaxConvergenceTime
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_UpscaleRegInit) refers to vl6180x_api.o(.text.VL6180x_UpscaleRegInit) for [Anonymous Symbol]
+    vl6180x_api.o(.text._UpscaleInitPatch0) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._UpscaleInitPatch0) refers to vl6180x_i2c.o(.text.VL6180x_WrDWord) for VL6180x_WrDWord
+    vl6180x_api.o(.ARM.exidx.text._UpscaleInitPatch0) refers to vl6180x_api.o(.text._UpscaleInitPatch0) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) refers to vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) for VL6180x_RangeSetEarlyConvergenceEestimateThreshold
+    vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) refers to vl6180x_api.o(.text._DMax_InitData) for _DMax_InitData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetMaxConvergenceTime) refers to vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) refers to vl6180x_api.o(.rodata.ScalerLookUP) for ScalerLookUP
+    vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for VL6180x_WrWord
+    vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) refers to vl6180x_api.o(.text.VL6180x_RangeSetEceState) for VL6180x_RangeSetEceState
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_UpscaleSetScaling) refers to vl6180x_api.o(.text.VL6180x_UpscaleSetScaling) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetEceState) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetEceState) refers to vl6180x_api.o(.text.VL6180x_RangeSetEceState) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_UpscaleGetScaling) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_UpscaleGetScaling) refers to vl6180x_api.o(.text.VL6180x_UpscaleGetScaling) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetGPIOxPolarity) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetGPIOxPolarity) refers to vl6180x_api.o(.text.VL6180x_SetGPIOxPolarity) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetGPIOxFunctionality) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetGPIOxFunctionality) refers to vl6180x_api.o(.text.VL6180x_SetGPIOxFunctionality) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetupGPIOx) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetupGPIOx) refers to vl6180x_api.o(.text.VL6180x_SetupGPIOx) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_DisableGPIOxOut) refers to vl6180x_api.o(.text.VL6180x_SetGPIOxFunctionality) for VL6180x_SetGPIOxFunctionality
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_DisableGPIOxOut) refers to vl6180x_api.o(.text.VL6180x_DisableGPIOxOut) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_SetupGPIO1) refers to vl6180x_api.o(.text.VL6180x_SetupGPIOx) for VL6180x_SetupGPIOx
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SetupGPIO1) refers to vl6180x_api.o(.text.VL6180x_SetupGPIO1) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetEceFactor) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeSetEceFactor) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text.VL6180x_RangeSetEceFactor) refers to vl6180x_api.o(.text.VL6180x_RangeSetMaxConvergenceTime) for VL6180x_RangeSetMaxConvergenceTime
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetEceFactor) refers to vl6180x_api.o(.text.VL6180x_RangeSetEceFactor) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_api.o(.text._GetAveTotalTime) for _GetAveTotalTime
+    vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_i2c.o(.text.VL6180x_RdDWord) for VL6180x_RdDWord
+    vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for VL6180x_WrWord
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) refers to vl6180x_api.o(.text.VL6180x_RangeSetEarlyConvergenceEestimateThreshold) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeSetInterMeasPeriod) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeSetInterMeasPeriod) refers to vl6180x_api.o(.text.VL6180x_RangeSetInterMeasPeriod) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeGetDeviceReady) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeGetDeviceReady) refers to vl6180x_api.o(.text.VL6180x_RangeGetDeviceReady) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeWaitDeviceReady) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeWaitDeviceReady) refers to vl6180x_api.o(.text.VL6180x_RangeWaitDeviceReady) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeStartContinuousMode) refers to vl6180x_api.o(.text.VL6180x_RangeSetSystemMode) for VL6180x_RangeSetSystemMode
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeStartContinuousMode) refers to vl6180x_api.o(.text.VL6180x_RangeStartContinuousMode) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeStartSingleShot) refers to vl6180x_api.o(.text.VL6180x_RangeSetSystemMode) for VL6180x_RangeSetSystemMode
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeStartSingleShot) refers to vl6180x_api.o(.text.VL6180x_RangeStartSingleShot) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeIgnoreSetEnable) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeIgnoreSetEnable) refers to vl6180x_api.o(.text._RangeIgnore_UpdateDevice) for _RangeIgnore_UpdateDevice
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeIgnoreSetEnable) refers to vl6180x_api.o(.text.VL6180x_RangeIgnoreSetEnable) for [Anonymous Symbol]
+    vl6180x_api.o(.text._RangeIgnore_UpdateDevice) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._RangeIgnore_UpdateDevice) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text._RangeIgnore_UpdateDevice) refers to vl6180x_i2c.o(.text.VL6180x_UpdateByte) for VL6180x_UpdateByte
+    vl6180x_api.o(.text._RangeIgnore_UpdateDevice) refers to vl6180x_api.o(.text._DMax_InitData) for _DMax_InitData
+    vl6180x_api.o(.text._RangeIgnore_UpdateDevice) refers to vl6180x_i2c.o(.text.VL6180x_WrWord) for VL6180x_WrWord
+    vl6180x_api.o(.ARM.exidx.text._RangeIgnore_UpdateDevice) refers to vl6180x_api.o(.text._RangeIgnore_UpdateDevice) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_RangeIgnoreConfigure) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_RangeIgnoreConfigure) refers to vl6180x_api.o(.text._RangeIgnore_UpdateDevice) for _RangeIgnore_UpdateDevice
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_RangeIgnoreConfigure) refers to vl6180x_api.o(.text.VL6180x_RangeIgnoreConfigure) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_DMaxSetState) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text.VL6180x_DMaxSetState) refers to vl6180x_api.o(.text._DMax_InitData) for _DMax_InitData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_DMaxSetState) refers to vl6180x_api.o(.text.VL6180x_DMaxSetState) for [Anonymous Symbol]
+    vl6180x_api.o(.text.VL6180x_DMaxGetState) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_DMaxGetState) refers to vl6180x_api.o(.text.VL6180x_DMaxGetState) for [Anonymous Symbol]
+    vl6180x_api.o(.ARM.exidx.text.VL6180x_SqrtUint32) refers to vl6180x_api.o(.text.VL6180x_SqrtUint32) for [Anonymous Symbol]
+    vl6180x_api.o(.text._GetAveTotalTime) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.ARM.exidx.text._GetAveTotalTime) refers to vl6180x_api.o(.text._GetAveTotalTime) for [Anonymous Symbol]
+    vl6180x_api.o(.text._filter_Start) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._filter_Start) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
+    vl6180x_api.o(.text._filter_Start) refers to vl6180x_i2c.o(.text.VL6180x_RdByte) for VL6180x_RdByte
+    vl6180x_api.o(.text._filter_Start) refers to vl6180x_i2c.o(.text.VL6180x_RdMulti) for VL6180x_RdMulti
+    vl6180x_api.o(.text._filter_Start) refers to vl6180x_i2c.o(.text.VL6180x_WrByte) for VL6180x_WrByte
+    vl6180x_api.o(.text._filter_Start) refers to vl6180x_api.o(.text._filter_StdDevDamper) for _filter_StdDevDamper
+    vl6180x_api.o(.ARM.exidx.text._filter_Start) refers to vl6180x_api.o(.text._filter_Start) for [Anonymous Symbol]
+    vl6180x_api.o(.ARM.exidx.text._filter_StdDevDamper) refers to vl6180x_api.o(.text._filter_StdDevDamper) for [Anonymous Symbol]
+    vl6180x_api.o(.text._DMax_RawValueAtRateKCps) refers to vl6180x_api.o(.data.SingleVL6180xDevData) for SingleVL6180xDevData
+    vl6180x_api.o(.text._DMax_RawValueAtRateKCps) refers to vl6180x_api.o(.text.VL6180x_SqrtUint32) for VL6180x_SqrtUint32
+    vl6180x_api.o(.ARM.exidx.text._DMax_RawValueAtRateKCps) refers to vl6180x_api.o(.text._DMax_RawValueAtRateKCps) for [Anonymous Symbol]
+    vl6180x_api.o(.data.VL6180x_RangeStatusErrString) refers to vl6180x_api.o(.rodata.str1.1) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.text.LED_Initialize) refers to led_32f469idiscovery.o(.rodata.cst32) for LED_PIN
+    led_32f469idiscovery.o(.text.LED_Initialize) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    led_32f469idiscovery.o(.text.LED_Initialize) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_Init) for HAL_GPIO_Init
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_Initialize) refers to led_32f469idiscovery.o(.text.LED_Initialize) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.text.LED_Uninitialize) refers to led_32f469idiscovery.o(.rodata.cst32) for LED_PIN
+    led_32f469idiscovery.o(.text.LED_Uninitialize) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_DeInit) for HAL_GPIO_DeInit
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_Uninitialize) refers to led_32f469idiscovery.o(.text.LED_Uninitialize) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.text.LED_On) refers to led_32f469idiscovery.o(.rodata.cst32) for LED_PIN
+    led_32f469idiscovery.o(.text.LED_On) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_On) refers to led_32f469idiscovery.o(.text.LED_On) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.text.LED_Off) refers to led_32f469idiscovery.o(.rodata.cst32) for LED_PIN
+    led_32f469idiscovery.o(.text.LED_Off) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_Off) refers to led_32f469idiscovery.o(.text.LED_Off) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.text.LED_SetOut) refers to led_32f469idiscovery.o(.text.LED_Off) for LED_Off
+    led_32f469idiscovery.o(.text.LED_SetOut) refers to led_32f469idiscovery.o(.text.LED_On) for LED_On
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_SetOut) refers to led_32f469idiscovery.o(.text.LED_SetOut) for [Anonymous Symbol]
+    led_32f469idiscovery.o(.ARM.exidx.text.LED_GetCount) refers to led_32f469idiscovery.o(.text.LED_GetCount) for [Anonymous Symbol]
+    rtx_lib.o(.text._platform_post_stackheap_init) refers to rtx_kernel.o(.text.osKernelInitialize) for osKernelInitialize
+    rtx_lib.o(.ARM.exidx.text._platform_post_stackheap_init) refers to rtx_lib.o(.text._platform_post_stackheap_init) for [Anonymous Symbol]
+    rtx_lib.o(.text.__user_perthread_libspace) refers to rtx_lib.o(.text.os_kernel_is_active) for os_kernel_is_active
+    rtx_lib.o(.text.__user_perthread_libspace) refers to rtx_thread.o(.text.osThreadGetId) for osThreadGetId
+    rtx_lib.o(.text.__user_perthread_libspace) refers to rtx_lib.o(.bss.os.libspace) for os_libspace_id
+    rtx_lib.o(.text.__user_perthread_libspace) refers to rtx_kernel.o(.text.osRtxKernelErrorNotify) for osRtxKernelErrorNotify
+    rtx_lib.o(.ARM.exidx.text.__user_perthread_libspace) refers to rtx_lib.o(.text.__user_perthread_libspace) for [Anonymous Symbol]
+    rtx_lib.o(.text.os_kernel_is_active) refers to rtx_lib.o(.bss.os_kernel_is_active.os_kernel_active) for os_kernel_is_active.os_kernel_active
+    rtx_lib.o(.text.os_kernel_is_active) refers to rtx_kernel.o(.text.osKernelGetState) for osKernelGetState
+    rtx_lib.o(.ARM.exidx.text.os_kernel_is_active) refers to rtx_lib.o(.text.os_kernel_is_active) for [Anonymous Symbol]
+    rtx_lib.o(.text._mutex_initialize) refers to rtx_mutex.o(.text.osMutexNew) for osMutexNew
+    rtx_lib.o(.text._mutex_initialize) refers to rtx_kernel.o(.text.osRtxKernelErrorNotify) for osRtxKernelErrorNotify
+    rtx_lib.o(.ARM.exidx.text._mutex_initialize) refers to rtx_lib.o(.text._mutex_initialize) for [Anonymous Symbol]
+    rtx_lib.o(.text._mutex_acquire) refers to rtx_lib.o(.text.os_kernel_is_active) for os_kernel_is_active
+    rtx_lib.o(.text._mutex_acquire) refers to rtx_mutex.o(.text.osMutexAcquire) for osMutexAcquire
+    rtx_lib.o(.ARM.exidx.text._mutex_acquire) refers to rtx_lib.o(.text._mutex_acquire) for [Anonymous Symbol]
+    rtx_lib.o(.text._mutex_release) refers to rtx_lib.o(.text.os_kernel_is_active) for os_kernel_is_active
+    rtx_lib.o(.text._mutex_release) refers to rtx_mutex.o(.text.osMutexRelease) for osMutexRelease
+    rtx_lib.o(.ARM.exidx.text._mutex_release) refers to rtx_lib.o(.text._mutex_release) for [Anonymous Symbol]
+    rtx_lib.o(.text._mutex_free) refers to rtx_mutex.o(.text.osMutexDelete) for osMutexDelete
+    rtx_lib.o(.ARM.exidx.text._mutex_free) refers to rtx_lib.o(.text._mutex_free) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_idle_thread_attr) refers to rtx_lib.o(.bss.os.thread.cb) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_idle_thread_attr) refers to rtx_lib.o(.bss.os.thread.idle.stack) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_timer_thread_attr) refers to rtx_lib.o(.bss.os.thread.cb) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_timer_thread_attr) refers to rtx_lib.o(.bss.os.thread.timer.stack) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_timer_mq_attr) refers to rtx_lib.o(.bss.os.msgqueue.cb) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.os_timer_mq_attr) refers to rtx_lib.o(.bss.os.msgqueue.mem) for [Anonymous Symbol]
+    rtx_lib.o(.rodata) refers to rtx_lib.o(.bss.os) for [Anonymous Symbol]
+    rtx_lib.o(.rodata) refers to rtx_lib.o(.rodata.os_idle_thread_attr) for [Anonymous Symbol]
+    rtx_lib.o(.rodata) refers to rtx_lib.o(.rodata.os_timer_thread_attr) for [Anonymous Symbol]
+    rtx_lib.o(.rodata) refers to rtx_timer.o(.text.osRtxTimerThread) for osRtxTimerThread
+    rtx_lib.o(.rodata) refers to rtx_timer.o(.text.osRtxTimerSetup) for osRtxTimerSetup
+    rtx_lib.o(.rodata) refers to rtx_lib.o(.rodata.os_timer_mq_attr) for [Anonymous Symbol]
+    rtx_lib.o(.rodata.irqRtxLibRef) refers to irq_armv7m.o(.rodata) for irqRtxLib
+    rtx_config.o(.ARM.exidx.text.osRtxIdleThread) refers to rtx_config.o(.text.osRtxIdleThread) for [Anonymous Symbol]
+    rtx_config.o(.ARM.exidx.text.osRtxErrorNotify) refers to rtx_config.o(.text.osRtxErrorNotify) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_Init) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriorityGrouping) for HAL_NVIC_SetPriorityGrouping
+    stm32f4xx_hal.o(.text.HAL_Init) refers to stm32f4xx_hal.o(.text.HAL_InitTick) for HAL_InitTick
+    stm32f4xx_hal.o(.text.HAL_Init) refers to stm32f4xx_hal.o(.text.HAL_MspInit) for HAL_MspInit
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_Init) refers to stm32f4xx_hal.o(.text.HAL_Init) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_InitTick) refers to stm32f4xx_hal.o(.data.uwTickFreq) for uwTickFreq
+    stm32f4xx_hal.o(.text.HAL_InitTick) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal.o(.text.HAL_InitTick) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_Config) for HAL_SYSTICK_Config
+    stm32f4xx_hal.o(.text.HAL_InitTick) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriority) for HAL_NVIC_SetPriority
+    stm32f4xx_hal.o(.text.HAL_InitTick) refers to stm32f4xx_hal.o(.data.uwTickPrio) for uwTickPrio
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_InitTick) refers to stm32f4xx_hal.o(.text.HAL_InitTick) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_MspInit) refers to stm32f4xx_hal.o(.text.HAL_MspInit) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_DeInit) refers to stm32f4xx_hal.o(.text.HAL_MspDeInit) for HAL_MspDeInit
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DeInit) refers to stm32f4xx_hal.o(.text.HAL_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_MspDeInit) refers to stm32f4xx_hal.o(.text.HAL_MspDeInit) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_IncTick) refers to stm32f4xx_hal.o(.data.uwTickFreq) for uwTickFreq
+    stm32f4xx_hal.o(.text.HAL_IncTick) refers to stm32f4xx_hal.o(.bss.uwTick) for uwTick
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_IncTick) refers to stm32f4xx_hal.o(.text.HAL_IncTick) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_GetTick) refers to stm32f4xx_hal.o(.bss.uwTick) for uwTick
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetTick) refers to stm32f4xx_hal.o(.text.HAL_GetTick) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_GetTickPrio) refers to stm32f4xx_hal.o(.data.uwTickPrio) for uwTickPrio
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetTickPrio) refers to stm32f4xx_hal.o(.text.HAL_GetTickPrio) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_SetTickFreq) refers to stm32f4xx_hal.o(.data.uwTickFreq) for uwTickFreq
+    stm32f4xx_hal.o(.text.HAL_SetTickFreq) refers to stm32f4xx_hal.o(.data.uwTickPrio) for uwTickPrio
+    stm32f4xx_hal.o(.text.HAL_SetTickFreq) refers to stm32f4xx_hal.o(.text.HAL_InitTick) for HAL_InitTick
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_SetTickFreq) refers to stm32f4xx_hal.o(.text.HAL_SetTickFreq) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_GetTickFreq) refers to stm32f4xx_hal.o(.data.uwTickFreq) for uwTickFreq
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetTickFreq) refers to stm32f4xx_hal.o(.text.HAL_GetTickFreq) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.text.HAL_Delay) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal.o(.text.HAL_Delay) refers to stm32f4xx_hal.o(.data.uwTickFreq) for uwTickFreq
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_Delay) refers to stm32f4xx_hal.o(.text.HAL_Delay) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_SuspendTick) refers to stm32f4xx_hal.o(.text.HAL_SuspendTick) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_ResumeTick) refers to stm32f4xx_hal.o(.text.HAL_ResumeTick) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetHalVersion) refers to stm32f4xx_hal.o(.text.HAL_GetHalVersion) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetREVID) refers to stm32f4xx_hal.o(.text.HAL_GetREVID) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetDEVID) refers to stm32f4xx_hal.o(.text.HAL_GetDEVID) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_EnableDBGSleepMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_EnableDBGSleepMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_DisableDBGSleepMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_DisableDBGSleepMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_EnableDBGStopMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_EnableDBGStopMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_DisableDBGStopMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_DisableDBGStopMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_EnableDBGStandbyMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_EnableDBGStandbyMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DBGMCU_DisableDBGStandbyMode) refers to stm32f4xx_hal.o(.text.HAL_DBGMCU_DisableDBGStandbyMode) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_EnableCompensationCell) refers to stm32f4xx_hal.o(.text.HAL_EnableCompensationCell) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DisableCompensationCell) refers to stm32f4xx_hal.o(.text.HAL_DisableCompensationCell) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetUIDw0) refers to stm32f4xx_hal.o(.text.HAL_GetUIDw0) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetUIDw1) refers to stm32f4xx_hal.o(.text.HAL_GetUIDw1) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_GetUIDw2) refers to stm32f4xx_hal.o(.text.HAL_GetUIDw2) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_EnableMemorySwappingBank) refers to stm32f4xx_hal.o(.text.HAL_EnableMemorySwappingBank) for [Anonymous Symbol]
+    stm32f4xx_hal.o(.ARM.exidx.text.HAL_DisableMemorySwappingBank) refers to stm32f4xx_hal.o(.text.HAL_DisableMemorySwappingBank) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPriorityGrouping) for __NVIC_SetPriorityGrouping
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_SetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriorityGrouping) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_SetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPriorityGrouping) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriority) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPriorityGrouping) for __NVIC_GetPriorityGrouping
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriority) refers to stm32f4xx_hal_cortex.o(.text.NVIC_EncodePriority) for NVIC_EncodePriority
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriority) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPriority) for __NVIC_SetPriority
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_SetPriority) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_GetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPriorityGrouping) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_SetPriority) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.NVIC_EncodePriority) refers to stm32f4xx_hal_cortex.o(.text.NVIC_EncodePriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_EnableIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_EnableIRQ) for __NVIC_EnableIRQ
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_EnableIRQ) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_EnableIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_EnableIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_EnableIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_DisableIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_DisableIRQ) for __NVIC_DisableIRQ
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_DisableIRQ) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_DisableIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_DisableIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_DisableIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SystemReset) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SystemReset) for __NVIC_SystemReset
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_SystemReset) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SystemReset) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_SystemReset) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SystemReset) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_Config) refers to stm32f4xx_hal_cortex.o(.text.SysTick_Config) for SysTick_Config
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_SYSTICK_Config) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_Config) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.SysTick_Config) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPriority) for __NVIC_SetPriority
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.SysTick_Config) refers to stm32f4xx_hal_cortex.o(.text.SysTick_Config) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_MPU_Disable) refers to stm32f4xx_hal_cortex.o(.text.HAL_MPU_Disable) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_MPU_Enable) refers to stm32f4xx_hal_cortex.o(.text.HAL_MPU_Enable) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_MPU_ConfigRegion) refers to stm32f4xx_hal_cortex.o(.text.HAL_MPU_ConfigRegion) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPriorityGrouping) for __NVIC_GetPriorityGrouping
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_GetPriorityGrouping) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPriorityGrouping) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPriority) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPriority) for __NVIC_GetPriority
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPriority) refers to stm32f4xx_hal_cortex.o(.text.NVIC_DecodePriority) for NVIC_DecodePriority
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_GetPriority) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.NVIC_DecodePriority) refers to stm32f4xx_hal_cortex.o(.text.NVIC_DecodePriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_GetPriority) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPriority) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPendingIRQ) for __NVIC_SetPendingIRQ
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_SetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_SetPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_SetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_SetPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPendingIRQ) for __NVIC_GetPendingIRQ
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_GetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_GetPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_ClearPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_ClearPendingIRQ) for __NVIC_ClearPendingIRQ
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_ClearPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_ClearPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_ClearPendingIRQ) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_ClearPendingIRQ) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetActive) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetActive) for __NVIC_GetActive
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_NVIC_GetActive) refers to stm32f4xx_hal_cortex.o(.text.HAL_NVIC_GetActive) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.__NVIC_GetActive) refers to stm32f4xx_hal_cortex.o(.text.__NVIC_GetActive) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_SYSTICK_CLKSourceConfig) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_CLKSourceConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_IRQHandler) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_Callback) for HAL_SYSTICK_Callback
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_SYSTICK_IRQHandler) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_cortex.o(.ARM.exidx.text.HAL_SYSTICK_Callback) refers to stm32f4xx_hal_cortex.o(.text.HAL_SYSTICK_Callback) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Init) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Init) refers to stm32f4xx_hal_dma.o(.text.DMA_CheckFifoParam) for DMA_CheckFifoParam
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Init) refers to stm32f4xx_hal_dma.o(.text.DMA_CalcBaseAndBitshift) for DMA_CalcBaseAndBitshift
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_Init) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Init) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.DMA_CheckFifoParam) refers to stm32f4xx_hal_dma.o(.text.DMA_CheckFifoParam) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.DMA_CalcBaseAndBitshift) refers to stm32f4xx_hal_dma.o(.text.DMA_CalcBaseAndBitshift) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_DeInit) refers to stm32f4xx_hal_dma.o(.text.DMA_CalcBaseAndBitshift) for DMA_CalcBaseAndBitshift
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_DeInit) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Start) refers to stm32f4xx_hal_dma.o(.text.DMA_SetConfig) for DMA_SetConfig
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_Start) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.DMA_SetConfig) refers to stm32f4xx_hal_dma.o(.text.DMA_SetConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) refers to stm32f4xx_hal_dma.o(.text.DMA_SetConfig) for DMA_SetConfig
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_Start_IT) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_Abort) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_Abort_IT) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_PollForTransfer) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_PollForTransfer) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort) for HAL_DMA_Abort
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_PollForTransfer) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_PollForTransfer) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.text.HAL_DMA_IRQHandler) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_IRQHandler) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_RegisterCallback) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_RegisterCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_UnRegisterCallback) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_UnRegisterCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_GetState) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_GetState) for [Anonymous Symbol]
+    stm32f4xx_hal_dma.o(.ARM.exidx.text.HAL_DMA_GetError) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_GetError) for [Anonymous Symbol]
+    stm32f4xx_hal_dma_ex.o(.text.HAL_DMAEx_MultiBufferStart) refers to stm32f4xx_hal_dma_ex.o(.text.DMA_MultiBufferSetConfig) for DMA_MultiBufferSetConfig
+    stm32f4xx_hal_dma_ex.o(.ARM.exidx.text.HAL_DMAEx_MultiBufferStart) refers to stm32f4xx_hal_dma_ex.o(.text.HAL_DMAEx_MultiBufferStart) for [Anonymous Symbol]
+    stm32f4xx_hal_dma_ex.o(.ARM.exidx.text.DMA_MultiBufferSetConfig) refers to stm32f4xx_hal_dma_ex.o(.text.DMA_MultiBufferSetConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_dma_ex.o(.text.HAL_DMAEx_MultiBufferStart_IT) refers to stm32f4xx_hal_dma_ex.o(.text.DMA_MultiBufferSetConfig) for DMA_MultiBufferSetConfig
+    stm32f4xx_hal_dma_ex.o(.ARM.exidx.text.HAL_DMAEx_MultiBufferStart_IT) refers to stm32f4xx_hal_dma_ex.o(.text.HAL_DMAEx_MultiBufferStart_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_dma_ex.o(.ARM.exidx.text.HAL_DMAEx_ChangeMemory) refers to stm32f4xx_hal_dma_ex.o(.text.HAL_DMAEx_ChangeMemory) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_Init) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_Init) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_DeInit) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_ReadPin) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_ReadPin) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_WritePin) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_WritePin) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_TogglePin) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_TogglePin) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_LockPin) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_LockPin) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.text.HAL_GPIO_EXTI_IRQHandler) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_EXTI_Callback) for HAL_GPIO_EXTI_Callback
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_EXTI_IRQHandler) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_EXTI_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_gpio.o(.ARM.exidx.text.HAL_GPIO_EXTI_Callback) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_EXTI_Callback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Init) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MspInit) for HAL_I2C_MspInit
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Init) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK1Freq) for HAL_RCC_GetPCLK1Freq
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Init) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Init) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MspInit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MspInit) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_DeInit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MspDeInit) for HAL_I2C_MspDeInit
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_DeInit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MspDeInit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MspDeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestWrite) for I2C_MasterRequestWrite
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnBTFFlagUntilTimeout) for I2C_WaitOnBTFFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for I2C_WaitOnTXEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Transmit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) for I2C_WaitOnMasterAddressFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterRequestWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestWrite) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_IsAcknowledgeFailed) for I2C_IsAcknowledgeFailed
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnTXEFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnBTFFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_IsAcknowledgeFailed) for I2C_IsAcknowledgeFailed
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnBTFFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnBTFFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnBTFFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestRead) for I2C_MasterRequestRead
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnRXNEFlagUntilTimeout) for I2C_WaitOnRXNEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Receive) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) for I2C_WaitOnMasterAddressFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterRequestRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterRequestRead) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnRXNEFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnRXNEFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnRXNEFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for I2C_WaitOnTXEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Transmit) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnRXNEFlagUntilTimeout) for I2C_WaitOnRXNEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPFlagUntilTimeout) for I2C_WaitOnSTOPFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Receive) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_IsAcknowledgeFailed) for I2C_IsAcknowledgeFailed
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnSTOPFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Transmit_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Receive_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Transmit_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Receive_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Transmit_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveTxCpltCallback) for HAL_I2C_SlaveTxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveRxCpltCallback) for HAL_I2C_SlaveRxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for HAL_I2C_ErrorCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemRxCpltCallback) for HAL_I2C_MemRxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterRxCpltCallback) for HAL_I2C_MasterRxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_DMAXferCplt) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAError) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_GetError) for HAL_DMA_GetError
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAError) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for HAL_I2C_ErrorCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_DMAError) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Receive_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Transmit_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Receive_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) for I2C_RequestMemoryWrite
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for I2C_WaitOnTXEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnBTFFlagUntilTimeout) for I2C_WaitOnBTFFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Write) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) for I2C_WaitOnMasterAddressFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for I2C_WaitOnTXEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_RequestMemoryWrite) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) for I2C_RequestMemoryRead
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnRXNEFlagUntilTimeout) for I2C_WaitOnRXNEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Read) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) for I2C_WaitOnMasterAddressFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnTXEFlagUntilTimeout) for I2C_WaitOnTXEFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_RequestMemoryRead) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Write_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Read_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryWrite) for I2C_RequestMemoryWrite
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Write_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Write_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_RequestMemoryRead) for I2C_RequestMemoryRead
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Mem_Read_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Mem_Read_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_IsDeviceReady) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_IsDeviceReady) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnFlagUntilTimeout) for I2C_WaitOnFlagUntilTimeout
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_IsDeviceReady) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_IsDeviceReady) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Seq_Transmit_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Transmit_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_IT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Seq_Receive_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_DMA) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Seq_Receive_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Seq_Transmit_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) for I2C_DMAAbort
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Seq_Transmit_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Transmit_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_AbortCpltCallback) for HAL_I2C_AbortCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for HAL_I2C_ErrorCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_DMAAbort) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Seq_Receive_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) for I2C_DMAAbort
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAXferCplt) for I2C_DMAXferCplt
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAError) for I2C_DMAError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Start_IT) for HAL_DMA_Start_IT
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Slave_Seq_Receive_DMA) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Slave_Seq_Receive_DMA) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_EnableListen_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_EnableListen_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_DisableListen_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_DisableListen_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Abort_IT) refers to stm32f4xx_hal_i2c.o(.text.I2C_ITError) for I2C_ITError
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_Master_Abort_IT) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_Master_Abort_IT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_ITError) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_AbortCpltCallback) for HAL_I2C_AbortCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_ITError) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) for I2C_DMAAbort
+    stm32f4xx_hal_i2c.o(.text.I2C_ITError) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.text.I2C_ITError) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for HAL_I2C_ErrorCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_ITError) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ListenCpltCallback) for HAL_I2C_ListenCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_ITError) refers to stm32f4xx_hal_i2c.o(.text.I2C_ITError) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveTransmit_TXE) for I2C_SlaveTransmit_TXE
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) for I2C_MasterReceive_RXNE
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_ConvertOtherXferOptions) for I2C_ConvertOtherXferOptions
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_SB) for I2C_Master_SB
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_ADDR) for I2C_Slave_ADDR
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) for I2C_Slave_STOPF
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_ADD10) for I2C_Master_ADD10
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_ADDR) for I2C_Master_ADDR
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_TXE) for I2C_MasterTransmit_TXE
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveReceive_RXNE) for I2C_SlaveReceive_RXNE
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveTransmit_BTF) for I2C_SlaveTransmit_BTF
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_BTF) for I2C_MasterReceive_BTF
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveReceive_BTF) for I2C_SlaveReceive_BTF
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_BTF) for I2C_MasterTransmit_BTF
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_MemoryTransmit_TXE_BTF) for I2C_MemoryTransmit_TXE_BTF
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_EV_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_EV_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_ConvertOtherXferOptions) refers to stm32f4xx_hal_i2c.o(.text.I2C_ConvertOtherXferOptions) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Master_SB) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_SB) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Master_ADD10) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_ADD10) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Master_ADDR) refers to stm32f4xx_hal_i2c.o(.text.I2C_Master_ADDR) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemTxCpltCallback) for HAL_I2C_MemTxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.I2C_MemoryTransmit_TXE_BTF) for I2C_MemoryTransmit_TXE_BTF
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterTxCpltCallback) for HAL_I2C_MasterTxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_TXE) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_BTF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterTxCpltCallback) for HAL_I2C_MasterTxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterTransmit_BTF) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterTransmit_BTF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MemoryTransmit_TXE_BTF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemTxCpltCallback) for HAL_I2C_MemTxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MemoryTransmit_TXE_BTF) refers to stm32f4xx_hal_i2c.o(.text.I2C_MemoryTransmit_TXE_BTF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPRequestThroughIT) for I2C_WaitOnSTOPRequestThroughIT
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for HAL_I2C_ErrorCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemRxCpltCallback) for HAL_I2C_MemRxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterRxCpltCallback) for HAL_I2C_MasterRxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_RXNE) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_BTF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemRxCpltCallback) for HAL_I2C_MemRxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_BTF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterRxCpltCallback) for HAL_I2C_MasterRxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_MasterReceive_BTF) refers to stm32f4xx_hal_i2c.o(.text.I2C_MasterReceive_BTF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_ADDR) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_AddrCallback) for HAL_I2C_AddrCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Slave_ADDR) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_ADDR) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_GetState) for HAL_DMA_GetState
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_i2c.o(.text.I2C_DMAAbort) for I2C_DMAAbort
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_dma.o(.text.HAL_DMA_Abort_IT) for HAL_DMA_Abort_IT
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_i2c.o(.text.I2C_ITError) for I2C_ITError
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveRxCpltCallback) for HAL_I2C_SlaveRxCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ListenCpltCallback) for HAL_I2C_ListenCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Slave_STOPF) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_STOPF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_SlaveTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveTxCpltCallback) for HAL_I2C_SlaveTxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_SlaveTransmit_TXE) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveTransmit_TXE) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_SlaveTransmit_BTF) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveTransmit_BTF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_SlaveReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveRxCpltCallback) for HAL_I2C_SlaveRxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_SlaveReceive_RXNE) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveReceive_RXNE) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_SlaveReceive_BTF) refers to stm32f4xx_hal_i2c.o(.text.I2C_SlaveReceive_BTF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_ER_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_ITError) for I2C_ITError
+    stm32f4xx_hal_i2c.o(.text.HAL_I2C_ER_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_AF) for I2C_Slave_AF
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_ER_IRQHandler) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ER_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_AF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ListenCpltCallback) for HAL_I2C_ListenCpltCallback
+    stm32f4xx_hal_i2c.o(.text.I2C_Slave_AF) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveTxCpltCallback) for HAL_I2C_SlaveTxCpltCallback
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_Slave_AF) refers to stm32f4xx_hal_i2c.o(.text.I2C_Slave_AF) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MasterTxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterTxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MasterRxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MasterRxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_SlaveTxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveTxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_SlaveRxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_SlaveRxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_AddrCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_AddrCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_ListenCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ListenCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MemTxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemTxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_MemRxCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_MemRxCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_ErrorCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_ErrorCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_AbortCpltCallback) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_AbortCpltCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_GetState) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_GetState) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_GetMode) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_GetMode) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.HAL_I2C_GetError) refers to stm32f4xx_hal_i2c.o(.text.HAL_I2C_GetError) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPRequestThroughIT) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnSTOPRequestThroughIT) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnSTOPRequestThroughIT) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_WaitOnMasterAddressFlagUntilTimeout) refers to stm32f4xx_hal_i2c.o(.text.I2C_WaitOnMasterAddressFlagUntilTimeout) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c.o(.ARM.exidx.text.I2C_IsAcknowledgeFailed) refers to stm32f4xx_hal_i2c.o(.text.I2C_IsAcknowledgeFailed) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c_ex.o(.ARM.exidx.text.HAL_I2CEx_ConfigAnalogFilter) refers to stm32f4xx_hal_i2c_ex.o(.text.HAL_I2CEx_ConfigAnalogFilter) for [Anonymous Symbol]
+    stm32f4xx_hal_i2c_ex.o(.ARM.exidx.text.HAL_I2CEx_ConfigDigitalFilter) refers to stm32f4xx_hal_i2c_ex.o(.text.HAL_I2CEx_ConfigDigitalFilter) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DeInit) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnableBkUpAccess) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnableBkUpAccess) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DisableBkUpAccess) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DisableBkUpAccess) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_ConfigPVD) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_ConfigPVD) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnablePVD) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnablePVD) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DisablePVD) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DisablePVD) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnableWakeUpPin) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnableWakeUpPin) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DisableWakeUpPin) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DisableWakeUpPin) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnterSLEEPMode) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnterSLEEPMode) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnterSTOPMode) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnterSTOPMode) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnterSTANDBYMode) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnterSTANDBYMode) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.text.HAL_PWR_PVD_IRQHandler) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_PVDCallback) for HAL_PWR_PVDCallback
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_PVD_IRQHandler) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_PVD_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_PVDCallback) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_PVDCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnableSleepOnExit) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnableSleepOnExit) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DisableSleepOnExit) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DisableSleepOnExit) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_EnableSEVOnPend) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_EnableSEVOnPend) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr.o(.ARM.exidx.text.HAL_PWR_DisableSEVOnPend) refers to stm32f4xx_hal_pwr.o(.text.HAL_PWR_DisableSEVOnPend) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnableBkUpReg) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_EnableBkUpReg) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnableBkUpReg) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_DisableBkUpReg) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_DisableBkUpReg) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_DisableBkUpReg) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_EnableFlashPowerDown) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnableFlashPowerDown) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_DisableFlashPowerDown) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_DisableFlashPowerDown) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_GetVoltageRange) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_GetVoltageRange) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_ControlVoltageScaling) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_ControlVoltageScaling) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_ControlVoltageScaling) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnableOverDrive) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_EnableOverDrive) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnableOverDrive) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_DisableOverDrive) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_DisableOverDrive) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_DisableOverDrive) for [Anonymous Symbol]
+    stm32f4xx_hal_pwr_ex.o(.ARM.exidx.text.HAL_PWREx_EnterUnderDriveSTOPMode) refers to stm32f4xx_hal_pwr_ex.o(.text.HAL_PWREx_EnterUnderDriveSTOPMode) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_DeInit) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_DeInit) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_OscConfig) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_OscConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_OscConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetSysClockFreq) for HAL_RCC_GetSysClockFreq
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to system_stm32f4xx.o(.rodata.AHBPrescTable) for AHBPrescTable
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to stm32f4xx_hal.o(.data.uwTickPrio) for uwTickPrio
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to stm32f4xx_hal.o(.text.HAL_InitTick) for HAL_InitTick
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_ClockConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_ClockConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetSysClockFreq) refers to lludivv7m.o(.text) for __aeabi_uldivmod
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetSysClockFreq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetSysClockFreq) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_MCOConfig) refers to stm32f4xx_hal_gpio.o(.text.HAL_GPIO_Init) for HAL_GPIO_Init
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_MCOConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_MCOConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_EnableCSS) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_EnableCSS) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_DisableCSS) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_DisableCSS) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetHCLKFreq) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetHCLKFreq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetHCLKFreq) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK1Freq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetHCLKFreq) for HAL_RCC_GetHCLKFreq
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK1Freq) refers to system_stm32f4xx.o(.rodata.APBPrescTable) for APBPrescTable
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetPCLK1Freq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK1Freq) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK2Freq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetHCLKFreq) for HAL_RCC_GetHCLKFreq
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK2Freq) refers to system_stm32f4xx.o(.rodata.APBPrescTable) for APBPrescTable
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetPCLK2Freq) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetPCLK2Freq) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetOscConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetOscConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_GetClockConfig) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_GetClockConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.text.HAL_RCC_NMI_IRQHandler) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_CSSCallback) for HAL_RCC_CSSCallback
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_NMI_IRQHandler) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_NMI_IRQHandler) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc.o(.ARM.exidx.text.HAL_RCC_CSSCallback) refers to stm32f4xx_hal_rcc.o(.text.HAL_RCC_CSSCallback) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_PeriphCLKConfig) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_PeriphCLKConfig) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_PeriphCLKConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_GetPeriphCLKConfig) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_GetPeriphCLKConfig) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_GetPeriphCLKFreq) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_GetPeriphCLKFreq) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_EnablePLLI2S) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_EnablePLLI2S) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_EnablePLLI2S) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_DisablePLLI2S) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_DisablePLLI2S) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_DisablePLLI2S) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_EnablePLLSAI) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_EnablePLLSAI) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_EnablePLLSAI) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_DisablePLLSAI) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCCEx_DisablePLLSAI) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCCEx_DisablePLLSAI) for [Anonymous Symbol]
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCC_DeInit) refers to main.o(.text.HAL_GetTick) for HAL_GetTick
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCC_DeInit) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCC_DeInit) refers to stm32f4xx_hal.o(.data.uwTickPrio) for uwTickPrio
+    stm32f4xx_hal_rcc_ex.o(.text.HAL_RCC_DeInit) refers to stm32f4xx_hal.o(.text.HAL_InitTick) for HAL_InitTick
+    stm32f4xx_hal_rcc_ex.o(.ARM.exidx.text.HAL_RCC_DeInit) refers to stm32f4xx_hal_rcc_ex.o(.text.HAL_RCC_DeInit) for [Anonymous Symbol]
+    startup_stm32f429xx.o(STACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_stm32f429xx.o(HEAP) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_stm32f429xx.o(RESET) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_stm32f429xx.o(RESET) refers to startup_stm32f429xx.o(STACK) for __initial_sp
+    startup_stm32f429xx.o(RESET) refers to startup_stm32f429xx.o(.text) for Reset_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.NMI_Handler) for NMI_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.HardFault_Handler) for HardFault_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.MemManage_Handler) for MemManage_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.BusFault_Handler) for BusFault_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.UsageFault_Handler) for UsageFault_Handler
+    startup_stm32f429xx.o(RESET) refers to irq_armv7m.o(.text) for SVC_Handler
+    startup_stm32f429xx.o(RESET) refers to stm32f4xx_it.o(.text.DebugMon_Handler) for DebugMon_Handler
+    startup_stm32f429xx.o(.text) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
+    startup_stm32f429xx.o(.text) refers to system_stm32f4xx.o(.text.SystemInit) for SystemInit
+    startup_stm32f429xx.o(.text) refers to __main.o(!!!main) for __main
+    startup_stm32f429xx.o(.text) refers to startup_stm32f429xx.o(HEAP) for Heap_Mem
+    startup_stm32f429xx.o(.text) refers to startup_stm32f429xx.o(STACK) for Stack_Mem
+    system_stm32f4xx.o(.ARM.exidx.text.SystemInit) refers to system_stm32f4xx.o(.text.SystemInit) for [Anonymous Symbol]
+    system_stm32f4xx.o(.text.SystemCoreClockUpdate) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    system_stm32f4xx.o(.text.SystemCoreClockUpdate) refers to system_stm32f4xx.o(.rodata.AHBPrescTable) for AHBPrescTable
+    system_stm32f4xx.o(.ARM.exidx.text.SystemCoreClockUpdate) refers to system_stm32f4xx.o(.text.SystemCoreClockUpdate) for [Anonymous Symbol]
+    rtx_kernel.o(.ARM.exidx.text.osRtxKernelPreInit) refers to rtx_kernel.o(.text.osRtxKernelPreInit) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osRtxKernelErrorNotify) refers to rtx_config.o(.text.osRtxErrorNotify) for osRtxErrorNotify
+    rtx_kernel.o(.ARM.exidx.text.osRtxKernelErrorNotify) refers to rtx_kernel.o(.text.osRtxKernelErrorNotify) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelInitialize) refers to rtx_kernel.o(.text.osRtxKernelPreInit) for osRtxKernelPreInit
+    rtx_kernel.o(.text.osKernelInitialize) refers to rtx_kernel.o(.text.svcRtxKernelInitialize) for svcRtxKernelInitialize
+    rtx_kernel.o(.ARM.exidx.text.osKernelInitialize) refers to rtx_kernel.o(.text.osKernelInitialize) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetInfo) refers to rtx_kernel.o(.text.svcRtxKernelGetInfo) for svcRtxKernelGetInfo
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetInfo) refers to rtx_kernel.o(.text.osKernelGetInfo) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetInfo) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_kernel.o(.text.svcRtxKernelGetInfo) refers to rtx_kernel.o(.rodata.str1.4) for [Anonymous Symbol]
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetInfo) refers to rtx_kernel.o(.text.svcRtxKernelGetInfo) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetState) refers to rtx_kernel.o(.text.svcRtxKernelGetState) for svcRtxKernelGetState
+    rtx_kernel.o(.text.osKernelGetState) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetState) refers to rtx_kernel.o(.text.osKernelGetState) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetState) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetState) refers to rtx_kernel.o(.text.svcRtxKernelGetState) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelStart) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_kernel.o(.text.osKernelStart) refers to rtx_kernel.o(.text.svcRtxKernelStart) for svcRtxKernelStart
+    rtx_kernel.o(.ARM.exidx.text.osKernelStart) refers to rtx_kernel.o(.text.osKernelStart) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelLock) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_kernel.o(.text.osKernelLock) refers to rtx_kernel.o(.text.svcRtxKernelLock) for svcRtxKernelLock
+    rtx_kernel.o(.ARM.exidx.text.osKernelLock) refers to rtx_kernel.o(.text.osKernelLock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelUnlock) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_kernel.o(.text.osKernelUnlock) refers to rtx_kernel.o(.text.svcRtxKernelUnlock) for svcRtxKernelUnlock
+    rtx_kernel.o(.ARM.exidx.text.osKernelUnlock) refers to rtx_kernel.o(.text.osKernelUnlock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelRestoreLock) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_kernel.o(.text.osKernelRestoreLock) refers to rtx_kernel.o(.text.svcRtxKernelRestoreLock) for svcRtxKernelRestoreLock
+    rtx_kernel.o(.ARM.exidx.text.osKernelRestoreLock) refers to rtx_kernel.o(.text.osKernelRestoreLock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelSuspend) refers to rtx_kernel.o(.text.svcRtxKernelSuspend) for svcRtxKernelSuspend
+    rtx_kernel.o(.ARM.exidx.text.osKernelSuspend) refers to rtx_kernel.o(.text.osKernelSuspend) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelResume) refers to rtx_kernel.o(.text.svcRtxKernelResume) for svcRtxKernelResume
+    rtx_kernel.o(.ARM.exidx.text.osKernelResume) refers to rtx_kernel.o(.text.osKernelResume) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetTickCount) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.text.osKernelGetTickCount) refers to rtx_kernel.o(.text.svcRtxKernelGetTickCount) for svcRtxKernelGetTickCount
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetTickCount) refers to rtx_kernel.o(.text.osKernelGetTickCount) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetTickCount) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetTickCount) refers to rtx_kernel.o(.text.svcRtxKernelGetTickCount) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetTickFreq) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_kernel.o(.text.osKernelGetTickFreq) refers to rtx_kernel.o(.text.svcRtxKernelGetTickFreq) for svcRtxKernelGetTickFreq
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetTickFreq) refers to rtx_kernel.o(.text.osKernelGetTickFreq) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetTickFreq) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetTickFreq) refers to rtx_kernel.o(.text.svcRtxKernelGetTickFreq) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetSysTimerCount) refers to rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) for svcRtxKernelGetSysTimerCount
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetSysTimerCount) refers to rtx_kernel.o(.text.osKernelGetSysTimerCount) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) refers to os_systick.o(.text.OS_Tick_GetCount) for OS_Tick_GetCount
+    rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) refers to os_systick.o(.text.OS_Tick_GetOverflow) for OS_Tick_GetOverflow
+    rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) refers to os_systick.o(.text.OS_Tick_GetInterval) for OS_Tick_GetInterval
+    rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetSysTimerCount) refers to rtx_kernel.o(.text.svcRtxKernelGetSysTimerCount) for [Anonymous Symbol]
+    rtx_kernel.o(.text.osKernelGetSysTimerFreq) refers to os_systick.o(.text.OS_Tick_GetClock) for OS_Tick_GetClock
+    rtx_kernel.o(.text.osKernelGetSysTimerFreq) refers to rtx_kernel.o(.text.svcRtxKernelGetSysTimerFreq) for svcRtxKernelGetSysTimerFreq
+    rtx_kernel.o(.ARM.exidx.text.osKernelGetSysTimerFreq) refers to rtx_kernel.o(.text.osKernelGetSysTimerFreq) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelGetSysTimerFreq) refers to os_systick.o(.text.OS_Tick_GetClock) for OS_Tick_GetClock
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelGetSysTimerFreq) refers to rtx_kernel.o(.text.svcRtxKernelGetSysTimerFreq) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelInitialize) refers to rtx_memory.o(.text.osRtxMemoryInit) for osRtxMemoryInit
+    rtx_kernel.o(.text.svcRtxKernelInitialize) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_kernel.o(.text.svcRtxKernelInitialize) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.text.svcRtxKernelInitialize) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelInitialize) refers to rtx_kernel.o(.text.svcRtxKernelInitialize) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to rtx_thread.o(.text.osRtxThreadStartup) for osRtxThreadStartup
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to os_systick.o(.text.OS_Tick_Setup) for OS_Tick_Setup
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to os_systick.o(.text.OS_Tick_GetIRQn) for OS_Tick_GetIRQn
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to os_systick.o(.text.OS_Tick_Enable) for OS_Tick_Enable
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to rtx_thread.o(.text.osRtxThreadSwitch) for osRtxThreadSwitch
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_kernel.o(.text.svcRtxKernelStart) refers to irq_armv7m.o(.text) for SysTick_Handler
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelStart) refers to rtx_kernel.o(.text.svcRtxKernelStart) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelLock) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelLock) refers to rtx_kernel.o(.text.svcRtxKernelLock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelUnlock) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelUnlock) refers to rtx_kernel.o(.text.svcRtxKernelUnlock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelRestoreLock) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelRestoreLock) refers to rtx_kernel.o(.text.svcRtxKernelRestoreLock) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelSuspend) refers to os_systick.o(.text.OS_Tick_Disable) for OS_Tick_Disable
+    rtx_kernel.o(.text.svcRtxKernelSuspend) refers to rtx_kernel.o(.text.GetKernelSleepTime) for GetKernelSleepTime
+    rtx_kernel.o(.text.svcRtxKernelSuspend) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelSuspend) refers to rtx_kernel.o(.text.svcRtxKernelSuspend) for [Anonymous Symbol]
+    rtx_kernel.o(.text.GetKernelSleepTime) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.GetKernelSleepTime) refers to rtx_kernel.o(.text.GetKernelSleepTime) for [Anonymous Symbol]
+    rtx_kernel.o(.text.svcRtxKernelResume) refers to rtx_kernel.o(.text.GetKernelSleepTime) for GetKernelSleepTime
+    rtx_kernel.o(.text.svcRtxKernelResume) refers to rtx_thread.o(.text.osRtxThreadDelayTick) for osRtxThreadDelayTick
+    rtx_kernel.o(.text.svcRtxKernelResume) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_kernel.o(.text.svcRtxKernelResume) refers to os_systick.o(.text.OS_Tick_Enable) for OS_Tick_Enable
+    rtx_kernel.o(.text.svcRtxKernelResume) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_kernel.o(.ARM.exidx.text.svcRtxKernelResume) refers to rtx_kernel.o(.text.svcRtxKernelResume) for [Anonymous Symbol]
+    rtx_kernel.o(.text.OUTLINED_FUNCTION_0) refers to rtx_mempool.o(.text.osRtxMemoryPoolInit) for osRtxMemoryPoolInit
+    rtx_kernel.o(.ARM.exidx.text.OUTLINED_FUNCTION_0) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_0) for [Anonymous Symbol]
+    rtx_kernel.o(.ARM.exidx.text.OUTLINED_FUNCTION_1) refers to rtx_kernel.o(.text.OUTLINED_FUNCTION_1) for [Anonymous Symbol]
+    rtx_kernel.o(.data.os) refers to rtx_kernel.o(.rodata.str1.4) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListPut) refers to rtx_thread.o(.text.osRtxThreadListPut) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListGet) refers to rtx_thread.o(.text.osRtxThreadListGet) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadListSort) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.osRtxThreadListSort) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListSort) refers to rtx_thread.o(.text.osRtxThreadListSort) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListRemove) refers to rtx_thread.o(.text.osRtxThreadListRemove) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadReadyPut) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_thread.o(.text.osRtxThreadReadyPut) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadReadyPut) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadDelayTick) refers to rtx_thread.o(.text.osRtxThreadListRoot) for osRtxThreadListRoot
+    rtx_thread.o(.text.osRtxThreadDelayTick) refers to rtx_mutex.o(.text.osRtxMutexOwnerRestore) for osRtxMutexOwnerRestore
+    rtx_thread.o(.text.osRtxThreadDelayTick) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.osRtxThreadDelayTick) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for osRtxThreadReadyPut
+    rtx_thread.o(.text.osRtxThreadDelayTick) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadDelayTick) refers to rtx_thread.o(.text.osRtxThreadDelayTick) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListRoot) refers to rtx_thread.o(.text.osRtxThreadListRoot) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadRegPtr) refers to rtx_thread.o(.text.osRtxThreadRegPtr) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadSwitch) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadSwitch) refers to rtx_thread.o(.text.osRtxThreadSwitch) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadDispatch) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for osRtxThreadReadyPut
+    rtx_thread.o(.text.osRtxThreadDispatch) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.osRtxThreadDispatch) refers to rtx_thread.o(.text.osRtxThreadBlock) for osRtxThreadBlock
+    rtx_thread.o(.text.osRtxThreadDispatch) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadDispatch) refers to rtx_thread.o(.text.osRtxThreadDispatch) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadBlock) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadBlock) refers to rtx_thread.o(.text.osRtxThreadBlock) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadWaitExit) refers to rtx_thread.o(.text.osRtxThreadDelayRemove) for osRtxThreadDelayRemove
+    rtx_thread.o(.text.osRtxThreadWaitExit) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for osRtxThreadReadyPut
+    rtx_thread.o(.text.osRtxThreadWaitExit) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadWaitExit) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadDelayRemove) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadDelayRemove) refers to rtx_thread.o(.text.osRtxThreadDelayRemove) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadWaitEnter) refers to rtx_thread.o(.text.osRtxThreadDelayInsert) for osRtxThreadDelayInsert
+    rtx_thread.o(.text.osRtxThreadWaitEnter) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadWaitEnter) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadDelayInsert) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadDelayInsert) refers to rtx_thread.o(.text.osRtxThreadDelayInsert) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadStartup) refers to rtx_thread.o(.text.svcRtxThreadNew) for svcRtxThreadNew
+    rtx_thread.o(.text.osRtxThreadStartup) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_thread.o(.text.osRtxThreadStartup) refers to rtx_config.o(.text.osRtxIdleThread) for osRtxIdleThread
+    rtx_thread.o(.text.osRtxThreadStartup) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadStartup) refers to rtx_thread.o(.text.osRtxThreadStartup) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for osRtxMemoryAlloc
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_thread.o(.text.osThreadExit) for osThreadExit
+    rtx_thread.o(.text.svcRtxThreadNew) refers to rtx_thread.o(.text.osRtxThreadPostProcess) for osRtxThreadPostProcess
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadNew) refers to rtx_thread.o(.text.svcRtxThreadNew) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadNew) refers to rtx_thread.o(.text.svcRtxThreadNew) for svcRtxThreadNew
+    rtx_thread.o(.ARM.exidx.text.osThreadNew) refers to rtx_thread.o(.text.osThreadNew) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetName) refers to rtx_thread.o(.text.svcRtxThreadGetName) for svcRtxThreadGetName
+    rtx_thread.o(.ARM.exidx.text.osThreadGetName) refers to rtx_thread.o(.text.osThreadGetName) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetId) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.text.osThreadGetId) refers to rtx_thread.o(.text.svcRtxThreadGetId) for svcRtxThreadGetId
+    rtx_thread.o(.ARM.exidx.text.osThreadGetId) refers to rtx_thread.o(.text.osThreadGetId) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadGetId) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetId) refers to rtx_thread.o(.text.svcRtxThreadGetId) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetState) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_4) for OUTLINED_FUNCTION_4
+    rtx_thread.o(.text.osThreadGetState) refers to rtx_thread.o(.text.svcRtxThreadGetState) for svcRtxThreadGetState
+    rtx_thread.o(.ARM.exidx.text.osThreadGetState) refers to rtx_thread.o(.text.osThreadGetState) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetStackSize) refers to rtx_thread.o(.text.svcRtxThreadGetStackSize) for svcRtxThreadGetStackSize
+    rtx_thread.o(.ARM.exidx.text.osThreadGetStackSize) refers to rtx_thread.o(.text.osThreadGetStackSize) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetStackSpace) refers to rtx_thread.o(.text.svcRtxThreadGetStackSpace) for svcRtxThreadGetStackSpace
+    rtx_thread.o(.ARM.exidx.text.osThreadGetStackSpace) refers to rtx_thread.o(.text.osThreadGetStackSpace) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadSetPriority) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadSetPriority) refers to rtx_thread.o(.text.svcRtxThreadSetPriority) for svcRtxThreadSetPriority
+    rtx_thread.o(.ARM.exidx.text.osThreadSetPriority) refers to rtx_thread.o(.text.osThreadSetPriority) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetPriority) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_4) for OUTLINED_FUNCTION_4
+    rtx_thread.o(.text.osThreadGetPriority) refers to rtx_thread.o(.text.svcRtxThreadGetPriority) for svcRtxThreadGetPriority
+    rtx_thread.o(.ARM.exidx.text.osThreadGetPriority) refers to rtx_thread.o(.text.osThreadGetPriority) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadYield) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadYield) refers to rtx_thread.o(.text.svcRtxThreadYield) for svcRtxThreadYield
+    rtx_thread.o(.ARM.exidx.text.osThreadYield) refers to rtx_thread.o(.text.osThreadYield) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadSuspend) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadSuspend) refers to rtx_thread.o(.text.svcRtxThreadSuspend) for svcRtxThreadSuspend
+    rtx_thread.o(.ARM.exidx.text.osThreadSuspend) refers to rtx_thread.o(.text.osThreadSuspend) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadResume) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadResume) refers to rtx_thread.o(.text.svcRtxThreadResume) for svcRtxThreadResume
+    rtx_thread.o(.ARM.exidx.text.osThreadResume) refers to rtx_thread.o(.text.osThreadResume) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadDetach) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadDetach) refers to rtx_thread.o(.text.svcRtxThreadDetach) for svcRtxThreadDetach
+    rtx_thread.o(.ARM.exidx.text.osThreadDetach) refers to rtx_thread.o(.text.osThreadDetach) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadJoin) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadJoin) refers to rtx_thread.o(.text.svcRtxThreadJoin) for svcRtxThreadJoin
+    rtx_thread.o(.ARM.exidx.text.osThreadJoin) refers to rtx_thread.o(.text.osThreadJoin) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadExit) refers to rtx_thread.o(.text.svcRtxThreadExit) for svcRtxThreadExit
+    rtx_thread.o(.ARM.exidx.text.osThreadExit) refers to rtx_thread.o(.text.osThreadExit) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadTerminate) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadTerminate) refers to rtx_thread.o(.text.svcRtxThreadTerminate) for svcRtxThreadTerminate
+    rtx_thread.o(.ARM.exidx.text.osThreadTerminate) refers to rtx_thread.o(.text.osThreadTerminate) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadGetCount) refers to rtx_thread.o(.text.svcRtxThreadGetCount) for svcRtxThreadGetCount
+    rtx_thread.o(.ARM.exidx.text.osThreadGetCount) refers to rtx_thread.o(.text.osThreadGetCount) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadEnumerate) refers to rtx_thread.o(.text.svcRtxThreadEnumerate) for svcRtxThreadEnumerate
+    rtx_thread.o(.ARM.exidx.text.osThreadEnumerate) refers to rtx_thread.o(.text.osThreadEnumerate) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadFlagsSet) refers to rtx_system.o(.text.osRtxPostProcess) for osRtxPostProcess
+    rtx_thread.o(.text.osThreadFlagsSet) refers to rtx_thread.o(.text.svcRtxThreadFlagsSet) for svcRtxThreadFlagsSet
+    rtx_thread.o(.ARM.exidx.text.osThreadFlagsSet) refers to rtx_thread.o(.text.osThreadFlagsSet) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadFlagsClear) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadFlagsClear) refers to rtx_thread.o(.text.svcRtxThreadFlagsClear) for svcRtxThreadFlagsClear
+    rtx_thread.o(.ARM.exidx.text.osThreadFlagsClear) refers to rtx_thread.o(.text.osThreadFlagsClear) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadFlagsGet) refers to rtx_thread.o(.text.svcRtxThreadFlagsGet) for svcRtxThreadFlagsGet
+    rtx_thread.o(.ARM.exidx.text.osThreadFlagsGet) refers to rtx_thread.o(.text.osThreadFlagsGet) for [Anonymous Symbol]
+    rtx_thread.o(.text.osThreadFlagsWait) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_thread.o(.text.osThreadFlagsWait) refers to rtx_thread.o(.text.svcRtxThreadFlagsWait) for svcRtxThreadFlagsWait
+    rtx_thread.o(.ARM.exidx.text.osThreadFlagsWait) refers to rtx_thread.o(.text.osThreadFlagsWait) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadPostProcess) refers to rtx_thread.o(.text.ThreadFlagsCheck) for ThreadFlagsCheck
+    rtx_thread.o(.text.osRtxThreadPostProcess) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadPostProcess) refers to rtx_thread.o(.text.osRtxThreadPostProcess) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.ThreadFlagsCheck) refers to rtx_thread.o(.text.ThreadFlagsCheck) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetName) refers to rtx_thread.o(.text.svcRtxThreadGetName) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadGetState) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_4) for OUTLINED_FUNCTION_4
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetState) refers to rtx_thread.o(.text.svcRtxThreadGetState) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetStackSize) refers to rtx_thread.o(.text.svcRtxThreadGetStackSize) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadGetStackSpace) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetStackSpace) refers to rtx_thread.o(.text.svcRtxThreadGetStackSpace) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadSetPriority) refers to rtx_thread.o(.text.osRtxThreadListSort) for osRtxThreadListSort
+    rtx_thread.o(.text.svcRtxThreadSetPriority) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadSetPriority) refers to rtx_thread.o(.text.svcRtxThreadSetPriority) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadGetPriority) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_4) for OUTLINED_FUNCTION_4
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetPriority) refers to rtx_thread.o(.text.svcRtxThreadGetPriority) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadYield) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.svcRtxThreadYield) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for osRtxThreadReadyPut
+    rtx_thread.o(.text.svcRtxThreadYield) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadYield) refers to rtx_thread.o(.text.svcRtxThreadYield) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for OUTLINED_FUNCTION_3
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_2) for OUTLINED_FUNCTION_2
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.osRtxThreadDelayInsert) for osRtxThreadDelayInsert
+    rtx_thread.o(.text.svcRtxThreadSuspend) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadSuspend) refers to rtx_thread.o(.text.svcRtxThreadSuspend) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadResume) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for OUTLINED_FUNCTION_3
+    rtx_thread.o(.text.svcRtxThreadResume) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_2) for OUTLINED_FUNCTION_2
+    rtx_thread.o(.text.svcRtxThreadResume) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_thread.o(.text.svcRtxThreadResume) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadResume) refers to rtx_thread.o(.text.svcRtxThreadResume) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadDetach) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for OUTLINED_FUNCTION_3
+    rtx_thread.o(.text.svcRtxThreadDetach) refers to rtx_thread.o(.text.osRtxThreadListUnlink) for osRtxThreadListUnlink
+    rtx_thread.o(.text.svcRtxThreadDetach) refers to rtx_thread.o(.text.osRtxThreadFree) for osRtxThreadFree
+    rtx_thread.o(.text.svcRtxThreadDetach) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadDetach) refers to rtx_thread.o(.text.svcRtxThreadDetach) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadListUnlink) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadListUnlink) refers to rtx_thread.o(.text.osRtxThreadListUnlink) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadFree) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_thread.o(.text.osRtxThreadFree) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_thread.o(.text.osRtxThreadFree) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadFree) refers to rtx_thread.o(.text.osRtxThreadFree) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for OUTLINED_FUNCTION_3
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.osRtxThreadListUnlink) for osRtxThreadListUnlink
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.osRtxThreadFree) for osRtxThreadFree
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_thread.o(.text.svcRtxThreadJoin) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadJoin) refers to rtx_thread.o(.text.svcRtxThreadJoin) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadExit) refers to rtx_mutex.o(.text.osRtxMutexOwnerRelease) for osRtxMutexOwnerRelease
+    rtx_thread.o(.text.svcRtxThreadExit) refers to rtx_thread.o(.text.osRtxThreadJoinWakeup) for osRtxThreadJoinWakeup
+    rtx_thread.o(.text.svcRtxThreadExit) refers to rtx_thread.o(.text.osRtxThreadDestroy) for osRtxThreadDestroy
+    rtx_thread.o(.text.svcRtxThreadExit) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadExit) refers to rtx_thread.o(.text.svcRtxThreadExit) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadJoinWakeup) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadJoinWakeup) refers to rtx_thread.o(.text.osRtxThreadJoinWakeup) for [Anonymous Symbol]
+    rtx_thread.o(.text.osRtxThreadDestroy) refers to rtx_thread.o(.text.osRtxThreadFree) for osRtxThreadFree
+    rtx_thread.o(.text.osRtxThreadDestroy) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.osRtxThreadDestroy) refers to rtx_thread.o(.text.osRtxThreadDestroy) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for OUTLINED_FUNCTION_3
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_2) for OUTLINED_FUNCTION_2
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_mutex.o(.text.osRtxMutexOwnerRelease) for osRtxMutexOwnerRelease
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.osRtxThreadJoinWakeup) for osRtxThreadJoinWakeup
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.osRtxThreadDestroy) for osRtxThreadDestroy
+    rtx_thread.o(.text.svcRtxThreadTerminate) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadTerminate) refers to rtx_thread.o(.text.svcRtxThreadTerminate) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadGetCount) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadGetCount) refers to rtx_thread.o(.text.svcRtxThreadGetCount) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadEnumerate) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadEnumerate) refers to rtx_thread.o(.text.svcRtxThreadEnumerate) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadFlagsSet) refers to rtx_thread.o(.text.ThreadFlagsCheck) for ThreadFlagsCheck
+    rtx_thread.o(.text.svcRtxThreadFlagsSet) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadFlagsSet) refers to rtx_thread.o(.text.svcRtxThreadFlagsSet) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadFlagsClear) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for OUTLINED_FUNCTION_1
+    rtx_thread.o(.text.svcRtxThreadFlagsClear) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadFlagsClear) refers to rtx_thread.o(.text.svcRtxThreadFlagsClear) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadFlagsGet) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadFlagsGet) refers to rtx_thread.o(.text.svcRtxThreadFlagsGet) for [Anonymous Symbol]
+    rtx_thread.o(.text.svcRtxThreadFlagsWait) refers to rtx_thread.o(.text.ThreadFlagsCheck) for ThreadFlagsCheck
+    rtx_thread.o(.text.svcRtxThreadFlagsWait) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_thread.o(.text.svcRtxThreadFlagsWait) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_thread.o(.ARM.exidx.text.svcRtxThreadFlagsWait) refers to rtx_thread.o(.text.svcRtxThreadFlagsWait) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.OUTLINED_FUNCTION_0) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_0) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.OUTLINED_FUNCTION_1) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_1) for [Anonymous Symbol]
+    rtx_thread.o(.text.OUTLINED_FUNCTION_2) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_thread.o(.text.OUTLINED_FUNCTION_2) refers to rtx_thread.o(.text.osRtxThreadDelayRemove) for osRtxThreadDelayRemove
+    rtx_thread.o(.ARM.exidx.text.OUTLINED_FUNCTION_2) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_2) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.OUTLINED_FUNCTION_3) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_3) for [Anonymous Symbol]
+    rtx_thread.o(.ARM.exidx.text.OUTLINED_FUNCTION_4) refers to rtx_thread.o(.text.OUTLINED_FUNCTION_4) for [Anonymous Symbol]
+    rtx_delay.o(.text.osDelay) refers to rtx_delay.o(.text.svcRtxDelay) for svcRtxDelay
+    rtx_delay.o(.ARM.exidx.text.osDelay) refers to rtx_delay.o(.text.osDelay) for [Anonymous Symbol]
+    rtx_delay.o(.text.osDelayUntil) refers to rtx_delay.o(.text.svcRtxDelayUntil) for svcRtxDelayUntil
+    rtx_delay.o(.ARM.exidx.text.osDelayUntil) refers to rtx_delay.o(.text.osDelayUntil) for [Anonymous Symbol]
+    rtx_delay.o(.text.svcRtxDelay) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_delay.o(.ARM.exidx.text.svcRtxDelay) refers to rtx_delay.o(.text.svcRtxDelay) for [Anonymous Symbol]
+    rtx_delay.o(.text.svcRtxDelayUntil) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_delay.o(.text.svcRtxDelayUntil) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_delay.o(.ARM.exidx.text.svcRtxDelayUntil) refers to rtx_delay.o(.text.svcRtxDelayUntil) for [Anonymous Symbol]
+    rtx_timer.o(.text.osRtxTimerSetup) refers to rtx_msgqueue.o(.text.osRtxMessageQueueTimerSetup) for osRtxMessageQueueTimerSetup
+    rtx_timer.o(.text.osRtxTimerSetup) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.text.osRtxTimerSetup) refers to rtx_timer.o(.text.osRtxTimerTick) for osRtxTimerTick
+    rtx_timer.o(.ARM.exidx.text.osRtxTimerSetup) refers to rtx_timer.o(.text.osRtxTimerSetup) for [Anonymous Symbol]
+    rtx_timer.o(.text.osRtxTimerTick) refers to rtx_msgqueue.o(.text.osMessageQueuePut) for osMessageQueuePut
+    rtx_timer.o(.text.osRtxTimerTick) refers to rtx_kernel.o(.text.osRtxKernelErrorNotify) for osRtxKernelErrorNotify
+    rtx_timer.o(.text.osRtxTimerTick) refers to rtx_timer.o(.text.TimerInsert) for TimerInsert
+    rtx_timer.o(.text.osRtxTimerTick) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.osRtxTimerTick) refers to rtx_timer.o(.text.osRtxTimerTick) for [Anonymous Symbol]
+    rtx_timer.o(.text.osRtxTimerThread) refers to rtx_msgqueue.o(.text.osMessageQueueGet) for osMessageQueueGet
+    rtx_timer.o(.ARM.exidx.text.osRtxTimerThread) refers to rtx_timer.o(.text.osRtxTimerThread) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerNew) refers to rtx_timer.o(.text.svcRtxTimerNew) for svcRtxTimerNew
+    rtx_timer.o(.ARM.exidx.text.osTimerNew) refers to rtx_timer.o(.text.osTimerNew) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerGetName) refers to rtx_timer.o(.text.svcRtxTimerGetName) for svcRtxTimerGetName
+    rtx_timer.o(.ARM.exidx.text.osTimerGetName) refers to rtx_timer.o(.text.osTimerGetName) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerStart) refers to rtx_timer.o(.text.svcRtxTimerStart) for svcRtxTimerStart
+    rtx_timer.o(.ARM.exidx.text.osTimerStart) refers to rtx_timer.o(.text.osTimerStart) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerStop) refers to rtx_timer.o(.text.svcRtxTimerStop) for svcRtxTimerStop
+    rtx_timer.o(.ARM.exidx.text.osTimerStop) refers to rtx_timer.o(.text.osTimerStop) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerIsRunning) refers to rtx_timer.o(.text.svcRtxTimerIsRunning) for svcRtxTimerIsRunning
+    rtx_timer.o(.ARM.exidx.text.osTimerIsRunning) refers to rtx_timer.o(.text.osTimerIsRunning) for [Anonymous Symbol]
+    rtx_timer.o(.text.osTimerDelete) refers to rtx_timer.o(.text.svcRtxTimerDelete) for svcRtxTimerDelete
+    rtx_timer.o(.ARM.exidx.text.osTimerDelete) refers to rtx_timer.o(.text.osTimerDelete) for [Anonymous Symbol]
+    rtx_timer.o(.text.TimerInsert) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.TimerInsert) refers to rtx_timer.o(.text.TimerInsert) for [Anonymous Symbol]
+    rtx_timer.o(.text.svcRtxTimerNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_timer.o(.text.svcRtxTimerNew) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for osRtxMemoryAlloc
+    rtx_timer.o(.text.svcRtxTimerNew) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerNew) refers to rtx_timer.o(.text.svcRtxTimerNew) for [Anonymous Symbol]
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerGetName) refers to rtx_timer.o(.text.svcRtxTimerGetName) for [Anonymous Symbol]
+    rtx_timer.o(.text.svcRtxTimerStart) refers to rtx_timer.o(.text.TimerRemove) for TimerRemove
+    rtx_timer.o(.text.svcRtxTimerStart) refers to rtx_timer.o(.text.TimerInsert) for TimerInsert
+    rtx_timer.o(.text.svcRtxTimerStart) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerStart) refers to rtx_timer.o(.text.svcRtxTimerStart) for [Anonymous Symbol]
+    rtx_timer.o(.text.TimerRemove) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.TimerRemove) refers to rtx_timer.o(.text.TimerRemove) for [Anonymous Symbol]
+    rtx_timer.o(.text.svcRtxTimerStop) refers to rtx_timer.o(.text.TimerRemove) for TimerRemove
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerStop) refers to rtx_timer.o(.text.svcRtxTimerStop) for [Anonymous Symbol]
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerIsRunning) refers to rtx_timer.o(.text.svcRtxTimerIsRunning) for [Anonymous Symbol]
+    rtx_timer.o(.text.svcRtxTimerDelete) refers to rtx_timer.o(.text.TimerRemove) for TimerRemove
+    rtx_timer.o(.text.svcRtxTimerDelete) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_timer.o(.text.svcRtxTimerDelete) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_timer.o(.text.svcRtxTimerDelete) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_timer.o(.ARM.exidx.text.svcRtxTimerDelete) refers to rtx_timer.o(.text.svcRtxTimerDelete) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osRtxMutexOwnerRelease) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mutex.o(.text.osRtxMutexOwnerRelease) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mutex.o(.ARM.exidx.text.osRtxMutexOwnerRelease) refers to rtx_mutex.o(.text.osRtxMutexOwnerRelease) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osRtxMutexOwnerRestore) refers to rtx_thread.o(.text.osRtxThreadListSort) for osRtxThreadListSort
+    rtx_mutex.o(.ARM.exidx.text.osRtxMutexOwnerRestore) refers to rtx_mutex.o(.text.osRtxMutexOwnerRestore) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexNew) refers to rtx_mutex.o(.text.svcRtxMutexNew) for svcRtxMutexNew
+    rtx_mutex.o(.ARM.exidx.text.osMutexNew) refers to rtx_mutex.o(.text.osMutexNew) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexGetName) refers to rtx_mutex.o(.text.svcRtxMutexGetName) for svcRtxMutexGetName
+    rtx_mutex.o(.ARM.exidx.text.osMutexGetName) refers to rtx_mutex.o(.text.osMutexGetName) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexAcquire) refers to rtx_mutex.o(.text.svcRtxMutexAcquire) for svcRtxMutexAcquire
+    rtx_mutex.o(.ARM.exidx.text.osMutexAcquire) refers to rtx_mutex.o(.text.osMutexAcquire) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexRelease) refers to rtx_mutex.o(.text.svcRtxMutexRelease) for svcRtxMutexRelease
+    rtx_mutex.o(.ARM.exidx.text.osMutexRelease) refers to rtx_mutex.o(.text.osMutexRelease) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexGetOwner) refers to rtx_mutex.o(.text.svcRtxMutexGetOwner) for svcRtxMutexGetOwner
+    rtx_mutex.o(.ARM.exidx.text.osMutexGetOwner) refers to rtx_mutex.o(.text.osMutexGetOwner) for [Anonymous Symbol]
+    rtx_mutex.o(.text.osMutexDelete) refers to rtx_mutex.o(.text.svcRtxMutexDelete) for svcRtxMutexDelete
+    rtx_mutex.o(.ARM.exidx.text.osMutexDelete) refers to rtx_mutex.o(.text.osMutexDelete) for [Anonymous Symbol]
+    rtx_mutex.o(.text.svcRtxMutexNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_mutex.o(.text.svcRtxMutexNew) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for osRtxMemoryAlloc
+    rtx_mutex.o(.text.svcRtxMutexNew) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
+    rtx_mutex.o(.text.svcRtxMutexNew) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexNew) refers to rtx_mutex.o(.text.svcRtxMutexNew) for [Anonymous Symbol]
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexGetName) refers to rtx_mutex.o(.text.svcRtxMutexGetName) for [Anonymous Symbol]
+    rtx_mutex.o(.text.svcRtxMutexAcquire) refers to rtx_thread.o(.text.osRtxThreadListSort) for osRtxThreadListSort
+    rtx_mutex.o(.text.svcRtxMutexAcquire) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_mutex.o(.text.svcRtxMutexAcquire) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_mutex.o(.text.svcRtxMutexAcquire) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexAcquire) refers to rtx_mutex.o(.text.svcRtxMutexAcquire) for [Anonymous Symbol]
+    rtx_mutex.o(.text.svcRtxMutexRelease) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mutex.o(.text.svcRtxMutexRelease) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mutex.o(.text.svcRtxMutexRelease) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_mutex.o(.text.svcRtxMutexRelease) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexRelease) refers to rtx_mutex.o(.text.svcRtxMutexRelease) for [Anonymous Symbol]
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexGetOwner) refers to rtx_mutex.o(.text.svcRtxMutexGetOwner) for [Anonymous Symbol]
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_thread.o(.text.osRtxThreadListSort) for osRtxThreadListSort
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_mutex.o(.text.svcRtxMutexDelete) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mutex.o(.ARM.exidx.text.svcRtxMutexDelete) refers to rtx_mutex.o(.text.svcRtxMutexDelete) for [Anonymous Symbol]
+    irq_armv7m.o(.text) refers to rtx_system.o(.text.osRtxPendSV_Handler) for osRtxPendSV_Handler
+    irq_armv7m.o(.text) refers to rtx_system.o(.text.osRtxTick_Handler) for osRtxTick_Handler
+    irq_armv7m.o(.text) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    irq_armv7m.o(.text) refers to rtx_lib.o(.rodata.osRtxUserSVC) for osRtxUserSVC
+    irq_armv7m.o(.ARM.exidx) refers to irq_armv7m.o(.text) for [Anonymous Symbol]
+    rtx_memory.o(.ARM.exidx.text.osRtxMemoryInit) refers to rtx_memory.o(.text.osRtxMemoryInit) for [Anonymous Symbol]
+    rtx_memory.o(.ARM.exidx.text.osRtxMemoryAlloc) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for [Anonymous Symbol]
+    rtx_memory.o(.ARM.exidx.text.osRtxMemoryFree) refers to rtx_memory.o(.text.osRtxMemoryFree) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.osRtxMemoryPoolInit) refers to rtx_mempool.o(.text.osRtxMemoryPoolInit) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.osRtxMemoryPoolAlloc) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.osRtxMemoryPoolFree) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolNew) refers to rtx_mempool.o(.text.svcRtxMemoryPoolNew) for svcRtxMemoryPoolNew
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolNew) refers to rtx_mempool.o(.text.osMemoryPoolNew) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolGetName) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetName) for svcRtxMemoryPoolGetName
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolGetName) refers to rtx_mempool.o(.text.osMemoryPoolGetName) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolAlloc) refers to rtx_mempool.o(.text.svcRtxMemoryPoolAlloc) for svcRtxMemoryPoolAlloc
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolAlloc) refers to rtx_mempool.o(.text.osMemoryPoolAlloc) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolFree) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_mempool.o(.text.osMemoryPoolFree) refers to rtx_system.o(.text.osRtxPostProcess) for osRtxPostProcess
+    rtx_mempool.o(.text.osMemoryPoolFree) refers to rtx_mempool.o(.text.svcRtxMemoryPoolFree) for svcRtxMemoryPoolFree
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolFree) refers to rtx_mempool.o(.text.osMemoryPoolFree) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolGetCapacity) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetCapacity) for svcRtxMemoryPoolGetCapacity
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolGetCapacity) refers to rtx_mempool.o(.text.osMemoryPoolGetCapacity) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolGetCapacity) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetCapacity) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolGetBlockSize) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetBlockSize) for svcRtxMemoryPoolGetBlockSize
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolGetBlockSize) refers to rtx_mempool.o(.text.osMemoryPoolGetBlockSize) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolGetBlockSize) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetBlockSize) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolGetCount) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetCount) for svcRtxMemoryPoolGetCount
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolGetCount) refers to rtx_mempool.o(.text.osMemoryPoolGetCount) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolGetCount) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetCount) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolGetSpace) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetSpace) for svcRtxMemoryPoolGetSpace
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolGetSpace) refers to rtx_mempool.o(.text.osMemoryPoolGetSpace) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolGetSpace) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetSpace) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osMemoryPoolDelete) refers to rtx_mempool.o(.text.svcRtxMemoryPoolDelete) for svcRtxMemoryPoolDelete
+    rtx_mempool.o(.ARM.exidx.text.osMemoryPoolDelete) refers to rtx_mempool.o(.text.osMemoryPoolDelete) for [Anonymous Symbol]
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for osRtxMemoryAlloc
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rt_memclr.o(.text) for __aeabi_memclr
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolInit) for osRtxMemoryPoolInit
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mempool.o(.text.svcRtxMemoryPoolNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolPostProcess) for osRtxMemoryPoolPostProcess
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolNew) refers to rtx_mempool.o(.text.svcRtxMemoryPoolNew) for [Anonymous Symbol]
+    rtx_mempool.o(.text.osRtxMemoryPoolPostProcess) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mempool.o(.text.osRtxMemoryPoolPostProcess) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mempool.o(.ARM.exidx.text.osRtxMemoryPoolPostProcess) refers to rtx_mempool.o(.text.osRtxMemoryPoolPostProcess) for [Anonymous Symbol]
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolGetName) refers to rtx_mempool.o(.text.svcRtxMemoryPoolGetName) for [Anonymous Symbol]
+    rtx_mempool.o(.text.svcRtxMemoryPoolAlloc) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_mempool.o(.text.svcRtxMemoryPoolAlloc) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_mempool.o(.text.svcRtxMemoryPoolAlloc) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolAlloc) refers to rtx_mempool.o(.text.svcRtxMemoryPoolAlloc) for [Anonymous Symbol]
+    rtx_mempool.o(.text.svcRtxMemoryPoolFree) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_mempool.o(.text.svcRtxMemoryPoolFree) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mempool.o(.text.svcRtxMemoryPoolFree) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolFree) refers to rtx_mempool.o(.text.svcRtxMemoryPoolFree) for [Anonymous Symbol]
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_mempool.o(.text.svcRtxMemoryPoolDelete) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_mempool.o(.ARM.exidx.text.svcRtxMemoryPoolDelete) refers to rtx_mempool.o(.text.svcRtxMemoryPoolDelete) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osRtxMessageQueueTimerSetup) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueNew) for svcRtxMessageQueueNew
+    rtx_msgqueue.o(.text.osRtxMessageQueueTimerSetup) refers to rtx_lib.o(.rodata) for osRtxConfig
+    rtx_msgqueue.o(.text.osRtxMessageQueueTimerSetup) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_msgqueue.o(.ARM.exidx.text.osRtxMessageQueueTimerSetup) refers to rtx_msgqueue.o(.text.osRtxMessageQueueTimerSetup) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_memory.o(.text.osRtxMemoryAlloc) for osRtxMemoryAlloc
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rt_memclr.o(.text) for __aeabi_memclr
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_mempool.o(.text.osRtxMemoryPoolInit) for osRtxMemoryPoolInit
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_msgqueue.o(.text.svcRtxMessageQueueNew) refers to rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) for osRtxMessageQueuePostProcess
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueNew) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueNew) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueNew) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueNew) for svcRtxMessageQueueNew
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueNew) refers to rtx_msgqueue.o(.text.osMessageQueueNew) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGetName) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetName) for svcRtxMessageQueueGetName
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGetName) refers to rtx_msgqueue.o(.text.osMessageQueueGetName) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueuePut) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.osMessageQueuePut) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.osMessageQueuePut) refers to rtx_system.o(.text.osRtxPostProcess) for osRtxPostProcess
+    rtx_msgqueue.o(.text.osMessageQueuePut) refers to rtx_msgqueue.o(.text.svcRtxMessageQueuePut) for svcRtxMessageQueuePut
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueuePut) refers to rtx_msgqueue.o(.text.osMessageQueuePut) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGet) refers to rtx_msgqueue.o(.text.MessageQueueGet) for MessageQueueGet
+    rtx_msgqueue.o(.text.osMessageQueueGet) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.osMessageQueueGet) refers to rtx_system.o(.text.osRtxPostProcess) for osRtxPostProcess
+    rtx_msgqueue.o(.text.osMessageQueueGet) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGet) for svcRtxMessageQueueGet
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGet) refers to rtx_msgqueue.o(.text.osMessageQueueGet) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGetCapacity) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetCapacity) for svcRtxMessageQueueGetCapacity
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGetCapacity) refers to rtx_msgqueue.o(.text.osMessageQueueGetCapacity) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGetCapacity) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetCapacity) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGetMsgSize) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetMsgSize) for svcRtxMessageQueueGetMsgSize
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGetMsgSize) refers to rtx_msgqueue.o(.text.osMessageQueueGetMsgSize) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGetMsgSize) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetMsgSize) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGetCount) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetCount) for svcRtxMessageQueueGetCount
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGetCount) refers to rtx_msgqueue.o(.text.osMessageQueueGetCount) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGetCount) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetCount) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueGetSpace) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetSpace) for svcRtxMessageQueueGetSpace
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueGetSpace) refers to rtx_msgqueue.o(.text.osMessageQueueGetSpace) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGetSpace) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetSpace) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueReset) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueReset) for svcRtxMessageQueueReset
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueReset) refers to rtx_msgqueue.o(.text.osMessageQueueReset) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osMessageQueueDelete) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) for svcRtxMessageQueueDelete
+    rtx_msgqueue.o(.ARM.exidx.text.osMessageQueueDelete) refers to rtx_msgqueue.o(.text.osMessageQueueDelete) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_msgqueue.o(.text.MessageQueueRemove) for MessageQueueRemove
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_msgqueue.o(.text.OUTLINED_FUNCTION_0) for OUTLINED_FUNCTION_0
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_thread.o(.text.osRtxThreadRegPtr) for osRtxThreadRegPtr
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) refers to rtx_msgqueue.o(.text.MessageQueuePut) for MessageQueuePut
+    rtx_msgqueue.o(.ARM.exidx.text.osRtxMessageQueuePostProcess) refers to rtx_msgqueue.o(.text.osRtxMessageQueuePostProcess) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.MessageQueueRemove) refers to rtx_msgqueue.o(.text.MessageQueueRemove) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.MessageQueuePut) refers to rtx_msgqueue.o(.text.MessageQueuePut) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGetName) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGetName) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_thread.o(.text.osRtxThreadRegPtr) for osRtxThreadRegPtr
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_msgqueue.o(.text.MessageQueuePut) for MessageQueuePut
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_msgqueue.o(.text.svcRtxMessageQueuePut) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueuePut) refers to rtx_msgqueue.o(.text.svcRtxMessageQueuePut) for [Anonymous Symbol]
+    rtx_msgqueue.o(.ARM.exidx.text.MessageQueueGet) refers to rtx_msgqueue.o(.text.MessageQueueGet) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_msgqueue.o(.text.MessageQueueGet) for MessageQueueGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_msgqueue.o(.text.MessageQueueRemove) for MessageQueueRemove
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_thread.o(.text.osRtxThreadRegPtr) for osRtxThreadRegPtr
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_msgqueue.o(.text.MessageQueuePut) for MessageQueuePut
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_thread.o(.text.osRtxThreadWaitEnter) for osRtxThreadWaitEnter
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_thread.o(.text.osRtxThreadListPut) for osRtxThreadListPut
+    rtx_msgqueue.o(.text.svcRtxMessageQueueGet) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueGet) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueGet) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_msgqueue.o(.text.MessageQueueGet) for MessageQueueGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_msgqueue.o(.text.MessageQueueRemove) for MessageQueueRemove
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_mempool.o(.text.osRtxMemoryPoolAlloc) for osRtxMemoryPoolAlloc
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_thread.o(.text.osRtxThreadRegPtr) for osRtxThreadRegPtr
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_msgqueue.o(.text.MessageQueuePut) for MessageQueuePut
+    rtx_msgqueue.o(.text.svcRtxMessageQueueReset) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueReset) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueReset) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_thread.o(.text.osRtxThreadListGet) for osRtxThreadListGet
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_memory.o(.text.osRtxMemoryFree) for osRtxMemoryFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_mempool.o(.text.osRtxMemoryPoolFree) for osRtxMemoryPoolFree
+    rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_msgqueue.o(.ARM.exidx.text.svcRtxMessageQueueDelete) refers to rtx_msgqueue.o(.text.svcRtxMessageQueueDelete) for [Anonymous Symbol]
+    rtx_msgqueue.o(.text.OUTLINED_FUNCTION_0) refers to rtx_thread.o(.text.osRtxThreadWaitExit) for osRtxThreadWaitExit
+    rtx_msgqueue.o(.ARM.exidx.text.OUTLINED_FUNCTION_0) refers to rtx_msgqueue.o(.text.OUTLINED_FUNCTION_0) for [Anonymous Symbol]
+    rtx_system.o(.text.osRtxTick_Handler) refers to os_systick.o(.text.OS_Tick_AcknowledgeIRQ) for OS_Tick_AcknowledgeIRQ
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_thread.o(.text.osRtxThreadDelayTick) for osRtxThreadDelayTick
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_thread.o(.text.osRtxThreadListRemove) for osRtxThreadListRemove
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_thread.o(.text.osRtxThreadReadyPut) for osRtxThreadReadyPut
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_thread.o(.text.osRtxThreadSwitch) for osRtxThreadSwitch
+    rtx_system.o(.text.osRtxTick_Handler) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_system.o(.ARM.exidx.text.osRtxTick_Handler) refers to rtx_system.o(.text.osRtxTick_Handler) for [Anonymous Symbol]
+    rtx_system.o(.text.osRtxPendSV_Handler) refers to rtx_thread.o(.text.osRtxThreadDispatch) for osRtxThreadDispatch
+    rtx_system.o(.text.osRtxPendSV_Handler) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_system.o(.ARM.exidx.text.osRtxPendSV_Handler) refers to rtx_system.o(.text.osRtxPendSV_Handler) for [Anonymous Symbol]
+    rtx_system.o(.text.osRtxPostProcess) refers to rtx_kernel.o(.text.osRtxKernelErrorNotify) for osRtxKernelErrorNotify
+    rtx_system.o(.text.osRtxPostProcess) refers to rtx_kernel.o(.data.os) for osRtxInfo
+    rtx_system.o(.ARM.exidx.text.osRtxPostProcess) refers to rtx_system.o(.text.osRtxPostProcess) for [Anonymous Symbol]
+    os_systick.o(.text.OS_Tick_Setup) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    os_systick.o(.text.OS_Tick_Setup) refers to os_systick.o(.bss.os) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_Setup) refers to os_systick.o(.text.OS_Tick_Setup) for [Anonymous Symbol]
+    os_systick.o(.text.OS_Tick_Enable) refers to os_systick.o(.bss.os) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_Enable) refers to os_systick.o(.text.OS_Tick_Enable) for [Anonymous Symbol]
+    os_systick.o(.text.OS_Tick_Disable) refers to os_systick.o(.bss.os) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_Disable) refers to os_systick.o(.text.OS_Tick_Disable) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_AcknowledgeIRQ) refers to os_systick.o(.text.OS_Tick_AcknowledgeIRQ) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_GetIRQn) refers to os_systick.o(.text.OS_Tick_GetIRQn) for [Anonymous Symbol]
+    os_systick.o(.text.OS_Tick_GetClock) refers to system_stm32f4xx.o(.data.SystemCoreClock) for SystemCoreClock
+    os_systick.o(.ARM.exidx.text.OS_Tick_GetClock) refers to os_systick.o(.text.OS_Tick_GetClock) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_GetInterval) refers to os_systick.o(.text.OS_Tick_GetInterval) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_GetCount) refers to os_systick.o(.text.OS_Tick_GetCount) for [Anonymous Symbol]
+    os_systick.o(.ARM.exidx.text.OS_Tick_GetOverflow) refers to os_systick.o(.text.OS_Tick_GetOverflow) for [Anonymous Symbol]
+    rt_memcpy_v6.o(.text) refers to rt_memcpy_w.o(.text) for __aeabi_memcpy4
+    rt_memclr.o(.text) refers to rt_memclr_w.o(.text) for _memset_w
+    __main.o(!!!main) refers to __rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for __rt_entry_li
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for __rt_entry_main
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$0000000C) for __rt_entry_postli_1
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$00000008) for __rt_entry_postsh_1
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry2.o(.ARM.Collect$$rtentry$$00000002) for __rt_entry_presh_1
+    __rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to __rtentry4.o(.ARM.Collect$$rtentry$$00000004) for __rt_entry_sh
+    aeabi_ldiv0_sigfpe.o(.text) refers to rt_div0.o(.text) for __rt_div0
+    __rtentry2.o(.ARM.Collect$$rtentry$$00000008) refers to rtx_lib.o(.text._platform_post_stackheap_init) for _platform_post_stackheap_init
+    __rtentry2.o(.ARM.Collect$$rtentry$$0000000A) refers to libinit.o(.ARM.Collect$$libinit$$00000000) for __rt_lib_init
+    __rtentry2.o(.ARM.Collect$$rtentry$$0000000B) refers to boardinit3.o(.text) for _platform_post_lib_init
+    __rtentry2.o(.ARM.Collect$$rtentry$$0000000D) refers to main.o(.text.main) for main
+    __rtentry2.o(.ARM.Collect$$rtentry$$0000000D) refers to exit.o(.text) for exit
+    __rtentry2.o(.ARM.exidx) refers to __rtentry2.o(.ARM.Collect$$rtentry$$00000001) for .ARM.Collect$$rtentry$$00000001
+    __rtentry2.o(.ARM.exidx) refers to __rtentry2.o(.ARM.Collect$$rtentry$$00000008) for .ARM.Collect$$rtentry$$00000008
+    __rtentry2.o(.ARM.exidx) refers to __rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for .ARM.Collect$$rtentry$$0000000A
+    __rtentry2.o(.ARM.exidx) refers to __rtentry2.o(.ARM.Collect$$rtentry$$0000000B) for .ARM.Collect$$rtentry$$0000000B
+    __rtentry2.o(.ARM.exidx) refers to __rtentry2.o(.ARM.Collect$$rtentry$$0000000D) for .ARM.Collect$$rtentry$$0000000D
+    __rtentry4.o(.ARM.Collect$$rtentry$$00000004) refers to sys_stackheap_outer.o(.text) for __user_setup_stackheap
+    __rtentry4.o(.ARM.exidx) refers to __rtentry4.o(.ARM.Collect$$rtentry$$00000004) for .ARM.Collect$$rtentry$$00000004
+    rt_div0.o(.text) refers to defsig_fpe_outer.o(.text) for __rt_SIGFPE
+    sys_stackheap_outer.o(.text) refers to libspace.o(.text) for __user_perproc_libspace
+    sys_stackheap_outer.o(.text) refers to startup_stm32f429xx.o(.text) for __user_initial_stackheap
+    exit.o(.text) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for __rt_exit
+    defsig_fpe_outer.o(.text) refers to defsig_fpe_inner.o(.text) for __rt_SIGFPE_inner
+    defsig_fpe_outer.o(.text) refers to defsig_exit.o(.text) for __sig_exit
+    defsig_fpe_formal.o(.text) refers to rt_raise.o(.text) for __rt_raise
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002E) for __rt_lib_init_alloca_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000002C) for __rt_lib_init_argv_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001B) for __rt_lib_init_atexit_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000021) for __rt_lib_init_clock_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000032) for __rt_lib_init_cpp_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000030) for __rt_lib_init_exceptions_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000001) for __rt_lib_init_fp_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001F) for __rt_lib_init_fp_trap_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000023) for __rt_lib_init_getenv_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000A) for __rt_lib_init_heap_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000011) for __rt_lib_init_lc_collate_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000013) for __rt_lib_init_lc_ctype_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000015) for __rt_lib_init_lc_monetary_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000017) for __rt_lib_init_lc_numeric_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000019) for __rt_lib_init_lc_time_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000004) for __rt_lib_init_preinit_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000E) for __rt_lib_init_rand_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000033) for __rt_lib_init_return
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000001D) for __rt_lib_init_signal_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$00000025) for __rt_lib_init_stdio_1
+    libinit.o(.ARM.Collect$$libinit$$00000000) refers (Special) to libinit2.o(.ARM.Collect$$libinit$$0000000C) for __rt_lib_init_user_alloc_1
+    libspace.o(.text) refers to libspace.o(.bss) for __libspace_start
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
+    rtexit.o(.ARM.Collect$$rtexit$$00000000) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000002) for __rt_exit_prels_1
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for __rt_exit_exit
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for __rt_exit_ls
+    rtexit.o(.ARM.exidx) refers (Special) to rtexit2.o(.ARM.Collect$$rtexit$$00000002) for __rt_exit_prels_1
+    rtexit.o(.ARM.exidx) refers to rtexit.o(.ARM.Collect$$rtexit$$00000000) for .ARM.Collect$$rtexit$$00000000
+    rt_raise.o(.text) refers to __raise.o(.text) for __raise
+    rt_raise.o(.text) refers to sys_exit.o(.text) for _sys_exit
+    defsig_exit.o(.text) refers to sys_exit.o(.text) for _sys_exit
+    defsig_fpe_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    libinit2.o(.ARM.Collect$$libinit$$00000001) refers to fpinit.o(x$fpl$fpinit) for _fp_init
+    libinit2.o(.ARM.Collect$$libinit$$00000010) refers to libinit2.o(.ARM.Collect$$libinit$$0000000F) for .ARM.Collect$$libinit$$0000000F
+    libinit2.o(.ARM.Collect$$libinit$$00000012) refers to libinit2.o(.ARM.Collect$$libinit$$0000000F) for .ARM.Collect$$libinit$$0000000F
+    libinit2.o(.ARM.Collect$$libinit$$00000014) refers to libinit2.o(.ARM.Collect$$libinit$$0000000F) for .ARM.Collect$$libinit$$0000000F
+    libinit2.o(.ARM.Collect$$libinit$$00000016) refers to libinit2.o(.ARM.Collect$$libinit$$0000000F) for .ARM.Collect$$libinit$$0000000F
+    libinit2.o(.ARM.Collect$$libinit$$00000018) refers to libinit2.o(.ARM.Collect$$libinit$$0000000F) for .ARM.Collect$$libinit$$0000000F
+    libinit2.o(.ARM.Collect$$libinit$$00000026) refers to argv_veneer.o(.emb_text) for __ARM_argv_veneer
+    libinit2.o(.ARM.Collect$$libinit$$00000027) refers to argv_veneer.o(.emb_text) for __ARM_argv_veneer
+    sys_exit.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_exit.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    sys_exit_hlt.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_exit_hlt.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    rtexit2.o(.ARM.Collect$$rtexit$$00000003) refers to libshutdown.o(.ARM.Collect$$libshutdown$$00000000) for __rt_lib_shutdown
+    rtexit2.o(.ARM.Collect$$rtexit$$00000004) refers to sys_exit.o(.text) for _sys_exit
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000001) for .ARM.Collect$$rtexit$$00000001
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000003) for .ARM.Collect$$rtexit$$00000003
+    rtexit2.o(.ARM.exidx) refers to rtexit2.o(.ARM.Collect$$rtexit$$00000004) for .ARM.Collect$$rtexit$$00000004
+    __raise.o(.text) refers to defsig.o(CL$$defsig) for __default_signal_handler
+    defsig_general.o(.text) refers to sys_wrch.o(.text) for _ttywrch
+    argv_veneer.o(.emb_text) refers to no_argv.o(.text) for __ARM_get_argv
+    sys_wrch.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_wrch.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    sys_wrch_hlt.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_wrch_hlt.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    defsig.o(CL$$defsig) refers to defsig_fpe_inner.o(.text) for __rt_SIGFPE_inner
+    defsig.o(CL$$defsig) refers to defsig_rtmem_inner.o(.text) for __rt_SIGRTMEM_inner
+    _get_argv_nomalloc.o(.text) refers (Special) to hrguard.o(.text) for __heap_region$guard
+    _get_argv_nomalloc.o(.text) refers to defsig_rtmem_outer.o(.text) for __rt_SIGRTMEM
+    _get_argv_nomalloc.o(.text) refers to sys_command.o(.text) for _sys_command_string
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000002) for __rt_lib_shutdown_cpp_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000007) for __rt_lib_shutdown_fp_trap_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000F) for __rt_lib_shutdown_heap_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000010) for __rt_lib_shutdown_return
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000A) for __rt_lib_shutdown_signal_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$00000004) for __rt_lib_shutdown_stdio_1
+    libshutdown.o(.ARM.Collect$$libshutdown$$00000000) refers (Special) to libshutdown2.o(.ARM.Collect$$libshutdown$$0000000C) for __rt_lib_shutdown_user_alloc_1
+    sys_command.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_command.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    sys_command_hlt.o(.text) refers (Special) to use_no_semi.o(.text) for __I$use$semihosting
+    sys_command_hlt.o(.text) refers (Special) to indicate_semi.o(.text) for __semihosting_library_function
+    defsig_abrt_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_rtred_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_rtmem_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_rtmem_outer.o(.text) refers to defsig_rtmem_inner.o(.text) for __rt_SIGRTMEM_inner
+    defsig_rtmem_outer.o(.text) refers to defsig_exit.o(.text) for __sig_exit
+    defsig_rtmem_formal.o(.text) refers to rt_raise.o(.text) for __rt_raise
+    defsig_stak_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_pvfn_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_cppl_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_segv_inner.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+    defsig_other.o(.text) refers to defsig_general.o(.text) for __default_signal_display
+
