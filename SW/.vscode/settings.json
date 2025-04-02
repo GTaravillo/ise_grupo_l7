@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.cgi": "perl",
+        "lcd.h": "c",
+        "paths.h": "c",
+        "rtc.h": "c"
+    }
+}
