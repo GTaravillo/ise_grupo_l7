@@ -1,0 +1,1 @@
+MCB4300 board is covered by the user guide and schematics of MCB1800
