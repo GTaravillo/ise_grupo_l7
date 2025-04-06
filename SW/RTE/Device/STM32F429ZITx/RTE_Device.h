@@ -1321,7 +1321,7 @@
 
 // <e> SPI2 (Serial Peripheral Interface 2) [Driver_SPI2]
 // <i> Configuration settings for Driver_SPI2 in component ::CMSIS Driver:SPI
-#define RTE_SPI2                        0
+#define RTE_SPI2                        1
 
 //   <o> SPI2_MISO Pin <0=>Not Used <1=>PB14 <2=>PC2 <3=>PI2 <4=>PA12
 #define RTE_SPI2_MISO_PORT_ID           0
@@ -1348,7 +1348,7 @@
 #endif
 
 //   <o> SPI2_MOSI Pin <0=>Not Used <1=>PB15 <2=>PC3 <3=>PI3 <4=>PA10
-#define RTE_SPI2_MOSI_PORT_ID           0
+#define RTE_SPI2_MOSI_PORT_ID           1
 #if    (RTE_SPI2_MOSI_PORT_ID == 0)
 #define RTE_SPI2_MOSI                   0
 #elif  (RTE_SPI2_MOSI_PORT_ID == 1)
@@ -1372,7 +1372,7 @@
 #endif
 
 //   <o> SPI2_SCK Pin <0=>PB10 <1=>PB13 <2=>PC7 <3=>PD3 <4=>PI1 <5=>PA9
-#define RTE_SPI2_SCL_PORT_ID            0
+#define RTE_SPI2_SCL_PORT_ID            1
 #if    (RTE_SPI2_SCL_PORT_ID == 0)
 #define RTE_SPI2_SCL_PORT               GPIOB
 #define RTE_SPI2_SCL_BIT                10

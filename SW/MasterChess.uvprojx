@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>Servidor_web</OutputName>
+          <OutputName>MasterChess</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -592,6 +592,16 @@
               <FileName>led.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\led\led.h</FilePath>
+            </File>
+            <File>
+              <FileName>LedStripManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\led\LedStripManager.c</FilePath>
+            </File>
+            <File>
+              <FileName>LedStripManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\led\LedStripManager.h</FilePath>
             </File>
           </Files>
         </Group>

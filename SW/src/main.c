@@ -8,6 +8,7 @@
 #include PATH_LCD
 #include PATH_RTC
 #include PATH_SERVER
+#include PATH_LED_STRIP
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -54,17 +55,17 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority) {
 /* Private define ------------------------------------------------------------*/
 /*	System Core Clock
 	HSE_VALUE = 8MHz
-	PLLM             = 8    [0,63]      ->  8MHz/4    = 1MHz		
-	PLLN 						 = 336	[50,432]		->	1MHz*336  = 336MHz
-	PLLP 						 = RCC_PLLP_DIV2		->	336MHz/2  = 168MHz  = SystemCoreClock
-	AHBCLKDivider    = RCC_SYSCLK_DIV1  ->  168MHz
-    APB1CLKDivider = RCC_HCLK_DIV4    ->  168MHz/4  = 42MHz   = APB1 peripheral clocks (max 45MHz)
-                                          42MHz*2   = 84MHz   = APB1 Timer clocks
-    APB2CLKDivider = RCC_HCLK_DIV2    ->  168MHz/2  = 84MHz   = APB2 peripheral clocks (max 90MHz)
-                                          84MHz*2   = 168MHz  = APB2 Timer clocks
+	PLLM              =  8    [0,63]      ->  8MHz/8    = 1MHz		
+	PLLN              =  336  [50,432]    ->  1MHz*336  = 336MHz
+	PLLP              =  RCC_PLLP_DIV2    ->  336MHz/2  = 168MHz  = SystemCoreClock
+	AHBCLKDivider     =  RCC_SYSCLK_DIV1  ->  168MHz
+    APB1CLKDivider  =  RCC_HCLK_DIV4    ->  168MHz/4  = 42MHz   = APB1 peripheral clocks (max 45MHz)
+                                            42MHz*2   = 84MHz   = APB1 Timer clocks
+    APB2CLKDivider  =  RCC_HCLK_DIV2    ->  168MHz/2  = 84MHz   = APB2 peripheral clocks (max 90MHz)
+                                            84MHz*2   = 168MHz  = APB2 Timer clocks
 */
-#define PLLM_DIV4     4
-#define PLLN_MULT80   72
+#define PLLM_DIV8     8
+#define PLLN_MULT336  336
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -104,10 +105,8 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-  LED_Initialize();
-  LCD_Initialize();
-  RTC_Initialize();
-  Server_Initialize();
+	LED_Initialize();
+  LedStripManagerInitialize();
 
   /* Start thread execution */
   osKernelStart();
@@ -119,26 +118,6 @@ int main(void)
   }
 }
 
-/**
-  * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
-  *            System Clock source            = PLL (HSE)
-  *            SYSCLK(Hz)                     = 168000000
-  *            HCLK(Hz)                       = 168000000
-  *            AHB Prescaler                  = 1
-  *            APB1 Prescaler                 = 4
-  *            APB2 Prescaler                 = 2
-  *            HSE Frequency(Hz)              = 8000000
-  *            PLL_M                          = 8
-  *            PLL_N                          = 336
-  *            PLL_P                          = 2
-  *            PLL_Q                          = 7
-  *            VDD(V)                         = 3.3
-  *            Main regulator output voltage  = Scale1 mode
-  *            Flash Latency(WS)              = 5
-  * @param  None
-  * @retval None
-  */
 static void SystemClock_Config(void)
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -157,8 +136,8 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState 			 = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState 	 = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM 			 = 8/*PLLM_DIV4*/;
-  RCC_OscInitStruct.PLL.PLLN 			 = 336/*PLLN_MULT80*/;
+  RCC_OscInitStruct.PLL.PLLM 			 = PLLM_DIV8;
+  RCC_OscInitStruct.PLL.PLLN 			 = PLLN_MULT336;
   RCC_OscInitStruct.PLL.PLLP 			 = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ 			 = 7;
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
