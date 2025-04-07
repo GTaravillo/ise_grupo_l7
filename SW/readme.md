@@ -29,7 +29,7 @@ Led Strip - SPI2
   
 ETH - RMII  
     TXD0:       PG13  
-    TXD1:       PB13  
+    TXD1:       PG14  
     TX_EN:      PG11  
     RXD0:       PC4  
     RXD1:       PC5  
@@ -38,9 +38,9 @@ ETH - RMII
     MDC:        PC1  
     MDIO:       PA2  
   
-POT - ADC  
-    POT_1:      PA3  ->  mbed_19  
-    POT_2:      PC0  ->  mbed_20  
+Posicion (pruebas) - I2C1  
+    SDA:        PB8  
+    SCL:        PB9  
   
 Problemas a solucionar  
     Mejorar gestión eventos RTC (se salta algunos segundos)  
