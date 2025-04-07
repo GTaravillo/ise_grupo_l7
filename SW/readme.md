@@ -16,9 +16,11 @@ Environment:
       APB2CLKDivider  =  RCC_HCLK_DIV2    ->  168MHz/2  =  84MHz   = APB2 peripheral clocks (max 90MHz)  
                                               84MHz*2   =  168MHz  = APB2 Timer clocks  
   
+Printf:         PB3  
+  
 LCD - SPI1  
     MOSI:       PB5  ->  mbed_05  
-    SCK:        PA5  ->  mbed_07 -> OJO! Si se pone PB3 no funciona printf tras inicialización SPI  
+    SCK:        PA5  ->  mbed_07  
     Reset:      PA6  ->  mbed_06  
     A0:         PF13 ->  mbed_08  
     nCS:        PD14 ->  mbed_11  
