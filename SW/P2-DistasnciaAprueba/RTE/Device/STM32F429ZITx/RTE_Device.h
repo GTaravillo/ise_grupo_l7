@@ -1015,7 +1015,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface 1) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define RTE_I2C1                        0
+#define RTE_I2C1                        1
 
 //   <o> I2C1_SCL Pin <0=>PB6 <1=>PB8
 #define RTE_I2C1_SCL_PORT_ID            0
@@ -1222,7 +1222,7 @@
 
 // <e> SPI1 (Serial Peripheral Interface 1) [Driver_SPI1]
 // <i> Configuration settings for Driver_SPI1 in component ::CMSIS Driver:SPI
-#define RTE_SPI1                        1
+#define RTE_SPI1                        0
 
 //   <o> SPI1_MISO Pin <0=>Not Used <1=>PA6 <2=>PB4
 #define RTE_SPI1_MISO_PORT_ID           0
@@ -1241,7 +1241,7 @@
 #endif
 
 //   <o> SPI1_MOSI Pin <0=>Not Used <1=>PA7 <2=>PB5
-#define RTE_SPI1_MOSI_PORT_ID           1
+#define RTE_SPI1_MOSI_PORT_ID           2
 #if    (RTE_SPI1_MOSI_PORT_ID == 0)
 #define RTE_SPI1_MOSI                   0
 #elif  (RTE_SPI1_MOSI_PORT_ID == 1)
@@ -1257,7 +1257,7 @@
 #endif
 
 //   <o> SPI1_SCK Pin <0=>PA5 <1=>PB3
-#define RTE_SPI1_SCL_PORT_ID            0
+#define RTE_SPI1_SCL_PORT_ID            1
 #if    (RTE_SPI1_SCL_PORT_ID == 0)
 #define RTE_SPI1_SCL_PORT               GPIOA
 #define RTE_SPI1_SCL_BIT                5
@@ -1294,7 +1294,7 @@
 //     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
 //     <i>  Selects DMA Priority
 //   </e>
-#define RTE_SPI1_RX_DMA                 0
+#define RTE_SPI1_RX_DMA                 1
 #define RTE_SPI1_RX_DMA_NUMBER          2
 #define RTE_SPI1_RX_DMA_STREAM          0
 #define RTE_SPI1_RX_DMA_CHANNEL         3

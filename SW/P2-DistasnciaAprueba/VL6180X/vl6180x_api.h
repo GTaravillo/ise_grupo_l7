@@ -36,7 +36,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef VL6180x_API_H_
 #define VL6180x_API_H_
 
+
 #include "vl6180x_platform.h"
+
 
 #ifdef __cplusplus
 extern "C" {

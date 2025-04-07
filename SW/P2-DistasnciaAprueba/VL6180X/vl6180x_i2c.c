@@ -40,6 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 #include "vl6180x_i2c.h"
+#include "Driver_I2C.h"
 
 #ifndef I2C_BUFFER_CONFIG
 #error "I2C_BUFFER_CONFIG not defined"
@@ -65,6 +66,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #error "invalid I2C_BUFFER_CONFIG "
 #endif
 
+
+extern ARM_DRIVER_I2C* I2Cdrv;
+
+void VL6180x_PollDelay(VL6180xDev_t dev)
+{
+  osDelay(500);
+}
 
 int VL6180x_WrByte(VL6180xDev_t dev, uint16_t index, uint8_t data){
     int  status;
@@ -245,5 +253,13 @@ int  VL6180x_RdMulti(VL6180xDev_t dev, uint16_t index, uint8_t *data, int nData)
 }
 
 int  VL6180x_I2CWrite(VL6180xDev_t dev, uint8_t  *buff, uint8_t len){
-  
+    int32_t status;
+    status = I2Cdrv->MasterTransmit(dev, buff, len, false);
+    return status;
+}
+
+int  VL6180x_I2CRead(VL6180xDev_t dev, uint8_t  *buff, uint8_t len){
+    int32_t status;
+    status = I2Cdrv->MasterReceive(dev, buff, len, false);
+    return status;
 }

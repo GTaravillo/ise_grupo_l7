@@ -219,10 +219,7 @@ void VL6180x_PollDelay(VL6180xDev_t dev); /* usualy best implemanted a a real fu
  * @ingroup api_platform
  */
 //#define VL6180x_PollDelay(dev)  (void)0
-void VL6180x_PollDelay(VL6180xDev_t dev)
-{
-  osDelay(500);
-}
+
 
 
 
