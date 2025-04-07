@@ -2383,7 +2383,7 @@
 #error "Invalid ETH_RMII_TXD0 Pin Configuration!"
 #endif
 //     <o> ETH_RMII_TXD1 Pin <0=>PB13 <1=>PG14
-#define RTE_ETH_RMII_TXD1_PORT_ID       0
+#define RTE_ETH_RMII_TXD1_PORT_ID       1
 #if    (RTE_ETH_RMII_TXD1_PORT_ID == 0)
 #define RTE_ETH_RMII_TXD1_PORT          GPIOB
 #define RTE_ETH_RMII_TXD1_PIN           13
