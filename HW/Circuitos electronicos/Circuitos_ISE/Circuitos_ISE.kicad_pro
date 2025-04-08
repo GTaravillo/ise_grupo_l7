@@ -413,20 +413,8 @@
       "Root"
     ],
     [
-      "833e9fa0-52b3-4e11-b22c-f9908c895b8c",
-      "Acondicionador de señal"
-    ],
-    [
-      "bfedd965-d482-4f02-b77b-ef9f5affa909",
-      "Masa Virtual"
-    ],
-    [
       "165572ce-9450-4ee0-904b-ee9fb466911b",
       "Tension de referencia"
-    ],
-    [
-      "7222ac86-87ae-4f6f-b1a9-27249464d435",
-      "Sensor de consumo"
     ]
   ],
   "text_variables": {}
