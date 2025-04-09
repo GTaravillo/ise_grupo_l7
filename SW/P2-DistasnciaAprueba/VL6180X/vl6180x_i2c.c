@@ -71,7 +71,7 @@ extern ARM_DRIVER_I2C* I2Cdrv;
 
 void VL6180x_PollDelay(VL6180xDev_t dev)
 {
-  osDelay(500);
+  osDelay(100);
 }
 
 int VL6180x_WrByte(VL6180xDev_t dev, uint16_t index, uint8_t data){
@@ -252,14 +252,18 @@ int  VL6180x_RdMulti(VL6180xDev_t dev, uint16_t index, uint8_t *data, int nData)
     return status;
 }
 
-int  VL6180x_I2CWrite(VL6180xDev_t dev, uint8_t  *buff, uint8_t len){
+int  VL6180x_I2CWrite(VL6180xDev_t addr, uint8_t  *buff, uint8_t len){
     int32_t status;
-    status = I2Cdrv->MasterTransmit(dev, buff, len, false);
+    status = I2Cdrv->MasterTransmit(addr, buff, len, true);
+    osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever);
+    osThreadFlagsClear(0x01);
     return status;
 }
 
-int  VL6180x_I2CRead(VL6180xDev_t dev, uint8_t  *buff, uint8_t len){
+int  VL6180x_I2CRead(VL6180xDev_t addr, uint8_t  *buff, uint8_t len){
     int32_t status;
-    status = I2Cdrv->MasterReceive(dev, buff, len, false);
+    status = I2Cdrv->MasterReceive(addr, buff, len, true);
+    osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever);
+    osThreadFlagsClear(0x01);
     return status;
 }

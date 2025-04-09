@@ -43,6 +43,7 @@
 //#include "VL6180X/vl6180x_i2c.h"
 #include "Driver_I2C.h"
 #include "cmsis_os2.h"
+#include <stdio.h>
 
 #ifdef _RTE_
 #include "RTE_Components.h"             // Component selection
@@ -125,21 +126,25 @@ int ThDistancia(void){
 }
 
 void Thread_Dis(void* argument){
-    uint8_t dev = 0x52;
+    uint8_t dev = 0x29;
     VL6180x_RangeData_t Range;
     MyDev_Init();
+    printf("I2C Inicializado\n");
     osDelay(1000);
     VL6180x_InitData(dev);
+    printf("VL6180x Data Inicializado\n");
     VL6180x_Prepare(dev);
+    printf("VL6180x Preparado\n");
     do {
         VL6180x_RangePollMeasurement(dev, &Range);
+        printf("VL6180x Detecta una medida\n");
         if (Range.errorStatus == 0 ){
-            printf("%d", Range.range_mm);
+            printf("%d mm\n", Range.range_mm);
         }else{
             printf("Error");
         }
         
-        } while (1);
+    } while (1);
     
 
 }
@@ -168,7 +173,9 @@ int main(void)
 
   /* Add your application code here
      */
-
+  
+  ThDistancia();
+  
 #ifdef RTE_CMSIS_RTOS2
   /* Initialize CMSIS-RTOS2 */
   osKernelInitialize ();
@@ -179,7 +186,7 @@ int main(void)
   /* Start thread execution */
   osKernelStart();
 #endif
-  ThDistancia();
+  
   
   /* Infinite loop */
   while (1)
@@ -225,7 +232,7 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLM = 8;
   RCC_OscInitStruct.PLL.PLLN = 336;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
