@@ -12,7 +12,10 @@
 #ifndef VL6180_I2C_H_
 #define VL6180_I2C_H_
 
+
 #include "vl6180x_platform.h"
+
+
 
 /**
  * @defgroup cci_i2c  CCI to RAW I2C translation layer
@@ -159,6 +162,8 @@ uint8_t *VL6180x_GetI2cBuffer(VL6180xDev_t dev, int n_byte);
 #error /* TODO add your macro of code here for VL6180x_GetI2cBuffer */
 #endif
 
+//extern void MyDev_Init(void);
+//extern void Thread_Dis(void* argument);
 
 
 
