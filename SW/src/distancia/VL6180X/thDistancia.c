@@ -5,10 +5,10 @@
 
 extern osThreadId_t tid_ThDistancia;  
 osThreadId_t tid_ThDistancia;
-extern ARM_DRIVER_I2C Driver_I2C1;
+extern ARM_DRIVER_I2C Driver_I2C2;
 void I2C_SignalEvent(uint32_t event);
 
-ARM_DRIVER_I2C* I2Cdrv = &Driver_I2C1;
+ARM_DRIVER_I2C* I2Cdrv = &Driver_I2C2;
 VL6180x_RangeData_t Range;
 
 
