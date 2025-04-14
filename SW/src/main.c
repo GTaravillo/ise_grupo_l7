@@ -9,6 +9,7 @@
 #include PATH_RTC
 #include PATH_SERVER
 #include PATH_LED_STRIP
+#include PATH_POSITION
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -97,7 +98,36 @@ int main(void)
 
   /* Add your application code here
      */
-  
+
+  /******** TEST EXPANSOR GPIO ********/
+  /**
+   * Idea: usar el botón de usuario para generar cambios de estado en un puerto del expansor,
+   * y así corroborar la correcta lectura del pin mediante I2C
+   */
+	GPIO_InitTypeDef GPIO_InitStruct_B1;
+
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);		// Interrupt lines 15:10 (B1)
+
+	GPIO_InitStruct_B1.Pin 		= GPIO_PIN_13;
+	GPIO_InitStruct_B1.Mode 	= GPIO_MODE_IT_RISING; 					// External Interrupt Mode with Rising edge trigger detection
+	GPIO_InitStruct_B1.Pull 	= GPIO_PULLDOWN; 								// When B1 is pushed: 0 -> 1. Otherwise, 0 (Pull-Down)
+	GPIO_InitStruct_B1.Speed 	= GPIO_SPEED_FREQ_LOW;
+
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct_B1);
+	
+  GPIO_InitTypeDef GPIO_InitStruct;
+	
+	/* Configure GPIO pins: PB0 PB7 PB14 */
+  GPIO_InitStruct.Pin   = GPIO_PIN_8;
+  GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull  = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+	
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET); // En el datasheet pone que para usar un puerto para lectura, primero hay que ponerlo a 1
+  /******** /TEST EXPANSOR GPIO ********/
 
 #ifdef RTE_CMSIS_RTOS2
   /* Initialize CMSIS-RTOS2 */
@@ -106,7 +136,8 @@ int main(void)
 
   /* Create thread functions that start executing*/
 	LED_Initialize();
-  LedStripManagerInitialize();
+  //LedStripManagerInitialize();
+	PositionManagerInitialize();
 
   /* Start thread execution */
   osKernelStart();

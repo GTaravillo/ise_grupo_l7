@@ -16,6 +16,7 @@
 	#define PATH_LED_STRIP   "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/led/LedStripManager.h"
 	#define PATH_RTC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/rtc/rtc.h"
 	#define PATH_UART        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/uart/uart.h"
+	#define PATH_POSITION    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/posicion/PositionManager.h"
 #endif
 
 #endif /* __PATHS_H */

@@ -659,6 +659,21 @@
           <GroupName>nfc</GroupName>
         </Group>
         <Group>
+          <GroupName>position</GroupName>
+          <Files>
+            <File>
+              <FileName>PositionManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\posicion\PositionManager.c</FilePath>
+            </File>
+            <File>
+              <FileName>PositionManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\posicion\PositionManager.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
