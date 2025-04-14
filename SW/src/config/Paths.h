@@ -1,10 +1,10 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE_FABIAN 1
+#define WORKSPACE 1
 
 /* Headers */
-#if WORKSPACE_FABIAN == 1
+#if WORKSPACE == 1		// Fabian
 	#define PATH_MAIN        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/main.h"
 	#define PATH_SERVER      "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/servidor/server.h"
 	#define PATH_ADC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/src/adc/adc.h"
