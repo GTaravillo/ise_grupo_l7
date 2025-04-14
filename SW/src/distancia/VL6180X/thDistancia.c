@@ -7,6 +7,7 @@ extern osThreadId_t tid_ThDistancia;
 osThreadId_t tid_ThDistancia;
 extern ARM_DRIVER_I2C Driver_I2C2;
 void I2C_SignalEvent(uint32_t event);
+void I2C_SignalEvent_dis(uint32_t event);
 
 ARM_DRIVER_I2C* I2Cdrv = &Driver_I2C2;
 VL6180x_RangeData_t Range;
@@ -19,14 +20,14 @@ int ThDistancia(void);
 void Thread_Dis(void* argument);
 /* Private functions ---------------------------------------------------------*/
 void MyDev_Init(){
-    I2Cdrv->Initialize(I2C_SignalEvent);
+	I2Cdrv->Initialize(I2C_SignalEvent_dis);
     I2Cdrv->PowerControl(ARM_POWER_FULL);
     I2Cdrv->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_FAST);
     I2Cdrv->Control(ARM_I2C_BUS_CLEAR, 0);
     
 }
 
-void I2C_SignalEvent(uint32_t event){
+void I2C_SignalEvent_dis(uint32_t event){
     uint8_t mask = ARM_I2C_EVENT_TRANSFER_DONE;
     if(event & mask){
         osThreadFlagsSet(tid_ThDistancia, 0x01);
