@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.cgi": "perl",
+        "*.h": "c",
+        "*.c": "c"
+    }
+}
