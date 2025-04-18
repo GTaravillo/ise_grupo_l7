@@ -16,7 +16,7 @@ Velocidad?
 #include PATH_LED
 
 #define POWER_ON_RESET  150     // Tiempo (ms) que debe mantenerse en reset al inicializar
-#define SLAVE_1_ADDR    0x40
+#define SLAVE_1_ADDR    0x20    // 0x24 en 7 bits es 0x48 en 8 bits
 #define SLAVE_2_ADDR    0x48
 
 /* Driver I2C */
@@ -72,15 +72,20 @@ static void Run(void *argument)
 		buff[0] = 0x00;
 		buff[1] = 0x00;
 		
-    status = I2Cdrv->MasterReceive(SLAVE_1_ADDR, buff, 2, false);
+    //status = I2Cdrv->MasterReceive(SLAVE_1_ADDR, buff, 2, false);
 		printf("MasterReceive [%d]\n", status);
     // Wait for the transfer to complete
     osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
   
     uint16_t gpioState = (buff[0] << 8) | buff[1];
-		printf("Estado PC8 [%d]\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8));
-    printf("LECTURA [%d]\n", gpioState);
-
+		
+		if(gpioState == 0){
+			printf("Estado PC8 [%d]\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8));
+			printf("LECTURA [%d]\n", gpioState);
+		}
+		
+		printf("Estado PC9 [%d]\n", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9));
+		
     osDelay(1000);
   }
 

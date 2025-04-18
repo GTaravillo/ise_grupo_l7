@@ -127,7 +127,18 @@ int main(void)
 	
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET); // En el datasheet pone que para usar un puerto para lectura, primero hay que ponerlo a 1
-  /******** /TEST EXPANSOR GPIO ********/
+
+  ///////////////////////////////////////
+
+  GPIO_InitStruct.Pin   = GPIO_PIN_9;
+  GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull  = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_SET);
+	
+	/******** /TEST EXPANSOR GPIO ********/
 
 #ifdef RTE_CMSIS_RTOS2
   /* Initialize CMSIS-RTOS2 */
@@ -135,7 +146,7 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-	LED_Initialize();
+	//LED_Initialize();
   //LedStripManagerInitialize();
 	PositionManagerInitialize();
 
