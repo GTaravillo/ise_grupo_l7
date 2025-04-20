@@ -43,8 +43,13 @@ ETH - RMII
 Posicion (pruebas) - I2C1  
     SDA:        PB8  
     SCL:        PB9  
+
 Distancia - I2C2
     SCL         PF1
     SDA         PF0
+
+Comunicación entre placas - UART
+    TX:         PB4
+    RX:         PB3
 Problemas a solucionar  
     Mejorar gestión eventos RTC (se salta algunos segundos)  
