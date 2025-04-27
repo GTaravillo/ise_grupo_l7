@@ -70,6 +70,11 @@ Printf:         PB3
     SCL         PF1  
     SDA         PF0  
   
+### Comunicación entre placas  
+    **UART7**  
+    TX:         PB4  
+    RX:         PB3 
+  
 ### RFID/NFC  
     **SPIx**  
     TO-DO  
