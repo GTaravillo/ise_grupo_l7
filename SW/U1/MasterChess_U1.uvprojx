@@ -381,6 +381,21 @@
       </TargetOption>
       <Groups>
         <Group>
+          <GroupName>config</GroupName>
+          <Files>
+            <File>
+              <FileName>NetConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\config\NetConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>Paths.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\config\Paths.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>main</GroupName>
           <Files>
             <File>
@@ -606,21 +621,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>config</GroupName>
-          <Files>
-            <File>
-              <FileName>NetConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\config\NetConfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>Paths.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\config\Paths.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>rtc</GroupName>
           <Files>
             <File>
@@ -682,6 +682,21 @@
               <FileName>ComunicacionPlacas.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\com_placas\ComunicacionPlacas.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>memoria</GroupName>
+          <Files>
+            <File>
+              <FileName>Memoria.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\memoria\Memoria.h</FilePath>
+            </File>
+            <File>
+              <FileName>Memoria.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\memoria\Memoria.c</FilePath>
             </File>
           </Files>
         </Group>

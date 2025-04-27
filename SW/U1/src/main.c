@@ -10,6 +10,7 @@
 #include PATH_SERVER
 #include PATH_LED_STRIP
 #include PATH_POSITION
+#include PATH_MEMORIA
 
 #define MASTER 1
 
@@ -109,9 +110,10 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-	LED_Initialize();
+	//LED_Initialize();
   //LedStripManagerInitialize();
-	PositionManagerInitialize();
+	//PositionManagerInitialize();
+	MemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();

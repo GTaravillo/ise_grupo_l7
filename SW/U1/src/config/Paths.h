@@ -5,18 +5,19 @@
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian
-	#define PATH_MAIN        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/main.h"
-	#define PATH_SERVER      "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/servidor/server.h"
-	#define PATH_ADC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/adc/adc.h"
-	#define PATH_BUTTONS     "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/buttons/buttons.h"
-	#define PATH_NET_CONFIG  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/config/NetConfig.h"
-	#define PATH_IRQ         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/irq/stm32f4xx_it.h"
-	#define PATH_LCD         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/lcd/lcd.h"
-	#define PATH_LED         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/led/led.h"
-	#define PATH_LED_STRIP   "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/led/LedStripManager.h"
-	#define PATH_RTC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
-	#define PATH_UART        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/uart/uart.h"
-	#define PATH_POSITION    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
+	#define PATH_MAIN       "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/main.h"
+	#define PATH_SERVER     "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/servidor/server.h"
+	#define PATH_ADC        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/adc/adc.h"
+	#define PATH_BUTTONS    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/buttons/buttons.h"
+	#define PATH_NET_CONFIG "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/config/NetConfig.h"
+	#define PATH_IRQ        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/irq/stm32f4xx_it.h"
+	#define PATH_LCD        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/lcd/lcd.h"
+	#define PATH_LED        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/led/led.h"
+	#define PATH_LED_STRIP  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/led/LedStripManager.h"
+	#define PATH_RTC        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
+	#define PATH_UART       "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/uart/uart.h"
+	#define PATH_POSITION   "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
+	#define PATH_MEMORIA    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
 #endif
 
 #if WORKSPACE == 2		// Yuanze
