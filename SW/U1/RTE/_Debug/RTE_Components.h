@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'MasterChess' 
+ * Project: 'MasterChess_U1' 
  * Target:  'Debug' 
  */
 

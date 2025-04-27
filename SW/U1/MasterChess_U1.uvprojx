@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>MasterChess</OutputName>
+          <OutputName>MasterChess_U1</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -656,9 +656,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>nfc</GroupName>
-        </Group>
-        <Group>
           <GroupName>position</GroupName>
           <Files>
             <File>
@@ -670,61 +667,6 @@
               <FileName>PositionManager.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\posicion\PositionManager.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>distancia</GroupName>
-          <Files>
-            <File>
-              <FileName>thDistancia.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\distancia\VL6180X\thDistancia.c</FilePath>
-            </File>
-            <File>
-              <FileName>thDistancia.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\thDistancia.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_api.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_api.c</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_api.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_api.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_cfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_cfg.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_def.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_def.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_i2c.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_i2c.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_platform.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_platform.h</FilePath>
-            </File>
-            <File>
-              <FileName>vl6180x_types.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\distancia\VL6180X\vl6180x_types.h</FilePath>
             </File>
           </Files>
         </Group>

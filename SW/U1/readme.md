@@ -18,70 +18,38 @@ Environment:
   
 Printf:         PB3  
   
-## <ins>U1</ins>  
-  
-### LCD  
-    **SPI1**  
+LCD - SPI1  
     MOSI:       PB5  ->  mbed_05  
     SCK:        PA5  ->  mbed_07  
     Reset:      PA6  ->  mbed_06  
     A0:         PF13 ->  mbed_08  
     nCS:        PD14 ->  mbed_11  
   
-### LEDs RGB  
-    **SPI2**  
+Led Strip - SPI2  
     MOSI:       PB15 ->  DATA  
     SCK:        PB13 ->  CLK  
   
-### Servidor Web / RTC
-    **ETH**  
-    RMII  
-        TXD0:       PG13  
-        TXD1:       PG14  
-        TX_EN:      PG11  
-        RXD0:       PC4  
-        RXD1:       PC5  
-        REF_CLK:    PA1  
-        CRS_DV:     PA7  
-    Management Data Interface  
-        MDC:        PC1  
-        MDIO:       PA2  
+ETH - RMII  
+    TXD0:       PG13  
+    TXD1:       PG14  
+    TX_EN:      PG11  
+    RXD0:       PC4  
+    RXD1:       PC5  
+    REF_CLK:    PA1  
+    CRS_DV:     PA7  
+    MDC:        PC1  
+    MDIO:       PA2  
   
-### Expansor GPIO - Posicion
-    **I2C1**  
+Posicion (pruebas) - I2C1  
     SDA:        PB8  
     SCL:        PB9  
-  
-### Memoria  
-    **I2C2**  
-    SCL         PF1  
-    SDA         PF0  
-  
-### Comunicación entre placas  
-    **UART7**  
-    TX:         PB4  
-    RX:         PB3  
 
-  
-## <ins>U2 - Bajo Consumo</ins>  
-  
-### Distancia  
-    **I2C2**  
-    SCL         PF1  
-    SDA         PF0  
-  
-### RFID/NFC  
-    **SPIx**  
-    TO-DO  
-  
-### Alimentación  
-    TO-DO  
-  
-### Ruido  
-    TO-DO  
-  
-  
-# Problemas a solucionar  
-  
-## RTC  
+Distancia - I2C2
+    SCL         PF1
+    SDA         PF0
+
+Comunicación entre placas - UART
+    TX:         PB4
+    RX:         PB3
+Problemas a solucionar  
     Mejorar gestión eventos RTC (se salta algunos segundos)  
