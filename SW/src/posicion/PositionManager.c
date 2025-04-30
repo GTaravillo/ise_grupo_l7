@@ -17,7 +17,9 @@ Velocidad?
 
 #define POWER_ON_RESET  150     // Tiempo (ms) que debe mantenerse en reset al inicializar
 #define SLAVE_1_ADDR    0x20    // 0x24 en 7 bits es 0x48 en 8 bits
-#define SLAVE_2_ADDR    0x48
+#define SLAVE_2_ADDR    0x21
+#define SLAVE_3_ADDR    0x22
+#define SLAVE_4_ADDR    0x25
 
 /* Driver I2C */
 extern ARM_DRIVER_I2C Driver_I2C1;
@@ -72,8 +74,23 @@ static void Run(void *argument)
 		buff[0] = 0x00;
 		buff[1] = 0x00;
 		
-    //status = I2Cdrv->MasterReceive(SLAVE_1_ADDR, buff, 2, false);
-		printf("MasterReceive [%d]\n", status);
+    status = I2Cdrv->MasterReceive(SLAVE_1_ADDR, buff, 2, false);
+		printf("MasterReceive1 [%d]\n", status);
+    // Wait for the transfer to complete
+    osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
+		
+		status = I2Cdrv->MasterReceive(SLAVE_2_ADDR, buff, 2, false);
+		printf("MasterReceive2 [%d]\n", status);
+    // Wait for the transfer to complete
+    osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
+		
+		status = I2Cdrv->MasterReceive(SLAVE_3_ADDR, buff, 2, false);
+		printf("MasterReceive3 [%d]\n", status);
+    // Wait for the transfer to complete
+    osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
+		
+		status = I2Cdrv->MasterReceive(SLAVE_4_ADDR, buff, 2, false);
+		printf("MasterReceive4 [%d]\n", status);
     // Wait for the transfer to complete
     osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
   
