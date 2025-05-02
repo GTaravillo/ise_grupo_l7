@@ -1,158 +1,138 @@
-#ifndef _RC522_H
-#define _RC522_H
+// Mifare RC522 RFID Card reader 13.56 MHz
+// STM32F103 RFID RC522 SPI1 / UART / USB / Keil HAL
 
-#include "../main.h"
 #include "stm32f4xx_hal.h"
 
+// SPI CS define
+//#define SPI_I2S_FLAG_BSY	((uint16_t)0x0080)
+#define cs_reset() 						HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET)
+#define cs_set() 						HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET)
 
-/*MFRC522寄存器定义*/
-//PAGE0
-#define MFRC_RFU00              	0x00    
-#define MFRC_CommandReg         	0x01    
-#define MFRC_ComIEnReg             	0x02    
-#define MFRC_DivlEnReg             	0x03    
-#define MFRC_ComIrqReg             	0x04    
-#define MFRC_DivIrqReg             	0x05
-#define MFRC_ErrorReg              	0x06    
-#define MFRC_Status1Reg            	0x07    
-#define MFRC_Status2Reg            	0x08    
-#define MFRC_FIFODataReg           	0x09
-#define MFRC_FIFOLevelReg          	0x0A
-#define MFRC_WaterLevelReg         	0x0B
-#define MFRC_ControlReg            	0x0C
-#define MFRC_BitFramingReg         	0x0D
-#define MFRC_CollReg               	0x0E
-#define MFRC_RFU0F                 	0x0F
-//PAGE1     
-#define MFRC_RFU10                 	0x10
-#define MFRC_ModeReg               	0x11
-#define MFRC_TxModeReg             	0x12
-#define MFRC_RxModeReg             	0x13
-#define MFRC_TxControlReg          	0x14
-#define MFRC_TxAutoReg             	0x15 //中文手册有误
-#define MFRC_TxSelReg              	0x16
-#define MFRC_RxSelReg              	0x17
-#define MFRC_RxThresholdReg        	0x18
-#define MFRC_DemodReg              	0x19
-#define MFRC_RFU1A                 	0x1A
-#define MFRC_RFU1B                 	0x1B
-#define MFRC_MifareReg             	0x1C
-#define MFRC_RFU1D                 	0x1D
-#define MFRC_RFU1E                 	0x1E
-#define MFRC_SerialSpeedReg        	0x1F
-//PAGE2    
-#define MFRC_RFU20                 	0x20  
-#define MFRC_CRCResultRegM         	0x21
-#define MFRC_CRCResultRegL         	0x22
-#define MFRC_RFU23                 	0x23
-#define MFRC_ModWidthReg           	0x24
-#define MFRC_RFU25                 	0x25
-#define MFRC_RFCfgReg              	0x26
-#define MFRC_GsNReg                	0x27
-#define MFRC_CWGsCfgReg            	0x28
-#define MFRC_ModGsCfgReg           	0x29
-#define MFRC_TModeReg              	0x2A
-#define MFRC_TPrescalerReg         	0x2B
-#define MFRC_TReloadRegH           	0x2C
-#define MFRC_TReloadRegL           	0x2D
-#define MFRC_TCounterValueRegH     	0x2E
-#define MFRC_TCounterValueRegL     	0x2F
-//PAGE3      
-#define MFRC_RFU30                 	0x30
-#define MFRC_TestSel1Reg           	0x31
-#define MFRC_TestSel2Reg           	0x32
-#define MFRC_TestPinEnReg          	0x33
-#define MFRC_TestPinValueReg       	0x34
-#define MFRC_TestBusReg            	0x35
-#define MFRC_AutoTestReg           	0x36
-#define MFRC_VersionReg            	0x37
-#define MFRC_AnalogTestReg         	0x38
-#define MFRC_TestDAC1Reg           	0x39  
-#define MFRC_TestDAC2Reg           	0x3A   
-#define MFRC_TestADCReg            	0x3B   
-#define MFRC_RFU3C                 	0x3C   
-#define MFRC_RFU3D                 	0x3D   
-#define MFRC_RFU3E                 	0x3E   
-#define MFRC_RFU3F                 	0x3F
+// Status enumeration, Used with most functions
+#define MI_OK							0
+#define MI_NOTAGERR						1
+#define MI_ERR							2
 
-/*MFRC522的FIFO长度定义*/
-#define MFRC_FIFO_LENGTH       		64 
+// MFRC522 Commands
+#define PCD_IDLE						0x00		// NO action; Cancel the current command
+#define PCD_AUTHENT						0x0E  		// Authentication Key
+#define PCD_RECEIVE						0x08   		// Receive Data
+#define PCD_TRANSMIT					0x04   		// Transmit data
+#define PCD_TRANSCEIVE					0x0C   		// Transmit and receive data,
+#define PCD_RESETPHASE					0x0F   		// Reset
+#define PCD_CALCCRC						0x03   		// CRC Calculate
 
-/*MFRC522传输的帧长定义*/
-#define MFRC_MAXRLEN                18                
+// Mifare_One card command word
+#define PICC_REQIDL						0x26   		// find the antenna area does not enter hibernation
+#define PICC_REQALL						0x52   		// find all the cards antenna area
+#define PICC_ANTICOLL					0x93   		// anti-collision
+#define PICC_SElECTTAG					0x93 	  	// election card
+#define PICC_AUTHENT1A					0x60	   	// authentication key A
+#define PICC_AUTHENT1B					0x61  	 	// authentication key B
+#define PICC_READ						0x30   		// Read Block
+#define PICC_WRITE						0xA0  	 	// write block
+#define PICC_DECREMENT					0xC0 	  	// debit
+#define PICC_INCREMENT					0xC1 	  	// recharge
+#define PICC_RESTORE					0xC2	   	// transfer block data to the buffer
+#define PICC_TRANSFER					0xB0  	 	// save the data in the buffer
+#define PICC_HALT						0x50  	 	// Sleep
 
-/*MFRC522命令集,中文手册P59*/
-#define MFRC_IDLE              		0x00	//取消当前命令的执行
-#define MFRC_CALCCRC           		0x03    //激活CRC计算
-#define MFRC_TRANSMIT          		0x04    //发送FIFO缓冲区内容
-#define MFRC_NOCMDCHANGE            0x07	//无命令改变
-#define MFRC_RECEIVE           		0x08    //激活接收器接收数据
-#define MFRC_TRANSCEIVE        		0x0C    //发送并接收数据
-#define MFRC_AUTHENT           		0x0E    //执行Mifare认证(验证密钥)
-#define MFRC_RESETPHASE        		0x0F    //复位MFRC522
+// MFRC522 Registers
+// Page 0: Command and Status
+#define MFRC522_REG_RESERVED00			0x00
+#define MFRC522_REG_COMMAND				0x01
+#define MFRC522_REG_COMM_IE_N			0x02
+#define MFRC522_REG_DIV1_EN				0x03
+#define MFRC522_REG_COMM_IRQ			0x04
+#define MFRC522_REG_DIV_IRQ				0x05
+#define MFRC522_REG_ERROR				0x06
+#define MFRC522_REG_STATUS1				0x07
+#define MFRC522_REG_STATUS2				0x08
+#define MFRC522_REG_FIFO_DATA			0x09
+#define MFRC522_REG_FIFO_LEVEL			0x0A
+#define MFRC522_REG_WATER_LEVEL			0x0B
+#define MFRC522_REG_CONTROL				0x0C
+#define MFRC522_REG_BIT_FRAMING			0x0D
+#define MFRC522_REG_COLL				0x0E
+#define MFRC522_REG_RESERVED01			0x0F
+// Page 1: Command
+#define MFRC522_REG_RESERVED10			0x10
+#define MFRC522_REG_MODE				0x11
+#define MFRC522_REG_TX_MODE				0x12
+#define MFRC522_REG_RX_MODE				0x13
+#define MFRC522_REG_TX_CONTROL			0x14
+#define MFRC522_REG_TX_AUTO				0x15
+#define MFRC522_REG_TX_SELL				0x16
+#define MFRC522_REG_RX_SELL				0x17
+#define MFRC522_REG_RX_THRESHOLD		0x18
+#define MFRC522_REG_DEMOD				0x19
+#define MFRC522_REG_RESERVED11			0x1A
+#define MFRC522_REG_RESERVED12			0x1B
+#define MFRC522_REG_MIFARE				0x1C
+#define MFRC522_REG_RESERVED13			0x1D
+#define MFRC522_REG_RESERVED14			0x1E
+#define MFRC522_REG_SERIALSPEED			0x1F
+// Page 2: CFG
+#define MFRC522_REG_RESERVED20			0x20
+#define MFRC522_REG_CRC_RESULT_M		0x21
+#define MFRC522_REG_CRC_RESULT_L		0x22
+#define MFRC522_REG_RESERVED21			0x23
+#define MFRC522_REG_MOD_WIDTH			0x24
+#define MFRC522_REG_RESERVED22			0x25
+#define MFRC522_REG_RF_CFG				0x26
+#define MFRC522_REG_GS_N				0x27
+#define MFRC522_REG_CWGS_PREG			0x28
+#define MFRC522_REG__MODGS_PREG			0x29
+#define MFRC522_REG_T_MODE				0x2A
+#define MFRC522_REG_T_PRESCALER			0x2B
+#define MFRC522_REG_T_RELOAD_H			0x2C
+#define MFRC522_REG_T_RELOAD_L			0x2D
+#define MFRC522_REG_T_COUNTER_VALUE_H	0x2E
+#define MFRC522_REG_T_COUNTER_VALUE_L	0x2F
+// Page 3:TestRegister
+#define MFRC522_REG_RESERVED30			0x30
+#define MFRC522_REG_TEST_SEL1			0x31
+#define MFRC522_REG_TEST_SEL2			0x32
+#define MFRC522_REG_TEST_PIN_EN			0x33
+#define MFRC522_REG_TEST_PIN_VALUE		0x34
+#define MFRC522_REG_TEST_BUS			0x35
+#define MFRC522_REG_AUTO_TEST			0x36
+#define MFRC522_REG_VERSION				0x37
+#define MFRC522_REG_ANALOG_TEST			0x38
+#define MFRC522_REG_TEST_ADC1			0x39
+#define MFRC522_REG_TEST_ADC2			0x3A
+#define MFRC522_REG_TEST_ADC0			0x3B
+#define MFRC522_REG_RESERVED31			0x3C
+#define MFRC522_REG_RESERVED32			0x3D
+#define MFRC522_REG_RESERVED33			0x3E
+#define MFRC522_REG_RESERVED34			0x3F
 
-/*MFRC522通讯时返回的错误代码*/
-#define MFRC_OK                 	(char)0
-#define MFRC_NOTAGERR            	(char)(-1)
-#define MFRC_ERR                	(char)(-2)
-
-
-
-#define RC522_RST_Pin GPIO_PIN_4
-#define RC522_RST_GPIO_Port GPIOB
-#define RC522_CS_Pin GPIO_PIN_12
-#define RC522_CS_GPIO_Port GPIOB
-/*MFRC522函数声明*/
-void MFRC_Init(void);
-void MFRC_WriteReg(uint8_t addr, uint8_t data);
-uint8_t MFRC_ReadReg(uint8_t addr);
-void MFRC_SetBitMask(uint8_t addr, uint8_t mask);
-void MFRC_ClrBitMask(uint8_t addr, uint8_t mask);
-void MFRC_CalulateCRC(uint8_t *pInData, uint8_t len, uint8_t *pOutData);
-char MFRC_CmdFrame(uint8_t cmd, uint8_t *pInData, uint8_t InLenByte, uint8_t *pOutData, uint16_t *pOutLenBit);
+#define MFRC522_DUMMY					0x00		// Dummy byte
+#define MFRC522_MAX_LEN					16			// Buf len byte
 
 
+extern uint8_t MFRC522_Check(uint8_t* id);
+extern uint8_t MFRC522_Compare(uint8_t* CardID, uint8_t* CompareID);
+extern void MFRC522_WriteRegister(uint8_t addr, uint8_t val);
+extern uint8_t MFRC522_ReadRegister(uint8_t addr);
+extern void MFRC522_SetBitMask(uint8_t reg, uint8_t mask);
+extern void MFRC522_ClearBitMask(uint8_t reg, uint8_t mask);
+extern uint8_t MFRC522_Request(uint8_t reqMode, uint8_t* TagType);
+extern uint8_t MFRC522_ToCard(uint8_t command, uint8_t* sendData, uint8_t sendLen, uint8_t* backData, uint16_t* backLen);
+extern uint8_t MFRC522_Anticoll(uint8_t* serNum);
+extern void MFRC522_CalulateCRC(uint8_t* pIndata, uint8_t len, uint8_t* pOutData);
+extern uint8_t MFRC522_SelectTag(uint8_t* serNum);
+extern uint8_t MFRC522_Auth(uint8_t authMode, uint8_t BlockAddr, uint8_t* Sectorkey, uint8_t* serNum);
+extern uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t* recvData);
+extern uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t* writeData);
+extern void MFRC522_Init(void);
+extern void MFRC522_Reset(void);
+extern void MFRC522_AntennaOn(void);
+extern void MFRC522_AntennaOff(void);
+extern void MFRC522_Halt(void);
 
-/***********************************************************************************
-*							MFRC552与MF1卡通讯接口程序	 		     	     	   *
-************************************************************************************/
-/*Mifare1卡片命令字*/
-#define PICC_REQIDL           	0x26               	//寻天线区内未进入休眠状态的卡
-#define PICC_REQALL           	0x52               	//寻天线区内全部卡
-#define PICC_ANTICOLL1        	0x93               	//防冲撞
-#define PICC_ANTICOLL2        	0x95               	//防冲撞
-#define PICC_AUTHENT1A        	0x60               	//验证A密钥
-#define PICC_AUTHENT1B        	0x61               	//验证B密钥
-#define PICC_READ             	0x30               	//读块
-#define PICC_WRITE            	0xA0               	//写块
-#define PICC_DECREMENT        	0xC0               	//减值(扣除)
-#define PICC_INCREMENT        	0xC1               	//增值(充值)
-#define PICC_TRANSFER         	0xB0               	//转存(传送)
-#define PICC_RESTORE          	0xC2               	//恢复(重储)
-#define PICC_HALT             	0x50               	//休眠
+extern SPI_HandleTypeDef hspi3;
 
-/*PCD通讯时返回的错误代码*/
-#define PCD_OK                 	(char)0				//成功
-#define PCD_NOTAGERR            (char)(-1)			//无卡
-#define PCD_ERR                	(char)(-2)			//出错
-
-/*PCD函数声明*/
-void PCD_Init(void);
-void PCD_Reset(void);
-void PCD_AntennaOn(void);
-void PCD_AntennaOff(void);
-char PCD_Request(uint8_t RequestMode, uint8_t *pCardType);  //寻卡，并返回卡的类型
-char PCD_Anticoll(uint8_t *pSnr);                           //防冲突,返回卡号
-char PCD_Select(uint8_t *pSnr);                             //选卡
-char PCD_AuthState(uint8_t AuthMode, uint8_t BlockAddr, uint8_t *pKey, uint8_t *pSnr); //验证密码(密码A和密码B)   
-char PCD_WriteBlock(uint8_t BlockAddr, uint8_t *pData);   //写数据
-char PCD_ReadBlock(uint8_t BlockAddr, uint8_t *pData);    //读数据
-char PCD_Value(uint8_t mode, uint8_t BlockAddr, uint8_t *pValue);   
-char PCD_BakValue(uint8_t sourceBlockAddr, uint8_t goalBlockAddr);                                 
-char PCD_Halt(void);
-void StartIDcardTask(void const * argument);
-void Cardcompare(void);
-
-	
-
-#endif
+static void MX_SPI3_Init(void);
+static void MX_GPIO_Init(void);
+extern void RC_RUN(void);
