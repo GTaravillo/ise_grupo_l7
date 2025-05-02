@@ -1,602 +1,490 @@
+// Mifare RC522 RFID Card reader 13.56 MHz
+// STM32F103 RFID RC522 SPI1 / UART / USB / Keil HAL / 2017 vk.com/zz555
+
+
+
+// MFRC522		STM32F103		DESCRIPTION
+// CS (SDA)		PA15				SPI1_NSS	Chip select for SPI
+// SCK				PC10				SPI1_SCK	Serial Clock for SPI
+// MOSI				PC12 				SPI1_MOSI	Master In Slave Out for SPI
+// MISO				PC11				SPI1_MISO	Master Out Slave In for SPI
+// IRQ				-						Irq
+// GND				GND					Ground
+// RST				3.3V				Reset pin (3.3V)
+// VCC				3.3V				3.3V power
+
 #include "stm32f4xx_hal.h"
-#include "RC522.h"
-#include "stdio.h"
-#include "string.h"
-#include "driver_SPI.h"
+#include "rc522.h"
+#include <stdio.h>
 
-#define osDelay HAL_Delay
+SPI_HandleTypeDef hspi3;
 
+// RC522
+uint8_t MFRC522_Check(uint8_t* id);
+uint8_t MFRC522_Compare(uint8_t* CardID, uint8_t* CompareID);
+void MFRC522_WriteRegister(uint8_t addr, uint8_t val);
+uint8_t MFRC522_ReadRegister(uint8_t addr);
+void MFRC522_SetBitMask(uint8_t reg, uint8_t mask);
+void MFRC522_ClearBitMask(uint8_t reg, uint8_t mask);
+uint8_t MFRC522_Request(uint8_t reqMode, uint8_t* TagType);
+uint8_t MFRC522_ToCard(uint8_t command, uint8_t* sendData, uint8_t sendLen, uint8_t* backData, uint16_t* backLen);
+uint8_t MFRC522_Anticoll(uint8_t* serNum);
+void MFRC522_CalulateCRC(uint8_t* pIndata, uint8_t len, uint8_t* pOutData);
+uint8_t MFRC522_SelectTag(uint8_t* serNum);
+uint8_t MFRC522_Auth(uint8_t authMode, uint8_t BlockAddr, uint8_t* Sectorkey, uint8_t* serNum);
+uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t* recvData);
+uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t* writeData);
+void MFRC522_Init(void);
+void MFRC522_Reset(void);
+void MFRC522_AntennaOn(void);
+void MFRC522_AntennaOff(void);
+void MFRC522_Halt(void);
 
-#define RS522_RST(N) HAL_GPIO_WritePin(RC522_RST_GPIO_Port, RC522_RST_Pin, N==1?GPIO_PIN_SET:GPIO_PIN_RESET)
-#define RS522_NSS(N) HAL_GPIO_WritePin(RC522_CS_GPIO_Port, RC522_CS_Pin, N==1?GPIO_PIN_SET:GPIO_PIN_RESET)
+//static void MX_SPI1_Init(void);
+//static void MX_GPIO_Init(void);
+void RC_RUN(void);
 
-extern SPI_HandleTypeDef hspi2;
+uint8_t SPI1SendByte(uint8_t data) {
+	unsigned char writeCommand[1];
+	unsigned char readValue[1];
 
+	writeCommand[0] = data;
+	HAL_SPI_TransmitReceive(&hspi3, (uint8_t*)&writeCommand, (uint8_t*)&readValue, 1, 10);
+	return readValue[0];
 
-void MFRC_Init(void)
-{
-    RS522_NSS(1);
-    RS522_RST(1);
+	//while (SPI1->SR & SPI_SR_BSY);								// STM32F030 - ждем конец передачи
+	//while (SPI1->SR & SPI_I2S_FLAG_BSY);					// STM32F103 - ждем конец передачи
+
+	//while (!(SPI1->SR & SPI_SR_TXE));     				// убедиться, что предыдущая передача завершена (STM32F103)
+	//SPI1->DR = data;															// вывод в SPI1
+	//while (!(SPI1->SR & SPI_SR_RXNE));     				// ждем окончания обмена (STM32F103)
+	//for (uint8_t i=0; i<50; i++) {};
+	//data = SPI1->DR;															// читаем принятые данные
+	//return data;
 }
 
-static uint8_t ret;  //这些函数是HAL与标准库不同的地方【读写函数】
-uint8_t SPI2_RW_Byte(uint8_t byte)
-{
-    HAL_SPI_TransmitReceive(&hspi2, &byte, &ret, 1, 10);//把byte 写入，并读出一个值，把它存入ret
-    return   ret;//入口是byte 的地址，读取时用的也是ret地址，一次只写入一个值10
+void SPI1_WriteReg(uint8_t address, uint8_t value) {
+	cs_reset();
+	SPI1SendByte(address);
+	SPI1SendByte(value);
+	cs_set();
 }
 
-void MFRC_WriteReg(uint8_t addr, uint8_t data)
-{
-    uint8_t AddrByte;
-    AddrByte = (addr << 1 ) & 0x7E; //求出地址字节
-    RS522_NSS(0);                   //NSS拉低
-    SPI2_RW_Byte(AddrByte);         //写地址字节
-    SPI2_RW_Byte(data);             //写数据
-    RS522_NSS(1);                   //NSS拉高
+uint8_t SPI1_ReadReg(uint8_t address) {
+	uint8_t	val;
+
+	cs_reset();
+	SPI1SendByte(address);
+	val = SPI1SendByte(0x00);
+	cs_set();
+	return val;
 }
 
-uint8_t MFRC_ReadReg(uint8_t addr)
-{
-    uint8_t AddrByte, data;
-    AddrByte = ((addr << 1 ) & 0x7E ) | 0x80;   //求出地址字节
-    RS522_NSS(0);                               //NSS拉低
-    SPI2_RW_Byte(AddrByte);                     //写地址字节
-    data = SPI2_RW_Byte(0x00);                  //读数据
-    RS522_NSS(1);                               //NSS拉高
-    return data;
+void MFRC522_WriteRegister(uint8_t addr, uint8_t val) {
+	addr = (addr << 1) & 0x7E;															// Address format: 0XXXXXX0
+  SPI1_WriteReg(addr, val);
 }
 
-void MFRC_SetBitMask(uint8_t addr, uint8_t mask)
-{
-    uint8_t temp;
-    temp = MFRC_ReadReg(addr);                  //先读回寄存器的值
-    MFRC_WriteReg(addr, temp | mask);           //处理过的数据再写入寄存器
+uint8_t MFRC522_ReadRegister(uint8_t addr) {
+	uint8_t val;
+
+	addr = ((addr << 1) & 0x7E) | 0x80;
+	val = SPI1_ReadReg(addr);
+	return val;
 }
 
-void MFRC_ClrBitMask(uint8_t addr, uint8_t mask)
-{
-    uint8_t temp;
-    temp = MFRC_ReadReg(addr);                  //先读回寄存器的值
-    MFRC_WriteReg(addr, temp & ~mask);          //处理过的数据再写入寄存器
+uint8_t MFRC522_Check(uint8_t* id) {
+	uint8_t status;
+	status = MFRC522_Request(PICC_REQIDL, id);							// Find cards, return card type
+	if (status == MI_OK) status = MFRC522_Anticoll(id);			// Card detected. Anti-collision, return card serial number 4 bytes
+	MFRC522_Halt();																					// Command card into hibernation
+	return status;
 }
 
-void MFRC_CalulateCRC(uint8_t *pInData, uint8_t len, uint8_t *pOutData)
-{
-    //0xc1 1        2           pInData[2]
-    uint8_t temp;
-    uint32_t i;
-    MFRC_ClrBitMask(MFRC_DivIrqReg, 0x04);                  //使能CRC中断
-    MFRC_WriteReg(MFRC_CommandReg, MFRC_IDLE);              //取消当前命令的执行
-    MFRC_SetBitMask(MFRC_FIFOLevelReg, 0x80);               //清除FIFO及其标志位
-    for(i = 0; i < len; i++)                                //将待CRC计算的数据写入FIFO
-    {
-        MFRC_WriteReg(MFRC_FIFODataReg, *(pInData + i));
-    }
-    MFRC_WriteReg(MFRC_CommandReg, MFRC_CALCCRC);           //执行CRC计算
-    i = 100000;
-    do
-    {
-        temp = MFRC_ReadReg(MFRC_DivIrqReg);                //读取DivIrqReg寄存器的值
-        i--;
-    }
-    while((i != 0) && !(temp & 0x04));                      //等待CRC计算完成
-    pOutData[0] = MFRC_ReadReg(MFRC_CRCResultRegL);         //读取CRC计算结果
-    pOutData[1] = MFRC_ReadReg(MFRC_CRCResultRegM);
+uint8_t MFRC522_Compare(uint8_t* CardID, uint8_t* CompareID) {
+	uint8_t i;
+	for (i = 0; i < 5; i++) {
+		if (CardID[i] != CompareID[i]) return MI_ERR;
+	}
+	return MI_OK;
 }
 
-char MFRC_CmdFrame(uint8_t cmd, uint8_t *pInData, uint8_t InLenByte, uint8_t *pOutData, uint16_t *pOutLenBit)
-{
-    uint8_t lastBits;
-    uint8_t n;
-    uint32_t i;
-    char status = MFRC_ERR;
-    uint8_t irqEn   = 0x00;
-    uint8_t waitFor = 0x00;
-
-    /*根据命令设置标志位*/
-    switch(cmd)
-    {
-        case MFRC_AUTHENT:                  //Mifare认证
-            irqEn = 0x12;
-            waitFor = 0x10;                 //idleIRq中断标志
-            break;
-        case MFRC_TRANSCEIVE:               //发送并接收数据
-            irqEn = 0x77;
-            waitFor = 0x30;                 //RxIRq和idleIRq中断标志
-            break;
-    }
-
-    /*发送命令帧前准备*/
-    MFRC_WriteReg(MFRC_ComIEnReg, irqEn | 0x80);    //开中断
-    MFRC_ClrBitMask(MFRC_ComIrqReg, 0x80);          //清除中断标志位SET1
-    MFRC_WriteReg(MFRC_CommandReg, MFRC_IDLE);      //取消当前命令的执行
-    MFRC_SetBitMask(MFRC_FIFOLevelReg, 0x80);       //清除FIFO缓冲区及其标志位
-
-    /*发送命令帧*/
-    for(i = 0; i < InLenByte; i++)                  //写入命令参数
-    {
-        MFRC_WriteReg(MFRC_FIFODataReg, pInData[i]);
-    }
-    MFRC_WriteReg(MFRC_CommandReg, cmd);            //执行命令
-    if(cmd == MFRC_TRANSCEIVE)
-    {
-        MFRC_SetBitMask(MFRC_BitFramingReg, 0x80);  //启动发送
-    }
-    i = 300000;                                     //根据时钟频率调整,操作M1卡最大等待时间25ms
-    do
-    {
-        n = MFRC_ReadReg(MFRC_ComIrqReg);
-        i--;
-    }
-    while((i != 0) && !(n & 0x01) && !(n & waitFor));     //等待命令完成
-    MFRC_ClrBitMask(MFRC_BitFramingReg, 0x80);          //停止发送
-
-    /*处理接收的数据*/
-    if(i != 0)
-    {
-        if(!(MFRC_ReadReg(MFRC_ErrorReg) & 0x1B))
-        {
-            status = MFRC_OK;
-            if(n & irqEn & 0x01)
-            {
-                status = MFRC_NOTAGERR;
-            }
-            if(cmd == MFRC_TRANSCEIVE)
-            {
-                n = MFRC_ReadReg(MFRC_FIFOLevelReg);
-                lastBits = MFRC_ReadReg(MFRC_ControlReg) & 0x07;
-                if (lastBits)
-                {
-                    *pOutLenBit = (n - 1) * 8 + lastBits;
-                }
-                else
-                {
-                    *pOutLenBit = n * 8;
-                }
-                if(n == 0)
-                {
-                    n = 1;
-                }
-                if(n > MFRC_MAXRLEN)
-                {
-                    n = MFRC_MAXRLEN;
-                }
-                for(i = 0; i < n; i++)
-                {
-                    pOutData[i] = MFRC_ReadReg(MFRC_FIFODataReg);
-                }
-            }
-        }
-        else
-        {
-            status = MFRC_ERR;
-        }
-    }
-
-    MFRC_SetBitMask(MFRC_ControlReg, 0x80);               //停止定时器运行
-    MFRC_WriteReg(MFRC_CommandReg, MFRC_IDLE);            //取消当前命令的执行
-
-    return status;
+void MFRC522_SetBitMask(uint8_t reg, uint8_t mask) {
+	MFRC522_WriteRegister(reg, MFRC522_ReadRegister(reg) | mask);
 }
 
-void PCD_Reset(void)
-{
-    /*硬复位*/
-    RS522_RST(1);//用到复位引脚
-    osDelay(2);
-    RS522_RST(0);
-    osDelay(2);
-    RS522_RST(1);
-    osDelay(2);
-
-    /*软复位*/
-    MFRC_WriteReg(MFRC_CommandReg, MFRC_RESETPHASE);
-    osDelay(2);
-
-    /*复位后的初始化配置*/
-    MFRC_WriteReg(MFRC_ModeReg, 0x3D);              //CRC初始值0x6363
-    MFRC_WriteReg(MFRC_TReloadRegL, 30);            //定时器重装值
-    MFRC_WriteReg(MFRC_TReloadRegH, 0);
-    MFRC_WriteReg(MFRC_TModeReg, 0x8D);             //定时器设置
-    MFRC_WriteReg(MFRC_TPrescalerReg, 0x3E);        //定时器预分频值
-    MFRC_WriteReg(MFRC_TxAutoReg, 0x40);            //100%ASK
-
-    PCD_AntennaOff();                               //关天线
-    osDelay(2);
-    PCD_AntennaOn();                                //开天线
-    
-    //printf("初始化完成\n");
+void MFRC522_ClearBitMask(uint8_t reg, uint8_t mask){
+	MFRC522_WriteRegister(reg, MFRC522_ReadRegister(reg) & (~mask));
 }
 
-void PCD_AntennaOn(void)
-{
-    uint8_t temp;
-    temp = MFRC_ReadReg(MFRC_TxControlReg);
-    if (!(temp & 0x03))
-    {
-        MFRC_SetBitMask(MFRC_TxControlReg, 0x03);
-    }
+uint8_t MFRC522_Request(uint8_t reqMode, uint8_t* TagType) {
+	uint8_t status;
+	uint16_t backBits;																			// The received data bits
+
+	MFRC522_WriteRegister(MFRC522_REG_BIT_FRAMING, 0x07);		// TxLastBists = BitFramingReg[2..0]
+	TagType[0] = reqMode;
+	status = MFRC522_ToCard(PCD_TRANSCEIVE, TagType, 1, TagType, &backBits);
+	if ((status != MI_OK) || (backBits != 0x10)) status = MI_ERR;
+	return status;
 }
 
-void PCD_AntennaOff(void)
-{
-    MFRC_ClrBitMask(MFRC_TxControlReg, 0x03);
-}
+uint8_t MFRC522_ToCard(uint8_t command, uint8_t* sendData, uint8_t sendLen, uint8_t* backData, uint16_t* backLen) {
+	uint8_t status = MI_ERR;
+	uint8_t irqEn = 0x00;
+	uint8_t waitIRq = 0x00;
+	uint8_t lastBits;
+	uint8_t n;
+	uint16_t i;
 
-void PCD_Init(void)
-{
-    MFRC_Init();      //MFRC管脚配置
-    PCD_Reset();      //PCD复位  并初始化配置
-    PCD_AntennaOff(); //关闭天线
-    PCD_AntennaOn();   //开启天线
-}
-
-char PCD_Request(uint8_t RequestMode, uint8_t *pCardType)
-{
-    int status;
-    uint16_t unLen;
-    uint8_t CmdFrameBuf[MFRC_MAXRLEN];
-
-    MFRC_ClrBitMask(MFRC_Status2Reg, 0x08);//关内部温度传感器
-    MFRC_WriteReg(MFRC_BitFramingReg, 0x07); //存储模式，发送模式，是否启动发送等
-    MFRC_SetBitMask(MFRC_TxControlReg, 0x03);//配置调制信号13.56MHZ
-
-    CmdFrameBuf[0] = RequestMode;
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 1, CmdFrameBuf, &unLen);
-
-    if((status == PCD_OK) && (unLen == 0x10))
-    {
-        *pCardType = CmdFrameBuf[0];
-        *(pCardType + 1) = CmdFrameBuf[1];
-    }
-
-    return status;
-}
-
-char PCD_Anticoll(uint8_t *pSnr)
-{
-    char status;
-    uint8_t i, snr_check = 0;
-    uint16_t  unLen;
-    uint8_t CmdFrameBuf[MFRC_MAXRLEN];
-
-    MFRC_ClrBitMask(MFRC_Status2Reg, 0x08);
-    MFRC_WriteReg(MFRC_BitFramingReg, 0x00);
-    MFRC_ClrBitMask(MFRC_CollReg, 0x80);
-
-    CmdFrameBuf[0] = PICC_ANTICOLL1;
-    CmdFrameBuf[1] = 0x20;
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 2, CmdFrameBuf, &unLen);
-
-    if(status == PCD_OK)
-    {
-        for(i = 0; i < 4; i++)
-        {
-            *(pSnr + i)  = CmdFrameBuf[i];
-            snr_check ^= CmdFrameBuf[i];
-        }
-        if(snr_check != CmdFrameBuf[i])
-        {
-            status = PCD_ERR;
-        }
-    }
-
-    MFRC_SetBitMask(MFRC_CollReg, 0x80);
-    return status;
-}
-
-char PCD_Select(uint8_t *pSnr)
-{
-    char status;
-    uint8_t i;
-    uint16_t unLen;
-    uint8_t CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = PICC_ANTICOLL1;
-    CmdFrameBuf[1] = 0x70;
-    CmdFrameBuf[6] = 0;
-    for(i = 0; i < 4; i++)
-    {
-        CmdFrameBuf[i + 2] = *(pSnr + i);
-        CmdFrameBuf[6]  ^= *(pSnr + i);
-    }
-    MFRC_CalulateCRC(CmdFrameBuf, 7, &CmdFrameBuf[7]);
-
-    MFRC_ClrBitMask(MFRC_Status2Reg, 0x08);
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 9, CmdFrameBuf, &unLen);
-
-    if((status == PCD_OK) && (unLen == 0x18))
-    {
-        status = PCD_OK;
-    }
-    else
-    {
-        status = PCD_ERR;
-    }
-    return status;
-}
-
-char PCD_AuthState(uint8_t AuthMode, uint8_t BlockAddr, uint8_t *pKey, uint8_t *pSnr)
-{
-    char status;
-    uint16_t unLen;
-    uint8_t i, CmdFrameBuf[MFRC_MAXRLEN];
-    CmdFrameBuf[0] = AuthMode;
-    CmdFrameBuf[1] = BlockAddr;
-    for(i = 0; i < 6; i++)
-    {
-        CmdFrameBuf[i + 2] = *(pKey + i);
-    }
-    for(i = 0; i < 4; i++)
-    {
-        CmdFrameBuf[i + 8] = *(pSnr + i);
-    }
-
-    status = MFRC_CmdFrame(MFRC_AUTHENT, CmdFrameBuf, 12, CmdFrameBuf, &unLen);
-    if((status != PCD_OK) || (!(MFRC_ReadReg(MFRC_Status2Reg) & 0x08)))
-    {
-        status = PCD_ERR;
-    }
-
-    return status;
-}
-
-char PCD_WriteBlock(uint8_t BlockAddr, uint8_t *pData)
-{
-    char status;
-    uint16_t unLen;
-    uint8_t i, CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = PICC_WRITE;
-    CmdFrameBuf[1] = BlockAddr;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-
-    if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-    {
-        status = PCD_ERR;
-    }
-
-    if(status == PCD_OK)
-    {
-        for(i = 0; i < 16; i++)
-        {
-            CmdFrameBuf[i] = *(pData + i);
-        }
-        MFRC_CalulateCRC(CmdFrameBuf, 16, &CmdFrameBuf[16]);
-
-        status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 18, CmdFrameBuf, &unLen);
-
-        if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-        {
-            status = PCD_ERR;
-        }
-    }
-
-    return status;
-}
-
-char PCD_ReadBlock(uint8_t BlockAddr, uint8_t *pData)
-{
-    char status;
-    uint16_t unLen;
-    uint8_t i, CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = PICC_READ;
-    CmdFrameBuf[1] = BlockAddr;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-    if((status == PCD_OK) && (unLen == 0x90))
-    {
-        for(i = 0; i < 16; i++)
-        {
-            *(pData + i) = CmdFrameBuf[i];
-        }
-    }
-    else
-    {
-        status = PCD_ERR;
-    }
-
-    return status;
-}
-
-char PCD_Value(uint8_t mode, uint8_t BlockAddr, uint8_t *pValue)
-{
-    //0XC1        1           Increment[4]={0x03, 0x01, 0x01, 0x01};
-    char status;
-    uint16_t unLen;
-    uint8_t i, CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = mode;
-    CmdFrameBuf[1] = BlockAddr;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-
-    if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-    {
-        status = PCD_ERR;
-    }
-
-    if(status == PCD_OK)
-    {
-        for(i = 0; i < 16; i++)
-        {
-            CmdFrameBuf[i] = *(pValue + i);
-        }
-        MFRC_CalulateCRC(CmdFrameBuf, 4, &CmdFrameBuf[4]);
-        unLen = 0;
-        status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 6, CmdFrameBuf, &unLen);
-        if(status != PCD_ERR)
-        {
-            status = PCD_OK;
-        }
-    }
-
-    if(status == PCD_OK)
-    {
-        CmdFrameBuf[0] = PICC_TRANSFER;
-        CmdFrameBuf[1] = BlockAddr;
-        MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-
-        status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-
-        if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-        {
-            status = PCD_ERR;
-        }
-    }
-    return status;
-}
-
-char PCD_BakValue(uint8_t sourceBlockAddr, uint8_t goalBlockAddr)
-{
-    char status;
-    uint16_t  unLen;
-    uint8_t CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = PICC_RESTORE;
-    CmdFrameBuf[1] = sourceBlockAddr;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-    if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-    {
-        status = PCD_ERR;
-    }
-
-    if(status == PCD_OK)
-    {
-        CmdFrameBuf[0] = 0;
-        CmdFrameBuf[1] = 0;
-        CmdFrameBuf[2] = 0;
-        CmdFrameBuf[3] = 0;
-        MFRC_CalulateCRC(CmdFrameBuf, 4, &CmdFrameBuf[4]);
-        status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 6, CmdFrameBuf, &unLen);
-        if(status != PCD_ERR)
-        {
-            status = PCD_OK;
-        }
-    }
-
-    if(status != PCD_OK)
-    {
-        return PCD_ERR;
-    }
-
-    CmdFrameBuf[0] = PICC_TRANSFER;
-    CmdFrameBuf[1] = goalBlockAddr;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-    if((status != PCD_OK) || (unLen != 4) || ((CmdFrameBuf[0] & 0x0F) != 0x0A))
-    {
-        status = PCD_ERR;
-    }
-
-    return status;
-}
-
-char PCD_Halt(void)
-{
-    char status;
-    uint16_t unLen;
-    uint8_t CmdFrameBuf[MFRC_MAXRLEN];
-
-    CmdFrameBuf[0] = PICC_HALT;
-    CmdFrameBuf[1] = 0;
-    MFRC_CalulateCRC(CmdFrameBuf, 2, &CmdFrameBuf[2]);
-
-    status = MFRC_CmdFrame(MFRC_TRANSCEIVE, CmdFrameBuf, 4, CmdFrameBuf, &unLen);
-
-    return status;
-}
-
-
-uint8_t readUid[5]; //卡号
-uint8_t CT[3]; 		//卡类型
-uint8_t DATA[16];	//存放数据
-
-uint8_t KEY_A[6]= {0xff,0xff,0xff,0xff,0xff,0xff};
-uint8_t KEY_B[6]= {0xff,0xff,0xff,0xff,0xff,0xff};
-
-
-uint8_t status;
-uint8_t addr=0x00; // 0扇区 0块
-
-void Cardcompare()
-{
-	    uint8_t i;
-
-		status = PCD_Request(0x52, CT);						//找到卡返回0
-		if(!status)  //寻卡成功
-		{
-				status = PCD_ERR;
-				status = PCD_Anticoll(readUid);//防冲撞
+	switch (command) {
+		case PCD_AUTHENT: {
+			irqEn = 0x12;
+			waitIRq = 0x10;
+			break;
 		}
+		case PCD_TRANSCEIVE: {
+			irqEn = 0x77;
+			waitIRq = 0x30;
+			break;
+		}
+		default:
+		break;
+	}
+
+	MFRC522_WriteRegister(MFRC522_REG_COMM_IE_N, irqEn | 0x80);
+	MFRC522_ClearBitMask(MFRC522_REG_COMM_IRQ, 0x80);
+	MFRC522_SetBitMask(MFRC522_REG_FIFO_LEVEL, 0x80);
+	MFRC522_WriteRegister(MFRC522_REG_COMMAND, PCD_IDLE);
+
+	// Writing data to the FIFO
+	for (i = 0; i < sendLen; i++) MFRC522_WriteRegister(MFRC522_REG_FIFO_DATA, sendData[i]);
+
+	// Execute the command
+	MFRC522_WriteRegister(MFRC522_REG_COMMAND, command);
+	if (command == PCD_TRANSCEIVE) MFRC522_SetBitMask(MFRC522_REG_BIT_FRAMING, 0x80);		// StartSend=1,transmission of data starts
+
+	// Waiting to receive data to complete
+	i = 2000;	// i according to the clock frequency adjustment, the operator M1 card maximum waiting time 25ms
+	do {
+		// CommIrqReg[7..0]
+		// Set1 TxIRq RxIRq IdleIRq HiAlerIRq LoAlertIRq ErrIRq TimerIRq
+		n = MFRC522_ReadRegister(MFRC522_REG_COMM_IRQ);
+		i--;
+	} while ((i!=0) && !(n&0x01) && !(n&waitIRq));
+
+	MFRC522_ClearBitMask(MFRC522_REG_BIT_FRAMING, 0x80);																// StartSend=0
+
+	if (i != 0)  {
+		if (!(MFRC522_ReadRegister(MFRC522_REG_ERROR) & 0x1B)) {
+			status = MI_OK;
+			if (n & irqEn & 0x01) status = MI_NOTAGERR;
+			if (command == PCD_TRANSCEIVE) {
+				n = MFRC522_ReadRegister(MFRC522_REG_FIFO_LEVEL);
+				lastBits = MFRC522_ReadRegister(MFRC522_REG_CONTROL) & 0x07;
+				if (lastBits) *backLen = (n-1)*8+lastBits; else *backLen = n*8;
+				if (n == 0) n = 1;
+				if (n > MFRC522_MAX_LEN) n = MFRC522_MAX_LEN;
+				for (i = 0; i < n; i++) backData[i] = MFRC522_ReadRegister(MFRC522_REG_FIFO_DATA);		// Reading the received data in FIFO
+			}
+		} else status = MI_ERR;
+	}
+	return status;
+}
+
+uint8_t MFRC522_Anticoll(uint8_t* serNum) {
+	uint8_t status;
+	uint8_t i;
+	uint8_t serNumCheck = 0;
+	uint16_t unLen;
+
+	MFRC522_WriteRegister(MFRC522_REG_BIT_FRAMING, 0x00);												// TxLastBists = BitFramingReg[2..0]
+	serNum[0] = PICC_ANTICOLL;
+	serNum[1] = 0x20;
+	status = MFRC522_ToCard(PCD_TRANSCEIVE, serNum, 2, serNum, &unLen);
+	if (status == MI_OK) {
+		// Check card serial number
+		for (i = 0; i < 4; i++) serNumCheck ^= serNum[i];
+		if (serNumCheck != serNum[i]) status = MI_ERR;
+	}
+	return status;
+}
+
+void MFRC522_CalculateCRC(uint8_t*  pIndata, uint8_t len, uint8_t* pOutData) {
+	uint8_t i, n;
+
+	MFRC522_ClearBitMask(MFRC522_REG_DIV_IRQ, 0x04);													// CRCIrq = 0
+	MFRC522_SetBitMask(MFRC522_REG_FIFO_LEVEL, 0x80);													// Clear the FIFO pointer
+	// Write_MFRC522(CommandReg, PCD_IDLE);
+
+	// Writing data to the FIFO
+	for (i = 0; i < len; i++) MFRC522_WriteRegister(MFRC522_REG_FIFO_DATA, *(pIndata+i));
+	MFRC522_WriteRegister(MFRC522_REG_COMMAND, PCD_CALCCRC);
+
+	// Wait CRC calculation is complete
+	i = 0xFF;
+	do {
+		n = MFRC522_ReadRegister(MFRC522_REG_DIV_IRQ);
+		i--;
+	} while ((i!=0) && !(n&0x04));																						// CRCIrq = 1
+
+	// Read CRC calculation result
+	pOutData[0] = MFRC522_ReadRegister(MFRC522_REG_CRC_RESULT_L);
+	pOutData[1] = MFRC522_ReadRegister(MFRC522_REG_CRC_RESULT_M);
+}
+
+uint8_t MFRC522_SelectTag(uint8_t* serNum) {
+	uint8_t i;
+	uint8_t status;
+	uint8_t size;
+	uint16_t recvBits;
+	uint8_t buffer[9];
+
+	buffer[0] = PICC_SElECTTAG;
+	buffer[1] = 0x70;
+	for (i = 0; i < 5; i++) buffer[i+2] = *(serNum+i);
+	MFRC522_CalculateCRC(buffer, 7, &buffer[7]);		//??
+	status = MFRC522_ToCard(PCD_TRANSCEIVE, buffer, 9, buffer, &recvBits);
+	if ((status == MI_OK) && (recvBits == 0x18)) size = buffer[0]; else size = 0;
+	return size;
+}
+
+uint8_t MFRC522_Auth(uint8_t authMode, uint8_t BlockAddr, uint8_t* Sectorkey, uint8_t* serNum) {
+	uint8_t status;
+	uint16_t recvBits;
+	uint8_t i;
+	uint8_t buff[12];
+
+	// Verify the command block address + sector + password + card serial number
+	buff[0] = authMode;
+	buff[1] = BlockAddr;
+	for (i = 0; i < 6; i++) buff[i+2] = *(Sectorkey+i);
+	for (i=0; i<4; i++) buff[i+8] = *(serNum+i);
+	status = MFRC522_ToCard(PCD_AUTHENT, buff, 12, buff, &recvBits);
+	if ((status != MI_OK) || (!(MFRC522_ReadRegister(MFRC522_REG_STATUS2) & 0x08))) status = MI_ERR;
+	return status;
+}
+
+uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t* recvData) {
+	uint8_t status;
+	uint16_t unLen;
+
+	recvData[0] = PICC_READ;
+	recvData[1] = blockAddr;
+	MFRC522_CalculateCRC(recvData,2, &recvData[2]);
+	status = MFRC522_ToCard(PCD_TRANSCEIVE, recvData, 4, recvData, &unLen);
+	if ((status != MI_OK) || (unLen != 0x90)) status = MI_ERR;
+	return status;
+}
+
+uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t* writeData) {
+	uint8_t status;
+	uint16_t recvBits;
+	uint8_t i;
+	uint8_t buff[18];
+
+	buff[0] = PICC_WRITE;
+	buff[1] = blockAddr;
+	MFRC522_CalculateCRC(buff, 2, &buff[2]);
+	status = MFRC522_ToCard(PCD_TRANSCEIVE, buff, 4, buff, &recvBits);
+	if ((status != MI_OK) || (recvBits != 4) || ((buff[0] & 0x0F) != 0x0A)) status = MI_ERR;
+	if (status == MI_OK) {
+		// Data to the FIFO write 16Byte
+		for (i = 0; i < 16; i++) buff[i] = *(writeData+i);
+		MFRC522_CalculateCRC(buff, 16, &buff[16]);
+		status = MFRC522_ToCard(PCD_TRANSCEIVE, buff, 18, buff, &recvBits);
+		if ((status != MI_OK) || (recvBits != 4) || ((buff[0] & 0x0F) != 0x0A)) status = MI_ERR;
+	}
+	return status;
+}
+
+void MFRC522_Init(void) {
+	MFRC522_Reset();
+	MFRC522_WriteRegister(MFRC522_REG_T_MODE, 0x8D);
+	MFRC522_WriteRegister(MFRC522_REG_T_PRESCALER, 0x3E);
+	MFRC522_WriteRegister(MFRC522_REG_T_RELOAD_L, 30);
+	MFRC522_WriteRegister(MFRC522_REG_T_RELOAD_H, 0);
+	MFRC522_WriteRegister(MFRC522_REG_RF_CFG, 0x70);				// 48dB gain
+	MFRC522_WriteRegister(MFRC522_REG_TX_AUTO, 0x40);
+	MFRC522_WriteRegister(MFRC522_REG_MODE, 0x3D);
+	MFRC522_AntennaOn();																		// Open the antenna
+}
+
+void MFRC522_Reset(void) {
+	MFRC522_WriteRegister(MFRC522_REG_COMMAND, PCD_RESETPHASE);
+}
+
+void MFRC522_AntennaOn(void) {
+	uint8_t temp;
+
+	temp = MFRC522_ReadRegister(MFRC522_REG_TX_CONTROL);
+	if (!(temp & 0x03)) MFRC522_SetBitMask(MFRC522_REG_TX_CONTROL, 0x03);
+}
+
+void MFRC522_AntennaOff(void) {
+	MFRC522_ClearBitMask(MFRC522_REG_TX_CONTROL, 0x03);
+}
+
+void MFRC522_Halt(void) {
+	uint16_t unLen;
+	uint8_t buff[4];
+
+	buff[0] = PICC_HALT;
+	buff[1] = 0;
+	MFRC522_CalculateCRC(buff, 2, &buff[2]);
+	MFRC522_ToCard(PCD_TRANSCEIVE, buff, 4, buff, &unLen);
+}
+
+static void MX_SPI3_Init(void)
+{
+
+  /* SPI1 parameter configuration*/
+	
+	__SPI3_CLK_ENABLE();
+	HAL_SPI_MspInit(&hspi3);
+	
+  hspi3.Instance = SPI3;
+  hspi3.Init.Mode = SPI_MODE_MASTER;
+  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi3.Init.NSS = SPI_NSS_SOFT;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi3.Init.CRCPolynomial = 10;
+	
+  if (HAL_SPI_Init(&hspi3) == HAL_OK)
+  {
+    printf("SPI inicialized succesfully.\n");
+  }else if ((HAL_SPI_Init(&hspi3) == HAL_ERROR))
+	{
+		printf("Error ocurred during SPI inicializing.\n");
+	}else if ((HAL_SPI_Init(&hspi3) == HAL_TIMEOUT))
+	{
+		printf("Timeout for SPI initialization.\n");
+	}
+
+}
+
+static void MX_GPIO_Init(void)
+{
+
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  /* GPIO Ports Clock Enable */
+  //__HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /*Configure GPIO pins : PA0 PA4 PA13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin       = GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_10;
+  GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull      = GPIO_PULLUP;
+  GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  // HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0|GPIO_PIN_4|GPIO_PIN_13, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  // HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_RESET);
+
+}
+
+void RC_RUN(void){
+	uint8_t state = 99;
+	uint8_t CT[3];
+	uint8_t pData[16];
+	uint8_t i=0;
+	uint8_t readUid[5];
+	uint8_t KEY_A[6]= {0xff,0xff,0xff,0xff,0xff,0xff};
+	uint8_t KEY_B[6]= {0xff,0xff,0xff,0xff,0xff,0xff};	
+	uint8_t size=0;
+	
+	MX_GPIO_Init();
+  MX_SPI3_Init();
+  MFRC522_Init();
+  /* USER CODE BEGIN 2 */
+  osDelay(1000);
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+	  state = MFRC522_Request(PICC_REQALL, CT);
+	if (state == MI_OK)
+	{
 		
-		if(!status) //防冲撞成功
+		state = MFRC522_Anticoll(readUid);//防冲撞
+		if (state == MI_OK)
 		{
-			status = PCD_ERR;
-            printf("卡的类型为：%x%x%x\r\n",CT[0],CT[1],CT[2]); //读取卡的类型 //读取卡的类型
-			printf("卡号：%x-%x-%x-%x\r\n",readUid[0],readUid[1],readUid[2],readUid[3]);
-			HAL_Delay(1000);
-            status=PCD_Select(readUid);
-		}	
-		
-		if(!status) //选卡成功
+			printf("Card read: %d %d %d\n",CT[0],CT[1],CT[2]);
+			printf("UID: %d %d %d %d %d\n",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
+			size = MFRC522_SelectTag(readUid);
+		}
+		if (size != 0)
 		{
-				status = PCD_ERR;
-				// 验证A密钥 块地址 密码 SN 
-				status = PCD_AuthState(0x60, addr, KEY_A, readUid);
-				if(status == PCD_OK)//验证A成功
-				{
-						printf("A密钥验证成功\r\n");
-						HAL_Delay(1000);
-				}
-				else
-				{
-						printf("A密钥验证失败\r\n");
-						HAL_Delay(1000);
-				}
+			state = MFRC522_Auth(0x60, 0x00, KEY_A, readUid);
+			
+			if(state == MI_OK)//验证A成功
+			{
+					printf("Key A correct.\n");
+					osDelay(100);
+			}
+			else
+			{
+					printf("Key A incorrect.\n");
+					osDelay(100);
+			}
 								
-				// 验证B密钥 块地址 密码 SN  
-				status = PCD_AuthState(0x61, addr, KEY_B, readUid);
-				if(status == PCD_OK)//验证B成功
-				{
-						printf("B密钥验证成功\r\n");
-				}
-				else
-				{
-						printf("B密钥验证失败\r\n");					
-				}
-				HAL_Delay(1000);
-		}	
-		
-		if(status == PCD_OK)//验证密码成功，接着读取0块
+			// 验证B密钥 块地址 密码 SN  
+			state = MFRC522_Auth(0x61, 0x00, KEY_B, readUid);
+			if(state == MI_OK)//验证B成功
+			{
+					printf("Key B correct.\n");
+			}
+			else
+			{
+					printf("Key B incorrect.\n");					
+			}
+			osDelay(100);
+		}
+			
+		//state = MFRC522_Read(0x00, pData);
+		if(state == MI_OK)
 		{
-            status = PCD_ERR;
-            status = PCD_ReadBlock(addr, DATA); 
-            if(status == PCD_OK)//读卡成功
-            {		
-                printf("0扇区0块DATA:");
-                for(i = 0; i < 16; i++)
-                {
-                    printf("%02x", DATA[i]);
-                }
-                printf("\r\n");	
-            }
-            else
-            {
-                printf("读卡失败\r\n");
-            }
-                    HAL_Delay(1000);
+			state = MFRC522_Read(0x00, pData);
+			if (state == MI_OK)
+			{
+				printf("Read: ");
+				for(i = 0; i < 16; i++)
+				{
+					printf("%02x", pData[i]);
+				}
+				printf("\n");
+			}
+			else
+			{
+				printf("Fail to read content.\n");
+			}
 		}
 		
+    /* USER CODE BEGIN 3 */
+	}else if(state == MI_NOTAGERR){
+		printf("No card read\n");
+	}else{
+		printf("Error\n");
+	}
+	osDelay(1000);
+	}
 }
-
