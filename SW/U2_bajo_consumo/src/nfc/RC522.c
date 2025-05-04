@@ -1,13 +1,25 @@
 // Mifare RC522 RFID Card reader 13.56 MHz
 // STM32F103 RFID RC522 SPI1 / UART / USB / Keil HAL / 2017 vk.com/zz555
 
-
+// PA0  - (OUT)	LED2
+// PA1	- (IN)	BTN1
+// PA4  - (OUT)	SPI1_NSS (Soft)
+// PA5  - (OUT)	SPI1_SCK
+// PA6  - (IN)	SPI1_MISO (Master In)
+// PA7  - (OUT)	SPI1_MOSI (Master Out)
+// PA9	- (OUT)	TX UART1 (RX-RS232)
+// PA10	- (IN)	RX UART1 (TX-RS232)
+// PA11 - (OUT) USB_DM
+// PA12 - (OUT) USB_DP
+// PA13 - (IN) 	SWDIO
+// PA14 - (IN) 	SWDCLK
+// PC13 - (OUT)	LED1
 
 // MFRC522		STM32F103		DESCRIPTION
-// CS (SDA)		PA15				SPI1_NSS	Chip select for SPI
-// SCK				PC10				SPI1_SCK	Serial Clock for SPI
-// MOSI				PC12 				SPI1_MOSI	Master In Slave Out for SPI
-// MISO				PC11				SPI1_MISO	Master Out Slave In for SPI
+// CS (SDA)		PA4					SPI1_NSS	Chip select for SPI
+// SCK				PA5					SPI1_SCK	Serial Clock for SPI
+// MOSI				PA7 				SPI1_MOSI	Master In Slave Out for SPI
+// MISO				PA6					SPI1_MISO	Master Out Slave In for SPI
 // IRQ				-						Irq
 // GND				GND					Ground
 // RST				3.3V				Reset pin (3.3V)
@@ -28,9 +40,9 @@ void MFRC522_SetBitMask(uint8_t reg, uint8_t mask);
 void MFRC522_ClearBitMask(uint8_t reg, uint8_t mask);
 uint8_t MFRC522_Request(uint8_t reqMode, uint8_t* TagType);
 uint8_t MFRC522_ToCard(uint8_t command, uint8_t* sendData, uint8_t sendLen, uint8_t* backData, uint16_t* backLen);
-uint8_t MFRC522_Anticoll(uint8_t* serNum);
+uint8_t MFRC522_Anticoll(uint8_t* serNum, uint8_t CL);
 void MFRC522_CalulateCRC(uint8_t* pIndata, uint8_t len, uint8_t* pOutData);
-uint8_t MFRC522_SelectTag(uint8_t* serNum);
+uint8_t MFRC522_SelectTag(uint8_t* serNum, uint8_t CL);
 uint8_t MFRC522_Auth(uint8_t authMode, uint8_t BlockAddr, uint8_t* Sectorkey, uint8_t* serNum);
 uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t* recvData);
 uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t* writeData);
@@ -96,7 +108,7 @@ uint8_t MFRC522_ReadRegister(uint8_t addr) {
 uint8_t MFRC522_Check(uint8_t* id) {
 	uint8_t status;
 	status = MFRC522_Request(PICC_REQIDL, id);							// Find cards, return card type
-	if (status == MI_OK) status = MFRC522_Anticoll(id);			// Card detected. Anti-collision, return card serial number 4 bytes
+	if (status == MI_OK) status = MFRC522_Anticoll(id, 1);			// Card detected. Anti-collision, return card serial number 4 bytes
 	MFRC522_Halt();																					// Command card into hibernation
 	return status;
 }
@@ -191,14 +203,14 @@ uint8_t MFRC522_ToCard(uint8_t command, uint8_t* sendData, uint8_t sendLen, uint
 	return status;
 }
 
-uint8_t MFRC522_Anticoll(uint8_t* serNum) {
+uint8_t MFRC522_Anticoll(uint8_t* serNum, uint8_t CL) {
 	uint8_t status;
 	uint8_t i;
 	uint8_t serNumCheck = 0;
 	uint16_t unLen;
 
 	MFRC522_WriteRegister(MFRC522_REG_BIT_FRAMING, 0x00);												// TxLastBists = BitFramingReg[2..0]
-	serNum[0] = PICC_ANTICOLL;
+	serNum[0] = CL == 1 ? PICC_ANTICOLL : 0x95;
 	serNum[1] = 0x20;
 	status = MFRC522_ToCard(PCD_TRANSCEIVE, serNum, 2, serNum, &unLen);
 	if (status == MI_OK) {
@@ -232,19 +244,31 @@ void MFRC522_CalculateCRC(uint8_t*  pIndata, uint8_t len, uint8_t* pOutData) {
 	pOutData[1] = MFRC522_ReadRegister(MFRC522_REG_CRC_RESULT_M);
 }
 
-uint8_t MFRC522_SelectTag(uint8_t* serNum) {
+uint8_t MFRC522_SelectTag(uint8_t* serNum, uint8_t CL) {
 	uint8_t i;
 	uint8_t status;
-	uint8_t size;
+	uint8_t size=0;
 	uint16_t recvBits;
 	uint8_t buffer[9];
 
-	buffer[0] = PICC_SElECTTAG;
+	buffer[0] = CL == 1 ? PICC_SElECTTAG : 0x95;
 	buffer[1] = 0x70;
 	for (i = 0; i < 5; i++) buffer[i+2] = *(serNum+i);
 	MFRC522_CalculateCRC(buffer, 7, &buffer[7]);		//??
 	status = MFRC522_ToCard(PCD_TRANSCEIVE, buffer, 9, buffer, &recvBits);
-	if ((status == MI_OK) && (recvBits == 0x18)) size = buffer[0]; else size = 0;
+	if (CL == 1){
+		if ((status == MI_OK) && (recvBits == 0x18)){
+			size = buffer[0];
+		}else{
+			size = 0;
+		}
+	}else if(CL == 2){
+		if ((status == MI_OK) && (recvBits == 0x18)){
+			size = 1;
+		}else{
+			size = 0;
+		}
+	}
 	return size;
 }
 
@@ -402,7 +426,7 @@ static void MX_GPIO_Init(void)
 void RC_RUN(void){
 	uint8_t state = 99;
 	uint8_t CT[3];
-	uint8_t pData[16];
+	uint8_t pData[20];
 	uint8_t i=0;
 	uint8_t readUid[5];
 	uint8_t KEY_A[6]= {0xff,0xff,0xff,0xff,0xff,0xff};
@@ -425,45 +449,52 @@ void RC_RUN(void){
 	if (state == MI_OK)
 	{
 		
-		state = MFRC522_Anticoll(readUid);//防冲撞
+		state = MFRC522_Anticoll(readUid, 1);//防冲撞
 		if (state == MI_OK)
 		{
 			printf("Card read: %d %d %d\n",CT[0],CT[1],CT[2]);
-			printf("UID: %d %d %d %d %d\n",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
-			size = MFRC522_SelectTag(readUid);
+			printf("UID: %d %d %d %d %d ",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
+			size = MFRC522_SelectTag(readUid, 1);
 		}
-		if (size != 0)
+		
+		state = MFRC522_Anticoll(readUid, 2);//防冲撞2
+		if (state == MI_OK)
 		{
-			state = MFRC522_Auth(0x60, 0x00, KEY_A, readUid);
-			
-			if(state == MI_OK)//验证A成功
-			{
-					printf("Key A correct.\n");
-					osDelay(100);
-			}
-			else
-			{
-					printf("Key A incorrect.\n");
-					osDelay(100);
-			}
-								
-			// 验证B密钥 块地址 密码 SN  
-			state = MFRC522_Auth(0x61, 0x00, KEY_B, readUid);
-			if(state == MI_OK)//验证B成功
-			{
-					printf("Key B correct.\n");
-			}
-			else
-			{
-					printf("Key B incorrect.\n");					
-			}
-			osDelay(100);
+			printf("%d %d %d %d %d\n",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
+			size = MFRC522_SelectTag(readUid, 2);
 		}
+//		if (size != 0)
+//		{
+//			state = MFRC522_Auth(0x60, 0x00, KEY_A, readUid);
+//			
+//			if(state == MI_OK)//验证A成功
+//			{
+//					printf("Key A correct.\n");
+//					osDelay(100);
+//			}
+//			else
+//			{
+//					printf("Key A incorrect.\n");
+//					osDelay(100);
+//			}
+//								
+//			// 验证B密钥 块地址 密码 SN  
+//			state = MFRC522_Auth(0x61, 0x00, KEY_B, readUid);
+//			if(state == MI_OK)//验证B成功
+//			{
+//					printf("Key B correct.\n");
+//			}
+//			else
+//			{
+//					printf("Key B incorrect.\n");					
+//			}
+//			osDelay(100);
+//		}
 			
 		//state = MFRC522_Read(0x00, pData);
-		if(state == MI_OK)
+		if(size != 0)
 		{
-			state = MFRC522_Read(0x00, pData);
+			state = MFRC522_Read(0x04, pData);
 			if (state == MI_OK)
 			{
 				printf("Read: ");
