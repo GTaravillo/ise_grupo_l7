@@ -11,6 +11,7 @@
 #include PATH_LED_STRIP
 #include PATH_POSITION
 #include PATH_MEMORIA
+#include PATH_COM_PLACAS
 
 #define MASTER 1
 
@@ -113,7 +114,8 @@ int main(void)
 	//LED_Initialize();
   //LedStripManagerInitialize();
 	//PositionManagerInitialize();
-	MemoriaInitialize();
+	//MemoriaInitialize();
+	ComunicacionPlacasInitialize();
 
   /* Start thread execution */
   osKernelStart();

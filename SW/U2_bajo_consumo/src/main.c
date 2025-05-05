@@ -4,6 +4,8 @@
 #include <stdio.h>
 /* Interfaces */
 #include "config/Paths.h"
+#include PATH_COM_PLACAS
+#include PATH_IRQ
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -92,7 +94,8 @@ int main(void)
 
   /* Add your application code here
      */
-  
+	
+	
   
 
 #ifdef RTE_CMSIS_RTOS2
@@ -101,7 +104,7 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-	
+	ComunicacionPlacasInitialize();
   
   /* Start thread execution */
   osKernelStart();

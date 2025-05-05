@@ -721,7 +721,7 @@
 #define RTE_UART7                       1
 
 //   <o> UART7_TX Pin <0=>Not Used <1=>PF7 <2=>PE8 <3=>PA15 <4=>PB4
-#define RTE_UART7_TX_ID                 4
+#define RTE_UART7_TX_ID                 1
 #if    (RTE_UART7_TX_ID == 0)
 #define RTE_UART7_TX                    0
 #elif  (RTE_UART7_TX_ID == 1)
@@ -745,7 +745,7 @@
 #endif
 
 //   <o> UART7_RX Pin <0=>Not Used <1=>PF6 <2=>PE7 <3=>PA8 <4=>PB3
-#define RTE_UART7_RX_ID                 4
+#define RTE_UART7_RX_ID                 2
 #if    (RTE_UART7_RX_ID == 0)
 #define RTE_UART7_RX                    0
 #elif  (RTE_UART7_RX_ID == 1)

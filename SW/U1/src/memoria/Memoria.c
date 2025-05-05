@@ -44,16 +44,12 @@ static void Run(void *argument)
 	int32_t status;
   printf("[memoria::Run] Initializing I2C\n");
   status = I2Cdrv->Initialize(I2C_SignalEvent);
-	printf("[A] status [%d]\n", status);
 	osDelay(1000);
   status = I2Cdrv->PowerControl (ARM_POWER_FULL);
-	printf("[B] status [%d]\n", status);
 	osDelay(1000);
   status = I2Cdrv->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
-	printf("[C] status [%d]\n", status);
 	osDelay(1000);
   status = I2Cdrv->Control(ARM_I2C_BUS_CLEAR, NULL);
-	printf("[D] status [%d]\n", status);
   osDelay(1000);
   
 	//SoftwareReset();
@@ -72,7 +68,6 @@ static void Run(void *argument)
 	
 	// Addr
 	status = I2Cdrv->MasterTransmit(SLAVE_ADDR, direccion_dato, 3, false);
-	printf("[E] status [%d]\n", status);
 	osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
 	osDelay(100);
 //	// Escribo dato

@@ -18,6 +18,7 @@
 	#define PATH_UART       "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/uart/uart.h"
 	#define PATH_POSITION   "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
 	#define PATH_MEMORIA    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
+	#define PATH_COM_PLACAS "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 #endif
 
 #if WORKSPACE == 2		// Yuanze
@@ -33,6 +34,8 @@
 	#define PATH_RTC         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
 	#define PATH_UART        "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/uart/uart.h"
 	#define PATH_POSITION    "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
+	#define PATH_MEMORIA     "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
+	#define PATH_COM_PLACAS  "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 #endif
 
 #endif /* __PATHS_H */

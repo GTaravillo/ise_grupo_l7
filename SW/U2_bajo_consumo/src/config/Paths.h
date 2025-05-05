@@ -17,6 +17,8 @@
 	#define PATH_RTC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/rtc/rtc.h"
 	#define PATH_UART        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/uart/uart.h"
 	#define PATH_POSITION    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/posicion/PositionManager.h"
+	#define PATH_COM_PLACAS  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/com_placas/ComunicacionPlacas.h"
+
 #endif
 
 #if WORKSPACE == 2		// Yuanze

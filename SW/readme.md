@@ -60,7 +60,7 @@ Printf:         PB3
 ### Comunicación entre placas  
     **UART7**  
     TX:         PB4  
-    RX:         PB3  
+    RX:         PE7  
 
   
 ## <ins>U2 - Bajo Consumo</ins>  
@@ -72,8 +72,8 @@ Printf:         PB3
   
 ### Comunicación entre placas  
     **UART7**  
-    TX:         PB4  
-    RX:         PB3 
+    TX:         PF7  
+    RX:         PE7
   
 ### RFID/NFC  
     **SPI3**  
