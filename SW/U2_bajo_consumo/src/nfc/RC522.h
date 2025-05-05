@@ -2,6 +2,7 @@
 // STM32F103 RFID RC522 SPI1 / UART / USB / Keil HAL
 
 #include "stm32f4xx_hal.h"
+#include "cmsis_os2.h"
 
 // SPI CS define
 //#define SPI_I2S_FLAG_BSY	((uint16_t)0x0080)
@@ -132,7 +133,10 @@ extern void MFRC522_AntennaOff(void);
 extern void MFRC522_Halt(void);
 
 extern SPI_HandleTypeDef hspi3;
+extern osMessageQueueId_t cola_nfc;
+extern osThreadId_t tid_Thread_NFC;
 
 static void MX_SPI3_Init(void);
 static void MX_GPIO_Init(void);
-extern void RC_RUN(void);
+extern void RC_RUN(void *argument);
+int Init_Thread_NFC (void);

@@ -11,8 +11,8 @@
 // PA10	- (IN)	RX UART1 (TX-RS232)
 // PA11 - (OUT) USB_DM
 // PA12 - (OUT) USB_DP
-// PA13 - (IN) 	SWDIO
-// PA14 - (IN) 	SWDCLK
+// PA13 - (IN)	SWDIO
+// PA14 - (IN)	SWDCLK
 // PC13 - (OUT)	LED1
 
 // MFRC522		STM32F103		DESCRIPTION
@@ -29,7 +29,12 @@
 #include "rc522.h"
 #include <stdio.h>
 
+
 SPI_HandleTypeDef hspi3;
+osMessageQueueId_t cola_nfc;
+osThreadId_t tid_Thread_NFC;
+osStatus_t status_cola;
+
 
 // RC522
 uint8_t MFRC522_Check(uint8_t* id);
@@ -54,7 +59,21 @@ void MFRC522_Halt(void);
 
 //static void MX_SPI1_Init(void);
 //static void MX_GPIO_Init(void);
-void RC_RUN(void);
+void RC_RUN(void *argument);
+int Init_Thread_NFC (void);
+
+
+
+int Init_Thread_NFC (void) {
+ 
+  cola_nfc = osMessageQueueNew(10, sizeof(uint8_t), NULL);
+  tid_Thread_NFC = osThreadNew(RC_RUN, NULL, NULL);
+  if (tid_Thread_NFC == NULL) {
+    return(-1);
+  }
+ 
+  return(0);
+}
 
 uint8_t SPI1SendByte(uint8_t data) {
 	unsigned char writeCommand[1];
@@ -387,7 +406,7 @@ static void MX_SPI3_Init(void)
 		printf("Error ocurred during SPI inicializing.\n");
 	}else if ((HAL_SPI_Init(&hspi3) == HAL_TIMEOUT))
 	{
-		printf("Timeout for SPI initialization.\n");
+		printf("Timeout during SPI initialization.\n");
 	}
 
 }
@@ -423,10 +442,10 @@ static void MX_GPIO_Init(void)
 
 }
 
-void RC_RUN(void){
+void RC_RUN(void *argument){
 	uint8_t state = 99;
 	uint8_t CT[3];
-	uint8_t pData[20];
+	uint8_t pData[16];
 	uint8_t i=0;
 	uint8_t readUid[5];
 	uint8_t KEY_A[6]= {0xff,0xff,0xff,0xff,0xff,0xff};
@@ -503,6 +522,8 @@ void RC_RUN(void){
 					printf("%02x", pData[i]);
 				}
 				printf("\n");
+        status_cola=osMessageQueuePut(cola_nfc, &pData[0], 0U, 0U);
+        osThreadFlagsWait(0x01U, osFlagsWaitAny, osWaitForever);
 			}
 			else
 			{
@@ -516,6 +537,10 @@ void RC_RUN(void){
 	}else{
 		printf("Error\n");
 	}
-	osDelay(1000);
+	osDelay(500);
+  
+  osThreadYield(); 
 	}
+  
+  
 }
