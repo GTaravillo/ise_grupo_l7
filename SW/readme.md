@@ -76,8 +76,11 @@ Printf:         PB3
     RX:         PB3 
   
 ### RFID/NFC  
-    **SPIx**  
-    TO-DO  
+    **SPI3**  
+    nCS(SDA):   PA15
+    SCK:        PC10
+    MISO:       PC11
+    MOSI:       PC12
   
 ### Alimentación  
     TO-DO  
