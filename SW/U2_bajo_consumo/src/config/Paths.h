@@ -22,18 +22,19 @@
 #endif
 
 #if WORKSPACE == 2		// Yuanze
-	#define PATH_MAIN        "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/main.h"
-	#define PATH_SERVER      "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/servidor/server.h"
-	#define PATH_ADC         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/adc/adc.h"
-	#define PATH_BUTTONS     "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/buttons/buttons.h"
-	#define PATH_NET_CONFIG  "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/config/NetConfig.h"
-	#define PATH_IRQ         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/irq/stm32f4xx_it.h"
-	#define PATH_LCD         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/lcd/lcd.h"
-	#define PATH_LED         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/led/led.h"
-	#define PATH_LED_STRIP   "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/led/LedStripManager.h"
-	#define PATH_RTC         "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/rtc/rtc.h"
-	#define PATH_UART        "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/uart/uart.h"
-	#define PATH_POSITION    "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U2_bajo_consumo/src/posicion/PositionManager.h"
+	#define PATH_MAIN        "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/main.h"
+	#define PATH_SERVER      "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/servidor/server.h"
+	#define PATH_ADC         "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/adc/adc.h"
+	#define PATH_BUTTONS     "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/buttons/buttons.h"
+	#define PATH_NET_CONFIG  "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/config/NetConfig.h"
+	#define PATH_IRQ         "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/irq/stm32f4xx_it.h"
+	#define PATH_LCD         "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/lcd/lcd.h"
+	#define PATH_LED         "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/led/led.h"
+	#define PATH_LED_STRIP   "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/led/LedStripManager.h"
+	#define PATH_RTC         "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/rtc/rtc.h"
+	#define PATH_UART        "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/uart/uart.h"
+	#define PATH_POSITION    "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/posicion/PositionManager.h"
+	#define PATH_COM_PLACAS  "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U2_bajo_consumo/src/com_placas/ComunicacionPlacas.h"
 #endif
 
 #endif /* __PATHS_H */

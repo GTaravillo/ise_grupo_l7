@@ -463,6 +463,7 @@ void RC_RUN(void *argument){
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		osThreadFlagsWait(FLAG_LEIDA_EMPIEZA, osFlagsWaitAny, osWaitForever);
     /* USER CODE END WHILE */
 	  state = MFRC522_Request(PICC_REQALL, CT);
 	if (state == MI_OK)
@@ -523,7 +524,8 @@ void RC_RUN(void *argument){
 				}
 				printf("\n");
         status_cola=osMessageQueuePut(cola_nfc, &pData[0], 0U, 0U);
-        osThreadFlagsWait(0x01U, osFlagsWaitAny, osWaitForever);
+        osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
+				MFRC522_Halt();
 			}
 			else
 			{

@@ -111,6 +111,33 @@
 #define MFRC522_DUMMY					0x00		// Dummy byte
 #define MFRC522_MAX_LEN					16			// Buf len byte
 
+#define FLAG_PIEZA_LEIDA	0x01U
+#define FLAG_LEIDA_EMPIEZA	0x02U
+#define COLOR_MASK 0x10000000
+
+typedef enum{
+	peon1 = 0,
+	peon2 = 1,
+	peon3 = 2,
+	peon4 = 3,
+	peon5 = 4,
+	peon6 = 5,
+	peon7 = 6,
+	peon8 = 7,
+	caballo1 = 8,
+	caballo2 = 9,
+	torre1 = 10,
+	torre2 = 11,
+	alfil1 = 12,
+	alfil2 = 13,
+	dama = 14,
+	rey = 15
+} piece_t;
+
+typedef enum{
+	blanco = 0,
+	negro = 1,
+} color_t;
 
 extern uint8_t MFRC522_Check(uint8_t* id);
 extern uint8_t MFRC522_Compare(uint8_t* CardID, uint8_t* CompareID);

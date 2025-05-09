@@ -60,6 +60,6 @@ void Thread_Dis(void* argument){
         }
         
     } while (1);
-    
+    osThreadYield(); 
 
 }
