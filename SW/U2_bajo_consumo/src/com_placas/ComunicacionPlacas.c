@@ -59,28 +59,29 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
-  printf("[com::%s]\n", __func__);
+//  printf("[com::%s]\n", __func__);
 
-  uint32_t flag;
-  mensaje_t mensajeTx = 
-	{
-		.tipoMensaje =  MENSAJE_NFC,
-		.mensaje = {'M', 'S', 'G', ' ', 'U', '2'}
-	};
-  int bytesMensaje = sizeof(mensajeTx);
-  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+//  uint32_t flag;
+  mensaje_t mensajeTx = {};
+//	{
+//		.remitente =  MENSAJE_NFC,
+//		.mensaje = {'M', 'S', 'G', ' ', 'U', '2'}
+//	};
+//  int bytesMensaje = sizeof(mensajeTx);
+//  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
   {
+		status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
     printf("[com::%s] Esperando mensaje...\n", __func__);
-    //status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
-    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
+    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
+    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.remitente);
 	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
 	  {
 	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
 	  }
-    USARTdrv->Send(&mensajeTx, bytesMensaje);
-	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
+    USARTdrv->Send(&mensajeTx, sizeof(mensajeTx));
+	  //flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
 		
 		osDelay(5000);
   }
@@ -102,7 +103,7 @@ static void RunRx(void *argument)
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
     flag = osThreadFlagsWait(RECEIVE_COMPLETE, osFlagsWaitAny, osWaitForever);	// Espero 5 seg a que se reciban los 3 bytes
 	
-    printf("[com::%s] Mensaje recibido: tipo [%d]\n", __func__, mensajeRx.tipoMensaje);
+    printf("[com::%s] Mensaje recibido: tipo [%d]\n", __func__, mensajeRx.remitente);
 	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
     {
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);

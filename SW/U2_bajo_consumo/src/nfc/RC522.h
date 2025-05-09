@@ -4,6 +4,7 @@
 #include "stm32f4xx_hal.h"
 #include "cmsis_os2.h"
 
+
 // SPI CS define
 //#define SPI_I2S_FLAG_BSY	((uint16_t)0x0080)
 #define cs_reset() 						HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET)
@@ -138,6 +139,8 @@ typedef enum{
 	blanco = 0,
 	negro = 1,
 } color_t;
+
+
 
 extern uint8_t MFRC522_Check(uint8_t* id);
 extern uint8_t MFRC522_Compare(uint8_t* CardID, uint8_t* CompareID);

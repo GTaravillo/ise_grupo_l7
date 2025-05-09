@@ -28,12 +28,14 @@
 #include "stm32f4xx_hal.h"
 #include "rc522.h"
 #include <stdio.h>
-
+#include "../config/Paths.h"
+#include PATH_COM_PLACAS
 
 SPI_HandleTypeDef hspi3;
 osMessageQueueId_t cola_nfc;
 osThreadId_t tid_Thread_NFC;
 osStatus_t status_cola;
+mensaje_t msg;
 
 
 // RC522
@@ -66,7 +68,7 @@ int Init_Thread_NFC (void);
 
 int Init_Thread_NFC (void) {
  
-  cola_nfc = osMessageQueueNew(10, sizeof(uint8_t), NULL);
+  //cola_nfc = osMessageQueueNew(10, sizeof(mensaje_t), NULL);
   tid_Thread_NFC = osThreadNew(RC_RUN, NULL, NULL);
   if (tid_Thread_NFC == NULL) {
     return(-1);
@@ -455,6 +457,8 @@ void RC_RUN(void *argument){
 	MX_GPIO_Init();
   MX_SPI3_Init();
   MFRC522_Init();
+	msg.mensaje[1] = 0;
+	msg.remitente = MENSAJE_NFC;
   /* USER CODE BEGIN 2 */
   osDelay(1000);
   /* USER CODE END 2 */
@@ -463,8 +467,13 @@ void RC_RUN(void *argument){
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+//		
+//		msg.mensaje[0] = /*(char)pData[0]*/ 0x22;
+//    status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
+		
 		osThreadFlagsWait(FLAG_LEIDA_EMPIEZA, osFlagsWaitAny, osWaitForever);
     /* USER CODE END WHILE */
+		
 	  state = MFRC522_Request(PICC_REQALL, CT);
 	if (state == MI_OK)
 	{
@@ -523,7 +532,8 @@ void RC_RUN(void *argument){
 					printf("%02x", pData[i]);
 				}
 				printf("\n");
-        status_cola=osMessageQueuePut(cola_nfc, &pData[0], 0U, 0U);
+				msg.mensaje[0] = (char)pData[0];
+        status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
         osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
 				MFRC522_Halt();
 			}
@@ -533,7 +543,6 @@ void RC_RUN(void *argument){
 			}
 		}
 		
-    /* USER CODE BEGIN 3 */
 	}else if(state == MI_NOTAGERR){
 		printf("No card read\n");
 	}else{
