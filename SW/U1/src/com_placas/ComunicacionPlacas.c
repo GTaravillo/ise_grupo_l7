@@ -1,5 +1,8 @@
 #include "ComunicacionPlacas.h"
 
+#include "../config/Paths.h"
+#include PATH_LED_STRIP
+
 #include "stdio.h"
 #include "string.h"
 
@@ -59,37 +62,29 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
-  printf("[com::%s]\n", __func__);
-
   uint32_t flag;
-  mensaje_t mensajeTx = 
-	{
-		.tipoMensaje =  MENSAJE_NFC,
-		.mensaje = {'M', 'S', 'G', ' ', 'U', '1'}
-	};
-  int bytesMensaje = sizeof(mensajeTx);
-  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+  // int bytesMensaje = sizeof(mensajeTx);
+  // printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
   {
-    printf("[com::%s] Esperando mensaje...\n", __func__);
-    //status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
-    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
-	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
-	  {
-	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
-	  }
-    USARTdrv->Send(&mensajeTx, bytesMensaje);
-	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
-		
-		osDelay(5000);
+//    printf("[com::%s] Esperando mensaje...\n", __func__);
+//    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
+//    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
+//	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
+//	  {
+//	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
+//	  }
+//    USARTdrv->Send(&mensajeTx, bytesMensaje);
+//	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
+//		
+//		osDelay(5000);
   }
 }
 
+// Recibe bytes (char) y propaga la información a los modulos correspondientes
 static void RunRx(void *argument) 
 {
-  printf("[com::%s]\n", __func__);
-
   uint32_t flag;
   mensaje_t mensajeRx = {};
   int bytesMensaje = sizeof(mensajeRx);
@@ -97,12 +92,66 @@ static void RunRx(void *argument)
 
   while(1) 
   {
-		memset(&mensajeRx, 0, sizeof mensajeRx);
+		memset(&mensajeRx, 0, sizeof(mensajeRx));
     printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
     flag = osThreadFlagsWait(RECEIVE_COMPLETE, osFlagsWaitAny, osWaitForever);	// Espero 5 seg a que se reciban los 3 bytes
 	
-    printf("[com::%s] Mensaje recibido: tipo [%d]\n", __func__, mensajeRx.tipoMensaje);
+    switch (mensajeRx.remitente)
+    {
+      case MENSAJE_LCD:
+
+        break;
+
+      case MENSAJE_LED_STRIP:
+
+        break;
+
+      case MENSAJE_SERVIDOR:
+
+        break;
+
+      case MENSAJE_RTC:
+
+        break;
+
+      case MENSAJE_POSICION:
+        
+        break;
+
+      case MENSAJE_MEMORIA:
+
+        break;
+
+      case MENSAJE_DISTANCIA:
+        
+        break;
+
+      case MENSAJE_NFC: {
+        LedStripMsg_t mensajeRxNfc = {
+          .nuevaJugada = true,
+          .tipoJugada = ESPECIAL,
+          .columna = (mensajeRx.mensaje[0] & 0xF0) >> 4,
+          .fila = mensajeRx.mensaje[0] & 0x0F
+        };
+        printf("[MENSAJE_NFC] mensaje[0] = [%d] - col = [%d]", mensajeRx.mensaje[0], mensajeRxNfc.columna);
+        printf("[MENSAJE_NFC] mensaje[0] = [%d] - fila = [%d]", mensajeRx.mensaje[0], mensajeRxNfc.fila);
+        osMessageQueuePut(e_ledStripMessageId, &mensajeRxNfc, 1, 0); }
+        break;
+
+      case MENSAJE_ALIMENTACION:
+
+        break;
+
+      case MENSAJE_MICROFONO:
+
+        break;
+
+      default:
+        break;
+
+    }
+    printf("[com::%s] Mensaje recibido: remitente [%d]\n", __func__, mensajeRx.remitente);
 	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
     {
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);

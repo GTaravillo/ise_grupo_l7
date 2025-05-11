@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.cgi": "perl",
+        "stdio.h": "c",
+        "ledstripmanager.h": "c",
+        "stdbool.h": "c"
+    }
+}

@@ -15,20 +15,26 @@
 #define	SEND_RECEIVE      (RECEIVE_COMPLETE | SEND_COMPLETE)
 
 #define NUMERO_MENSAJES_MAX 10    // Maximum number of messages in queue
-#define TAM_MENSAJE_MAX  40    // Maximum message size in bytes
+#define TAM_MENSAJE_MAX      2    // Maximum message size in bytes
 
 typedef enum
 {
-  MENSAJE_NFC          = 1,
-  MENSAJE_DISTANCIA    = 2,
-  MENSAJE_ALIMENTACION = 3,
-  MENSAJE_MICROFONO    = 4
-} ETipoMensaje;
+  MENSAJE_LCD          = 1,
+  MENSAJE_LED_STRIP    = 2,
+  MENSAJE_SERVIDOR     = 3,
+  MENSAJE_RTC          = 4,
+  MENSAJE_POSICION     = 5,
+  MENSAJE_MEMORIA      = 6,
+  MENSAJE_DISTANCIA    = 7,
+  MENSAJE_NFC          = 8,
+  MENSAJE_ALIMENTACION = 9,
+  MENSAJE_MICROFONO    = 10
+} ERemitente;
 
 typedef struct
 {
-  ETipoMensaje tipoMensaje;
-  const char mensaje[TAM_MENSAJE_MAX - 1];
+  ERemitente remitente;
+  char mensaje[TAM_MENSAJE_MAX];
 } mensaje_t;
 
 extern osThreadId_t        e_comPlacasRxThreadId;
