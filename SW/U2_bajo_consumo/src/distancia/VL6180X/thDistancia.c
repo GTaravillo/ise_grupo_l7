@@ -71,8 +71,9 @@ void Thread_Dis(void* argument){
           VL6180x_RangePollMeasurement(dev, &Range);
           //printf("VL6180x Detecta una medida\n");
           if (Range.errorStatus == 0 ){
-              printf("%d mm\n", Range.range_mm);
+              
               if (read_h == 0){
+                printf("%d mm\n", Range.range_mm);
                 msg_dis.mensaje[0] = Range.range_mm;
                 status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg_dis, 0U, 0U);
               }
@@ -110,10 +111,10 @@ void dis_sim(void* argument){
   do{
     flag[0]=osThreadFlagsSet(tid_ThDistancia, FLAG_EMPIEZA_DIS);
     printf("dintance ditection on [%d]\n", flag[0]);
-    osDelay(5000);
+    osDelay(20000);
     flag[1] =osThreadFlagsSet(tid_ThDistancia, FLAG_PARA_DIS);
     printf("dintance ditection off [%d]\n", flag[1]);
-    osDelay(5000);
+    osDelay(3000);
   }while(1);
   osThreadYield(); 
 }

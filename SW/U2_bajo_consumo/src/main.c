@@ -105,10 +105,10 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-	ComunicacionPlacasInitialize();
-  Init_Thread_NFC();
+	//ComunicacionPlacasInitialize();
+  //Init_Thread_NFC();
   ThDistancia();
-  //ThSimNfc();
+  //ThSimDis();
   
   /* Start thread execution */
   osKernelStart();
