@@ -166,6 +166,12 @@ extern SPI_HandleTypeDef hspi3;
 extern osMessageQueueId_t cola_nfc;
 extern osThreadId_t tid_Thread_NFC;
 
+/* Para probación
+extern void nfc_sim(void* argument);
+extern int ThSimNfc(void);
+*/
+
+
 static void MX_SPI3_Init(void);
 static void MX_GPIO_Init(void);
 extern void RC_RUN(void *argument);

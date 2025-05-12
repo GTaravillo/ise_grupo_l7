@@ -4,8 +4,9 @@
 #include <stdio.h>
 /* Interfaces */
 #include "config/Paths.h"
-#include PATH_COM_PLACAS
-#include PATH_IRQ
+#include "com_placas/ComunicacionPlacas.h"  //PATH_COM_PLACAS
+#include "irq/stm32f4xx_it.h" //PATH_IRQ
+#include "distancia/VL6180X/thDistancia.h" //
 #include "nfc/rc522.h"
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
@@ -106,6 +107,9 @@ int main(void)
   /* Create thread functions that start executing*/
 	ComunicacionPlacasInitialize();
   Init_Thread_NFC();
+  ThDistancia();
+  //ThSimNfc();
+  
   /* Start thread execution */
   osKernelStart();
 #endif

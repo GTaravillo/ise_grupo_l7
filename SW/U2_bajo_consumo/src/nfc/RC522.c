@@ -29,13 +29,15 @@
 #include "rc522.h"
 #include <stdio.h>
 #include "../config/Paths.h"
-#include PATH_COM_PLACAS
+#include "../com_placas/ComunicacionPlacas.h"  //PATH_COM_PLACAS
 
 SPI_HandleTypeDef hspi3;
 osMessageQueueId_t cola_nfc;
 osThreadId_t tid_Thread_NFC;
 osStatus_t status_cola;
 mensaje_t msg;
+
+//osThreadId_t tid_ThSimNfc;
 
 
 // RC522
@@ -459,6 +461,8 @@ void RC_RUN(void *argument){
   MFRC522_Init();
 	msg.mensaje[1] = 0;
 	msg.remitente = MENSAJE_NFC;
+  uint8_t loop = 1;
+  uint32_t flag;
   /* USER CODE BEGIN 2 */
   osDelay(1000);
   /* USER CODE END 2 */
@@ -472,8 +476,9 @@ void RC_RUN(void *argument){
 //    status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
 		
 		osThreadFlagsWait(FLAG_LEIDA_EMPIEZA, osFlagsWaitAny, osWaitForever);
+    loop = 1;
     /* USER CODE END WHILE */
-		
+   do{
 	  state = MFRC522_Request(PICC_REQALL, CT);
 	if (state == MI_OK)
 	{
@@ -536,6 +541,7 @@ void RC_RUN(void *argument){
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
         osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
 				MFRC522_Halt();
+        loop = 0;
 			}
 			else
 			{
@@ -548,10 +554,41 @@ void RC_RUN(void *argument){
 	}else{
 		printf("Error\n");
 	}
-	osDelay(500);
+  flag = osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, 100U);
+  if(flag == FLAG_PIEZA_LEIDA){
+    MFRC522_Halt();
+    loop = 0;
+  }
+	osDelay(400);
+  }while(loop);
+  
   
   osThreadYield(); 
 	}
   
   
 }
+
+/* Para probación
+int ThSimNfc(void){
+    tid_ThSimNfc = osThreadNew(nfc_sim, NULL, NULL);
+    if (tid_ThSimNfc == NULL) {
+        return(-1);
+    }
+    return(0);
+}
+
+void nfc_sim(void* argument){
+  int flag[2];
+  //osDelay(5000);
+  do{
+    flag[0]=osThreadFlagsSet(tid_Thread_NFC, FLAG_LEIDA_EMPIEZA);
+    printf("Start reading: [%d]\n", flag[0]);
+    osDelay(10000);
+    flag[1] =osThreadFlagsSet(tid_Thread_NFC, FLAG_PIEZA_LEIDA);
+    printf("Read finished: [%d]\n", flag[1]);
+    osDelay(5000);
+  }while(1);
+  osThreadYield(); 
+}
+*/

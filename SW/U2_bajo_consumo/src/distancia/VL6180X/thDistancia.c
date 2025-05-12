@@ -3,10 +3,11 @@
 #include "cmsis_os2.h"
 #include "Driver_I2C.h"
 #include <stdio.h>
-#include PATH_COM_PLACAS
+#include "../../com_placas/ComunicacionPlacas.h"  //PATH_COM_PLACAS
 
-extern osThreadId_t tid_ThDistancia;  
+//extern osThreadId_t tid_ThDistancia;  
 osThreadId_t tid_ThDistancia;
+//osThreadId_t tid_ThSimDis;
 extern ARM_DRIVER_I2C Driver_I2C2;
 void I2C_SignalEvent(uint32_t event);
 void I2C_SignalEvent_dis(uint32_t event);
@@ -49,6 +50,8 @@ void Thread_Dis(void* argument){
 		osStatus_t status_cola;
 		msg_dis.mensaje[1] = 0;
 		msg_dis.remitente = MENSAJE_DISTANCIA;
+    int flag;
+    uint8_t key = 0;
     MyDev_Init();
     //printf("I2C Inicializado\n");
     osDelay(1000);
@@ -57,21 +60,61 @@ void Thread_Dis(void* argument){
     VL6180x_Prepare(dev);
     //printf("VL6180x Preparado\n");
     do {
-        VL6180x_RangePollMeasurement(dev, &Range);
-        //printf("VL6180x Detecta una medida\n");
-        if (Range.errorStatus == 0 ){
-            printf("%d mm\n", Range.range_mm);
-						if (read_h == 0){
-							msg_dis.mensaje[0] = Range.range_mm;
-							status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg_dis, 0U, 0U);
-						}
-						read_h = Range.range_mm;
+        if(key == 0){
+          flag = osThreadFlagsWait(FLAG_EMPIEZA_DIS, osFlagsWaitAny, osWaitForever);
+          osThreadFlagsClear(FLAG_EMPIEZA_DIS);
+          key = (flag & FLAG_EMPIEZA_DIS) == FLAG_EMPIEZA_DIS ? 1 : 0;
+          flag = 0;
+          
         }else{
-						read_h = 0;
-            printf("Error");
+          
+          VL6180x_RangePollMeasurement(dev, &Range);
+          //printf("VL6180x Detecta una medida\n");
+          if (Range.errorStatus == 0 ){
+              printf("%d mm\n", Range.range_mm);
+              if (read_h == 0){
+                msg_dis.mensaje[0] = Range.range_mm;
+                status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg_dis, 0U, 0U);
+              }
+              read_h = Range.range_mm;
+          }else{
+              read_h = 0;
+              printf("Error\n");
+          }
+          
+          flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 10U);
+          osThreadFlagsClear(FLAG_PARA_DIS);
+          key = flag == FLAG_PARA_DIS ? 0 : 1;
+          flag = 0;
+         
+          
         }
         
     } while (1);
     osThreadYield(); 
 
 }
+
+/* Para probación
+int ThSimDis(void){
+    tid_ThSimDis = osThreadNew(dis_sim, NULL, NULL);
+    if (tid_ThSimDis == NULL) {
+        return(-1);
+    }
+    return(0);
+}
+
+void dis_sim(void* argument){
+  int flag[2];
+  //osDelay(5000);
+  do{
+    flag[0]=osThreadFlagsSet(tid_ThDistancia, FLAG_EMPIEZA_DIS);
+    printf("dintance ditection on [%d]\n", flag[0]);
+    osDelay(5000);
+    flag[1] =osThreadFlagsSet(tid_ThDistancia, FLAG_PARA_DIS);
+    printf("dintance ditection off [%d]\n", flag[1]);
+    osDelay(5000);
+  }while(1);
+  osThreadYield(); 
+}
+*/
