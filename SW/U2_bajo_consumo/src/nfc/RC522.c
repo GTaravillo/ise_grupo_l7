@@ -461,7 +461,7 @@ void RC_RUN(void *argument){
   MFRC522_Init();
 	msg.mensaje[1] = 0;
 	msg.remitente = MENSAJE_NFC;
-  uint8_t loop = 1;
+  //uint8_t loop = 0;
   uint32_t flag;
   /* USER CODE BEGIN 2 */
   osDelay(1000);
@@ -469,16 +469,15 @@ void RC_RUN(void *argument){
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  //osThreadFlagsWait(FLAG_EMPIEZA_FINALIZA, osFlagsWaitAny, osWaitForever);
   while (1)
   {
 //		
 //		msg.mensaje[0] = /*(char)pData[0]*/ 0x22;
 //    status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
-		
-		osThreadFlagsWait(FLAG_LEIDA_EMPIEZA, osFlagsWaitAny, osWaitForever);
-    loop = 1;
+    
     /* USER CODE END WHILE */
-   do{
+   
 	  state = MFRC522_Request(PICC_REQALL, CT);
 	if (state == MI_OK)
 	{
@@ -541,7 +540,7 @@ void RC_RUN(void *argument){
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
         osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
 				MFRC522_Halt();
-        loop = 0;
+       
 			}
 			else
 			{
@@ -554,19 +553,20 @@ void RC_RUN(void *argument){
 	}else{
 		printf("Error\n");
 	}
-  flag = osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, 100U);
-  if(flag == FLAG_PIEZA_LEIDA){
-    MFRC522_Halt();
-    loop = 0;
+  
+  flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);
+  if(flag == FLAG_FINALIZA){
+    HAL_SPI_MspDeInit(&hspi3);
+    break;
   }
-	osDelay(400);
-  }while(loop);
+	osDelay(500);
+  
   
   
   osThreadYield(); 
 	}
   
-  
+  osThreadYield();
 }
 
 /* Para probación
@@ -580,15 +580,16 @@ int ThSimNfc(void){
 
 void nfc_sim(void* argument){
   int flag[2];
+  uint8_t i;
   //osDelay(5000);
-  do{
-    flag[0]=osThreadFlagsSet(tid_Thread_NFC, FLAG_LEIDA_EMPIEZA);
-    printf("Start reading: [%d]\n", flag[0]);
-    osDelay(10000);
+  
+  for(i=0; i<=3; i++){
     flag[1] =osThreadFlagsSet(tid_Thread_NFC, FLAG_PIEZA_LEIDA);
     printf("Read finished: [%d]\n", flag[1]);
     osDelay(5000);
-  }while(1);
+  }
+  flag[0]=osThreadFlagsSet(tid_Thread_NFC, FLAG_FINALIZA);
+  printf("End reading: [%d]\n", flag[0]);
   osThreadYield(); 
 }
 */

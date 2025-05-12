@@ -10,7 +10,7 @@ extern int ThDistancia(void);
 extern VL6180x_RangeData_t Range;
 
 
-/* Para oprobación
+/* Para probación
 extern void dis_sim(void* argument);
 extern int ThSimDis(void);
 */
