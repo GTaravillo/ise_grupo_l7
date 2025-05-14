@@ -26,18 +26,18 @@ void HandleLedData(const char *data);
 void GetLcdInput(const char *data);
 static void HandleDateData(const char *data);
 
-static uint32_t HandleNetworkScript(const char *env, char *buf);
-static uint32_t HandleLedScript(const char *env, char *buf);
-static uint32_t HandleTcpScript(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi);
-static uint32_t HandleSystemScript(const char *env, char *buf);
-static uint32_t HandleLanguageScript(const char *env, char *buf);
+// static uint32_t HandleNetworkScript(const char *env, char *buf);
+// static uint32_t HandleLedScript(const char *env, char *buf);
+// static uint32_t HandleTcpScript(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi);
+// static uint32_t HandleSystemScript(const char *env, char *buf);
+// static uint32_t HandleLanguageScript(const char *env, char *buf);
 static uint32_t HandleLcdScript(const char *env, char *buf);
 static uint32_t HandleAdcScript(const char *env, char *buf, uint32_t *adv);
 static uint32_t HandleDateInScript(const char *env, char *buf);
 static uint32_t HandleTimeOutScript(const char *env, char *buf);
 static uint32_t HandleDateOutScript(const char *env, char *buf);
 static uint32_t HandleAdcOutputScript(const char *env, char *buf, uint32_t *adv);
-static uint32_t HandleButtonStateScript(const char *env, char *buf);
+// static uint32_t HandleButtonStateScript(const char *env, char *buf);
 
 // My structure of CGI status variable.
 typedef struct {
@@ -332,27 +332,27 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
     // Analyze a 'c' script line starting position 2
     case SCRIPT_NETWORK:
       // Network parameters from 'network.cgi'
-      len = HandleNetworkScript(env, buf);
+      //len = HandleNetworkScript(env, buf);
       break;
 
     case SCRIPT_LED:
       // LED control from 'led.cgi'
-      len = HandleLedScript(env, buf);
+      //len = HandleLedScript(env, buf);
       break;
 
     case SCRIPT_TCP:
       // TCP status from 'tcp.cgi'
-      len = HandleTcpScript(env, buf, buflen, pcgi);
+      //len = HandleTcpScript(env, buf, buflen, pcgi);
       break;
 
     case SCRIPT_SYSTEM:
       // System password from 'system.cgi'
-      len = HandleSystemScript(env, buf);
+      //len = HandleSystemScript(env, buf);
       break;
 
     case SCRIPT_LANGUAGE:
       // Browser Language from 'language.cgi'
-      len = HandleLanguageScript(env, buf);
+      //len = HandleLanguageScript(env, buf);
       break;
 
     case SCRIPT_LCD:
@@ -387,176 +387,176 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 
     case SCRIPT_BUTTON_STATE:
       // Button state from 'button.cgx'
-      len = HandleButtonStateScript(env, buf);
+      //len = HandleButtonStateScript(env, buf);
       break;
   }
   return len;
 }
 
-static uint32_t HandleNetworkScript(const char *env, char *buf)
-{
-  int16_t      typ     = 0;
-	bool         correct = true;
-  netIF_Option opt     = netIF_OptionMAC_Address;
+// static uint32_t HandleNetworkScript(const char *env, char *buf)
+// {
+//   int16_t      typ     = 0;
+// 	bool         correct = true;
+//   netIF_Option opt     = netIF_OptionMAC_Address;
 	
-  switch (env[3]) {
-		case '4': typ = NET_ADDR_IP4; break;
-		case '6': typ = NET_ADDR_IP6; break;
+//   switch (env[3]) {
+// 		case '4': typ = NET_ADDR_IP4; break;
+// 		case '6': typ = NET_ADDR_IP6; break;
 
-		default: return 0;
-	}
+// 		default: return 0;
+// 	}
 	
-	switch (env[2]) {
-		case 'l':
-			// Link-local address
-			if (env[3] == '4') { return 0;                             }
-			else               { opt = netIF_OptionIP6_LinkLocalAddress; }
-			break;
+// 	switch (env[2]) {
+// 		case 'l':
+// 			// Link-local address
+// 			if (env[3] == '4') { return 0;                             }
+// 			else               { opt = netIF_OptionIP6_LinkLocalAddress; }
+// 			break;
 
-		case 'i':
-			// Write local IP address (IPv4 or IPv6)
-			if (env[3] == '4') { opt = netIF_OptionIP4_Address;       }
-			else               { opt = netIF_OptionIP6_StaticAddress; }
-			break;
+// 		case 'i':
+// 			// Write local IP address (IPv4 or IPv6)
+// 			if (env[3] == '4') { opt = netIF_OptionIP4_Address;       }
+// 			else               { opt = netIF_OptionIP6_StaticAddress; }
+// 			break;
 
-		case 'm':
-			// Write local network mask
-			if (env[3] == '4') { opt = netIF_OptionIP4_SubnetMask; }
-			else               { return (0);                       }
-			break;
+// 		case 'm':
+// 			// Write local network mask
+// 			if (env[3] == '4') { opt = netIF_OptionIP4_SubnetMask; }
+// 			else               { return (0);                       }
+// 			break;
 
-		case 'g':
-			// Write default gateway IP address
-			if (env[3] == '4') { opt = netIF_OptionIP4_DefaultGateway; }
-			else               { opt = netIF_OptionIP6_DefaultGateway; }
-			break;
+// 		case 'g':
+// 			// Write default gateway IP address
+// 			if (env[3] == '4') { opt = netIF_OptionIP4_DefaultGateway; }
+// 			else               { opt = netIF_OptionIP6_DefaultGateway; }
+// 			break;
 
-		case 'p':
-			// Write primary DNS server IP address
-			if (env[3] == '4') { opt = netIF_OptionIP4_PrimaryDNS; }
-			else               { opt = netIF_OptionIP6_PrimaryDNS; }
-			break;
+// 		case 'p':
+// 			// Write primary DNS server IP address
+// 			if (env[3] == '4') { opt = netIF_OptionIP4_PrimaryDNS; }
+// 			else               { opt = netIF_OptionIP6_PrimaryDNS; }
+// 			break;
 
-		case 's':
-			// Write secondary DNS server IP address
-			if (env[3] == '4') { opt = netIF_OptionIP4_SecondaryDNS; }
-			else               { opt = netIF_OptionIP6_SecondaryDNS; }
-			break;
-	}
+// 		case 's':
+// 			// Write secondary DNS server IP address
+// 			if (env[3] == '4') { opt = netIF_OptionIP4_SecondaryDNS; }
+// 			else               { opt = netIF_OptionIP6_SecondaryDNS; }
+// 			break;
+// 	}
 
-	netIF_GetOption (NET_IF_CLASS_ETH, opt, ip_addr, sizeof(ip_addr));
-	netIP_ntoa (typ, ip_addr, ip_string, sizeof(ip_string));
-	return (uint32_t)sprintf (buf, &env[5], ip_string);
-}
+// 	netIF_GetOption (NET_IF_CLASS_ETH, opt, ip_addr, sizeof(ip_addr));
+// 	netIP_ntoa (typ, ip_addr, ip_string, sizeof(ip_string));
+// 	return (uint32_t)sprintf (buf, &env[5], ip_string);
+// }
 
-static uint32_t HandleLedScript(const char *env, char *buf)
-{
-	uint8_t id;
+// static uint32_t HandleLedScript(const char *env, char *buf)
+// {
+// 	uint8_t id;
 	
-  if (env[2] == 'c') {
-		// Select Control
-		// return (uint32_t)sprintf (buf, &env[4], LEDrun ?     ""     : "selected",
-		//                                        LEDrun ? "selected" :    ""     );
-	}
-	// LED CheckBoxes
-	id = env[2] - '0';
-	if (id > 0x04) {
-		id = 0;
-	}
-	id = (uint8_t)(1U << id);
-	return (uint32_t)sprintf (buf, &env[4], (mSelectedLeds & id) ? "checked" : "");
-}
+//   if (env[2] == 'c') {
+// 		// Select Control
+// 		// return (uint32_t)sprintf (buf, &env[4], LEDrun ?     ""     : "selected",
+// 		//                                        LEDrun ? "selected" :    ""     );
+// 	}
+// 	// LED CheckBoxes
+// 	id = env[2] - '0';
+// 	if (id > 0x04) {
+// 		id = 0;
+// 	}
+// 	id = (uint8_t)(1U << id);
+// 	return (uint32_t)sprintf (buf, &env[4], (mSelectedLeds & id) ? "checked" : "");
+// }
 
-static uint32_t HandleTcpScript(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi)
-{
-  int32_t socket;
-  netTCP_State state;
-  NET_ADDR r_client;
+// static uint32_t HandleTcpScript(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi)
+// {
+//   int32_t socket;
+//   netTCP_State state;
+//   NET_ADDR r_client;
 
-  uint32_t len = 0U;
+//   uint32_t len = 0U;
 
-  while ((len + 150) < buflen)
-  {
-    socket = ++MYBUF(pcgi)->idx;
-    state  = netTCP_GetState(socket);
+//   while ((len + 150) < buflen)
+//   {
+//     socket = ++MYBUF(pcgi)->idx;
+//     state  = netTCP_GetState(socket);
 
-    if (state == netTCP_StateINVALID) 
-    {
-      /* Invalid socket, we are done */
-      return len;
-    }
+//     if (state == netTCP_StateINVALID) 
+//     {
+//       /* Invalid socket, we are done */
+//       return len;
+//     }
 
-    // Start table row
-    len += (uint32_t)sprintf(buf + len, "<tr align=\"center\">");
+//     // Start table row
+//     len += (uint32_t)sprintf(buf + len, "<tr align=\"center\">");
 
-    if (state <= netTCP_StateCLOSED) 
-    {
-      len += (uint32_t)sprintf(buf + len,
-             "<td>%d</td><td>%d</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>\r\n",
-             socket, netTCP_StateCLOSED);
-    }
-    else if (state == netTCP_StateLISTEN) 
-    {
-      len += (uint32_t)sprintf(buf + len,
-             "<td>%d</td><td>%d</td><td>%d</td><td>-</td><td>-</td><td>-</td></tr>\r\n",
-             socket, netTCP_StateLISTEN, netTCP_GetLocalPort(socket));
-    }
-    else 
-    {
-      netTCP_GetPeer(socket, &r_client, sizeof(r_client));
-      netIP_ntoa(r_client.addr_type, r_client.addr, ip_string, sizeof(ip_string));
+//     if (state <= netTCP_StateCLOSED) 
+//     {
+//       len += (uint32_t)sprintf(buf + len,
+//              "<td>%d</td><td>%d</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>\r\n",
+//              socket, netTCP_StateCLOSED);
+//     }
+//     else if (state == netTCP_StateLISTEN) 
+//     {
+//       len += (uint32_t)sprintf(buf + len,
+//              "<td>%d</td><td>%d</td><td>%d</td><td>-</td><td>-</td><td>-</td></tr>\r\n",
+//              socket, netTCP_StateLISTEN, netTCP_GetLocalPort(socket));
+//     }
+//     else 
+//     {
+//       netTCP_GetPeer(socket, &r_client, sizeof(r_client));
+//       netIP_ntoa(r_client.addr_type, r_client.addr, ip_string, sizeof(ip_string));
 
-      len += (uint32_t)sprintf(buf + len,
-             "<td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%s</td><td>%d</td></tr>\r\n",
-             socket, state, netTCP_GetLocalPort(socket), netTCP_GetTimer(socket), ip_string, r_client.port);
-    }
-  }
+//       len += (uint32_t)sprintf(buf + len,
+//              "<td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%s</td><td>%d</td></tr>\r\n",
+//              socket, state, netTCP_GetLocalPort(socket), netTCP_GetTimer(socket), ip_string, r_client.port);
+//     }
+//   }
 
-	/* More sockets to go, set a repeat flag */
-	return len | (1u << 31);
-}
+// 	/* More sockets to go, set a repeat flag */
+// 	return len | (1u << 31);
+// }
 
-static uint32_t HandleSystemScript(const char *env, char *buf)
-{
-	uint32_t len    = 0U;
+// static uint32_t HandleSystemScript(const char *env, char *buf)
+// {
+// 	uint32_t len    = 0U;
 	
-  switch (env[2])
-  {
-    case '1':
-      len = (uint32_t)sprintf (buf, &env[4], netHTTPs_LoginActive() ? "Enabled" : "Disabled");
-		  break;
+//   switch (env[2])
+//   {
+//     case '1':
+//       len = (uint32_t)sprintf (buf, &env[4], netHTTPs_LoginActive() ? "Enabled" : "Disabled");
+// 		  break;
 
-    case '2':
-      len = (uint32_t)sprintf (buf, &env[4], netHTTPs_GetPassword());
-		  break;
+//     case '2':
+//       len = (uint32_t)sprintf (buf, &env[4], netHTTPs_GetPassword());
+// 		  break;
 		
-		default:
-			break;
-  }
-	return len;
-}
+// 		default:
+// 			break;
+//   }
+// 	return len;
+// }
 
-static uint32_t HandleLanguageScript(const char *env, char *buf)
-{
-	const char *lang;
-  lang = netHTTPs_GetLanguage();
-	if      (strncmp (lang, "en", 2) == 0) {
-		lang = "English";
-	}
-	else if (strncmp (lang, "de", 2) == 0) {
-		lang = "German";
-	}
-	else if (strncmp (lang, "fr", 2) == 0) {
-		lang = "French";
-	}
-	else if (strncmp (lang, "sl", 2) == 0) {
-		lang = "Slovene";
-	}
-	else {
-		lang = "Unknown";
-	}
-	return (uint32_t)sprintf (buf, &env[2], lang, netHTTPs_GetLanguage());
-}
+// static uint32_t HandleLanguageScript(const char *env, char *buf)
+// {
+// 	const char *lang;
+//   lang = netHTTPs_GetLanguage();
+// 	if      (strncmp (lang, "en", 2) == 0) {
+// 		lang = "English";
+// 	}
+// 	else if (strncmp (lang, "de", 2) == 0) {
+// 		lang = "German";
+// 	}
+// 	else if (strncmp (lang, "fr", 2) == 0) {
+// 		lang = "French";
+// 	}
+// 	else if (strncmp (lang, "sl", 2) == 0) {
+// 		lang = "Slovene";
+// 	}
+// 	else {
+// 		lang = "Unknown";
+// 	}
+// 	return (uint32_t)sprintf (buf, &env[2], lang, netHTTPs_GetLanguage());
+// }
 
 static uint32_t HandleLcdScript(const char *env, char *buf)
 {
@@ -660,11 +660,11 @@ static uint32_t HandleAdcOutputScript(const char *env, char *buf, uint32_t *adv)
   return (uint32_t)sprintf (buf, &env[1], *adv);
 }
 
-static uint32_t HandleButtonStateScript(const char *env, char *buf)
-{
-  return (uint32_t)sprintf(buf, "<checkbox><id>button%c</id><on>%s</on></checkbox>",
-                           env[1], (get_button () & (1 << (env[1]-'0'))) ? "true" : "false");
-}
+// static uint32_t HandleButtonStateScript(const char *env, char *buf)
+// {
+//   return (uint32_t)sprintf(buf, "<checkbox><id>button%c</id><on>%s</on></checkbox>",
+//                            env[1], (get_button () & (1 << (env[1]-'0'))) ? "true" : "false");
+// }
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic pop

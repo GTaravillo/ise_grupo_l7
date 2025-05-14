@@ -1,5 +1,4 @@
-#include <notacion.h>
-
+#include "notacion.h"
 #include <string.h>
 
 char* strCasillas[] = {
@@ -14,7 +13,7 @@ char* strCasillas[] = {
 };
 /////////////////////////////////////////////////////////////////////////////////////////
 // toAlgebrString
-//  Convierte la informaciÃ³n de una jugada a formato Algebr
+//  Convierte la información de una jugada a formato Algebr
 //
 void toAlgebraString (AJD_JugadaPtr jugada, char* buff)
 {

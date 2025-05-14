@@ -31,21 +31,21 @@ Printf:         PB3
 ### LEDs RGB  
     **SPI2**  
     MOSI:       PB15 ->  DATA  
-    SCK:        PB13 ->  CLK  
+    SCK:        PD3  ->  CLK  
   
 ### Servidor Web / RTC
     **ETH**  
     RMII  
-        TXD0:       PG13  
-        TXD1:       PG14  
-        TX_EN:      PG11  
-        RXD0:       PC4  
-        RXD1:       PC5  
-        REF_CLK:    PA1  
-        CRS_DV:     PA7  
+        TXD0:       PG13  (NO SE PUEDE CAMBIAR)  
+        TXD1:       PB13  (NO SE PUEDE CAMBIAR)  
+        TX_EN:      PG11  (NO SE PUEDE CAMBIAR)  
+        RXD0:       PC4   (NO SE PUEDE CAMBIAR)  
+        RXD1:       PC5   (NO SE PUEDE CAMBIAR)  
+        REF_CLK:    PA1   (NO SE PUEDE CAMBIAR)  
+        CRS_DV:     PA7   (NO SE PUEDE CAMBIAR)  
     Management Data Interface  
-        MDC:        PC1  
-        MDIO:       PA2  
+        MDC:        PC1   (NO SE PUEDE CAMBIAR)  
+        MDIO:       PA2   (NO SE PUEDE CAMBIAR)  
   
 ### Expansor GPIO - Posicion
     **I2C1**  
@@ -59,8 +59,8 @@ Printf:         PB3
   
 ### Comunicación entre placas  
     **UART7**  
-    TX:         PB4  
-    RX:         PE7  
+    TX:         PF7  
+    RX:         PE7
 
   
 ## <ins>U2 - Bajo Consumo</ins>  

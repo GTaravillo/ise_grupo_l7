@@ -18,8 +18,8 @@
 
 /* Public */
 osThreadId_t        e_serverThreadId;
-// osMessageQueueId_t  e_serverInputMessageId;
-// osMessageQueueId_t  e_serverOutputMessageId;
+osMessageQueueId_t  e_serverInputMessageId;
+osMessageQueueId_t  e_serverOutputMessageId;
 
 /* Private */
 static  uint64_t g_serverStk[SERVER_STK_SZ / 8];
@@ -59,7 +59,7 @@ static void Run(void *argument)
 {
   LoadDefaultValues();
   //Buttons_Initialize();
-  ADC_Initialize();
+  //ADC_Initialize();
 
   netInitialize();
 
