@@ -12,8 +12,7 @@
 #include PATH_POSITION
 #include PATH_MEMORIA
 #include PATH_COM_PLACAS
-
-#define MASTER 1
+#include PATH_PRINCIPAL
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -111,11 +110,16 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-	//LED_Initialize();
+  
+	LED_Initialize();
+	LCD_Initialize();
+	RTC_Initialize();
+  Server_Initialize();
   //LedStripManagerInitialize();
 	//PositionManagerInitialize();
 	//MemoriaInitialize();
-	ComunicacionPlacasInitialize();
+	//ComunicacionPlacasInitialize();
+  //PrincipalInitialize();
 
   /* Start thread execution */
   osKernelStart();

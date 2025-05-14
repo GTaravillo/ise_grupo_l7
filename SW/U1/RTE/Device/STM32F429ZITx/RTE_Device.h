@@ -1372,7 +1372,7 @@
 #endif
 
 //   <o> SPI2_SCK Pin <0=>PB10 <1=>PB13 <2=>PC7 <3=>PD3 <4=>PI1 <5=>PA9
-#define RTE_SPI2_SCL_PORT_ID            1
+#define RTE_SPI2_SCL_PORT_ID            3
 #if    (RTE_SPI2_SCL_PORT_ID == 0)
 #define RTE_SPI2_SCL_PORT               GPIOB
 #define RTE_SPI2_SCL_BIT                10
@@ -2383,7 +2383,7 @@
 #error "Invalid ETH_RMII_TXD0 Pin Configuration!"
 #endif
 //     <o> ETH_RMII_TXD1 Pin <0=>PB13 <1=>PG14
-#define RTE_ETH_RMII_TXD1_PORT_ID       1
+#define RTE_ETH_RMII_TXD1_PORT_ID       0
 #if    (RTE_ETH_RMII_TXD1_PORT_ID == 0)
 #define RTE_ETH_RMII_TXD1_PORT          GPIOB
 #define RTE_ETH_RMII_TXD1_PIN           13

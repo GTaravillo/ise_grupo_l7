@@ -409,11 +409,6 @@
           <GroupName>Server</GroupName>
           <Files>
             <File>
-              <FileName>Web.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\web\Web.c</FilePath>
-            </File>
-            <File>
               <FileName>server.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\servidor\server.c</FilePath>
@@ -433,45 +428,20 @@
               <FileType>5</FileType>
               <FilePath>.\src\servidor\server_CGI.h</FilePath>
             </File>
+            <File>
+              <FileName>Web.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\web\Web.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Web files</GroupName>
           <Files>
             <File>
-              <FileName>ad.cgi</FileName>
+              <FileName>historico.cgi</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\ad.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>ad.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\ad.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>buttons.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\buttons.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>buttons.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\buttons.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>date.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\date.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>date.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\date.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>home.png</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\home.png</FilePath>
+              <FilePath>.\src\web\historico.cgi</FilePath>
             </File>
             <File>
               <FileName>index.htm</FileName>
@@ -479,69 +449,19 @@
               <FilePath>.\src\web\index.htm</FilePath>
             </File>
             <File>
-              <FileName>keil.gif</FileName>
+              <FileName>leaderboard.cgi</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\keil.gif</FilePath>
+              <FilePath>.\src\web\leaderboard.cgi</FilePath>
             </File>
             <File>
-              <FileName>language.cgi</FileName>
+              <FileName>nuevaPartida.cgi</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\language.cgi</FilePath>
+              <FilePath>.\src\web\nuevaPartida.cgi</FilePath>
             </File>
             <File>
-              <FileName>lcd.cgi</FileName>
+              <FileName>retomarPartida.cgi</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\lcd.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>leds.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\leds.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>llblue.jpg</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\llblue.jpg</FilePath>
-            </File>
-            <File>
-              <FileName>logo.gif</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\logo.gif</FilePath>
-            </File>
-            <File>
-              <FileName>network.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\network.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>pabb.gif</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\pabb.gif</FilePath>
-            </File>
-            <File>
-              <FileName>pg_footer.inc</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\web\pg_footer.inc</FilePath>
-            </File>
-            <File>
-              <FileName>pg_header.inc</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\web\pg_header.inc</FilePath>
-            </File>
-            <File>
-              <FileName>system.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\system.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>tcp.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\tcp.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>xml_http.js</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\xml_http.js</FilePath>
+              <FilePath>.\src\web\retomarPartida.cgi</FilePath>
             </File>
           </Files>
         </Group>

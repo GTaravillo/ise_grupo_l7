@@ -3,6 +3,7 @@
 #include "stm32f4xx_hal.h"
 #include "../rtc/rtc.h"
 #include "../led/led.h"
+#include "../posicion/PositionManager.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -97,8 +98,8 @@ void EXTI15_10_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);	// Boton B1
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  osThreadFlagsSet(e_rtcThreadId, BUTTON_ACTION);
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == GPIO_PIN_9) {
+        osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED);  // Despierta el hilo de gestión de sensores
+    }
 }
