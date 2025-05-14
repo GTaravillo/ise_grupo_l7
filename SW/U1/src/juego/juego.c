@@ -180,13 +180,13 @@ void _colocaPiezas(AJD_TableroPtr tablero)
       tablero->casilla[col].color_pieza         = NEGRO;
 
       tablero->casilla[7*8 + col].pieza         = piezasMayores[col]; // fila 8: piezas mayores blancas
-      //tablero->casilla[7*8 + col].color_pieza   = BLANCO;
+      tablero->casilla[7*8 + col].color_pieza   = BLANCO;
 
       tablero->casilla[8 + col].pieza           = PEON;               // fila 2: peones negros
       tablero->casilla[8 + col].color_pieza     = NEGRO;
       
       tablero->casilla[6*8 + col].pieza         = PEON;               // fils 7: peones blancos
-      //tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
+      tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
    }
 }
 
