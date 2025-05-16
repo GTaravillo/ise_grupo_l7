@@ -7,6 +7,7 @@
 #define HALL_DETECTED 20  // Maximum number of different states the leds can take
 
 extern osThreadId_t e_positionManagerThreadId;
+extern osMessageQueueId_t  e_positionMessageId;
 
 void PositionManagerInitialize(void);
 

@@ -3,8 +3,22 @@
 #include "juego.h"
 #include "tablero.h"
 #include "movimiento.h"
+#include "cmsis_os2.h"
+#include "../com_placas/ComunicacionPlacas.h"
+#include "../posicion/PositionManager.h"
 
 #include <time.h>
+
+typedef enum{
+  Init,
+  Espera,
+  Lectura,
+  Idle,
+  LevantaPieza,
+  CompMov,
+  MovCrct,
+  Error
+} modo_t;
 
 ////////////////////////////////////////////////////////////////////////////
 // FUNCIONES PRIVADAS forward declarations
@@ -15,9 +29,32 @@ void actualizaCrono ();
 // VARIABLES PRIVADAS AL MÓDULO
 AJD_Estado estado_juego;   // Estado del juego
 static time_t crono;       // Temporizador para contar tiempo
+modo_t modo = Init;
+osMessageQueueId_t  e_ConsultPosition;
 
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ PÚBLICA
+
+////////////////////////////////////////////////////////////////////////////
+// MÁQUINA DE ESTATOS
+//void stateMachine(void)
+//{
+//  osStatus_t status;
+//  AJD_Tablero tablero;
+//  switch(modo){
+//    case Init:
+//      status = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+//      if(status == FLAG_START ){
+//        inicializa(&tablero);
+//        nuevoJuego(&tablero);
+//        
+//      }
+//    break;
+//    case Espera:
+//      
+//    break;
+//  }
+//}
 ////////////////////////////////////////////////////////////////////////////
 // INICIALIZA
 //
@@ -155,6 +192,7 @@ void actualizaJuego (AJD_TableroPtr tablero)
 //
 // Bucle principal, se ejecuta hasta que termina la partida.
 //
+
 void ejecutaPartida (AJD_TableroPtr tablero)
 {
    while (!estado_juego.fin_juego)
@@ -163,6 +201,8 @@ void ejecutaPartida (AJD_TableroPtr tablero)
    }
 }
 
+
+
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ PRIVADA
 ////////////////////////////////////////////////////////////////////////////
@@ -170,25 +210,38 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 //
 // Dispone las piezas en el tablero para una partida nueva
 //
-void _colocaPiezas(AJD_TableroPtr tablero)
-{   
-   AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
-   for (int col=0; col < 8; col++)
-   {
+//void _colocaPiezas(AJD_TableroPtr tablero)
+//{   
+//   AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
+//   for (int col=0; col < 8; col++)
+//   {
 
-      tablero->casilla[col].pieza               = piezasMayores[col]; // fila 1: piezas mayores negras
-      tablero->casilla[col].color_pieza         = NEGRO;
+//      tablero->casilla[col].pieza               = piezasMayores[col]; // fila 1: piezas mayores negras
+//      tablero->casilla[col].color_pieza         = NEGRO;
 
-      tablero->casilla[7*8 + col].pieza         = piezasMayores[col]; // fila 8: piezas mayores blancas
-      tablero->casilla[7*8 + col].color_pieza   = BLANCO;
+//      tablero->casilla[7*8 + col].pieza         = piezasMayores[col]; // fila 8: piezas mayores blancas
+//      tablero->casilla[7*8 + col].color_pieza   = BLANCO;
 
-      tablero->casilla[8 + col].pieza           = PEON;               // fila 2: peones negros
-      tablero->casilla[8 + col].color_pieza     = NEGRO;
-      
-      tablero->casilla[6*8 + col].pieza         = PEON;               // fils 7: peones blancos
-      tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
-   }
-}
+//      tablero->casilla[8 + col].pieza           = PEON;               // fila 2: peones negros
+//      tablero->casilla[8 + col].color_pieza     = NEGRO;
+//      
+//      tablero->casilla[6*8 + col].pieza         = PEON;               // fils 7: peones blancos
+//      tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
+//   }
+//}
+
+//void _colocaPiezas(AJD_TableroPtr tablero, )
+//{
+//  osStatus_t status;
+//  ECasilla pos;
+//  AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
+//  for (int i = 0; i < 64; i++){
+//    status = osMessageQueueGet(e_positionMessageId, &pos, NULL, osWaitForever);
+//    if(status == osOK){
+//      
+//    }
+//  }
+//}
 
 void actualizaCrono()
 {

@@ -4,6 +4,10 @@
 	#include "tablero.h"
 	#include <stdint.h>
 	#include <time.h>
+  
+  #define FLAG_START    0x01U
+  #define FLAG_RETOCAR  0x02U
+  #define FLAG_PAUSA    0X04U
 
 	typedef enum { NO_SELECCION, ORIGEN_SELECCIONADO, DESTINO_SELECCIONADO } AJD_Seleccion;
 	typedef enum { NO_ENROQUE, ENROQUE_LARGO, ENROQUE_CORTO } AJD_Enroque;
@@ -27,6 +31,8 @@
 		 AJD_CasillaPtr casilla_destino; // casilla destino de la pieza a mover   
 		 uint8_t        fin_juego : 1;          // Salir del juego?
 	} AJD_Estado, *AJD_EstadoPtr;
+  
+  
 	/////////////////////////////////////////////////////////////////////
 	// INTERFAZ PUBLICA
 	//

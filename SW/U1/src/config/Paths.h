@@ -38,7 +38,7 @@
 	#define PATH_COM_PLACAS  "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL   "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/juego/principal.h"
 
-#else WORKSPACE == 3		// Raul
+#elif WORKSPACE == 3		// Raul
 	#define PATH_MAIN        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/main.h"
 	#define PATH_SERVER      "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/servidor/server.h"
 	#define PATH_ADC         "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/adc/adc.h"
