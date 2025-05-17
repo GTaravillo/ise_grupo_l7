@@ -92,10 +92,11 @@ static void Run(void *argument)
 
   osStatus_t    status;
   LedStripMsg_t mensajeRx;
-  
 
   while(1)
   {
+    osStatus_t status;
+
     memset(&mensajeRx, 0, sizeof(mensajeRx));
     status = osMessageQueueGet(e_ledStripMessageId, &mensajeRx, NULL, osWaitForever);
     if (RecepcionCorrecta(status) && PosicionRecibidaValida(mensajeRx))

@@ -3,6 +3,7 @@
         "*.cgi": "perl",
         "stdio.h": "c",
         "ledstripmanager.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "compare": "c"
     }
 }
