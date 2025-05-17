@@ -1,6 +1,6 @@
 #include "prediction.h"
 //#include "tablero.h"
-//#include ""
+#include <string.h>
 
 void predictPosition(AJD_TableroPtr tablero, AJD_CasillaPtr origen, uint8_t predict[64]);
 void predPeon(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero);

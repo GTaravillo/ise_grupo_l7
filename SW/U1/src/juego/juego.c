@@ -26,17 +26,17 @@ void _colocaPiezas (AJD_TableroPtr tablero);
 void actualizaCrono ();
 
 ////////////////////////////////////////////////////////////////////////////
-// VARIABLES PRIVADAS AL MÓDULO
+// VARIABLES PRIVADAS AL Mï¿½DULO
 AJD_Estado estado_juego;   // Estado del juego
 static time_t crono;       // Temporizador para contar tiempo
 modo_t modo = Init;
 osMessageQueueId_t  e_ConsultPosition;
 
 ////////////////////////////////////////////////////////////////////////////
-// INTERFAZ PÚBLICA
+// INTERFAZ Pï¿½BLICA
 
 ////////////////////////////////////////////////////////////////////////////
-// MÁQUINA DE ESTATOS
+// Mï¿½QUINA DE ESTATOS
 //void stateMachine(void)
 //{
 //  osStatus_t status;
@@ -59,7 +59,7 @@ osMessageQueueId_t  e_ConsultPosition;
 // INICIALIZA
 //
 // Pone todas las casillas del tablero a su estado inicial:
-//    - Todas las casillas están vacías
+//    - Todas las casillas estï¿½n vacï¿½as
 //    - El color de cada casilla alterna entre blanco y negro y la
 //      casilla inferior derecha es de color blanco
 //
@@ -79,8 +79,8 @@ void inicializa(AJD_TableroPtr tablero)
          casilla->color = color;
          color ^= 1; // Alterna entre blanco/negro       
          
-         // Inicialmente el tablero está vacío
-         // El color de la pieza cuando la casilla está vacía es irrelevante
+         // Inicialmente el tablero estï¿½ vacï¿½o
+         // El color de la pieza cuando la casilla estï¿½ vacï¿½a es irrelevante
          casilla->pieza = NONE;
          casilla->color_pieza = BLANCO;
          casilla->id = id++;
@@ -95,14 +95,14 @@ void inicializa(AJD_TableroPtr tablero)
 //
 // Prepara el estado del juego y el tablero para una partida nueva:
 //
-//    - Estado del juego: ninguna pieza movida, ningún rey en jaque,
+//    - Estado del juego: ninguna pieza movida, ningï¿½n rey en jaque,
 //      turno del jugador 1, juegan blancas
 //
 //    - Coloca las piezas en el tablero para una partida nueva
 //
 //    - Turnos jugados = 0
 //
-void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACIÓN NFC
+void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACIï¿½N NFC
 {
    // Estado del juego
    memset(&estado_juego, 0, sizeof (AJD_Estado));
@@ -210,25 +210,25 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 //
 // Dispone las piezas en el tablero para una partida nueva
 //
-//void _colocaPiezas(AJD_TableroPtr tablero)
-//{   
-//   AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
-//   for (int col=0; col < 8; col++)
-//   {
+void _colocaPiezas(AJD_TableroPtr tablero)
+{   
+  AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
+  for (int col=0; col < 8; col++)
+  {
 
-//      tablero->casilla[col].pieza               = piezasMayores[col]; // fila 1: piezas mayores negras
-//      tablero->casilla[col].color_pieza         = NEGRO;
+     tablero->casilla[col].pieza               = piezasMayores[col]; // fila 1: piezas mayores negras
+     tablero->casilla[col].color_pieza         = NEGRO;
 
-//      tablero->casilla[7*8 + col].pieza         = piezasMayores[col]; // fila 8: piezas mayores blancas
-//      tablero->casilla[7*8 + col].color_pieza   = BLANCO;
+     tablero->casilla[7*8 + col].pieza         = piezasMayores[col]; // fila 8: piezas mayores blancas
+     tablero->casilla[7*8 + col].color_pieza   = BLANCO;
 
-//      tablero->casilla[8 + col].pieza           = PEON;               // fila 2: peones negros
-//      tablero->casilla[8 + col].color_pieza     = NEGRO;
-//      
-//      tablero->casilla[6*8 + col].pieza         = PEON;               // fils 7: peones blancos
-//      tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
-//   }
-//}
+     tablero->casilla[8 + col].pieza           = PEON;               // fila 2: peones negros
+     tablero->casilla[8 + col].color_pieza     = NEGRO;
+     
+     tablero->casilla[6*8 + col].pieza         = PEON;               // fils 7: peones blancos
+     tablero->casilla[6*8 + col].color_pieza   = BLANCO;          
+  }
+}
 
 //void _colocaPiezas(AJD_TableroPtr tablero, )
 //{
@@ -245,7 +245,7 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 
 void actualizaCrono()
 {
-    // Actualización del cronometro
+    // Actualizaciï¿½n del cronometro
    if (difftime (time(NULL), crono) >= 1.0)
    {
      if (estado_juego.juegan_blancas)
