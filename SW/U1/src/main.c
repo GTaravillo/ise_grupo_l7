@@ -111,15 +111,17 @@ int main(void)
 
   /* Create thread functions that start executing*/
   
-	LED_Initialize();
-	LCD_Initialize();
-	RTC_Initialize();
-  Server_Initialize();
-  //LedStripManagerInitialize();
+	//LED_Initialize();
+	//LCD_Initialize();
+	//RTC_Initialize();
+  //Server_Initialize();
+	MemoriaInitialize();
+  LedStripManagerInitialize();
 	//PositionManagerInitialize();
-	//MemoriaInitialize();
 	//ComunicacionPlacasInitialize();
   //PrincipalInitialize();
+  
+
 
   /* Start thread execution */
   osKernelStart();

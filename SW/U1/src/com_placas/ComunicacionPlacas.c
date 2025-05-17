@@ -120,7 +120,7 @@ static void RunRx(void *argument)
         break;
 
       case MENSAJE_MEMORIA:
-
+        
         break;
 
       case MENSAJE_DISTANCIA:
