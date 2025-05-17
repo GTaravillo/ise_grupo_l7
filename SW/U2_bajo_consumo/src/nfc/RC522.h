@@ -166,7 +166,7 @@ extern SPI_HandleTypeDef hspi3;
 extern osMessageQueueId_t cola_nfc;
 extern osThreadId_t tid_Thread_NFC;
 
-/* Para probación
+/* Para probaciï¿½n
 extern void nfc_sim(void* argument);
 extern int ThSimNfc(void);
 */
