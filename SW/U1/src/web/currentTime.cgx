@@ -3,9 +3,5 @@ t <text>
 t <id>timeOut</id>
 c v<value>%s</value>
 t </text>
-t <text>
-t <id>dateOut</id>
-c w<value>%s</value>
-t </text>
 t </form>
 .

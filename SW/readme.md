@@ -93,3 +93,4 @@ Printf:         PB3
   
 ## RTC  
     Mejorar gestión eventos RTC (se salta algunos segundos)  
+    Corregir gestión hora SNTP: a las 01:00:00 se muestra 25:00:00 cuando lo coge del servidor  

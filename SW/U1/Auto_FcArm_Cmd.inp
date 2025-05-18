@@ -2,5 +2,8 @@ historico.cgi,
 index.htm,
 leaderboard.cgi,
 nuevaPartida.cgi,
-retomarPartida.cgi 
+retomarPartida.cgi,
+xml_http.js,
+currentDate.cgx,
+currentTime.cgx 
 TO Web.c RTE NOPRINT ROOT(.\src\web)
