@@ -431,7 +431,7 @@
             <File>
               <FileName>Web.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\web\Web.c</FilePath>
+              <FilePath>src\web\Web.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -462,6 +462,21 @@
               <FileName>retomarPartida.cgi</FileName>
               <FileType>9</FileType>
               <FilePath>.\src\web\retomarPartida.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>xml_http.js</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\xml_http.js</FilePath>
+            </File>
+            <File>
+              <FileName>currentDate.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentDate.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>currentTime.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentTime.cgx</FilePath>
             </File>
           </Files>
         </Group>
