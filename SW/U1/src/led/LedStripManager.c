@@ -17,7 +17,7 @@
 /* Control */
 #define BRILLO_DEFECTO        15
 /* Cola mensajes */
-#define NUMERO_MENSAJES_MAX   30  // 28 maximo teorico. 2 salvaguarda
+#define NUMERO_MENSAJES_MAX   30    // 28 maximo teorico. 2 salvaguarda
 
 
 /* Public */
@@ -69,6 +69,8 @@ static void StopCommunication(void);
 static void EnviarComando(unsigned char cmd);
 static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores);
 static void EnviarDatos(void);
+static void TestLeds(void);
+static void TurnOff(void);
 
 void  ARM_LedSPI_SignalEvent(uint32_t event);
 
@@ -88,7 +90,7 @@ void LedStripManagerInitialize(void)
 static void Run(void *argument)
 {
   InitializeSpiDriver();
-  StartCommunication();
+  TestLeds();
 
   osStatus_t    status;
   LedStripMsg_t mensajeRx;
@@ -274,6 +276,49 @@ static void EnviarComando(unsigned char cmd)
   osThreadFlagsWait(LCD_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
 }
 
+static void TestLeds(void)
+{
+  ColorLed_t colores;
+  const ETipoJugada tipoJugada = CAPTURA;
+  GetColor(tipoJugada, &colores);
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    g_leds[i]           = colores;
+    const uint8_t azul  = g_leds[i].blue;
+    const uint8_t verde = g_leds[i].green;
+    const uint8_t rojo  = g_leds[i].red;
+		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | brillo);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(100);
+	}
+  StopCommunication();
+}
+
+static void TurnOff(void)
+{
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 0;
+    const uint8_t rojo  = 0;
+		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | 0);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(100);
+	}
+  StopCommunication();
+}
+
 void ARM_LedSPI_SignalEvent(uint32_t event)
 {
   if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE)
@@ -283,10 +328,12 @@ void ARM_LedSPI_SignalEvent(uint32_t event)
   }
   if (event & ARM_SPI_EVENT_MODE_FAULT)
   {
+		printf("[LedStrip::%s] ARM_SPI_EVENT_MODE_FAULT", __func__);
     // Master Mode Fault (SS deactivated when Master)
   }
   if (event & ARM_SPI_EVENT_DATA_LOST)
   {
+		printf("[LedStrip::%s] ARM_SPI_EVENT_DATA_LOST", __func__);
     // Data lost: Receive overflow / Transmit underflow
   }
 }
