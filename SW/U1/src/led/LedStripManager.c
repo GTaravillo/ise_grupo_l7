@@ -40,17 +40,17 @@ typedef struct {
  * Mando mensaje a LedStripManager con mensaje 0x12 0x00 (padding)
  * Gestión interna: 0x12 -> [1-1][2-1] == [0][1] = se enciende LED 15
  *  */ 
-const static uint8_t g_numeroLedMap[8][8] = {
-//  1   2   3   4   5   6   7   8
-  { 0, 15, 16, 31, 32, 47, 48, 63 }, // A 
-  { 1, 14, 17, 30, 33, 46, 49, 62 }, // B
-  { 2, 13, 18, 29, 34, 45, 50, 61 }, // C
-  { 3, 12, 19, 28, 35, 44, 51, 60 }, // D
-  { 4, 11, 20, 27, 36, 43, 52, 59 }, // E
-  { 5, 10, 21, 26, 37, 42, 53, 58 }, // F
-  { 6,  9, 22, 25, 38, 41, 54, 57 }, // G
-  { 7,  8, 23, 24, 39, 40, 55, 56 }  // H
-};
+// const static uint8_t g_numeroLedMap[8][8] = {
+// //  1   2   3   4   5   6   7   8
+//   { 0, 15, 16, 31, 32, 47, 48, 63 }, // A 
+//   { 1, 14, 17, 30, 33, 46, 49, 62 }, // B
+//   { 2, 13, 18, 29, 34, 45, 50, 61 }, // C
+//   { 3, 12, 19, 28, 35, 44, 51, 60 }, // D
+//   { 4, 11, 20, 27, 36, 43, 52, 59 }, // E
+//   { 5, 10, 21, 26, 37, 42, 53, 58 }, // F
+//   { 6,  9, 22, 25, 38, 41, 54, 57 }, // G
+//   { 7,  8, 23, 24, 39, 40, 55, 56 }  // H
+// };
 
 extern ARM_DRIVER_SPI   Driver_SPI2;
        ARM_DRIVER_SPI*  SPIdrv2 = &Driver_SPI2;
@@ -147,16 +147,15 @@ static bool RecepcionCorrecta(osStatus_t status)
 
 static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 {
-  const uint8_t col = mensajeRx.columna;
-  const uint8_t fila = mensajeRx.fila;
+  const uint8_t posicion  = mensajeRx.posicion;
 
-  printf("[LedStrip::%s] RECIBIDO: col[%d] fila[%d]\n", __func__, col, fila);
-  if ((1 <= col) && (col <= 8) && (1 <= fila) && (fila <= 8))
+  printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, PositionToString(posicion));
+  if (posicion < 64)
   {
     return true;
   }
   
-  printf("[LedStrip::%s] ERROR! Posicion invalida\n", __func__);
+  printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
   return false;
 }
 
@@ -175,12 +174,8 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const ETipoJugada tipoJugada = mensajeRx.tipoJugada;
   GetColor(tipoJugada, &colores);
 
-  // Localizo el led a encender y le asigno valores de color
-  const uint8_t col    = mensajeRx.columna - 1;
-  const uint8_t fila   = mensajeRx.fila - 1;
-  const uint8_t numLed = g_numeroLedMap[col][fila];
-  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, numLed);
-  g_leds[numLed] = colores;
+  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
+  g_leds[posicion] = colores;
 }
 
 static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)

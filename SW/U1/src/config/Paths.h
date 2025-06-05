@@ -20,6 +20,7 @@
 	#define PATH_MEMORIA    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
 	#define PATH_COM_PLACAS "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/juego/principal.h"
+	#define PATH_COMMON		"C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #elif WORKSPACE == 2		// Yuanze
 	#define PATH_MAIN        "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/main.h"
@@ -37,6 +38,7 @@
 	#define PATH_MEMORIA     "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
 	#define PATH_COM_PLACAS  "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL   "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/juego/principal.h"
+	#define PATH_COMMON		 "D:/Estudio/ISE/Bloq2/dev/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #elif WORKSPACE == 3		// Raul
 	#define PATH_MAIN        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/main.h"
@@ -52,6 +54,7 @@
 	#define PATH_UART        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/uart/uart.h"
 	#define PATH_POSITION    "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
 	#define PATH_PRINCIPAL   "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/juego/principal.h"
+	#define PATH_COMMON		 "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #endif
 
