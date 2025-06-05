@@ -17,8 +17,7 @@ typedef enum {
 typedef struct {
   bool        nuevaJugada;  // Poner a true para limpiar tablero y encender los LEDs hasta proxima nueva jugada
   ETipoJugada tipoJugada;   // Determina el color del LED
-  uint8_t     columna;      // 1 = A, 2 = B, ..., 8 = H
-  uint8_t     fila;
+  uint8_t     posicion;     // [0, 63]
 } LedStripMsg_t;
 
 extern osMessageQueueId_t  e_ledStripMessageId;

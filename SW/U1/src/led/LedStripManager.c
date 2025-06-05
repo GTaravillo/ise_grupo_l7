@@ -17,7 +17,7 @@
 /* Control */
 #define BRILLO_DEFECTO        15
 /* Cola mensajes */
-#define NUMERO_MENSAJES_MAX   30  // 28 maximo teorico. 2 salvaguarda
+#define NUMERO_MENSAJES_MAX   30    // 28 maximo teorico. 2 salvaguarda
 
 
 /* Public */
@@ -40,17 +40,17 @@ typedef struct {
  * Mando mensaje a LedStripManager con mensaje 0x12 0x00 (padding)
  * Gestión interna: 0x12 -> [1-1][2-1] == [0][1] = se enciende LED 15
  *  */ 
-const static uint8_t g_numeroLedMap[8][8] = {
-//  1   2   3   4   5   6   7   8
-  { 0, 15, 16, 31, 32, 47, 48, 63 }, // A 
-  { 1, 14, 17, 30, 33, 46, 49, 62 }, // B
-  { 2, 13, 18, 29, 34, 45, 50, 61 }, // C
-  { 3, 12, 19, 28, 35, 44, 51, 60 }, // D
-  { 4, 11, 20, 27, 36, 43, 52, 59 }, // E
-  { 5, 10, 21, 26, 37, 42, 53, 58 }, // F
-  { 6,  9, 22, 25, 38, 41, 54, 57 }, // G
-  { 7,  8, 23, 24, 39, 40, 55, 56 }  // H
-};
+// const static uint8_t g_numeroLedMap[8][8] = {
+// //  1   2   3   4   5   6   7   8
+//   { 0, 15, 16, 31, 32, 47, 48, 63 }, // A 
+//   { 1, 14, 17, 30, 33, 46, 49, 62 }, // B
+//   { 2, 13, 18, 29, 34, 45, 50, 61 }, // C
+//   { 3, 12, 19, 28, 35, 44, 51, 60 }, // D
+//   { 4, 11, 20, 27, 36, 43, 52, 59 }, // E
+//   { 5, 10, 21, 26, 37, 42, 53, 58 }, // F
+//   { 6,  9, 22, 25, 38, 41, 54, 57 }, // G
+//   { 7,  8, 23, 24, 39, 40, 55, 56 }  // H
+// };
 
 extern ARM_DRIVER_SPI   Driver_SPI2;
        ARM_DRIVER_SPI*  SPIdrv2 = &Driver_SPI2;
@@ -69,6 +69,8 @@ static void StopCommunication(void);
 static void EnviarComando(unsigned char cmd);
 static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores);
 static void EnviarDatos(void);
+static void TestLeds(void);
+static void TurnOff(void);
 
 void  ARM_LedSPI_SignalEvent(uint32_t event);
 
@@ -88,7 +90,7 @@ void LedStripManagerInitialize(void)
 static void Run(void *argument)
 {
   InitializeSpiDriver();
-  StartCommunication();
+  TestLeds();
 
   osStatus_t    status;
   LedStripMsg_t mensajeRx;
@@ -145,16 +147,15 @@ static bool RecepcionCorrecta(osStatus_t status)
 
 static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 {
-  const uint8_t col = mensajeRx.columna;
-  const uint8_t fila = mensajeRx.fila;
+  const uint8_t posicion  = mensajeRx.posicion;
 
-  printf("[LedStrip::%s] RECIBIDO: col[%d] fila[%d]\n", __func__, col, fila);
-  if ((1 <= col) && (col <= 8) && (1 <= fila) && (fila <= 8))
+  printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, PositionToString(posicion));
+  if (posicion < 64)
   {
     return true;
   }
   
-  printf("[LedStrip::%s] ERROR! Posicion invalida\n", __func__);
+  printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
   return false;
 }
 
@@ -173,12 +174,8 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const ETipoJugada tipoJugada = mensajeRx.tipoJugada;
   GetColor(tipoJugada, &colores);
 
-  // Localizo el led a encender y le asigno valores de color
-  const uint8_t col    = mensajeRx.columna - 1;
-  const uint8_t fila   = mensajeRx.fila - 1;
-  const uint8_t numLed = g_numeroLedMap[col][fila];
-  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, numLed);
-  g_leds[numLed] = colores;
+  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
+  g_leds[posicion] = colores;
 }
 
 static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
@@ -274,6 +271,49 @@ static void EnviarComando(unsigned char cmd)
   osThreadFlagsWait(LCD_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
 }
 
+static void TestLeds(void)
+{
+  ColorLed_t colores;
+  const ETipoJugada tipoJugada = CAPTURA;
+  GetColor(tipoJugada, &colores);
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    g_leds[i]           = colores;
+    const uint8_t azul  = g_leds[i].blue;
+    const uint8_t verde = g_leds[i].green;
+    const uint8_t rojo  = g_leds[i].red;
+		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | brillo);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(100);
+	}
+  StopCommunication();
+}
+
+static void TurnOff(void)
+{
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 0;
+    const uint8_t rojo  = 0;
+		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | 0);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(100);
+	}
+  StopCommunication();
+}
+
 void ARM_LedSPI_SignalEvent(uint32_t event)
 {
   if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE)
@@ -283,10 +323,12 @@ void ARM_LedSPI_SignalEvent(uint32_t event)
   }
   if (event & ARM_SPI_EVENT_MODE_FAULT)
   {
+		printf("[LedStrip::%s] ARM_SPI_EVENT_MODE_FAULT", __func__);
     // Master Mode Fault (SS deactivated when Master)
   }
   if (event & ARM_SPI_EVENT_DATA_LOST)
   {
+		printf("[LedStrip::%s] ARM_SPI_EVENT_DATA_LOST", __func__);
     // Data lost: Receive overflow / Transmit underflow
   }
 }

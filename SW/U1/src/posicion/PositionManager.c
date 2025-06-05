@@ -44,7 +44,7 @@ Velocidad?
 		P17 - 0xFF,0x7F / P16 - 0xFF,0xBF / P15 - 0xFF,0xDF / P14 - 0xFF,0xEF / 	TODO EL RATO, 1ER BYTE A FF
 		P13 - 0xFF,0xF7 / P12 - 0xFF,0xFB / P11 - 0xFF,0xFD / P10 - 0xFF,0xFE
 		
-		P00 - 0xFE,0xFF / P01 - 0xFD,0xFF / P02 - 0xFB,0xFF / P03 - 0xF7,0xFF /   TODO EL RATO, 2º BYTE A FF
+		P00 - 0xFE,0xFF / P01 - 0xFD,0xFF / P02 - 0xFB,0xFF / P03 - 0xF7,0xFF /   TODO EL RATO, 2ï¿½ BYTE A FF
 	  P04 - 0xEF,0xFF / P05 - 0xDF,0xFF / P06 - 0xBF,0xFF / P07 - 0x7F,0xFF
 	*/
 
@@ -60,15 +60,12 @@ osMessageQueueId_t  e_positionMessageId;
 /* Private */
 static  void  Run(void *argument);
 
-void  I2C_SignalEvent(uint32_t event);
-
-void Pcf8575Initialize(void);
-
-void leerExpansor(uint8_t slave_addr, uint8_t *buffer);
-
+static void I2C_SignalEvent(uint32_t event);
+static void Pcf8575Initialize(void);
+static void leerExpansor(uint8_t slave_addr, uint8_t *buffer);
 static void checkExpansorChanges(uint8_t *buff_exp, uint8_t *prev_buff_exp, int exp_num);
 
-uint8_t mapPinToCasilla(int exp_num, int pin);
+static uint8_t mapPinToCasilla(int exp_num, int pin);
 
 
 
@@ -112,7 +109,7 @@ static void Run(void *argument)
 
   while (1)
   {
-		osThreadFlagsWait(HALL_DETECTED, osFlagsWaitAll, osWaitForever);  // Espera a que haya interrupción (cambio de estado de algún hall)
+		osThreadFlagsWait(HALL_DETECTED, osFlagsWaitAll, osWaitForever);  // Espera a que haya interrupciï¿½n (cambio de estado de algï¿½n hall)
 
 		leerExpansor(SLAVE_1_ADDR, buff_exp1);
 		leerExpansor(SLAVE_2_ADDR, buff_exp2);
@@ -125,7 +122,7 @@ static void Run(void *argument)
     checkExpansorChanges(buff_exp3, last_buff_exp3, 3);
     checkExpansorChanges(buff_exp4, last_buff_exp4, 4);
   
-    // Actualiza los valores previos de los buffers después de la lectura
+    // Actualiza los valores previos de los buffers despuï¿½s de la lectura
     memcpy(last_buff_exp1, buff_exp1, 2);
     memcpy(last_buff_exp2, buff_exp2, 2);
     memcpy(last_buff_exp3, buff_exp3, 2);
@@ -134,7 +131,7 @@ static void Run(void *argument)
   }
 }
 
-void I2C_SignalEvent(uint32_t event) 
+static void I2C_SignalEvent(uint32_t event) 
 {
 	printf("I2C_SignalEvent [%#x]\n", event);
   if (event & ARM_I2C_EVENT_TRANSFER_DONE) 
@@ -144,7 +141,7 @@ void I2C_SignalEvent(uint32_t event)
   }
 }
 
-void Pcf8575Initialize(void) {
+static void Pcf8575Initialize(void) {
     uint8_t writeBuffer[2] = {0xFF, 0xFF}; // Configura todos los pines como entradas (1 = High)
 
     const uint8_t slaveAddresses[4] = {
@@ -165,7 +162,7 @@ void Pcf8575Initialize(void) {
     printf("Todos los expansores PCF8575 inicializados correctamente.\n");
 }
 
-void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
+static void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
     int32_t status = I2Cdrv->MasterReceive(slave_addr, buffer, 2, false);
     if (status != ARM_DRIVER_OK) {
         printf("Error reading from slave 0x%02X\n", slave_addr);
@@ -174,16 +171,16 @@ void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
     osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
 }
 
-uint8_t mapPinToCasilla(int exp_num, int pin)
+static uint8_t mapPinToCasilla(int exp_num, int pin)
 {
-    // Definimos cómo se mapea cada expansor a las filas y columnas del tablero
+    // Definimos cï¿½mo se mapea cada expansor a las filas y columnas del tablero
     // Por ejemplo, el expansor 1 mapea a la fila 1, el expansor 2 a la fila 2, etc.
     // Y el pin se mapea directamente a las columnas (1 a 8)
 
     uint8_t fila = exp_num;  // Fila en el tablero (1 a 4 corresponden a las primeras 4 filas)
     uint8_t columna = pin + 1;  // Las columnas en el tablero son 1-8, y los pins 0-7
 
-    // La casilla en formato numérico es columna * 10 + fila
+    // La casilla en formato numï¿½rico es columna * 10 + fila
     uint8_t casilla = (columna * 10) + fila;
 
     return casilla;
@@ -191,24 +188,24 @@ uint8_t mapPinToCasilla(int exp_num, int pin)
 
 static void checkExpansorChanges(uint8_t *buff_exp, uint8_t *prev_buff_exp, int exp_num)
 {
-    for (int i = 0; i < 2; i++) {
-        uint8_t diff = buff_exp[i] ^ prev_buff_exp[i]; // XOR para obtener los bits que han cambiado
-        if (diff != 0) {
-            for (int b = 0; b < 8; b++) {
-                if (diff & (1 << b)) {
-                    // Calculamos la casilla en el tablero de ajedrez
-                    uint8_t casilla = mapPinToCasilla(exp_num, (i * 8) + b);
+  for (int i = 0; i < 2; i++) {
+      uint8_t diff = buff_exp[i] ^ prev_buff_exp[i]; // XOR para obtener los bits que han cambiado
+      if (diff != 0) {
+          for (int b = 0; b < 8; b++) {
+              if (diff & (1 << b)) {
+                  // Calculamos la casilla en el tablero de ajedrez
+                  uint8_t casilla = mapPinToCasilla(exp_num, (i * 8) + b);
 
-                    // Llenar la estructura con la casilla
-                    ECasilla casilla_Accionada;
-                    casilla_Accionada.casilla = casilla;
+                  // Llenar la estructura con la casilla
+                  ECasilla casilla_Accionada;
+                  casilla_Accionada.casilla = casilla;
 
-                    // Enviar la casilla a la cola
-                    osMessageQueuePut(e_positionMessageId, &casilla_Accionada, 0, osWaitForever);
-                }
-            }
-        }
-    }
+                  // Enviar la casilla a la cola
+                  osMessageQueuePut(e_positionMessageId, &casilla_Accionada, 0, osWaitForever);
+              }
+          }
+      }
+  }
 }
 
 static void ProcessCasillaChanges(void *argument)
@@ -218,9 +215,9 @@ static void ProcessCasillaChanges(void *argument)
         // Esperar por un mensaje de cambio de casilla
         osMessageQueueGet(e_positionMessageId, &casilla_Accionada, NULL, osWaitForever);
 
-        // Aquí procesas el cambio (puedes actualizar el tablero, verificar la jugada, etc.)
+        // Aquï¿½ procesas el cambio (puedes actualizar el tablero, verificar la jugada, etc.)
         printf("Casilla cambiada: %d\n", casilla_Accionada.casilla);
 
-        // Aquí puedes agregar la lógica para actualizar el estado del tablero o realizar alguna acción
+        // Aquï¿½ puedes agregar la lï¿½gica para actualizar el estado del tablero o realizar alguna acciï¿½n
     }
 }
