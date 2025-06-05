@@ -111,8 +111,9 @@ static void ProcesarPeticion(MemoriaInMsg_t mensajeRx)
 	    byteLeido = LeerByte(paginaLectura, i);
 	    mensajeTx.dato[i] = byteLeido;
 
-        status = osMessageQueuePut(e_memoriaTxMessageId, &mensajeTx, 1, 0);
+        
 	  }
+    status = osMessageQueuePut(e_memoriaTxMessageId, &mensajeTx, 1, 0);
 	} break;
 
 	default:

@@ -15,16 +15,17 @@ void predictPosition(AJD_TableroPtr tablero, AJD_CasillaPtr origen, uint8_t pred
 	AJD_Pieza pieza = origen->pieza;
 	memset(predict,0,8*8*sizeof(uint8_t));
 	switch (pieza){
-		case PEON:
+		case PEON1...PEON8:
 			predPeon(predict, origen, tablero);
 			break;
-		case CABALLO:
+		case CABALLO1:
+		case CABALLO2:
 			predCaballo(predict, origen, tablero);
 			break;
-		case ALFIL:
+		case ALFIL1...ALFIL2:
 			predDiagonal(predict, origen, tablero);
 			break;
-		case TORRE:
+		case TORRE1...TORRE2:
 			predVertHorz(predict, origen, tablero);
 			break;
 		case DAMA:

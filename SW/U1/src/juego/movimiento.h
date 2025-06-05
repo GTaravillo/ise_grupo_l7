@@ -4,15 +4,15 @@
 	#include "tablero.h"
 	#include "juego.h"
 
-	// Máximo número de casillas que pueden moverse la TORRE
+	// Mï¿½ximo nï¿½mero de casillas que pueden moverse la TORRE
 	#define MAX_CASILLAS_TORRE 	7  
-	// Máximo número de casillas que pueden moverse el ALFIL
+	// Mï¿½ximo nï¿½mero de casillas que pueden moverse el ALFIL
 	#define MAX_CASILLAS_ALFIL 	7  
-	// Máximo número de casillas que pueden moverse la DAMA
+	// Mï¿½ximo nï¿½mero de casillas que pueden moverse la DAMA
 	#define MAX_CASILLAS_DAMA 	7  
-	// Máximo número de casillas que puede moverse el PEON
+	// Mï¿½ximo nï¿½mero de casillas que puede moverse el PEON
 	#define MAX_CASILLAS_PEON 	1
-	// Máximo número de casillas que puede moverse el REY
+	// Mï¿½ximo nï¿½mero de casillas que puede moverse el REY
 	#define MAX_CASILLAS_REY 		1
 
 	// id casillas involucrados en un enroque
@@ -48,7 +48,7 @@
 	// esMovimientoValido
 	//
 	//  Comprueba si un movimiento desde una casilla origen a destino
-	// es válido.
+	// es vï¿½lido.
 	//
 	int esMovimientoValido (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego);
 	////////////////////////////////////////////////////////////////////////////
