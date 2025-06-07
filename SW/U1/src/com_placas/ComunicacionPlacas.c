@@ -127,16 +127,8 @@ static void RunRx(void *argument)
         
         break;
 
-      case MENSAJE_NFC: {
-        LedStripMsg_t mensajeRxNfc = {
-          .nuevaJugada = true,
-          .tipoJugada = ESPECIAL,
-          .columna = (mensajeRx.mensaje[0] & 0xF0) >> 4,
-          .fila = mensajeRx.mensaje[0] & 0x0F
-        };
-        printf("[MENSAJE_NFC] mensaje[0] = [%d] - col = [%d]", mensajeRx.mensaje[0], mensajeRxNfc.columna);
-        printf("[MENSAJE_NFC] mensaje[0] = [%d] - fila = [%d]", mensajeRx.mensaje[0], mensajeRxNfc.fila);
-        osMessageQueuePut(e_ledStripMessageId, &mensajeRxNfc, 1, 0); }
+      case MENSAJE_NFC:
+        
         break;
 
       case MENSAJE_ALIMENTACION:

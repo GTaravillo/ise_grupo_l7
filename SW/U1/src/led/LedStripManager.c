@@ -6,6 +6,7 @@
 #include <string.h>
 /* Interfaces */
 #include "../config/Paths.h"
+#include PATH_COMMON
 
 /* Registros */
 #define  SPICLK               10000000
@@ -148,8 +149,10 @@ static bool RecepcionCorrecta(osStatus_t status)
 static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 {
   const uint8_t posicion  = mensajeRx.posicion;
+	char* posicionStr;
+	PositionToString(posicion, posicionStr);
 
-  printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, PositionToString(posicion));
+  printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
   if (posicion < 64)
   {
     return true;
@@ -175,7 +178,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   GetColor(tipoJugada, &colores);
 
   printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
-  g_leds[posicion] = colores;
+  g_leds[mensajeRx.posicion] = colores;
 }
 
 static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
