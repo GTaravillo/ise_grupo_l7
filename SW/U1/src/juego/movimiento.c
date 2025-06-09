@@ -335,6 +335,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     destino->pieza = origen->pieza;
     destino->color_pieza = origen->color_pieza;        
     origen->pieza = NONE;
+    origen->color_pieza = BLANCO;
 }
 ////////////////////////////////////////////////////////////////////////////
 // promocionaPeon

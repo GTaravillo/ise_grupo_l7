@@ -5,9 +5,11 @@
 	#include <stdint.h>
 	#include <time.h>
   
-  	#define FLAG_START    0x01U
-  	#define FLAG_RETOCAR  0x02U
- 	#define FLAG_PAUSA    0X04U
+  	#define FLAG_START		0x01U
+  	#define FLAG_RETOCAR	0x02U
+ 	#define FLAG_PAUSA		0X04U
+	#define FLAG_STOP		0X08U
+	#define FLAG_RESUME		0X10U
 
   //typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	// #define NONE	0x00
@@ -18,15 +20,15 @@
 	// #define DAMA	0x05
 	// #define REY		0x06
 
-	#define BLANCO	0X00
-	#define NEGRO	0X80
+	#define BLANCO	0X80
+	#define NEGRO	0X00
 
 	#define FLAG_ERROR_MOV 0X02
 
 
 	typedef enum { NO_SELECCION, ORIGEN_SELECCIONADO, DESTINO_SELECCIONADO } AJD_Seleccion;
 	typedef enum { NO_ENROQUE, ENROQUE_LARGO, ENROQUE_CORTO } AJD_Enroque;
-	typedef enum { blanco, negro } PAQ_Turno;
+	typedef enum { negeo, blanco } PAQ_Turno;
 	// Paquete que se recibe
 	typedef struct {
 		uint8_t turno_color : 1;

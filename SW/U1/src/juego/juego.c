@@ -18,13 +18,14 @@ typedef enum{
   Idle,
   LevantaPieza,
   CompMov,
-  //MovCrct,
-  //Error
+  Pause,
+  Stop
 } modo_t;
 
 ////////////////////////////////////////////////////////////////////////////
 // FUNCIONES PRIVADAS forward declarations
 void _colocaPiezas (AJD_TableroPtr tablero, uint8_t* map);
+void stateMachine(void);
 //void actualizaCrono ();
 void newGameMap(void);
 uint8_t convertNum(uint8_t n);
@@ -34,6 +35,7 @@ uint8_t convertNum(uint8_t n);
 AJD_Estado estado_juego;   // Estado del juego
 static time_t crono;       // Temporizador para contar tiempo
 modo_t modo = Init;
+modo_t modot;
 osMessageQueueId_t  e_ConsultPosition;
 osMessageQueueId_t  e_ConsultStatus;
 osMessageQueueId_t  e_PiezaLevantada;
@@ -41,7 +43,7 @@ osMessageQueueId_t  e_juegoTxMessageId;
 osMessageQueueId_t  e_juegoRxMessageId;
 PAQ_status paq;
 uint8_t* map;
-uint8_t firstRound = 1;
+uint8_t firstRound = 0;
 
 osStatus_t status;
  osStatus_t flag;
@@ -57,15 +59,26 @@ osStatus_t status;
 
 ////////////////////////////////////////////////////////////////////////////
 // M�QUINA DE ESTATOS
+
 void stateMachine(void)
 {
  
  
 
  while(true){
+
+   flag = osThreadFlagsWait(FLAG_PAUSE | FLAG_STOP, osFlagsWaitAny, 0);
+   if(flag == FLAG_PAUSE) {
+      modot = modo;
+      modo = Pause;
+   }else if (flag == FLAG_STOP){
+      modo = Stop;
+   }
+
    switch(modo){
       case Init:
          flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+         map = malloc(64*sizeof(uint8_t));
          memset(map, 0, 64*sizeof(uint8_t));
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
@@ -81,9 +94,10 @@ void stateMachine(void)
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
             status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-            map = paq.map;
-            estado_juego.juegan_blancas = !paq.turno_color;
+            memcpy(map, paq.map, 64 * sizeof(uint8_t));
+            estado_juego.juegan_blancas = paq.turno_color;
          }else if(flag == FLAG_START){
+            firstRound = 1;
             newGameMap();
             nuevoJuego(&tablero);
             estado_juego.juegan_blancas = 1;
@@ -114,8 +128,11 @@ void stateMachine(void)
             // movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
             predictPosition(&tablero, estado_juego.casilla_origen, predict);
          }
+         predict_64b = 0;
          for(int i=0; i<64; i++){
-            predict_64b |= 0x01<<i ? predict[i]==1 : 0;
+            if (predict[i] == 1) {
+               predict_64b |= (1ULL << i);
+            }
          } 
          status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
          if(status == osOK) modo = CompMov;
@@ -127,14 +144,13 @@ void stateMachine(void)
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
             if(esMovimientoValido(&tablero, &estado_juego)){
-               
                if(peonUltimaFila(&tablero, &estado_juego)){
-								  tPromo = estado_juego.casilla_destino;
-									muevePieza(&tablero, &estado_juego);
+						tPromo = estado_juego.casilla_destino;
+						muevePieza(&tablero, &estado_juego);
                   promocionaPeon(&tablero, tPromo);
                }else{
-									muevePieza(&tablero, &estado_juego);
-							 }
+						muevePieza(&tablero, &estado_juego);
+					}
             }else{
                status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
             }
@@ -144,9 +160,23 @@ void stateMachine(void)
             // movInfo.destino = &(tablero->casillas[movInfo.dstY*8+movInfo.dstX]);
          }
       break;
-
+      case Pause:
+         flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
+         if (flag == FLAG_RESUME){
+            modo = modot;
+            modot = 0;
+         }
+      break;
+      case Stop:
+         memset(&paq, 0, sizeof(PAQ_status));
+         for(int i = 0; i < 64; i++) paq.map[i] = tablero.casilla[i].pieza | (tablero.casilla[i].pieza_color << 7);
+         paq.turno_color = estado_juego.juegan_blancas;
+         status = osMessageQueuePut(e_memoriaTxMessageId, &paq, 1, 0);
+         modo = Init;
+      break;
    }
  }
+ __WFI();
 }
 ////////////////////////////////////////////////////////////////////////////
 // INICIALIZA
@@ -331,10 +361,12 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t position;
  uint8_t k1 = 0;
  uint8_t k2 = 0;
+ uint8_t found = 0;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
  for (int i = 0; i < 32; i++){
    status = osMessageQueueGet(e_juegoTxMessageId, &pos, NULL, osWaitForever);
    if(status == osOK && pos != 0){
+      found = 0;
       // do{
       //    if(k2 < 7){
       //       k2++;
@@ -343,16 +375,18 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //       k2=0;
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
-      for (int i=0; i<64; i++) {
-         if(map[i] == pos){
-            map[i] = 0;
-            tablero->casilla[i].pieza = pos & 0x0F;
-            tablero->casilla[i].color_pieza = (pos & 0x80) >> 7;
+      for (int j=0; j<64; j++) {
+         if(map[j] == pos){
+            map[j] = 0;
+            tablero->casilla[j].pieza = pos & 0x0F;
+            tablero->casilla[j].color_pieza = (pos & 0x80) >> 7;
+            found = 1;
             break;
-         }else{
-            //status = osThreadFlagsSet()
-            printf("[Error] Pieza no encontrado\n");
          }
+      }
+      if(!found){
+         printf("[Error] Pieza no encontrado\n");
+         //i--;
       }
       // if(placeHolder == pos){
       //    position = 8*i+(8-j);
@@ -397,7 +431,7 @@ uint8_t convertNum(uint8_t n){
    uint8_t x = 0;
    uint8_t m;
    y = n / 8;
-   x = n%7 ? y%2 == 0 : (7 - n%7);
-   m = y * 7 + x;
+   x = y%2 == 0 ? n%8 : (7 - n%8);
+   m = y * 8 + x;
    return m;
 }
