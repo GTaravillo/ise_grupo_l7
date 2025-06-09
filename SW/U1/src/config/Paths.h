@@ -20,7 +20,7 @@
 	#define PATH_MEMORIA    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
 	#define PATH_COM_PLACAS "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/juego/principal.h"
-	#define PATH_COMMON		"C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
+	#define PATH_COMMON		  "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #elif WORKSPACE == 2		// Yuanze
 <<<<<<< HEAD

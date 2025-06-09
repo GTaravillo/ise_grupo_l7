@@ -396,6 +396,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>common</GroupName>
+          <Files>
+            <File>
+              <FileName>CommonDefines.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\common\CommonDefines.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>main</GroupName>
           <Files>
             <File>
