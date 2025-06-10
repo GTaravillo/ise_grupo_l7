@@ -81,7 +81,7 @@ void predDiagonal(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tab
 	//uint8_t result[8];
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
-	while(pos[0] + vector[0] < 8 || pos[1] + vector[1] < 8 || pos[0] - vector[0] < 8 || pos[1] - vector[1] < 8){
+	while(pos[0] + vector[0] < 7 || pos[1] + vector[1] < 7 || pos[0] - vector[0] > 0 || pos[1] - vector[1] > 0){
 		vectorProcess(pos, vector, pred);
 		predProcess(pred, predict);
 		vector[0]++;
@@ -95,14 +95,14 @@ void predVertHorz(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tab
 	uint8_t i;
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
-	while(pos[0] + vector[0] < 8 || pos[0] - vector[0] < 8){
+	while(((pos[0] + vector[0]) < 7) || ((pos[0] - vector[0]) > 0)){
 		vectorProcess(pos, vector, pred);
 		predProcess(pred, predict);
 		vector[0]++;
 	}
 	vector[0] = 0;
 	vector[1] = 1;
-	while(pos[1] + vector[1] < 8 || pos[1] - vector[1] < 8){
+	while(((pos[1] + vector[1]) < 7) || ((pos[1] - vector[1]) > 0)){
 		vectorProcess(pos, vector, pred);
 		predProcess(pred, predict);
 		vector[1]++;

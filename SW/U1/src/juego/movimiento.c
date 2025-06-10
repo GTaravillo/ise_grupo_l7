@@ -330,7 +330,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 
     // Si el movimiento es de alguna de las dos TORRES o el REY, invalidar la opci�n
     // de enroque correspondiente.
-    actualizaOpcionesDeEnroque (origen, estado_juego);
+    // actualizaOpcionesDeEnroque (origen, estado_juego);
 
     destino->pieza = origen->pieza;
     destino->color_pieza = origen->color_pieza;        
@@ -372,10 +372,10 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     idCasilla = estado_juego->casilla_destino->id;    
     juegan_blancas = estado_juego->juegan_blancas;
 
-    printf ("[%d] in [%d]..[%d]?     ", 
-              idCasilla, 
-              limites[!juegan_blancas][0],
-              limites[!juegan_blancas][1]);
+    // printf ("[%d] in [%d]..[%d]?     ", 
+    //           idCasilla, 
+    //           limites[!juegan_blancas][0],
+    //           limites[!juegan_blancas][1]);
 
     if (idCasilla >= limites[!juegan_blancas][0] 
         &&  idCasilla <= limites[!juegan_blancas][1])

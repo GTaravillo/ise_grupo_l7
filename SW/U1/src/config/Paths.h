@@ -39,6 +39,7 @@
 	#define PATH_MEMORIA     "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
 	#define PATH_COM_PLACAS  "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL   "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/juego/principal.h"
+	#define PATH_JUEGO   "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/juego/juego.h"
 	#define PATH_COMMON			 "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #elif WORKSPACE == 3		// Raul

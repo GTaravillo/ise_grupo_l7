@@ -7,7 +7,7 @@
   
   	#define FLAG_START		0x01U
   	#define FLAG_RETOCAR	0x02U
- 	#define FLAG_PAUSA		0X04U
+ 	#define FLAG_PAUSE		0X04U
 	#define FLAG_STOP		0X08U
 	#define FLAG_RESUME		0X10U
 
@@ -20,8 +20,8 @@
 	// #define DAMA	0x05
 	// #define REY		0x06
 
-	#define BLANCO	0X80
-	#define NEGRO	0X00
+	#define WHITE	0X80
+	#define BLACK	0X00
 
 	#define FLAG_ERROR_MOV 0X02
 
@@ -65,6 +65,9 @@
 	void actualizaJuego (AJD_TableroPtr tablero);
 //	void menu();
 //	void liberaRecursos();
+	
+	extern void juegoInitialize(void);
+	extern void juegoTbInitialize(void);
 
 #endif // JUEGO_H
 
