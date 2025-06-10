@@ -101,6 +101,7 @@
         "solder_mask_bridge": "error",
         "starved_thermal": "error",
         "text_height": "warning",
+        "text_on_edge_cuts": "error",
         "text_thickness": "warning",
         "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
@@ -404,6 +405,7 @@
       "bus_entry_needed": "error",
       "bus_to_bus_conflict": "error",
       "bus_to_net_conflict": "error",
+      "conflicting_netclasses": "error",
       "different_unit_footprint": "error",
       "different_unit_net": "error",
       "duplicate_reference": "error",
@@ -611,6 +613,38 @@
     [
       "fc1c7a48-e258-41da-82b5-172f051ec090",
       "Root"
+    ],
+    [
+      "a6a93c4c-69bf-43d3-ab37-4d6c2d1baa45",
+      "Circuito_consumo"
+    ],
+    [
+      "f59b483d-e1b5-4aee-ae4d-c4afa44cd173",
+      "Alimentacion"
+    ],
+    [
+      "3a0694a3-df0f-4d25-944d-88c4e1913a02",
+      "Filtro_activo"
+    ],
+    [
+      "de6102e2-d542-4d42-8b43-588dca2efa51",
+      "Cortex_M4_Low_Power"
+    ],
+    [
+      "4fbb5a9a-ea10-48cd-bb73-ec3142f06d78",
+      "Cortex_M4_Server"
+    ],
+    [
+      "8e38d074-5333-41ee-8247-11df878117c7",
+      "Sensores_Digitales"
+    ],
+    [
+      "480e8e73-3fed-4ad8-b3cc-c958faf5d83d",
+      "Hall_Effect"
+    ],
+    [
+      "226e4ac3-6057-4f48-90b8-c61d659e5adc",
+      "LEDS"
     ]
   ],
   "text_variables": {}
