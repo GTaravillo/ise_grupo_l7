@@ -4,6 +4,7 @@
 #include "../rtc/rtc.h"
 #include "../led/led.h"
 #include "../posicion/PositionManager.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -92,14 +93,34 @@ void DebugMon_Handler(void)
 /*  file (startup_stm32f4xx.s).                                               */
 /******************************************************************************/
 
-// IRQ B1
+// IRQ pines para Interrupciones (INT) de los expansores
 void EXTI15_10_IRQHandler(void) 
 {
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);	// Boton B1
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);	// PF12 - Exp 2  
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);	// PF14 - Exp 3  
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);	// PF15 - Exp 4 
+}
+
+void EXTI9_5_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);  // PC9 - Exp 1
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == GPIO_PIN_9) {
-        osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED);  // Despierta el hilo de gestión de sensores
-    }
+	if (GPIO_Pin == GPIO_PIN_9)
+	{
+		osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED_1);
+	} 	
+	else if (GPIO_Pin == GPIO_PIN_12)
+	{
+		osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED_2);
+	}	
+	else if (GPIO_Pin == GPIO_PIN_14)
+	{
+		osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED_3);
+	}	
+	else if (GPIO_Pin == GPIO_PIN_15)
+	{
+		osThreadFlagsSet(e_positionManagerThreadId, HALL_DETECTED_4);
+	}
 }
