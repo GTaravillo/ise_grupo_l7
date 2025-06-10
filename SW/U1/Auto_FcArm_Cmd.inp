@@ -5,5 +5,7 @@ nuevaPartida.cgi,
 retomarPartida.cgi,
 xml_http.js,
 currentDate.cgx,
-currentTime.cgx 
+currentTime.cgx,
+favicon.ico,
+currentConsumo.cgx 
 TO Web.c RTE NOPRINT ROOT(.\src\web)

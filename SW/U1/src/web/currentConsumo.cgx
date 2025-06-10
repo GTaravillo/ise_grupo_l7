@@ -1,0 +1,7 @@
+t <form>
+t <text>
+t <id>consumoActual</id>
+c x<value>%s</value>
+t </text>
+t </form>
+.

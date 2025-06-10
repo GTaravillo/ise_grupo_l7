@@ -488,6 +488,16 @@
               <FileType>9</FileType>
               <FilePath>.\src\web\currentTime.cgx</FilePath>
             </File>
+            <File>
+              <FileName>favicon.ico</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\favicon.ico</FilePath>
+            </File>
+            <File>
+              <FileName>currentConsumo.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentConsumo.cgx</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

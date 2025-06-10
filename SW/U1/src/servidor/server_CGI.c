@@ -37,6 +37,7 @@ static uint32_t HandleDateInScript(const char *env, char *buf);
 static uint32_t HandleTimeOutScript(const char *env, char *buf);
 static uint32_t HandleDateOutScript(const char *env, char *buf);
 static uint32_t HandleAdcOutputScript(const char *env, char *buf, uint32_t *adv);
+static uint32_t HandleCurrentConsumoScript(const char *env, char *buf);
 // static uint32_t HandleButtonStateScript(const char *env, char *buf);
 
 // My structure of CGI status variable.
@@ -399,8 +400,8 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       break;
 
     case SCRIPT_ADC_OUT:
-      // AD Input from 'ad.cgx'
-      len = HandleAdcOutputScript(env, buf, &adv);
+      // If this is for currentConsumo.cgx, use the custom handler:
+      len = HandleCurrentConsumoScript(env, buf);
       break;
 
     case SCRIPT_BUTTON_STATE:
@@ -689,6 +690,12 @@ static uint32_t HandleAdcOutputScript(const char *env, char *buf, uint32_t *adv)
 //   return (uint32_t)sprintf(buf, "<checkbox><id>button%c</id><on>%s</on></checkbox>",
 //                            env[1], (get_button () & (1 << (env[1]-'0'))) ? "true" : "false");
 // }
+
+static uint32_t HandleCurrentConsumoScript(const char *env, char *buf) {
+    // env points to the format string, just like currentTime/currentDate
+    // Hardcode the value "500mA"
+    return (uint32_t)sprintf(buf, &env[1], "500mA");
+}
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic pop

@@ -265,7 +265,7 @@ static void Run(void *argument)
 	UpdateDate();
 	RemoveTimer(RTC_ALARM_A);
 	RemoveTimer(RTC_ALARM_B);
-	SetTimerOnce(10);
+	// SetTimerOnce(10);
 	InitUserButton();
 	while(1)
 	{
