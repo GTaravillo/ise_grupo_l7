@@ -1,6 +1,7 @@
-#include <movimiento.h>
-#include <interfaz.h>
-#include <utils.h>
+#include "movimiento.h"
+//#include <utils.h>
+#include <stdio.h>
+
 
 #include <stdlib.h>
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -47,9 +48,9 @@ void obtenMovInfo (AJD_EstadoPtr estado_juego)
     movInfo.dy      = movInfo.dstY - movInfo.srcY;
     movInfo.dx      = movInfo.dstX - movInfo.srcX;
     // Multiplicando dy * dir nos da la "distancia" en vertical.
-    // Realmente no se trata de distancia en el sentido matemÃ¡tico, ya que
+    // Realmente no se trata de distancia en el sentido matemático, ya que
     // tiene signo, dependiendo de si la pieza se ha movido hacia adelante (positivo)
-    // o hacia atrÃ¡s (negativo)
+    // o hacia atrás (negativo)
     movInfo.distY = movInfo.dy * dir;
     // Distancia en horizontal (en el sentido matematico, 
     // (siempre positivo, nunca negativo) del movimiento
@@ -107,7 +108,7 @@ int cumpleReglasMovimientoPeon (AJD_TableroPtr tablero)
 
     if (distX == 0)
     {
-        // Movimiento vertical de dos casillas, sÃ³lo es vÃ¡lido si 
+        // Movimiento vertical de dos casillas, sólo es válido si 
         // es 1er movimiento o lo que es lo mismo, si se parte de 
         // las filas de inicio de PEON.
         return (distY == 2 && movInfo.srcY == filaInicioPeones 
@@ -139,9 +140,9 @@ int seMueveEnDiagonal (AJD_TableroPtr tablero)
 int cumpleReglasMovimientoCaballo ()
 {
     // La "distancia" movInfo.distY es un tanto especial, ya que tiene
-    // signo para poder saber si la pieza se desplaza hacia adelante o atrÃ¡s.
+    // signo para poder saber si la pieza se desplaza hacia adelante o atrás.
     // Necesitamos el valor absoluto para obtener la distancia en el sentido
-    // matemÃ¡tico.
+    // matemático.
     int distY = abs(movInfo.distY);
     int distX = movInfo.distX;
 
@@ -193,8 +194,8 @@ int caminoLibre (AJD_TableroPtr tablero, AJD_CasillaPtr origen, AJD_CasillaPtr d
     AJD_idCasilla idDestino = destino->id;    
     dx = dy = 0;
 
-    dx = sign (movInfo.dx);
-    dy = sign (movInfo.dy) * 8;
+//    dx = sign (movInfo.dx);
+//    dy = sign (movInfo.dy) * 8;
 
     for (AJD_idCasilla idCasilla = idOrigen+dy+dx; idCasilla != idDestino; idCasilla += dy+dx)
     {
@@ -247,15 +248,14 @@ void actualizaOpcionesDeEnroque (AJD_CasillaPtr origen, AJD_EstadoPtr estado_jue
 int esMovimientoValido (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 {
     obtenMovInfo (estado_juego);
-    muestraMovInfo (&movInfo);
     
     // Primero que cumpla las reglas de movimiento especifico de la pieza.
-    // Si lo cumple, mira si la casilla destino estÃ¡ ocupada.
+    // Si lo cumple, mira si la casilla destino está ocupada.
     // Si la pieza ocupada es del mismo "bando", el movimiento no es valido 
     // Si la casilla es del mismo color, come la pieza. 
-    // Si la casilla estÃ¡ libre, es un movimiento valido.
-    // El PEON es la Ãºnica pieza que come de forma diferente, asÃ­ que se 
-    // comprueba en un caso aparte si se detecta movimiento de pieza no vÃ¡lido.
+    // Si la casilla está libre, es un movimiento valido.
+    // El PEON es la única pieza que come de forma diferente, así que se 
+    // comprueba en un caso aparte si se detecta movimiento de pieza no válido.
     if (cumpleReglasMovimiento (tablero, estado_juego))
     {
         if (casillaOcupada (movInfo.destino))
@@ -280,11 +280,11 @@ int puedeEnrocar (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego, AJD_Enroqu
 
     juegan_blancas = estado_juego->juegan_blancas;
     destino = casillaRey = NULL;
-// El enroque sÃ³lo es admisible si todos cumplen las siguientes condiciones:
+// El enroque sólo es admisible si todos cumplen las siguientes condiciones:
 //
 // Ninguna de las piezas que intervienen en el enroque puede haber sido movido previamente.
 // No debe haber ninguna pieza entre el rey y la torre;
-// El rey no puede estar en jaque, ni tampoco podrÃ¡ pasar a travÃ©s de casillas que estÃ¡n 
+// El rey no puede estar en jaque, ni tampoco podrá pasar a través de casillas que están 
 // bajo ataque por parte de las piezas enemigas. Al igual que con cualquier movimiento, 
 // el enroque es ilegal si pusiera al rey en jaque.    
     casillaRey = juegan_blancas ? 
@@ -325,7 +325,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     origen = estado_juego->casilla_origen;    
     destino = estado_juego->casilla_destino;
 
-    // Si el movimiento es de alguna de las dos TORRES o el REY, invalidar la opciÃ³n
+    // Si el movimiento es de alguna de las dos TORRES o el REY, invalidar la opción
     // de enroque correspondiente.
     actualizaOpcionesDeEnroque (origen, estado_juego);
 
@@ -340,7 +340,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 //
 void promocionaPeon (AJD_TableroPtr tablero, AJD_CasillaPtr casilla)
 {
-    mvprintw (3,63, "Promocionando PEON      ");
+    printf ("Promocionando PEON      ");
     // TODO: De momento siempre promociona a DAMA, queda pendiente
     //       poder seleccionar (con cursores p.ej.) el tipo de pieza
     casilla->pieza = DAMA;
@@ -361,14 +361,14 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     AJD_idCasilla idCasilla;
     AJD_Color juegan_blancas;    
 
-    // Si no es un peon no hagas mÃ¡s nada
+    // Si no es un peon no hagas más nada
     if (estado_juego->casilla_destino->pieza != PEON) return 0;
 
 
     idCasilla = estado_juego->casilla_destino->id;    
     juegan_blancas = estado_juego->juegan_blancas;
 
-    mvprintw (3,63, "[%d] in [%d]..[%d]?     ", 
+    printf ("[%d] in [%d]..[%d]?     ", 
               idCasilla, 
               limites[juegan_blancas][0],
               limites[juegan_blancas][1]);
@@ -376,7 +376,7 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     if (idCasilla >= limites[juegan_blancas][0] 
         &&  idCasilla <= limites[juegan_blancas][1])
     {
-        mvprintw (3,80, "SI!!");
+        printf ("SI!!");
         return 1;
     }
     return 0;
@@ -388,7 +388,7 @@ void efectuaEnroque (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 {
     AJD_idCasilla origen, destino;
 
-    mvprintw (3, 62, "ENROCANDO!!!");
+    printf("ENROCANDO!!!");
     // Mueve primero el rey
     muevePieza (tablero, estado_juego);
 

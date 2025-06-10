@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include <interfaz.h>
-#include <juego.h>
-#include <tablero.h>
-#include <movimiento.h>
+#include "juego.h"
+#include "tablero.h"
+#include "movimiento.h"
 
 #include <time.h>
 
@@ -13,17 +12,17 @@ void _colocaPiezas (AJD_TableroPtr tablero);
 void actualizaCrono ();
 
 ////////////////////////////////////////////////////////////////////////////
-// VARIABLES PRIVADAS AL MÃ“DULO
+// VARIABLES PRIVADAS AL MÓDULO
 AJD_Estado estado_juego;   // Estado del juego
 static time_t crono;       // Temporizador para contar tiempo
 
 ////////////////////////////////////////////////////////////////////////////
-// INTERFAZ PÃšBLICA
+// INTERFAZ PÚBLICA
 ////////////////////////////////////////////////////////////////////////////
 // INICIALIZA
 //
 // Pone todas las casillas del tablero a su estado inicial:
-//    - Todas las casillas estÃ¡n vacÃ­as
+//    - Todas las casillas están vacías
 //    - El color de cada casilla alterna entre blanco y negro y la
 //      casilla inferior derecha es de color blanco
 //
@@ -43,8 +42,8 @@ void inicializa(AJD_TableroPtr tablero)
          casilla->color = color;
          color ^= 1; // Alterna entre blanco/negro       
          
-         // Inicialmente el tablero estÃ¡ vacÃ­o
-         // El color de la pieza cuando la casilla estÃ¡ vacÃ­a es irrelevante
+         // Inicialmente el tablero está vacío
+         // El color de la pieza cuando la casilla está vacía es irrelevante
          casilla->pieza = NONE;
          casilla->color_pieza = BLANCO;
          casilla->id = id++;
@@ -52,32 +51,21 @@ void inicializa(AJD_TableroPtr tablero)
    }
    //printf("sizeof(AJD_Tablero) = %ld\n", sizeof (AJD_Tablero));
 
-   // Inicializa la UI
-   inicializaPantalla();
-   inicializaSprites(tablero);
 }
-////////////////////////////////////////////////////////////////////////////
-// liberaRecursos
-//
-// Libera los recursos usados por el programa, incluÃ­da la UI
-void liberaRecursos()
-{   
-   liberaPantalla();
-   puts ("ncurses finalizado");
-}
+
 ////////////////////////////////////////////////////////////////////////////
 // nuevoJuego
 //
 // Prepara el estado del juego y el tablero para una partida nueva:
 //
-//    - Estado del juego: ninguna pieza movida, ningÃºn rey en jaque,
+//    - Estado del juego: ninguna pieza movida, ningún rey en jaque,
 //      turno del jugador 1, juegan blancas
 //
 //    - Coloca las piezas en el tablero para una partida nueva
 //
 //    - Turnos jugados = 0
 //
-void nuevoJuego(AJD_TableroPtr tablero)
+void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACIÓN NFC
 {
    // Estado del juego
    memset(&estado_juego, 0, sizeof (AJD_Estado));
@@ -96,11 +84,11 @@ void nuevoJuego(AJD_TableroPtr tablero)
    // El cursor movil y de pieza seleccionada se posicionan a d2
    // El cursor movil es visible y sin flash
    // El cursor de pieza seleccionada no es visible y con flash
-   tablero->cursorMovil.casilla = tablero->cursorPiezaSeleccionada.casilla = &tablero->casilla[d2];   
-   tablero->cursorMovil.visible = 1;
-   tablero->cursorPiezaSeleccionada.visible = 0;
-   tablero->cursorMovil.flash = 0;
-   tablero->cursorPiezaSeleccionada.flash = 1;
+//   tablero->cursorMovil.casilla = tablero->cursorPiezaSeleccionada.casilla = &tablero->casilla[d2];   
+//   tablero->cursorMovil.visible = 1;
+//   tablero->cursorPiezaSeleccionada.visible = 0;
+//   tablero->cursorMovil.flash = 0;
+//   tablero->cursorPiezaSeleccionada.flash = 1;
 }
 ////////////////////////////////////////////////////////////////////////////
 // actualizaJuego
@@ -109,8 +97,7 @@ void nuevoJuego(AJD_TableroPtr tablero)
 void actualizaJuego (AJD_TableroPtr tablero)
 {
    actualizaCrono ();
-   procesaTeclado (tablero, &estado_juego);
-
+	
    switch (estado_juego.casilla_seleccionada)
    {   
    case ORIGEN_SELECCIONADO:
@@ -122,7 +109,7 @@ void actualizaJuego (AJD_TableroPtr tablero)
       else
       {
          // Casilla origen seleccionada, muestra el cursor fijo
-         tablero->cursorPiezaSeleccionada.visible = 1;
+//         tablero->cursorPiezaSeleccionada.visible = 1;
       }
       break;
 
@@ -145,7 +132,7 @@ void actualizaJuego (AJD_TableroPtr tablero)
          estado_juego.enroque_efectuado = NO_ENROQUE;
 
          // movimiento efectuado, oculta el cursor fijo
-         tablero->cursorPiezaSeleccionada.visible = 0;
+//         tablero->cursorPiezaSeleccionada.visible = 0;
 
          // Restablece contadores de tiempo
          time (&crono);
@@ -160,16 +147,10 @@ void actualizaJuego (AJD_TableroPtr tablero)
    default:
       break;
    }
+	 printf("%d", (uint8_t)(estado_juego.casilla_destino->id));
 
 }
-////////////////////////////////////////////////////////////////////////////
-// menu
-// 
-// Ejecuta los diferentes menus previos al comienzo
-void menu()
-{
-   menuJuego (&estado_juego);
-}
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Bucle principal, se ejecuta hasta que termina la partida.
@@ -178,8 +159,6 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 {
    while (!estado_juego.fin_juego)
    {
-      dibujaJuego (tablero, &estado_juego);
-
       actualizaJuego (tablero);
    }
 }
@@ -213,7 +192,7 @@ void _colocaPiezas(AJD_TableroPtr tablero)
 
 void actualizaCrono()
 {
-    // ActualizaciÃ³n del cronometro
+    // Actualización del cronometro
    if (difftime (time(NULL), crono) >= 1.0)
    {
      if (estado_juego.juegan_blancas)

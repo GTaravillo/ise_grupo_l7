@@ -729,6 +729,56 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>juego</GroupName>
+          <Files>
+            <File>
+              <FileName>juego.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\juego\juego.c</FilePath>
+            </File>
+            <File>
+              <FileName>juego.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\juego\juego.h</FilePath>
+            </File>
+            <File>
+              <FileName>movimiento.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\juego\movimiento.c</FilePath>
+            </File>
+            <File>
+              <FileName>movimiento.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\juego\movimiento.h</FilePath>
+            </File>
+            <File>
+              <FileName>notacion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\juego\notacion.c</FilePath>
+            </File>
+            <File>
+              <FileName>notacion.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\juego\notacion.h</FilePath>
+            </File>
+            <File>
+              <FileName>principal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\juego\principal.c</FilePath>
+            </File>
+            <File>
+              <FileName>principal.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\juego\principal.h</FilePath>
+            </File>
+            <File>
+              <FileName>tablero.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\juego\tablero.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>

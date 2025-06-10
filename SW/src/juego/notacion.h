@@ -1,6 +1,4 @@
-#pragma once
-
-#include <tablero.h>
+#include "tablero.h"
 
 #include <stdint.h>
 
@@ -21,6 +19,6 @@ extern char* strCasillas[];
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // toAlgebrString
-//  Convierte la informaciÃ³n de una jugada a formato Algebr
+//  Convierte la información de una jugada a formato Algebr
 //
 void toAlgebraString (AJD_JugadaPtr jugada, char* buff);

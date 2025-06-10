@@ -47,6 +47,8 @@
 	#define PATH_RTC         "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/src/rtc/rtc.h"
 	#define PATH_UART        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/src/uart/uart.h"
 	#define PATH_POSITION    "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/src/posicion/PositionManager.h"
+	#define PATH_PRINCIPAL   "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/src/juego/principal.h"
+
 #endif
 
 #endif /* __PATHS_H */

@@ -10,6 +10,7 @@
 #include PATH_SERVER
 #include PATH_LED_STRIP
 #include PATH_POSITION
+#include PATH_PRINCIPAL
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -127,16 +128,6 @@ int main(void)
 	
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET); // En el datasheet pone que para usar un puerto para lectura, primero hay que ponerlo a 1
-
-  ///////////////////////////////////////
-
-  GPIO_InitStruct.Pin   = GPIO_PIN_9;
-  GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull  = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-  //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_SET);
 	
 	/******** /TEST EXPANSOR GPIO ********/
 
@@ -149,6 +140,7 @@ int main(void)
 	//LED_Initialize();
   //LedStripManagerInitialize();
 	PositionManagerInitialize();
+	//PrincipalInitialize();
 
   /* Start thread execution */
   osKernelStart();
