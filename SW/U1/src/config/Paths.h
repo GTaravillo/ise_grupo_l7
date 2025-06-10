@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 2
+#define WORKSPACE 3
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian
@@ -54,8 +54,10 @@
 	#define PATH_RTC         "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
 	#define PATH_UART        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/uart/uart.h"
 	#define PATH_POSITION    "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/posicion/PositionManager.h"
+	#define PATH_MEMORIA     "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/memoria/Memoria.h"
+	#define PATH_COM_PLACAS  "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL   "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/juego/principal.h"
-	#define PATH_COMMON		 "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
+	#define PATH_COMMON		 	 "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
 
 #endif
 

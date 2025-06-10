@@ -110,14 +110,14 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-  Server_Initialize();
-	RTC_Initialize();
+  //Server_Initialize();
+	//RTC_Initialize();
   
 	//LED_Initialize();
 	//LCD_Initialize();
 	//MemoriaInitialize();
   //LedStripManagerInitialize();
-	//PositionManagerInitialize();
+	PositionManagerInitialize();
 	//ComunicacionPlacasInitialize();
   //PrincipalInitialize();
   
