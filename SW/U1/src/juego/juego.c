@@ -8,6 +8,8 @@
 #include "cmsis_os2.h"
 #include "../com_placas/ComunicacionPlacas.h"
 #include "../posicion/PositionManager.h"
+#include "../led/LedStripManager.h"
+
 
 #include <time.h>
 
@@ -70,8 +72,9 @@ osStatus_t status;
  ECasilla movedCasilla;
  uint8_t movedId;
  uint8_t predict[64];
- uint64_t predict_64b = 0;
+ //uint64_t predict_64b = 0;
  AJD_CasillaPtr tPromo;
+ LedStripMsg_t ledMsg;
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ P�BLICA
 
@@ -120,6 +123,7 @@ static void stateMachine(void* argument)
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          inicializa(&tablero);
          modo = Espera;
+         ledMsg.nuevaJugada = false;
       break;
       case Espera:
          if(flag == FLAG_RETOCAR){
@@ -143,14 +147,18 @@ static void stateMachine(void* argument)
       case Idle:
          if(!firstRound){
             estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
+            estado_juego.casilla_seleccionada = NO_SELECCION;
+            ledMsg.nuevaJugada = true;
+            memset(predict, 0, 64*sizeof(uint8_t));
+            osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
          }else{
             firstRound = 0;
          }
-         modo = LevantaPieza;
+         status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
+         if(status == osOK) modo = LevantaPieza;
       break;
       case LevantaPieza:
 				//esperaPausaDetener();
-         status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, osWaitForever);
          if(status == osOK){
             movedId = convertNum(movedCasilla.casilla);
             estado_juego.casilla_origen = &(tablero.casilla[movedId]);
@@ -161,20 +169,35 @@ static void stateMachine(void* argument)
             // movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
             predictPosition(&tablero, estado_juego.casilla_origen, predict);
          }
-         predict_64b = 0;
+         //predict_64b = 0;
          for(int i=0; i<64; i++){
             if (predict[i] == 1) {
-               predict_64b |= (1ULL << i);
+               //predict_64b |= (1ULL << i);
+               if(tablero.casilla[movedId].pieza != NONE){
+                  ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
+               }else{
+                  ledMsg.tipoJugada = CAPTURA;
+               }
+               ledMsg.posicion = i;
+               ledMsg.nuevaJugada = false;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
          } 
+         ledMsg.tipoJugada = ACTUAL;
+         ledMsg.posicion = movedCasilla.casilla;
+         ledMsg.nuevaJugada = false;
+         osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
          //status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
-         //if(status == osOK)
-				 modo = CompMov;
+         //if(status == osOK){
+			modo = CompMov;
+         //}
       break;
       case CompMov:
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, osWaitForever);
-         movedId = convertNum(movedCasilla.casilla);
          if(status == osOK){
+            //ledMsg.nuevaJugada = true;
+            //osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+            movedId = convertNum(movedCasilla.casilla);
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
             if(esMovimientoValido(&tablero, &estado_juego)){
@@ -188,6 +211,10 @@ static void stateMachine(void* argument)
             }else{
                //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
                printf("[Error] Movimiento de pieza invalido\n");
+               ledMsg.nuevaJugada = false;
+               ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
+               ledMsg.posicion = movedCasilla.casilla;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
             modo = Idle;
             // movInfo.dstY = movedId/8;
@@ -553,6 +580,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 15; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 31; // a4位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -563,6 +592,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 49; // b7位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 33; // b5位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -573,6 +604,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 14; // b2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 17; // b3位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -594,9 +627,9 @@ static void juegoTestBench(void* argument){
 
    
 		
-	tbCasilla.casilla = 255;
+	//tbCasilla.casilla = 255;
    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	osDelay(500);
    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
 	osDelay(500);
@@ -634,6 +667,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 0; // a1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 31; // a4位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -644,6 +679,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 63; // a8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 32; // a5位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -655,6 +692,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 1; // b1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 16; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -665,6 +704,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 62; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 47; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -676,6 +717,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 2; // b1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 40; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -686,6 +729,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 61; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 23; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -697,6 +742,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 3; // b1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 25; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -707,6 +754,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 60; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 38; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -717,6 +766,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 25; // b1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 28; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -727,17 +778,22 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 38; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 35; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
    printChessboard();
    osDelay(100);
+   
 
    printf("  [Test] rey:\n");
    tbCasilla.casilla = 4; // b1位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 11; // a2位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -748,6 +804,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 59; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 52; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -755,9 +813,9 @@ static void juegoTestBench(void* argument){
    printChessboard();
    osDelay(100);
 
-   tbCasilla.casilla = 255;
+   //tbCasilla.casilla = 255;
    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	osDelay(500);
    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
 	osDelay(500);
@@ -781,6 +839,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 12; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 3; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -791,6 +851,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 3; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 39; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -801,6 +863,8 @@ static void juegoTestBench(void* argument){
    tbCasilla.casilla = 39; // b8位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    osDelay(500);
+   printChessboard();
+   osDelay(100);
 
    tbCasilla.casilla = 32; // a6位置
    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -897,6 +961,10 @@ void printChessboard() {
                symbol = pieceSymbolsBlack[piece];
             }else{
               symbol = pieceSymbolsWhite[piece];
+            }
+
+            if (piece == NONE && predict[index] == 1) {
+               symbol = " X";
             }
             
             printf(" %s|", symbol);
