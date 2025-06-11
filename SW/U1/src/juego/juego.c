@@ -837,7 +837,7 @@ static void juegoTestBench(void* argument){
 void printChessboard() {
     // 棋子符号映射表
     const char* pieceSymbolsWhite[] = {
-        "   ",    // NONE
+        "  ",    // NONE
         "♙",     // PEON1
         "♙",     // PEON2
         "♙",     // PEON3
@@ -857,7 +857,7 @@ void printChessboard() {
     };
 
     const char* pieceSymbolsBlack[] = {
-        "   ",    // NONE
+        "  ",    // NONE
         "♟",     // PEON1
         "♟",     // PEON2
         "♟",     // PEON3
@@ -899,7 +899,7 @@ void printChessboard() {
               symbol = pieceSymbolsWhite[piece];
             }
             
-            printf(" %s |", symbol);
+            printf(" %s|", symbol);
         }
         
         printf("\n   +---+---+---+---+---+---+---+---+\n");
