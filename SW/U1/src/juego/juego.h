@@ -34,12 +34,15 @@
 		uint8_t turno_color : 1;
 		uint8_t map[64];
 	} PAQ_status;
+
+	//Manejo deln tiempo
+	
 	// Tipo para representar el estado
 	typedef struct
 	{
 		//  uint16_t       turno;                     // Cu�ntos turnos se han jugado ya
-		//  uint16_t       segundos_blancas;
-		//  uint16_t       segundos_negras;
+		 uint16_t       segundos_blancas;
+		 uint16_t       segundos_negras;
 		 uint8_t        juegan_blancas      : 1; 
 		 uint8_t        negro_jaque         : 1; 
 		 uint8_t        blanco_jaque        : 1; 
