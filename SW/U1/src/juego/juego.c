@@ -292,6 +292,114 @@ static void stateMachine(void* argument)
 //    - El color de cada casilla alterna entre blanco y negro y la
 //      casilla inferior derecha es de color blanco
 //
+void checkJaque(AJD_TableroPtr tablero){
+   uint8_t vCaballo[2] = {1, 2};
+   uint8_t vVertHorz[2] = {0, 1};
+   uint8_t vDiag[2] = {1, 1}; 
+   int8_t cz[8] = {+1, +1, +1, -1, -1, +1, -1, -1};
+   AJD_CasillaPtr rey = NULL;
+   //AJD_CasillaPtr reyN = NULL;
+
+   uint8_t id;
+   uint8_t x;
+   uint8_t y;
+   
+   // Localiza el rey
+   for (int i=0; i<64; i++) 
+   {
+     if (tablero->casilla[i].pieza == REY && tablero->casilla[i].color_pieza == estado_juego.juegan_blancas) 
+     {
+         rey = &(tablero->casilla[i]);
+         break;
+     }
+   }
+
+   estado_juego.negro_jaque = estado_juego.juegan_blancas ? amenazaRey(rey, tablero) : 0;
+   estado_juego.blanco_jaque = !estado_juego.juegan_blancas ? amenazaRey(rey, tablero) : 0;
+
+
+}
+
+bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
+{
+   uint8_t vCaballo[2] = {1, 2};
+   uint8_t vVertHorz[2] = {0, 1};
+   uint8_t vDiag[2] = {1, 1}; 
+   int8_t cz[8] = {+1, +1, +1, -1, -1, +1, -1, -1};
+   bool enJaque = false;
+   uint8_t id;
+   uint8_t x;
+   uint8_t y;
+   uint8_t resposx;
+	uint8_t resposy;
+   uint8_t cnt;
+
+   id = rey->id;
+   x = id%8;
+   y = id/8;
+   AJD_CasillaPtr casilla;
+
+   // Amenaza desde caballos
+   for(int i=0; i<2; i++){
+      for (int j=0; j<4; j++) 
+      {
+         casilla = &(tablero->casilla[(x + cz[j*2]*vCaballo[i]) + (y + cz[1+j*2]*vCaballo[1-i])*8]);
+         if(casilla->pieza == CABALLO && casilla->color_pieza == !estado_juego.juegan_blancas)
+         {
+            //enJaque = true;
+            return true;
+         }
+      }
+   }
+
+   // Amenaza desde piezas que se mueve verticales/horizontales
+   for(int i=0; i<2; i++){
+      for(int j=0; j<4; j++){
+         resposx = (int8_t)x+vVertHorz[i]*cz[j*2];
+         resposy = (int8_t)y+vVertHorz[1-i]*cz[j*2+1];
+         cnt = 0;
+         while(resposx >= 0 && resposx < 8 && resposy >= 0 && resposy < 8)
+         {
+            casilla = &(tablero->casilla[resposx + resposy*8]);
+            if((casilla->pieza == TORRE1 || casilla->pieza == TORRE2 || casilla->pieza ==  DAMA
+               || (casilla->pieza == REY && cnt == 0))
+               && casilla->color_pieza != estado_juego.juegan_blancas)
+            {
+               return true;
+            }
+            resposx += vVertHorz[i]*cz[j*2];
+            resposy += vVertHorz[1-i]*cz[1+j*2];
+            cnt++;
+         }
+      }
+   }
+
+   // Amenaza desde piezas que se mueven diagonales
+   
+   for(int j=0; j<4; ij++){
+      resposx = (int8_t)x+vDiag[0]*cz[j*2];
+      resposy = (int8_t)y+vDiag[1]*cz[j*2+1];
+      cnt = 0;
+      while(resposx >= 0 && resposx < 8 && resposy >= 0 && resposy < 8)
+      {
+         casilla = &(tablero->casilla[resposx + resposy*8]);
+         if((casilla->pieza == ALFIL1 || casilla->pieza == ALFIL2 || casilla->pieza ==  DAMA
+            || (casilla->pieza == REY && cnt == 0))
+            && casilla->color_pieza != estado_juego.juegan_blancas)
+         {
+            return true;
+         }
+         resposx += vDiag[0]*cz[j*2];
+         resposy += vDiag[1]*cz[1+j*2];
+         cnt++;
+      }
+   }
+
+   return false;
+}
+
+
+
 void inicializa(AJD_TableroPtr tablero)
 {
    AJD_Color color = NEGRO;

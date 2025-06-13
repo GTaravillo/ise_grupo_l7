@@ -17,7 +17,7 @@
 	//typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	typedef enum{
 	NONE,
-	PEON1,
+	PEON1,	//10000001
 	PEON2,
 	PEON3,
 	PEON4,
