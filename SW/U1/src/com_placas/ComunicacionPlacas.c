@@ -62,23 +62,31 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
+  mensaje_t mensajeTx;
   uint32_t flag;
-  // int bytesMensaje = sizeof(mensajeTx);
-  // printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+  int bytesMensaje = sizeof(mensajeTx);
+  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
   {
-//    printf("[com::%s] Esperando mensaje...\n", __func__);
-//    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
-//    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
-//	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
-//	  {
-//	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
-//	  }
-//    USARTdrv->Send(&mensajeTx, bytesMensaje);
-//	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
-//		
-//		osDelay(5000);
+  //  printf("[com::%s] Esperando mensaje...\n", __func__);
+  //  status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
+    for (int i = MENSAJE_LCD; i <= MENSAJE_MICROFONO; i++)
+    {
+      mensajeTx.mensaje[0] = i;
+      mensajeTx.mensaje[1] = i * 2;
+
+      mensajeTx.remitente = i;
+
+      printf("[com::%s] Mensaje a enviar: remitente [%d]\n", __func__, mensajeTx.remitente);
+      for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
+      {
+        printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
+      }
+      USARTdrv->Send(&mensajeTx, bytesMensaje);
+      flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
+      osDelay(100);
+    }
   }
 }
 

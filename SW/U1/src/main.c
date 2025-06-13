@@ -117,8 +117,8 @@ int main(void)
 	//LCD_Initialize();
 	//MemoriaInitialize();
   //LedStripManagerInitialize();
-	PositionManagerInitialize();
-	//ComunicacionPlacasInitialize();
+	// PositionManagerInitialize();
+	ComunicacionPlacasInitialize();
   //PrincipalInitialize();
   
 
