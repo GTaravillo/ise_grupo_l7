@@ -83,10 +83,10 @@ Printf:         PB3
     MOSI:       PC12
   
 ### Alimentación  
-    TO-DO  
+    ADC:        PC0  
   
 ### Ruido  
-    TO-DO  
+    ADC:        PC3
   
   
 # Problemas a solucionar  
