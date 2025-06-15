@@ -263,7 +263,7 @@ int esMovimientoValido (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     {
         if (casillaOcupada (movInfo.destino))
         {               
-            if (movInfo.origen->pieza < PEON1 && movInfo.origen->pieza > PEON7)
+            if (movInfo.origen->pieza < PEON1 ||     movInfo.origen->pieza > PEON7)
                 return  (movInfo.destino->color_pieza != movInfo.origen->color_pieza);
         }           
         else            
@@ -366,7 +366,7 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     AJD_Color juegan_blancas;    
 
     // Si no es un peon no hagas m�s nada
-    if (estado_juego->casilla_destino->pieza < PEON1 && estado_juego->casilla_destino->pieza > PEON8) return 0;
+    if (estado_juego->casilla_origen->pieza < PEON1 || estado_juego->casilla_origen->pieza > PEON8) return 0;
 
 
     idCasilla = estado_juego->casilla_destino->id;    

@@ -22,7 +22,8 @@ typedef enum{
   LevantaPieza,
   CompMov,
   Pause,
-  Stop
+  Stop,
+  Win
 } modo_t;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -39,6 +40,8 @@ void juegoTbInitialize(void);
 void esperaPausaDetener(void);
 void juegoEsperaInitialize(void);
 void tick_segundos_callback(void *argument);
+void checkJaque(AJD_TableroPtr tablero);
+bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero);
 
 ////////////////////////////////////////////////////////////////////////////
 // VARIABLES PRIVADAS AL M�DULO
@@ -104,11 +107,33 @@ void tick_segundos_callback(void *argument){
       lcdMsg.printMsg.printLine = PRINT_LINE_1;
       sprintf(lcdMsg.printMsg.msg, "BLANCO: %d : %d", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60);
       osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+      if(estado_juego.segundos_blancas == 0){
+         estado_juego.segundos_blancas = 0;
+         estado_juego.segundos_negras = 0;
+         lcdMsg.printMsg.printLine = PRINT_LINE_1;
+         sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
+         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+         lcdMsg.printMsg.printLine = PRINT_LINE_2;
+         sprintf(lcdMsg.printMsg.msg, "VICTORIA NEGRA");
+         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+         modo = Win;
+     }
    }else{
       estado_juego.segundos_negras--;
       lcdMsg.printMsg.printLine = PRINT_LINE_1;
       sprintf(lcdMsg.printMsg.msg, "NEGRO: %d : %d", estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
       osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+      if(estado_juego.segundos_negras == 0){
+         estado_juego.segundos_negras = 0;
+         estado_juego.segundos_blancas = 0;
+         lcdMsg.printMsg.printLine = PRINT_LINE_1;
+         sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
+         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+         lcdMsg.printMsg.printLine = PRINT_LINE_2;
+         sprintf(lcdMsg.printMsg.msg, "VICTORIA BLANCA");
+         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+         modo = Win;
+      }
    }
 
 	//osThreadFlagsSet(tid_Thread_Principal, ACTUALIZAR_HORA);
@@ -239,7 +264,15 @@ static void stateMachine(void* argument)
             movedId = convertNum(movedCasilla.casilla);
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
-            if(esMovimientoValido(&tablero, &estado_juego)){
+            if(estado_juego.casilla_origen == estado_juego.casilla_destino){
+               break;
+            }else if(esMovimientoValido(&tablero, &estado_juego)){
+               if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
+                  modo = Win;
+                  if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
+                  else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+               }
+               
                if(peonUltimaFila(&tablero, &estado_juego)){
 						tPromo = estado_juego.casilla_destino;
 						muevePieza(&tablero, &estado_juego);
@@ -249,6 +282,18 @@ static void stateMachine(void* argument)
 					}
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+               checkJaque(&tablero);
+               
+               if(estado_juego.blanco_jaque == 1){
+                  printf(" [Test] Jaque al blanco\n");
+                  estado_juego.blanco_jaque = 0;
+
+               }else if(estado_juego.negro_jaque == 1){
+                 printf(" [Test] Jaque al negro\n");
+                  estado_juego.negro_jaque = 0;
+               }
+               
+
             }else{
                //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
                printf("[Error] Movimiento de pieza invalido: destino\n");
@@ -280,6 +325,11 @@ static void stateMachine(void* argument)
          status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
          modo = Init;
       break;
+      case Win:
+         osTimerStop(tick_segundos);
+         modo = Init;
+         //osThreadFlagsSet(e_serverThreadId, FLAG_WIN);
+      break;
    }
  }
  //osThreadYield();
@@ -307,15 +357,21 @@ void checkJaque(AJD_TableroPtr tablero){
    // Localiza el rey
    for (int i=0; i<64; i++) 
    {
-     if (tablero->casilla[i].pieza == REY && tablero->casilla[i].color_pieza == estado_juego.juegan_blancas) 
+     if (tablero->casilla[i].pieza == REY && tablero->casilla[i].color_pieza == !estado_juego.juegan_blancas) 
      {
          rey = &(tablero->casilla[i]);
          break;
      }
    }
+   
+   // if(rey == NULL){
+   //   estado_juego.negro_jaque = 0;
+   //   estado_juego.blanco_jaque = 0;
+   //   return;
+   // }
 
-   estado_juego.negro_jaque = estado_juego.juegan_blancas ? amenazaRey(rey, tablero) : 0;
-   estado_juego.blanco_jaque = !estado_juego.juegan_blancas ? amenazaRey(rey, tablero) : 0;
+   estado_juego.negro_jaque = estado_juego.juegan_blancas == BLANCO ? amenazaRey(rey, tablero) : 0;
+   estado_juego.blanco_jaque = estado_juego.juegan_blancas == NEGRO ? amenazaRey(rey, tablero) : 0;
 
 
 }
@@ -326,7 +382,7 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
    uint8_t vVertHorz[2] = {0, 1};
    uint8_t vDiag[2] = {1, 1}; 
    int8_t cz[8] = {+1, +1, +1, -1, -1, +1, -1, -1};
-   bool enJaque = false;
+   //bool enJaque = false;
    uint8_t id;
    uint8_t x;
    uint8_t y;
@@ -338,13 +394,17 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
    x = id%8;
    y = id/8;
    AJD_CasillaPtr casilla;
+   AJD_Color rey_color = rey->color_pieza;
+
+   int pawnDir = (rey_color == BLANCO) ? -1 : 1; // 兵攻击方向
+   int pawnThreats[2][2] = {{-1, pawnDir}, {1, pawnDir}};
 
    // Amenaza desde caballos
    for(int i=0; i<2; i++){
       for (int j=0; j<4; j++) 
       {
          casilla = &(tablero->casilla[(x + cz[j*2]*vCaballo[i]) + (y + cz[1+j*2]*vCaballo[1-i])*8]);
-         if(casilla->pieza == CABALLO && casilla->color_pieza == !estado_juego.juegan_blancas)
+         if((casilla->pieza == CABALLO1 || casilla->pieza == CABALLO2) && casilla->color_pieza != rey_color)
          {
             //enJaque = true;
             return true;
@@ -352,21 +412,39 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
       }
    }
 
+   // Amenaza desde peones
+   for(int i=0; i<2; i++) {
+      resposx = x + pawnThreats[i][0];
+      resposy = y + pawnThreats[i][1];
+    
+      if(resposx >= 0 && resposx < 8 && resposy >= 0 && resposy < 8) {
+         casilla = &(tablero->casilla[resposx + resposy*8]);
+         if((casilla->pieza >= PEON1 && casilla->pieza <= PEON8) && 
+            casilla->color_pieza != rey_color) {
+               return true;
+         }
+      }
+}
+
    // Amenaza desde piezas que se mueve verticales/horizontales
    for(int i=0; i<2; i++){
       for(int j=0; j<4; j++){
-         resposx = (int8_t)x+vVertHorz[i]*cz[j*2];
-         resposy = (int8_t)y+vVertHorz[1-i]*cz[j*2+1];
+         resposx = x+vVertHorz[i]*cz[j*2];
+         resposy = y+vVertHorz[1-i]*cz[j*2+1];
          cnt = 0;
          while(resposx >= 0 && resposx < 8 && resposy >= 0 && resposy < 8)
          {
             casilla = &(tablero->casilla[resposx + resposy*8]);
-            if((casilla->pieza == TORRE1 || casilla->pieza == TORRE2 || casilla->pieza ==  DAMA
-               || (casilla->pieza == REY && cnt == 0))
-               && casilla->color_pieza != estado_juego.juegan_blancas)
+            if(casilla -> pieza == NONE)
             {
-               return true;
+               if((casilla->pieza == TORRE1 || casilla->pieza == TORRE2 || casilla->pieza ==  DAMA)
+                  && casilla->color_pieza != rey_color)
+               {
+                  return true;
+               }
+               break;
             }
+
             resposx += vVertHorz[i]*cz[j*2];
             resposy += vVertHorz[1-i]*cz[1+j*2];
             cnt++;
@@ -376,18 +454,20 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
 
    // Amenaza desde piezas que se mueven diagonales
    
-   for(int j=0; j<4; ij++){
-      resposx = (int8_t)x+vDiag[0]*cz[j*2];
-      resposy = (int8_t)y+vDiag[1]*cz[j*2+1];
+   for(int j=0; j<4; j++){
+      resposx = x+vDiag[0]*cz[j*2];
+      resposy = y+vDiag[1]*cz[j*2+1];
       cnt = 0;
       while(resposx >= 0 && resposx < 8 && resposy >= 0 && resposy < 8)
       {
          casilla = &(tablero->casilla[resposx + resposy*8]);
-         if((casilla->pieza == ALFIL1 || casilla->pieza == ALFIL2 || casilla->pieza ==  DAMA
-            || (casilla->pieza == REY && cnt == 0))
-            && casilla->color_pieza != estado_juego.juegan_blancas)
-         {
-            return true;
+         if(casilla-> pieza != NONE){
+            if((casilla->pieza == ALFIL1 || casilla->pieza == ALFIL2 || casilla->pieza ==  DAMA)
+               && casilla->color_pieza != rey_color)
+            {
+               return true;
+            }
+            break;
          }
          resposx += vDiag[0]*cz[j*2];
          resposy += vDiag[1]*cz[1+j*2];
@@ -1035,6 +1115,92 @@ static void juegoTestBench(void* argument){
    printChessboard();
    osDelay(100);
 
+   // Victoria y jaque
+   osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+	osDelay(500);
+   osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	osDelay(500);
+
+   memset(tbMap, 0, 64*sizeof(uint8_t));
+
+   tbMap[3] = REY | BLACK;
+   tbMap[33] = CABALLO1 | WHITE;
+   tbMap[21] = PEON1 | WHITE;
+   //tbPaq.map = tbMap;
+	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
+   tbPaq.turno_color = 1;
+   osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+   for(int i = 0; i < 32; i++){
+      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+      osDelay(100); // 10ms delay between sending each piece
+   }
+   printChessboard();
+	 osDelay(100);
+   printf(" [Test] Jaque y victoria\n");
+
+   tbCasilla.casilla = 33; // b1位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+
+   tbCasilla.casilla = 18; // a2位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   // 模拟用户操作：选择黑方前进
+   tbCasilla.casilla = 3; // b8位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   
+   tbCasilla.casilla = 4; // a6位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+
+   tbCasilla.casilla = 21; // b1位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+
+   tbCasilla.casilla = 10; // a2位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   // 模拟用户操作：选择黑方前进
+   tbCasilla.casilla = 4; // b8位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   
+   tbCasilla.casilla = 3; // a6位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+
+   tbCasilla.casilla = 18; // b8位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   
+   tbCasilla.casilla = 3; // a6位置
+   osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   osDelay(500);
+   printChessboard();
+   osDelay(100);
+   
+	 osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    printf("[Test] End\n");
    
 

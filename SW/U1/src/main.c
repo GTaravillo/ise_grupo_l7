@@ -84,7 +84,7 @@ static void Error_Handler(void);
   * @retval None
   */
 int main(void)
-{
+	{
   /* STM32F4xx HAL library initialization:
        - Configure the Flash prefetch, Flash preread and Buffer caches
        - Systick timer is configured by default as source of time base, but user 
