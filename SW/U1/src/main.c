@@ -13,6 +13,7 @@
 #include PATH_MEMORIA
 #include PATH_COM_PLACAS
 #include PATH_PRINCIPAL
+#include PATH_TEST_MEMORIA
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -115,13 +116,14 @@ int main(void)
   
 	//LED_Initialize();
 	//LCD_Initialize();
-	//MemoriaInitialize();
+	MemoriaInitialize();
   //LedStripManagerInitialize();
-	PositionManagerInitialize();
+	// PositionManagerInitialize();
 	//ComunicacionPlacasInitialize();
   //PrincipalInitialize();
   
-
+  // Tests
+  TestMemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();

@@ -75,7 +75,7 @@ static  void  Error_Handler(void);
 
 void Server_Initialize(void) 
 {
-  e_serverThreadId        = osThreadNew(Run, NULL, &g_serverAttr);
+  e_serverThreadId = osThreadNew(Run, NULL, &g_serverAttr);
 //  e_serverInputMessageId  = osMessageQueueNew(SERVER_MAX_MSGS, sizeof(serverMsg_t), NULL);
 //  e_serverOutputMessageId = osMessageQueueNew(SERVER_MAX_MSGS, sizeof(serverMsg_t), NULL);
 
@@ -93,50 +93,50 @@ static void Run(void *argument)
   {
     case netOK:
       printf("[servidor::Run] netInitialize: Operation succeeded\n");
-      break;
+    break;
 
     case netBusy:
       printf("[servidor::Run] netInitialize: Process is busy\n");
-      break;
+    break;
 
     case netError:
       printf("[servidor::Run] netInitialize: Unspecified error\n");
-      break;
+    break;
 
     case netInvalidParameter:
       printf("[servidor::Run] netInitialize: Invalid parameter specified\n");
-      break;
+    break;
 
     case netWrongState:
       printf("[servidor::Run] netInitialize: Wrong state error\n");
-      break;
+    break;
 
     case netDriverError:
       printf("[servidor::Run] netInitialize: Driver error\n");
-      break;
+    break;
 
     case netServerError:
       printf("[servidor::Run] netInitialize: Server error\n");
-      break;
+    break;
 
     case netAuthenticationFailed:
       printf("[servidor::Run] netInitialize: User authentication failed\n");
-      break;
+    break;
 
     case netDnsResolverError:
       printf("[servidor::Run] netInitialize: DNS host resolver failed\n");
-      break;
+    break;
 
     case netFileError:
       printf("[servidor::Run] netInitialize: File not found or file r/w error\n");
-      break;
+    break;
 
     case netTimeout:
       printf("[servidor::Run] netInitialize: Operation timeout\n");
-      break;
+    break;
 
     default:
-      break;
+    break;
   }
 
   while (!netHTTPs_Running())

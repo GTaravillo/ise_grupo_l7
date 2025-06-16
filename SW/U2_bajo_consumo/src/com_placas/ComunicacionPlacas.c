@@ -59,17 +59,11 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
-//  printf("[com::%s]\n", __func__);
-
-//  uint32_t flag;
-  mensaje_t mensajeTx = {};
-//	{
-//		.remitente =  MENSAJE_NFC,
-//		.mensaje = {'M', 'S', 'G', ' ', 'U', '2'}
-//	};
-//  int bytesMensaje = sizeof(mensajeTx);
-//  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
-
+  mensaje_t mensajeTx;
+  uint32_t flag;
+  int bytesMensaje = sizeof(mensajeTx);
+  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+  
   while(1) 
   {
 		status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
