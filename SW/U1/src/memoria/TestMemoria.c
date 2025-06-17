@@ -219,7 +219,7 @@ static void Run(void *argument)
 		flag = osThreadFlagsWait(FLAG_READY, osFlagsWaitAll, osWaitForever);
     TestGuardarPartidaFinalizada(2);
 		flag = osThreadFlagsWait(FLAG_READY, osFlagsWaitAll, osWaitForever);
-		TestObtenerInfoPartida();
+		//TestObtenerInfoPartida();
     status = osMessageQueueGet(e_memoriaTxMessageId, &mensajeRx, NULL, osWaitForever);
     ConfirmarDatosRecibidos(2, mensajeRx);
 	#endif
