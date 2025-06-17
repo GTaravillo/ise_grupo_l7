@@ -10,6 +10,7 @@
 #include "../posicion/PositionManager.h"
 #include "../led/LedStripManager.h"
 #include "../lcd/lcd.h"
+#include <stdlib.h>
 
 
 #include <time.h>
@@ -146,10 +147,10 @@ void tick_segundos_callback(void *argument){
 static void stateMachine(void* argument)
 {
  
- char* timepoBlancasMinStr;
- char* timepoBlancasSegStr;
+ char* tiempoBlancasMinStr;
+ char* tiempoBlancasSegStr;
  char* tiempoNegrasMinStr;
- char* timepoNegrasSegStr;
+ char* tiempoNegrasSegStr;
 
  while(true){
 

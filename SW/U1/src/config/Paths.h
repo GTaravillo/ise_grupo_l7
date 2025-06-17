@@ -1,11 +1,8 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-<<<<<<< HEAD
 #define WORKSPACE 4
-=======
-#define WORKSPACE 1
->>>>>>> d2bd66c51a15e1451e44bc3ea47d5900f8c61f4b
+
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian
@@ -85,9 +82,12 @@
 	#define PATH_UART        "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/uart/uart.h"
 	#define PATH_POSITION    "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/posicion/PositionManager.h"
 	#define PATH_MEMORIA     "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/memoria/Memoria.h"
-	#define PATH_COM_PLACAS  "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/com_placas/ComunicacionPlacas.h"
+	#define PATH_TEST_MEMORIA	"C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/memoria/TestMemoria.h"
+  #define PATH_COM_PLACAS  "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/com_placas/ComunicacionPlacas.h"
 	#define PATH_PRINCIPAL   "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/juego/principal.h"
-	#define PATH_COMMON		 	 "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/common/CommonDefines.h"
+	#define PATH_TABLERO		 "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/juego/tablero.h"
+	#define PATH_JUEGO       "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/juego/juego.h"
+  #define PATH_COMMON		 	 "C:\Users\raul.torres.huete\Desktop\MASTERCHESS\SW\U1/src/common/CommonDefines.h"
 
 #endif
 
