@@ -10,6 +10,7 @@
 #include "../posicion/PositionManager.h"
 #include "../led/LedStripManager.h"
 #include "../lcd/lcd.h"
+#include "stdlib.h"
 
 
 #include <time.h>
@@ -64,7 +65,8 @@ osThreadId_t e_juegoThreadId;
 osThreadId_t e_juegoEsperaThreadId;
 osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
-PAQ_status paq;
+PartidaOutMsg_t paq;
+PartidaInMsg_t paqIn;
 uint8_t* map;
 uint8_t firstRound = 0;
 
@@ -83,6 +85,7 @@ lcdMessage_t lcdMsg;
  //uint64_t predict_64b = 0;
  AJD_CasillaPtr tPromo;
  LedStripMsg_t ledMsg;
+ 
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ P�BLICA
 
@@ -101,6 +104,8 @@ lcdMessage_t lcdMsg;
 //}
 
 void tick_segundos_callback(void *argument){
+
+   
 
    if(estado_juego.juegan_blancas){
       estado_juego.segundos_blancas--;
@@ -142,7 +147,10 @@ void tick_segundos_callback(void *argument){
 static void stateMachine(void* argument)
 {
  
- 
+ char* timepoBlancasMinStr;
+ char* timepoBlancasSegStr;
+ char* tiempoNegrasMinStr;
+ char* timepoNegrasSegStr;
 
  while(true){
 
@@ -172,13 +180,29 @@ static void stateMachine(void* argument)
          modo = Espera;
          lcdMsg.mode = PRINT_NORMAL;
          ledMsg.nuevaJugada = false;
+         tiempoBlancasMinStr = malloc(2*sizeof(char));
+         tiempoNegrasMinStr = malloc(2*sizeof(char));
+         tiempoBlancasSegStr = malloc(2*sizeof(char));
+         tiempoNegrasSegStr = malloc(2*sizeof(char));
       break;
       case Espera:
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
             status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-            memcpy(map, paq.map, 64 * sizeof(uint8_t));
-            estado_juego.juegan_blancas = (uint8_t)paq.turno_color;
+            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
+            estado_juego.juegan_blancas = paq.turno;
+            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
+            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
+            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
+            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
+            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
+            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
+            free(tiempoBlancasMinStr);
+            free(tiempoNegrasMinStr);
+            free(tiempoBlancasSegStr);
+            free(tiempoNegrasSegStr);
+            
+             
          }else if(flag == FLAG_START){
             
             newGameMap();
@@ -318,10 +342,18 @@ static void stateMachine(void* argument)
          }
       break;
       case Stop:
-				osTimerStop(tick_segundos);
-         memset(&paq, 0, sizeof(PAQ_status));
-         for(int i = 0; i < 64; i++) paq.map[i] = tablero.casilla[i].pieza | (tablero.casilla[i].color_pieza << 7);
-         paq.turno_color = estado_juego.juegan_blancas;
+			osTimerStop(tick_segundos);
+         memset(&paqIn, 0, sizeof(PartidaInMsg_t));
+         for(int i = 0; i < 64; i++) paq.dato[i] = tablero.casilla[i].pieza | (tablero.casilla[i].color_pieza << 7);
+         paq.turno = estado_juego.juegan_blancas;
+         paq.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
+         paq.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
+         paq.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
+         paq.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
+         paq.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
+         paq.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
+         paq.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
+         paq.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
          status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
          modo = Init;
       break;
@@ -744,16 +776,16 @@ void juegoInitialize(void)
   }
 }
 
-void juegoTbInitialize(void)
-{
-   e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
+// void juegoTbInitialize(void)
+// {
+//    e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
 	
 
-  if ((e_juegoTestbenchThreadId == NULL))
-  {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
-  }
-}
+//   if ((e_juegoTestbenchThreadId == NULL))
+//   {
+//     printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
+//   }
+// }
 
 // static void juegoTestBench(void* argument){
 
