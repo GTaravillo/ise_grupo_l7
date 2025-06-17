@@ -10,6 +10,7 @@
 #include "../posicion/PositionManager.h"
 #include "../led/LedStripManager.h"
 #include "../lcd/lcd.h"
+#include <stdlib.h>
 
 
 #include <time.h>
@@ -744,16 +745,16 @@ void juegoInitialize(void)
   }
 }
 
-void juegoTbInitialize(void)
-{
-   e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
+// void juegoTbInitialize(void)
+// {
+//    e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
 	
 
-  if ((e_juegoTestbenchThreadId == NULL))
-  {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
-  }
-}
+//   if ((e_juegoTestbenchThreadId == NULL))
+//   {
+//     printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
+//   }
+// }
 
 // static void juegoTestBench(void* argument){
 
