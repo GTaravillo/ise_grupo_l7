@@ -403,6 +403,11 @@
               <FileType>5</FileType>
               <FilePath>.\src\common\CommonDefines.h</FilePath>
             </File>
+            <File>
+              <FileName>CommonDefines.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\common\CommonDefines.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -644,14 +649,24 @@
           <GroupName>memoria</GroupName>
           <Files>
             <File>
+              <FileName>Memoria.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\memoria\Memoria.c</FilePath>
+            </File>
+            <File>
               <FileName>Memoria.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\memoria\Memoria.h</FilePath>
             </File>
             <File>
-              <FileName>Memoria.c</FileName>
+              <FileName>TestMemoria.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\memoria\Memoria.c</FilePath>
+              <FilePath>.\src\memoria\TestMemoria.c</FilePath>
+            </File>
+            <File>
+              <FileName>TestMemoria.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\memoria\TestMemoria.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -13,7 +13,6 @@
 	#define PATH_IRQ         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/irq/stm32f4xx_it.h"
 	#define PATH_LCD         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/lcd/lcd.h"
 	#define PATH_LED         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/led/led.h"
-	#define PATH_LED_STRIP   "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/led/LedStripManager.h"
 	#define PATH_RTC         "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/rtc/rtc.h"
 	#define PATH_UART        "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/uart/uart.h"
 	#define PATH_POSITION    "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U2_bajo_consumo/src/posicion/PositionManager.h"
