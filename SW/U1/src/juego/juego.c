@@ -255,12 +255,12 @@ static void stateMachine(void* argument)
                for(int i=0; i<64; i++){
                   if (predict[i] == 1) {
                      //predict_64b |= (1ULL << i);
-                     if(tablero.casilla[movedId].pieza != NONE){
+                     if(tablero.casilla[movedId].pieza == NONE){
                         ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
                      }else{
                         ledMsg.tipoJugada = CAPTURA;
                      }
-                     ledMsg.posicion = i;
+                     ledMsg.posicion = convertNum(i);
                      ledMsg.nuevaJugada = false;
                      osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                   }
@@ -684,7 +684,8 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  osStatus_t status;
  uint8_t pos;
  uint8_t placeHolder;
- uint8_t position;
+ //uint8_t position;
+ ECasilla position;
  uint8_t k1 = 0;
  uint8_t k2 = 0;
  uint8_t found = 0;
@@ -707,6 +708,14 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             map[j] = 0;
             tablero->casilla[j].pieza = (AJD_Pieza)(pos & 0x1F);
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x80) >> 7);
+            ledMsg.posicion = convertNum(j);
+            ledMsg.nuevaJugada = false;
+            osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+            status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
+            if(status == osOK && position.casilla == ledMsg.posicion){
+               ledMsg.nuevaJugada = true;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+            }
             found = 1;
             break;
          }
@@ -776,464 +785,464 @@ void juegoInitialize(void)
   }
 }
 
-// void juegoTbInitialize(void)
-// {
-//    e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
+void juegoTbInitialize(void)
+{
+   e_juegoTestbenchThreadId = osThreadNew(juegoTestBench, NULL, NULL);
 	
 
-//   if ((e_juegoTestbenchThreadId == NULL))
-//   {
-//     printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
-//   }
-// }
+  if ((e_juegoTestbenchThreadId == NULL))
+  {
+    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
+  }
+}
 
-// static void juegoTestBench(void* argument){
+static void juegoTestBench(void* argument){
 
 
 
    
-//    //osMessageQueueId_t e_comPlacasRxThreadId;
+   //osMessageQueueId_t e_comPlacasRxThreadId;
 
-//    uint8_t tbPos[32];
-//    PAQ_status tbPaq;
-//    uint8_t tbMap[64];
-//    ECasilla tbCasilla;
-//    e_positionMessageId = osMessageQueueNew(10, sizeof(ECasilla), NULL);
-//    //e_juegoTxMessageId = osMessageQueueNew(10, sizeof(uint64_t), NULL);
-//    //e_juegoRxMessageId = osMessageQueueNew(10, sizeof(uint8_t), NULL);
-//    e_memoriaTxMessageId = osMessageQueueNew(10, sizeof(PAQ_status), NULL);
-//    e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PAQ_status), NULL);
-//    //tbPaq = malloc(sizeof(PAQ_status));
+   uint8_t tbPos[32];
+   PAQ_status tbPaq;
+   uint8_t tbMap[64];
+   ECasilla tbCasilla;
+   //e_positionMessageId = osMessageQueueNew(10, sizeof(ECasilla), NULL);
+   //e_juegoTxMessageId = osMessageQueueNew(10, sizeof(uint64_t), NULL);
+   //e_juegoRxMessageId = osMessageQueueNew(10, sizeof(uint8_t), NULL);
+   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(PAQ_status), NULL);
+   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PAQ_status), NULL);
+   //tbPaq = malloc(sizeof(PAQ_status));
 
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_START);
-// 	osDelay(300);
+   //osThreadFlagsSet(e_juegoThreadId, FLAG_START);
+	//osDelay(300);
 
-//    tbPos[0] = TORRE1 | WHITE;
-//    tbPos[1] = CABALLO1 | WHITE;
-//    tbPos[2] = ALFIL1 | WHITE;
-//    tbPos[3] = DAMA | WHITE;
-//    tbPos[4] = REY | WHITE;
-//    tbPos[5] = ALFIL2 | WHITE;
-//    tbPos[6] = CABALLO2 | WHITE;
-//    tbPos[7] = TORRE2 | WHITE;
-//     for (int i = 8; i < 16; i++) {
-//        tbPos[i] = (PEON1 + (i - 8)) | WHITE;
-//        tbPos[i+8] = (PEON1 + (i - 8)) | BLACK;
-//     }
+   tbPos[0] = TORRE1 | WHITE;
+   tbPos[1] = CABALLO1 | WHITE;
+   tbPos[2] = ALFIL1 | WHITE;
+   tbPos[3] = DAMA | WHITE;
+   tbPos[4] = REY | WHITE;
+   tbPos[5] = ALFIL2 | WHITE;
+   tbPos[6] = CABALLO2 | WHITE;
+   tbPos[7] = TORRE2 | WHITE;
+    for (int i = 8; i < 16; i++) {
+       tbPos[i] = (PEON1 + (i - 8)) | WHITE;
+       tbPos[i+8] = (PEON1 + (i - 8)) | BLACK;
+    }
     
-//     // 黑方
-//    tbPos[24] = TORRE1 | BLACK;
-//    tbPos[25] = CABALLO1 | BLACK;
-//    tbPos[26] = ALFIL1 | BLACK;
-//    tbPos[27] = DAMA | BLACK;
-//    tbPos[28] = REY | BLACK;
-//    tbPos[29] = ALFIL2 | BLACK;
-//    tbPos[30] = CABALLO2 | BLACK;
-//    tbPos[31] = TORRE2 | BLACK;
+    // 黑方
+   tbPos[24] = TORRE1 | BLACK;
+   tbPos[25] = CABALLO1 | BLACK;
+   tbPos[26] = ALFIL1 | BLACK;
+   tbPos[27] = DAMA | BLACK;
+   tbPos[28] = REY | BLACK;
+   tbPos[29] = ALFIL2 | BLACK;
+   tbPos[30] = CABALLO2 | BLACK;
+   tbPos[31] = TORRE2 | BLACK;
 
-//    // tbPaq.map = tbMap;
-//    // tbPaq.turno_color = 
-//    for(int i = 0; i < 32; i++){
-//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-//       osDelay(100); // 10ms delay between sending each piece
-//    }
-//    printChessboard();
-//    osDelay(100);
-//    printf("[Test] basic move:\n");
-//    printf("  [Test] peon:\n");
+   // tbPaq.map = tbMap;
+   // tbPaq.turno_color = 
+   // for(int i = 0; i < 32; i++){
+   //    osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+   //    osDelay(100); // 10ms delay between sending each piece
+   // }
+   // printChessboard();
+   // osDelay(100);
+   // printf("[Test] basic move:\n");
+   // printf("  [Test] peon:\n");
    
-//    tbCasilla.casilla = 49; // b7位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 49; // b7位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 33; // b5位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 33; // b5位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 15; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 15; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 31; // a4位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方兵前进
+   // tbCasilla.casilla = 31; // a4位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方兵前进
 
-//    tbCasilla.casilla = 48; // b2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 48; // b2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 47; // b3位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 47; // b3位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    printf("  [Test] captura\n");
-//    // 模拟用户操作：选择黑方兵前进
-//    tbCasilla.casilla = 31; // b5位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
+   // printf("  [Test] captura\n");
+   // // 模拟用户操作：选择黑方兵前进
+   // tbCasilla.casilla = 31; // b5位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
 
-//    tbCasilla.casilla = 33; // a4位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 33; // a4位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
    
 		
-// 	//tbCasilla.casilla = 255;
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-//    printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
-//    //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-// 	osDelay(500);
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
-// 	osDelay(500);
+	// //tbCasilla.casilla = 255;
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+	// osDelay(500);
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	// osDelay(500);
 
-//    memset(tbMap, 0, 64*sizeof(uint8_t));
+   // memset(tbMap, 0, 64*sizeof(uint8_t));
 
-//    tbMap[0] = TORRE1 | BLACK;
-//    tbMap[1] = CABALLO1 | BLACK;
-//    tbMap[2] = ALFIL1 | BLACK;
-//    tbMap[3] = DAMA | BLACK;
-//    tbMap[4] = REY | BLACK;
-//    tbMap[5] = ALFIL2 | BLACK;
-//    tbMap[6] = CABALLO2 | BLACK;
-//    tbMap[7] = TORRE2 | BLACK;
-//    // 黑方
-//    tbMap[56] = TORRE1 | WHITE;
-//    tbMap[57] = CABALLO1 | WHITE;
-//    tbMap[58] = ALFIL1 | WHITE;
-//    tbMap[59] = DAMA | WHITE;
-//    tbMap[60] = REY | WHITE;
-//    tbMap[61] = ALFIL2 | WHITE;
-//    tbMap[62] = CABALLO2 | WHITE;
-//    tbMap[63] = TORRE2 | WHITE;
+   // tbMap[0] = TORRE1 | BLACK;
+   // tbMap[1] = CABALLO1 | BLACK;
+   // tbMap[2] = ALFIL1 | BLACK;
+   // tbMap[3] = DAMA | BLACK;
+   // tbMap[4] = REY | BLACK;
+   // tbMap[5] = ALFIL2 | BLACK;
+   // tbMap[6] = CABALLO2 | BLACK;
+   // tbMap[7] = TORRE2 | BLACK;
+   // // 黑方
+   // tbMap[56] = TORRE1 | WHITE;
+   // tbMap[57] = CABALLO1 | WHITE;
+   // tbMap[58] = ALFIL1 | WHITE;
+   // tbMap[59] = DAMA | WHITE;
+   // tbMap[60] = REY | WHITE;
+   // tbMap[61] = ALFIL2 | WHITE;
+   // tbMap[62] = CABALLO2 | WHITE;
+   // tbMap[63] = TORRE2 | WHITE;
 
-//    //tbPaq.map = tbMap;
-// 	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
-//    tbPaq.turno_color = 0;
-//    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
-//    for(int i = 0; i < 32; i++){
-//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-//       osDelay(100); // 10ms delay between sending each piece
-//    }
+   // //tbPaq.map = tbMap;
+	// memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
+   // tbPaq.turno_color = 0;
+   // osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+   // for(int i = 0; i < 32; i++){
+   //    osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+   //    osDelay(100); // 10ms delay between sending each piece
+   // }
 
-//    printf("  [Test] torre:\n");
-//    tbCasilla.casilla = 0; // a1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] torre:\n");
+   // tbCasilla.casilla = 0; // a1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 31; // a4位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方兵前进
-//    tbCasilla.casilla = 63; // a8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 31; // a4位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方兵前进
+   // tbCasilla.casilla = 63; // a8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 32; // a5位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 32; // a5位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
 
-//    printf("  [Test] caballo:\n");
-//    tbCasilla.casilla = 1; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] caballo:\n");
+   // tbCasilla.casilla = 1; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 16; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方兵前进
-//    tbCasilla.casilla = 62; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 16; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方兵前进
+   // tbCasilla.casilla = 62; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 47; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 47; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    printf("  [Test] alfil:\n");
-//    tbCasilla.casilla = 2; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] alfil:\n");
+   // tbCasilla.casilla = 2; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 40; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 61; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 40; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 61; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 23; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 23; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    printf("  [Test] dama:\n");
-//    tbCasilla.casilla = 3; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] dama:\n");
+   // tbCasilla.casilla = 3; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 25; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 60; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 25; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 60; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 38; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 38; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 25; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 25; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 28; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 38; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 28; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 38; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 35; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 35; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
 
-//    printf("  [Test] rey:\n");
-//    tbCasilla.casilla = 4; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] rey:\n");
+   // tbCasilla.casilla = 4; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 11; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 59; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 11; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 59; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-//    tbCasilla.casilla = 52; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 52; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-//    //tbCasilla.casilla = 255;
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-//    printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
-//    //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-// 	osDelay(500);
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
-// 	osDelay(500);
+   // //tbCasilla.casilla = 255;
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+	// osDelay(500);
+   osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	osDelay(500);
 
-//    memset(tbMap, 0, 64*sizeof(uint8_t));
+   memset(tbMap, 0, 64*sizeof(uint8_t));
 
-//    tbMap[11] = PEON1 | WHITE;
+   tbMap[11] = PEON1 | WHITE;
 
-//    //tbPaq.map = tbMap;
-// 	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
-//    tbPaq.turno_color = 1;
-//    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
-//    for(int i = 0; i < 32; i++){
-//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-//       osDelay(100); // 10ms delay between sending each piece
-//    }
-//    printChessboard();
-// 	 osDelay(100);
+   //tbPaq.map = tbMap;
+	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
+   tbPaq.turno_color = 1;
+   osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+   for(int i = 0; i < 32; i++){
+      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+      osDelay(100); // 10ms delay between sending each piece
+   }
+   // printChessboard();
+	//  osDelay(100);
 	 
-//    printf("  [Test] Promoción:\n");
-//    tbCasilla.casilla = 12; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // printf("  [Test] Promoción:\n");
+   // tbCasilla.casilla = 12; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 3; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 3; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    estado_juego.juegan_blancas = 1;
-//    printf(" [Test] Manualmente cambia el turno a blanco\n");
+   // estado_juego.juegan_blancas = 1;
+   // printf(" [Test] Manualmente cambia el turno a blanco\n");
 
-//    tbCasilla.casilla = 3; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 3; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 39; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 39; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    estado_juego.juegan_blancas = 1;
-//    printf(" [Test] Manualmente cambia el turno a blanco\n");
+   // estado_juego.juegan_blancas = 1;
+   // printf(" [Test] Manualmente cambia el turno a blanco\n");
 
-//    tbCasilla.casilla = 39; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 39; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 32; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 32; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    // Victoria y jaque
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-//    //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-// 	osDelay(500);
-//    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
-// 	osDelay(500);
+   // // Victoria y jaque
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+	// osDelay(500);
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	// osDelay(500);
 
-//    memset(tbMap, 0, 64*sizeof(uint8_t));
+   // memset(tbMap, 0, 64*sizeof(uint8_t));
 
-//    tbMap[3] = REY | BLACK;
-//    tbMap[33] = CABALLO1 | WHITE;
-//    tbMap[21] = PEON1 | WHITE;
-//    //tbPaq.map = tbMap;
-// 	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
-//    tbPaq.turno_color = 1;
-//    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
-//    for(int i = 0; i < 32; i++){
-//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-//       osDelay(100); // 10ms delay between sending each piece
-//    }
-//    printChessboard();
-// 	 osDelay(100);
-//    printf(" [Test] Jaque y victoria\n");
+   // tbMap[3] = REY | BLACK;
+   // tbMap[33] = CABALLO1 | WHITE;
+   // tbMap[21] = PEON1 | WHITE;
+   // //tbPaq.map = tbMap;
+	// memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
+   // tbPaq.turno_color = 1;
+   // osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+   // for(int i = 0; i < 32; i++){
+   //    osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+   //    osDelay(100); // 10ms delay between sending each piece
+   // }
+   // printChessboard();
+	//  osDelay(100);
+   // printf(" [Test] Jaque y victoria\n");
 
-//    tbCasilla.casilla = 33; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 33; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 18; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 3; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 18; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 3; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-//    tbCasilla.casilla = 4; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 4; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 21; // b1位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 21; // b1位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 10; // a2位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
-//    // 模拟用户操作：选择黑方前进
-//    tbCasilla.casilla = 4; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 10; // a2位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
+   // // 模拟用户操作：选择黑方前进
+   // tbCasilla.casilla = 4; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-//    tbCasilla.casilla = 3; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 3; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
 
-//    tbCasilla.casilla = 18; // b8位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 18; // b8位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-//    tbCasilla.casilla = 3; // a6位置
-//    osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
-//    osDelay(500);
-//    printChessboard();
-//    osDelay(100);
+   // tbCasilla.casilla = 3; // a6位置
+   // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
+   // osDelay(500);
+   // printChessboard();
+   // osDelay(100);
    
-// 	 osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-//    printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
-//    printf("[Test] End\n");
+	//  osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   // printf("[Test] End\n");
    
 
 
@@ -1241,18 +1250,18 @@ void juegoInitialize(void)
   
 
 
-//    // 模拟兵升变
-//    // movedCasilla.casilla = 15; // h2位置
-//    // osMessageQueuePut(e_positionMessageId, &movedCasilla, 0, 0);
-//    // osDelay(100);
+   // 模拟兵升变
+   // movedCasilla.casilla = 15; // h2位置
+   // osMessageQueuePut(e_positionMessageId, &movedCasilla, 0, 0);
+   // osDelay(100);
    
-//    // movedCasilla.casilla = 55; // h7位置
-//    // osMessageQueuePut(e_positionMessageId, &movedCasilla, 0, 0);
-//    // osDelay(100);
+   // movedCasilla.casilla = 55; // h7位置
+   // osMessageQueuePut(e_positionMessageId, &movedCasilla, 0, 0);
+   // osDelay(100);
 
 
 
-// }
+}
 
 
 /**

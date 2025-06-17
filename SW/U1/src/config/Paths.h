@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 4
+#define WORKSPACE 2
 
 
 /* Headers */
@@ -46,6 +46,7 @@
 	#define PATH_TABLERO		 "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/juego/tablero.h"
 	#define PATH_JUEGO   "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/juego/juego.h"
 	#define PATH_COMMON			 "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/common/CommonDefines.h"
+	#define PATH_TEST_MEMORIA	"D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/memoria/TestMemoria.h"
 
 #elif WORKSPACE == 3		// Raul
 	#define PATH_MAIN        "C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/main.h"
