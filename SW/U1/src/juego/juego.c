@@ -242,6 +242,7 @@ static void stateMachine(void* argument)
             // movInfo.srcY = movedId/8;
             // movInfo.srcX = movedId%8;
             // movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
+           printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
             if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
                predictPosition(&tablero, estado_juego.casilla_origen, predict);
             
@@ -289,6 +290,9 @@ static void stateMachine(void* argument)
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
             if(estado_juego.casilla_origen == estado_juego.casilla_destino){
+               modo = LevantaPieza;
+               ledMsg.nuevaJugada = true;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                break;
             }else if(esMovimientoValido(&tablero, &estado_juego)){
                if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
@@ -316,7 +320,7 @@ static void stateMachine(void* argument)
                  printf(" [Test] Jaque al negro\n");
                   estado_juego.negro_jaque = 0;
                }
-               
+               modo = Idle;
 
             }else{
                //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
@@ -326,7 +330,7 @@ static void stateMachine(void* argument)
                ledMsg.posicion = movedCasilla.casilla;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
-            modo = Idle;
+            
             // movInfo.dstY = movedId/8;
             // movInfo.dstX = movedId%8;
             // movInfo.destino = &(tablero->casillas[movInfo.dstY*8+movInfo.dstX]);
@@ -804,14 +808,14 @@ static void juegoTestBench(void* argument){
    //osMessageQueueId_t e_comPlacasRxThreadId;
 
    uint8_t tbPos[32];
-   PAQ_status tbPaq;
+   PartidaOutMsg_t tbPaq;
    uint8_t tbMap[64];
    ECasilla tbCasilla;
    //e_positionMessageId = osMessageQueueNew(10, sizeof(ECasilla), NULL);
    //e_juegoTxMessageId = osMessageQueueNew(10, sizeof(uint64_t), NULL);
    //e_juegoRxMessageId = osMessageQueueNew(10, sizeof(uint8_t), NULL);
-   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(PAQ_status), NULL);
-   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PAQ_status), NULL);
+   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(PartidaOutMsg_t), NULL);
+   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PartidaOutMsg_t), NULL);
    //tbPaq = malloc(sizeof(PAQ_status));
 
    //osThreadFlagsSet(e_juegoThreadId, FLAG_START);
@@ -1100,11 +1104,22 @@ static void juegoTestBench(void* argument){
 
    memset(tbMap, 0, 64*sizeof(uint8_t));
 
-   tbMap[11] = PEON1 | WHITE;
+   tbMap[11] = DAMA | WHITE;
 
    //tbPaq.map = tbMap;
-	memcpy(tbPaq.map, tbMap, 64 * sizeof(uint8_t));
-   tbPaq.turno_color = 1;
+	memcpy(tbPaq.dato, tbMap, 64 * sizeof(uint8_t));
+   tbPaq.turno = 1;
+   //tbPaq.turno = estado_juego.juegan_blancas;
+   tbPaq.tiempoBlancas[0] = (600/60)/10 + '0';
+   tbPaq.tiempoBlancas[1] = (600/60)%10 + '0';
+   tbPaq.tiempoBlancas[2] = (600%60)/10 + '0';
+   tbPaq.tiempoBlancas[3] = (600%60)%10 + '0';
+   tbPaq.tiempoNegras[0] = (600/60)/10 + '0';
+   tbPaq.tiempoNegras[1] = (600/60)%10 + '0';
+   tbPaq.tiempoNegras[2] = (600%60)/10 + '0';
+   tbPaq.tiempoNegras[3] = (600%60)%10 + '0';
+  // status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
+
    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
    for(int i = 0; i < 32; i++){
       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);

@@ -271,13 +271,15 @@ void detectarCambiosHall(uint8_t numero_expansor, uint8_t* buffer_actual, uint8_
 		if(cambios != 0){
 	uint8_t casilla = mapPinToHallIndex(numero_expansor, cambios);
 
-  LedStripMsg_t mensajeLed;
-  mensajeLed.posicion = casilla;
-  mensajeLed.tipoJugada = ESPECIAL;
+//  LedStripMsg_t mensajeLed;
+//  mensajeLed.posicion = casilla;
+//  mensajeLed.tipoJugada = ESPECIAL;
 	
 	printf("Movimiento en la casilla %d \n", casilla);
 	
-	osStatus_t status = osMessageQueuePut(e_ledStripMessageId, &mensajeLed, 0, 0);
+	//osStatus_t status = osMessageQueuePut(e_ledStripMessageId, &mensajeLed, 0, 0);
+	osStatus_t status = osMessageQueuePut(e_positionMessageId, &casilla, 0, 0);
+
 //	
 //	if (status != osOK) {
 //			printf("Error enviando casilla %d a la cola\n", casilla_Accionada.casilla);

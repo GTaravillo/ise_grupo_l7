@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 2
+#define WORKSPACE 4
 
 
 /* Headers */

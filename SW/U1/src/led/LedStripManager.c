@@ -91,7 +91,7 @@ void LedStripManagerInitialize(void)
 static void Run(void *argument)
 {
   InitializeSpiDriver();
-  TestLeds();
+  //TestLeds();
 
   osStatus_t    status;
   LedStripMsg_t mensajeRx;
