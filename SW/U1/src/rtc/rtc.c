@@ -38,8 +38,8 @@ static  RTC_HandleTypeDef g_rtcHandle;   // RTC handler declaration
 static	RTC_TimeTypeDef   g_timeConfig;
 static  RTC_DateTypeDef   g_dateConfig;
 static  RTC_AlarmTypeDef  g_alarmConfig;
-static  char              g_time[9];   // Time buffer (HH:MM:SS)
-static  char              g_date[11];   // Date buffer (DD/MM/AAAA)
+static  char              g_time[9];     // Time buffer (HH:MM:SS)
+static  char              g_date[11];    // Date buffer (DD/MM/AAAA)
 static  bool              g_waitForSntp;
 static  bool              g_dstOn = true;
 static  int               g_utcOffset = +1;
@@ -86,7 +86,7 @@ void RTC_Initialize(void)
 void SetRtcTime(const int hh, const int mm, const int ss, EFormatoHora formato_24_12h)
 {
   // osSemaphoreAcquire(e_writeSemaphoreId, 0);
-  printf("[rtc::%s] Want to set time to [%02d:%02d:%02d] DST [%s] UTC+%d\n", __func__, hh, mm, ss, g_dstOn ? "ON" : "OFF", g_utcOffset);
+  ////printf("[rtc::%s] Want to set time to [%02d:%02d:%02d] DST [%s] UTC+%d\n", __func__, hh, mm, ss, g_dstOn ? "ON" : "OFF", g_utcOffset);
 
   g_timeConfig.Hours          = (uint8_t)hh;
   g_timeConfig.Minutes        = (uint8_t)mm;
@@ -99,12 +99,12 @@ void SetRtcTime(const int hh, const int mm, const int ss, EFormatoHora formato_2
 
   if (HAL_RTC_SetTime(&g_rtcHandle, &g_timeConfig, RTC_FORMAT_BIN) != HAL_OK)
   {
-    printf("[rtc::%s] HAL_RTC_SetTime ERROR!\n", __func__);
+    ////printf("[rtc::%s] HAL_RTC_SetTime ERROR!\n", __func__);
     
     Error_Handler();
   }
 
-  printf("[rtc::%s] Time set to [%02d:%02d:%02d]\n", __func__, hh, mm, ss);
+  //printf("[rtc::%s] Time set to [%02d:%02d:%02d]\n", __func__, hh, mm, ss);
   
 
   // osSemaphoreRelease(e_writeSemaphoreId);
@@ -125,12 +125,12 @@ void SetSntpTime(const int hh, const int mm, const int ss, EFormatoHora formato_
 
   if (HAL_RTC_SetTime(&g_rtcHandle, &g_timeConfig, RTC_FORMAT_BIN) != HAL_OK)
   {
-    printf("[rtc::%s] HAL_RTC_SetTime ERROR!\n", __func__);
+    //printf("[rtc::%s] HAL_RTC_SetTime ERROR!\n", __func__);
     
     Error_Handler();
   }
 
-  printf("[rtc::%s] Time set to [%02d:%02d:%02d]\n", __func__, hh, mm, ss);
+  //printf("[rtc::%s] Time set to [%02d:%02d:%02d]\n", __func__, hh, mm, ss);
   
 
   // osSemaphoreRelease(e_writeSemaphoreId);
@@ -146,12 +146,12 @@ void SetRtcDate(const int8_t dd, const EMes mes, const int8_t yy, EDiaSemana dia
 
   if(HAL_RTC_SetDate(&g_rtcHandle, &g_dateConfig, RTC_FORMAT_BIN) != HAL_OK)
   {
-    printf("[rtc::%s] HAL_RTC_SetDate ERROR!\n", __func__);
+    //printf("[rtc::%s] HAL_RTC_SetDate ERROR!\n", __func__);
     
     Error_Handler();
   }
 
-  printf("[rtc::%s] Date set to [%02d/%02d/%02d]\n", __func__, dd, mes, yy);
+  //printf("[rtc::%s] Date set to [%02d/%02d/%02d]\n", __func__, dd, mes, yy);
   
 	
   //osSemaphoreRelease(e_writeSemaphoreId);
@@ -162,14 +162,14 @@ void RemoveTimer(uint32_t alarm)
   RTC_AlarmTypeDef alarmConfig;
   if ((alarm != RTC_ALARM_A) && (alarm != RTC_ALARM_B))
   {
-    printf("[rtc::%s] Specified alarm [%d] isn't RTC_ALARM_A nor RTC_ALARM_B\n", __func__, alarm);
+    //printf("[rtc::%s] Specified alarm [%d] isn't RTC_ALARM_A nor RTC_ALARM_B\n", __func__, alarm);
     return;
   }
 	
 	__HAL_RTC_ALARM_CLEAR_FLAG(&g_rtcHandle, (alarm == RTC_ALARM_A) ? RTC_FLAG_ALRAF : RTC_FLAG_ALRBF);
 	HAL_RTC_DeactivateAlarm(&g_rtcHandle, alarm);
 	
-  printf("[rtc::%s] Alarm [%c] removed\n", __func__, (alarm == RTC_ALARM_A) ? 'A' : 'B');
+  //printf("[rtc::%s] Alarm [%c] removed\n", __func__, (alarm == RTC_ALARM_A) ? 'A' : 'B');
 }
 
 void SetTimerOnce(const int segundos) 
@@ -184,20 +184,20 @@ void SetTimerOnce(const int segundos)
 
   if (alarmAisActive && alarmBisActive) 
   {
-    printf("[rtc::%s] No alarms left\n", __func__);
+    //printf("[rtc::%s] No alarms left\n", __func__);
     
     return;
   }
 	
   if (!alarmAisActive)
   {
-    printf("[rtc::%s] Setting alarm A...\n", __func__);
+    //printf("[rtc::%s] Setting alarm A...\n", __func__);
     
     g_alarmConfig.Alarm = RTC_ALARM_A;
   }
   else
   {
-    printf("[rtc::%s] Setting alarm B...\n", __func__);
+    //printf("[rtc::%s] Setting alarm B...\n", __func__);
     
     g_alarmConfig.Alarm = RTC_ALARM_B;
   }
@@ -205,13 +205,13 @@ void SetTimerOnce(const int segundos)
   // Turns specified seconds into appropiate time for alarm
   GetAlarmTime(&hh, &mm, &ss, segundos);
 
-	printf("[%02d:%02d:%02d]\n", hh, mm, ss);
+	//printf("[%02d:%02d:%02d]\n", hh, mm, ss);
 	
 	hh = RTC_ByteToBcd2(hh);
 	mm = RTC_ByteToBcd2(mm);
 	ss = RTC_ByteToBcd2(ss);
 
-  printf("[%02X:%02X:%02X]\n", hh, mm, ss);
+  //printf("[%02X:%02X:%02X]\n", hh, mm, ss);
 	
   g_alarmConfig.AlarmTime.Hours    = hh;
   g_alarmConfig.AlarmTime.Minutes  = mm;
@@ -219,22 +219,22 @@ void SetTimerOnce(const int segundos)
   g_alarmConfig.AlarmMask          = RTC_ALARMMASK_DATEWEEKDAY;
   g_alarmConfig.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
 	
-  // sprintf((char *)timeBuffer, "%02d:%02d:%02d", alarmConfig.AlarmTime.Hours, 
+  // s//printf((char *)timeBuffer, "%02d:%02d:%02d", alarmConfig.AlarmTime.Hours, 
   //                                               alarmConfig.AlarmTime.Minutes, 
   //                                               alarmConfig.AlarmTime.Seconds);
 
-  // printf("[rtc::%s] Alarm [%c] set to [%s]\n", __func__, (alarmConfig.Alarm == RTC_ALARM_A) ? 'A' : 'B', timeBuffer);
+  // //printf("[rtc::%s] Alarm [%c] set to [%s]\n", __func__, (alarmConfig.Alarm == RTC_ALARM_A) ? 'A' : 'B', timeBuffer);
   
-	printf("[%02X:%02X:%02X]\n", g_alarmConfig.AlarmTime.Hours, g_alarmConfig.AlarmTime.Minutes, g_alarmConfig.AlarmTime.Seconds);
+	//printf("[%02X:%02X:%02X]\n", g_alarmConfig.AlarmTime.Hours, g_alarmConfig.AlarmTime.Minutes, g_alarmConfig.AlarmTime.Seconds);
 
 
   HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
   // Set Alarm
   status = HAL_RTC_SetAlarm_IT(&g_rtcHandle, &g_alarmConfig, RTC_FORMAT_BCD);
-	printf("[rtc::%s] HAL_RTC_SetAlarm_IT [%d]\n", __func__, status);
+	//printf("[rtc::%s] HAL_RTC_SetAlarm_IT [%d]\n", __func__, status);
   if (status != HAL_OK)
   {
-    printf("[rtc::%s] HAL_RTC_SetAlarm_IT ERROR!\n", __func__);
+    //printf("[rtc::%s] HAL_RTC_SetAlarm_IT ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -256,7 +256,7 @@ static void Run(void *argument)
 	
 	while (g_waitForSntp)
 	{
-		printf("[rtc::%s] Waiting for SNTP server to respond...\n", __func__);
+		//printf("[rtc::%s] Waiting for SNTP server to respond...\n", __func__);
 		osDelay(100);
 	}
 	
@@ -270,7 +270,7 @@ static void Run(void *argument)
 	while(1)
 	{
 		flag = osThreadFlagsWait(ANY, osFlagsWaitAny | osFlagsNoClear, osWaitForever);
-    printf("[rtc::%s] received [%d]\n", __func__, flag);
+    //printf("[rtc::%s] received [%d]\n", __func__, flag);
 		ERtcPrivateFlag event = (ERtcPrivateFlag)flag;
 		EventCB(event);
 	}
@@ -293,7 +293,7 @@ static void RTC_Config(void)
 
   if (halStatus != HAL_OK)
   {
-    printf("[rtc::%s] HAL_RTC_Init ERROR!\n", __func__);
+    //printf("[rtc::%s] HAL_RTC_Init ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -353,7 +353,7 @@ static void UpdateTime(void)
   g_timeConfig.Seconds = rtcTime.Seconds;
 
   sprintf((char *)g_time, "%02d:%02d:%02d", g_timeConfig.Hours, g_timeConfig.Minutes, g_timeConfig.Seconds);
-  printf("[rtc::%s] Time for LCD set to [%s]\n", __func__, g_time);
+  //printf("[rtc::%s] Time for LCD set to [%s]\n", __func__, g_time);
   
 }
 
@@ -414,19 +414,19 @@ static bool RequestSntpTime(const char* serverIp)
 	bool correct = false;
 	
 	correct = netIP_aton(serverIp, NET_ADDR_IP4, &ip[0]);
-	printf("[rtc::%s] IP [%s]\n", __func__, serverIp);
+	//printf("[rtc::%s] IP [%s]\n", __func__, serverIp);
 	
 	if (!correct)
 	{
-		printf("[rtc::%s] netIP_aton ERROR!\n", __func__);
+		//printf("[rtc::%s] netIP_aton ERROR!\n", __func__);
 		return correct;
 	}
 	
 	for (int i = 0; i < NET_ADDR_IP4_LEN; i++)
 	{
-		printf("ip[%d] = %d ", i, ip[i]);
+		//printf("ip[%d] = %d ", i, ip[i]);
 	}
-	printf("\n");
+	//printf("\n");
 	
   NET_ADDR ntpServer = { 
     .addr = { ip[0], ip[1], ip[2], ip[3] },
@@ -435,7 +435,7 @@ static bool RequestSntpTime(const char* serverIp)
 	
 	while (!netHTTPs_Running())
 	{
-		printf("[rtc::%s] Waiting for HTTP server to start...\n", __func__);
+		//printf("[rtc::%s] Waiting for HTTP server to start...\n", __func__);
 		osDelay(10);
 	}
 	
@@ -455,11 +455,11 @@ static bool RequestSntpTime(const char* serverIp)
 void SntpCB(uint32_t seconds, uint32_t fractionSeconds)
 {
   struct tm localTime = *localtime((time_t*)&seconds);
-  printf("[rtc::%s] seconds [%d]\n", __func__, seconds);
+  //printf("[rtc::%s] seconds [%d]\n", __func__, seconds);
 	
 	if (seconds == 0)
 	{
-		printf("[rtc::%s] No connection with SNTP server!\n", __func__);
+		//printf("[rtc::%s] No connection with SNTP server!\n", __func__);
 		g_waitForSntp = false;
 		return;
 	}
@@ -473,7 +473,7 @@ void SntpCB(uint32_t seconds, uint32_t fractionSeconds)
 	int min  = localTime.tm_min;
 	int sec  = localTime.tm_sec;
 	
-	printf("[rtc::%s] day[%d] month[%d] year[%d] wday[%d] hh[%d] mm[%d] ss[%d]\n", __func__, day, month, year, weekDay, hour, min, sec);
+	//printf("[rtc::%s] day[%d] month[%d] year[%d] wday[%d] hh[%d] mm[%d] ss[%d]\n", __func__, day, month, year, weekDay, hour, min, sec);
 	
 	weekDay = (weekDay == 0) ? DOMINGO : weekDay;
 	
@@ -490,7 +490,7 @@ void SntpCB(uint32_t seconds, uint32_t fractionSeconds)
 
 static void EventCB(ERtcPrivateFlag event)
 {
-  printf("[rtc::%s] event [%d]\n", __func__, event);
+  //printf("[rtc::%s] event [%d]\n", __func__, event);
 
   bool wakeUpEv = event & WAKE_UP_1s;
   bool alarmAEv = event & WAKE_UP_ALARM_A;

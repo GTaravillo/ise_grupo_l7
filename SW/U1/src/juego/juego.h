@@ -7,7 +7,7 @@
   
   	#define FLAG_START		0x01U
   	#define FLAG_RETOCAR	0x02U
- 	#define FLAG_PAUSA		0X04U
+ 	#define FLAG_PAUSE		0X04U
 	#define FLAG_STOP		0X08U
 	#define FLAG_RESUME		0X10U
 
@@ -20,8 +20,8 @@
 	// #define DAMA	0x05
 	// #define REY		0x06
 
-	#define BLANCO	0X80
-	#define NEGRO	0X00
+	#define WHITE	0X80
+	#define BLACK	0X00
 
 	#define FLAG_ERROR_MOV 0X02
 
@@ -34,12 +34,15 @@
 		uint8_t turno_color : 1;
 		uint8_t map[64];
 	} PAQ_status;
+
+	//Manejo deln tiempo
+	
 	// Tipo para representar el estado
 	typedef struct
 	{
 		//  uint16_t       turno;                     // Cu�ntos turnos se han jugado ya
-		//  uint16_t       segundos_blancas;
-		//  uint16_t       segundos_negras;
+		 uint16_t       segundos_blancas;
+		 uint16_t       segundos_negras;
 		 uint8_t        juegan_blancas      : 1; 
 		 uint8_t        negro_jaque         : 1; 
 		 uint8_t        blanco_jaque        : 1; 
@@ -65,6 +68,9 @@
 	void actualizaJuego (AJD_TableroPtr tablero);
 //	void menu();
 //	void liberaRecursos();
+	
+	extern void juegoInitialize(void);
+	extern void juegoTbInitialize(void);
 
 #endif // JUEGO_H
 

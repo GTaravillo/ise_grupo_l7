@@ -8,7 +8,7 @@ void predCaballo(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tabl
 void predDiagonal(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero);
 void predVertHorz(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero);
 void predRey(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero);
-void vectorProcess(uint8_t pos[2], uint8_t vector[2], uint8_t pred[4]);
+void vectorProcess(uint8_t pos[2], uint8_t vector[2], uint8_t pred[4], uint8_t block[4]);
 void predProcess(uint8_t pred[4], uint8_t predict[64]);
 
 void predictPosition(AJD_TableroPtr tablero, AJD_CasillaPtr origen, uint8_t predict[64]){
@@ -44,33 +44,56 @@ void predictPosition(AJD_TableroPtr tablero, AJD_CasillaPtr origen, uint8_t pred
 void predPeon(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero){
 	AJD_idCasilla id = origin->id;
 	uint8_t i = 0;
-	if((origin->color == NEGRO && id < 8 && id > 0) || (origin->color == BLANCO && id < 6*8+8 && id > 6*8)){
-		for(i = 0; i<2; i++){
-			if(tablero->casilla[id+8*i].pieza == NONE){
+	if(origin->color_pieza == NEGRO){
+		if(id < 16 && id >= 8){ //|| (origin->color_pieza == BLANCO && id < 6*8+8 && id >= 6*8)){
+			for(i = 0; i<2; i++){
+				if(tablero->casilla[id+8*(i+1)].pieza == NONE){
+					predict[id+8*(i+1)] = 1;
+				}else{
+					break;
+				}
+			}
+		}else{
+			if(tablero->casilla[id+8].pieza == NONE){
 				predict[id+8] = 1;
-			}else{
-				break;
 			}
 		}
-	}else{
-		if(tablero->casilla[id+8*i].pieza != NONE){
-			predict[id+8] = 1;
+		predict[id+7] = tablero->casilla[id+7].pieza != NONE ? 1 : 0;
+		predict[id+9] = tablero->casilla[id+9].pieza != NONE ? 1 : 0;
+
+	}else if(origin->color_pieza == BLANCO){
+		if(id < 6*8+8 && id >= 6*8){
+			for(i = 0; i<2; i++){
+				if(tablero->casilla[id-8*(i+1)].pieza == NONE){
+					predict[id-8*(i+1)] = 1;
+				}else{
+					break;
+				}
+			}
+		}else{
+			if(tablero->casilla[id-8].pieza == NONE){
+				predict[id-8] = 1;
+			}
 		}
+		predict[id-7] = tablero->casilla[id-7].pieza != NONE ? 1 : 0;
+		predict[id-9] = tablero->casilla[id-9].pieza != NONE ? 1 : 0;
 	}
 }
 
 void predCaballo(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero){
 	uint8_t vector[2] = {1, 2};
 	uint8_t pred[4];
+	uint8_t block[4] = {0, 0, 0, 0};
 	//uint8_t result[8];
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
 	//uint8_t i;
-	vectorProcess(pos, vector, pred);
+	vectorProcess(pos, vector, pred, block);
 	predProcess(pred, predict);
 	vector[0] = 2;
 	vector[1] = 1;
-	vectorProcess(pos, vector, pred);
+	memset(block, 0, 4*sizeof(uint8_t));
+	vectorProcess(pos, vector, pred, block);
 	predProcess(pred, predict);
 	
 }
@@ -78,12 +101,18 @@ void predCaballo(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tabl
 void predDiagonal(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero){
 	uint8_t vector[2] = {1, 1};
 	uint8_t pred[4];
+	uint8_t block[4] = {0, 0, 0, 0};
 	//uint8_t result[8];
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
-	while(pos[0] + vector[0] < 8 || pos[1] + vector[1] < 8 || pos[0] - vector[0] < 8 || pos[1] - vector[1] < 8){
-		vectorProcess(pos, vector, pred);
+	while(pos[0] + vector[0] < 8 || pos[1] + vector[1] < 8 || pos[0] - vector[0] >= 0 || pos[1] - vector[1] >= 0){
+		vectorProcess(pos, vector, pred, block);
 		predProcess(pred, predict);
+		for(int i = 0; i < 4; i++){
+			if(pred[i] != 255){
+				block[i] = tablero->casilla[pred[i]].pieza != NONE ? 1 : block[i];
+			}
+		}
 		vector[0]++;
 		vector[1]++;
 	}
@@ -92,39 +121,54 @@ void predDiagonal(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tab
 void predVertHorz(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero){
 	uint8_t vector[2] = {1, 0};
 	uint8_t pred[4];
+	uint8_t block[4] = {0, 0, 0, 0};
 	uint8_t i;
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
-	while(pos[0] + vector[0] < 8 || pos[0] - vector[0] < 8){
-		vectorProcess(pos, vector, pred);
+	while(((pos[0] + vector[0]) < 8) || ((pos[0] - vector[0]) >= 0)){
+		vectorProcess(pos, vector, pred, block);
 		predProcess(pred, predict);
+		for(i = 0; i < 4; i++){
+			if(pred[i] != 255){
+				block[i] = tablero->casilla[pred[i]].pieza != NONE ? 1 : block[i];
+			}
+		}
 		vector[0]++;
 	}
 	vector[0] = 0;
 	vector[1] = 1;
-	while(pos[1] + vector[1] < 8 || pos[1] - vector[1] < 8){
-		vectorProcess(pos, vector, pred);
+	memset(block, 0, 4*sizeof(uint8_t));
+	while(((pos[1] + vector[1]) < 8) || ((pos[1] - vector[1]) >= 0)){
+		vectorProcess(pos, vector, pred, block);
 		predProcess(pred, predict);
+		for(i = 0; i < 4; i++){
+			if(pred[i] != 255){
+				block[i] = tablero->casilla[pred[i]].pieza != NONE ? 1 : block[i];
+			}
+		}
 		vector[1]++;
 	}
 }
 void predRey(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero){
 	uint8_t vector[2] = {1, 0};
 	uint8_t pred[4];
+	uint8_t block[4] = {0, 0, 0, 0};
 	uint8_t i;
 	AJD_idCasilla id = origin->id;
 	uint8_t pos[2] = {origin->id % 8, origin->id / 8};
-	vectorProcess(pos, vector, pred);
+	vectorProcess(pos, vector, pred, block);
 	predProcess(pred, predict);
 	vector[1]++;
-	vectorProcess(pos, vector, pred);
+	memset(block, 0, 4*sizeof(uint8_t));
+	vectorProcess(pos, vector, pred, block);
 	predProcess(pred, predict);
 	vector[0]--;
-	vectorProcess(pos, vector, pred);
+	memset(block, 0, 4*sizeof(uint8_t));
+	vectorProcess(pos, vector, pred, block);
 	predProcess(pred, predict);
 	
 }
-void vectorProcess(uint8_t pos[2], uint8_t vector[2], uint8_t pred[4]){
+void vectorProcess(uint8_t pos[2], uint8_t vector[2], uint8_t pred[4], uint8_t block[4]){
 	uint8_t i;
 	int8_t resposx;
 	int8_t resposy;
@@ -132,7 +176,7 @@ void vectorProcess(uint8_t pos[2], uint8_t vector[2], uint8_t pred[4]){
 	for(i = 0; i < 4; i++){
 		resposx = (int8_t)pos[0]+vector[0]*cz[i*2];
 		resposy = (int8_t)pos[1]+vector[1]*cz[i*2+1];
-		if(resposx<8 && resposy<8 && resposx>0 && resposy>0){
+		if(resposx<8 && resposy<8 && resposx>=0 && resposy>=0 && block[i] == 0){
 			pred[i] = (uint8_t)(resposy*8 + resposx);
 		}else{
 			pred[i] = 255;

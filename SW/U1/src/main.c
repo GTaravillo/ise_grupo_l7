@@ -13,6 +13,8 @@
 #include PATH_MEMORIA
 #include PATH_COM_PLACAS
 #include PATH_PRINCIPAL
+#include PATH_TEST_MEMORIA
+#include PATH_JUEGO
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -83,7 +85,7 @@ static void Error_Handler(void);
   * @retval None
   */
 int main(void)
-{
+	{
   /* STM32F4xx HAL library initialization:
        - Configure the Flash prefetch, Flash preread and Buffer caches
        - Systick timer is configured by default as source of time base, but user 
@@ -110,18 +112,22 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-  //Server_Initialize();
-	//RTC_Initialize();
+  Server_Initialize();
+	RTC_Initialize();
   
+	//juegoInitialize();
+	//osDelay(1000);
+	//juegoTbInitialize();s
 	//LED_Initialize();
 	//LCD_Initialize();
-	//MemoriaInitialize();
+	MemoriaInitialize();
   //LedStripManagerInitialize();
-	PositionManagerInitialize();
+	// PositionManagerInitialize();
 	//ComunicacionPlacasInitialize();
   //PrincipalInitialize();
   
-
+  // Tests
+  // TestMemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();
