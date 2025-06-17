@@ -78,7 +78,7 @@ static void RunTx(void *argument)
       mensajeTx.remitente = i;
 
       printf("[com::%s] Mensaje a enviar: remitente [%d]\n", __func__, mensajeTx.remitente);
-      for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
+      for (int i = 0; i < (TAM_MENSAJE_MAX); i++)
       {
         printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
       }
@@ -86,6 +86,7 @@ static void RunTx(void *argument)
       flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
       osDelay(100);
     }
+    osDelay(10000);
   }
 }
 
@@ -151,7 +152,7 @@ static void RunRx(void *argument)
 
     }
     printf("[com::%s] Mensaje recibido: remitente [%d]\n", __func__, mensajeRx.remitente);
-	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
+	  for (int i = 0; i < (TAM_MENSAJE_MAX); i++)
     {
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
     }
