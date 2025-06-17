@@ -10,6 +10,7 @@
 /* Interfaces */
 #include "../config/Paths.h"
 #include PATH_LED
+#include PATH_LED_STRIP
 
 #define POWER_ON_RESET  150     // Tiempo (ms) que debe mantenerse en reset al inicializar
 #define SLAVE_1_ADDR    0x20    // 0x20 en 7 bits es 0x40 en 8 bits - A0, A1 Y A2 SIN SOLDAR
@@ -150,6 +151,8 @@ static void Run(void *argument)
 			case HALL_DETECTED_4:
 				leerExpansor(SLAVE_4_ADDR, buff_exp4);
         detectarCambiosHall(3, buff_exp4, last_buff_exp4);
+        //osDelay(300);
+        //osThreadFlagsClear(HALL_DETECTED_4);
 				break;
 			
 			default:
@@ -265,21 +268,23 @@ void detectarCambiosHall(uint8_t numero_expansor, uint8_t* buffer_actual, uint8_
 	//buffer_anterior -> buffer con la situcación pasada de las casillas
 
 	uint16_t cambios = ((buffer_actual[0] << 8)|buffer_actual[1]) ^ ((buffer_anterior[0] << 8)|buffer_anterior[1]); // XOR: bits que cambiaron
-		
+		if(cambios != 0){
 	uint8_t casilla = mapPinToHallIndex(numero_expansor, cambios);
 
-	ECasilla casilla_Accionada;
-	casilla_Accionada.casilla = casilla;
+  LedStripMsg_t mensajeLed;
+  mensajeLed.posicion = casilla;
+  mensajeLed.tipoJugada = ESPECIAL;
 	
-	printf("Movimiento en la casilla %d \n", casilla_Accionada.casilla);
+	printf("Movimiento en la casilla %d \n", casilla);
 	
-	osStatus_t status = osMessageQueuePut(e_positionMessageId, &casilla_Accionada, 0, 0);
-	
-	if (status != osOK) {
-			printf("Error enviando casilla %d a la cola\n", casilla_Accionada.casilla);
-	}
+	osStatus_t status = osMessageQueuePut(e_ledStripMessageId, &mensajeLed, 0, 0);
+//	
+//	if (status != osOK) {
+//			printf("Error enviando casilla %d a la cola\n", casilla_Accionada.casilla);
+//	}
 
 	// Actualiza estado anterior
 	buffer_anterior[0] = buffer_actual[0];
 	buffer_anterior[1] = buffer_actual[1];
+}
 }
