@@ -1,4 +1,7 @@
 #include "stm32f4xx_hal.h"
+#include "cmsis_os2.h"     
+#include "adc.h"
+#include "stdio.h"
 #define RESOLUTION_12B 4096U
 #define VREF 3.3f
 
@@ -7,6 +10,14 @@
   * @param None
   * @retval None
   */
+  
+ osThreadId_t tid_ThADC;
+ 
+ void ThADC (void *argument);
+  
+  osMessageQueueId_t   queueADC;
+   
+  
 void ADC1_pins_F429ZI_config(){
 	  GPIO_InitTypeDef GPIO_InitStruct = {0};
 	__HAL_RCC_ADC1_CLK_ENABLE();
@@ -24,6 +35,24 @@ void ADC1_pins_F429ZI_config(){
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
   }
+
+int Init_ADC (void) {
+ 
+   //Inicialización potenciometros
+   
+	ADC1_pins_F429ZI_config();
+   
+   //Crear Queue
+   
+   queueADC = osMessageQueueNew(QUEUE_ADC_SIZE, sizeof(MSG_POT), NULL);
+   
+  tid_ThADC = osThreadNew(ThADC, NULL, NULL);
+  if (tid_ThADC == NULL) {
+    return(-1);
+  }
+ 
+  return(0);
+}
 /**
   * @brief Initialize the ADC to work with single conversions. 12 bits resolution, software start, 1 conversion
   * @param ADC handle
@@ -92,19 +121,37 @@ while(status != HAL_OK);
   return raw;
 
 }
-	
-/* Example of using this code from a Thread 
-void Thread (void *argument) {
+	// Example of using this code from a Thread 
+void ThADC (void *argument) {
   ADC_HandleTypeDef adchandle; //handler definition
-	ADC1_pins_F429ZI_config(); //specific PINS configuration
-	float value;
+	//ADC1_pins_F429ZI_config(); //specific PINS configuration
+	float value_consumo;
+	float value_ruido;
+	MSG_POT adc_queue_msg;
+	
+	
+	
 	ADC_Init_Single_Conversion(&adchandle , ADC1); //ADC1 configuration
   while (1) {
+    //osThreadFlagsWait(0x01,osFlagsWaitAny,osWaitForever);
+		
+	  value_ruido=ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
+		value_consumo=ADC_getVoltage(&adchandle , 13 );
+		
+		value_ruido = (((3.3*value_ruido)/4096)-2) ;
+		value_consumo = ((3.3*value_consumo)/4096)/10;
     
-	  value=ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
-		value=ADC_getVoltage(&adchandle , 13 );
-		osDelay(1000);
-   
+		adc_queue_msg.ruido = (uint32_t)(value_ruido);
+		adc_queue_msg.consumo =(uint32_t)(value_consumo);
+    
+    printf("Valor de ruido medido: %f, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
+    
+    osDelay(1000);
+		
+		//osMessageQueuePut(queueADC,&adc_queue_msg,NULL,100);
+		
+	  osThreadYield();      
+	
   }
 }
-*/
+

@@ -35,6 +35,9 @@
 #ifndef __ADC_H
 #define __ADC_H
 
+#include "cmsis_os2.h"
+#define QUEUE_ADC_SIZE 3
+
 #include <stdint.h>
 
 /**
@@ -84,5 +87,17 @@ extern int32_t  ADC_StartConversion (void);
 extern int32_t  ADC_ConversionDone  (void);
 extern int32_t  ADC_GetValue        (void);
 extern uint32_t ADC_GetResolution   (void);
+
+
+int Init_ADC (void);
+
+extern osThreadId_t tid_ThADC;
+
+typedef struct {
+  uint32_t consumo;
+  uint32_t ruido;
+}MSG_POT;
+
+extern osMessageQueueId_t queueADC;
 
 #endif /* __ADC_H */
