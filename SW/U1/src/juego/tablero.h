@@ -17,7 +17,7 @@
 	//typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	typedef enum{
 	NONE,
-	PEON1,
+	PEON1,	//10000001
 	PEON2,
 	PEON3,
 	PEON4,
@@ -25,10 +25,10 @@
 	PEON6,
 	PEON7,
 	PEON8,
-	CABALLO1,
-	CABALLO2,
 	TORRE1,
 	TORRE2,
+	CABALLO1,
+	CABALLO2,
 	ALFIL1,
 	ALFIL2,
 	DAMA,
@@ -70,7 +70,7 @@
 	typedef struct
 	{
 		 AJD_Color     color:1;      // Color de la casilla (BLANCO o NEGRO)
-		 AJD_Pieza     pieza:3;      // Tipo de pieza en la casilla
+		 AJD_Pieza     pieza:5;      // Tipo de pieza en la casilla
 		 AJD_Color     color_pieza:1;// Color de la pieza en esta casilla
 		 AJD_idCasilla id;       // Indice en el array de casillas (0..63)
 	} AJD_Casilla, *AJD_CasillaPtr;

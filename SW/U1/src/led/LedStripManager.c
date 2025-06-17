@@ -170,6 +170,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   {
     printf("[LedStrip::%s] RESET LEDS\n", __func__);
     memset(g_leds, 0, sizeof(g_leds));
+    return;
   }
 
   // Cojo datos mensaje

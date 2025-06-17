@@ -263,7 +263,7 @@ int esMovimientoValido (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     {
         if (casillaOcupada (movInfo.destino))
         {               
-            if (movInfo.origen->pieza < PEON1 && movInfo.origen->pieza > PEON7)
+            if (movInfo.origen->pieza < PEON1 ||     movInfo.origen->pieza > PEON7)
                 return  (movInfo.destino->color_pieza != movInfo.origen->color_pieza);
         }           
         else            
@@ -330,7 +330,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 
     // Si el movimiento es de alguna de las dos TORRES o el REY, invalidar la opci�n
     // de enroque correspondiente.
-    actualizaOpcionesDeEnroque (origen, estado_juego);
+    // actualizaOpcionesDeEnroque (origen, estado_juego);
 
     destino->pieza = origen->pieza;
     destino->color_pieza = origen->color_pieza;        
@@ -366,16 +366,16 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     AJD_Color juegan_blancas;    
 
     // Si no es un peon no hagas m�s nada
-    if (estado_juego->casilla_destino->pieza < PEON1 && estado_juego->casilla_destino->pieza > PEON8) return 0;
+    if (estado_juego->casilla_origen->pieza < PEON1 || estado_juego->casilla_origen->pieza > PEON8) return 0;
 
 
     idCasilla = estado_juego->casilla_destino->id;    
     juegan_blancas = estado_juego->juegan_blancas;
 
-    printf ("[%d] in [%d]..[%d]?     ", 
-              idCasilla, 
-              limites[!juegan_blancas][0],
-              limites[!juegan_blancas][1]);
+    // printf ("[%d] in [%d]..[%d]?     ", 
+    //           idCasilla, 
+    //           limites[!juegan_blancas][0],
+    //           limites[!juegan_blancas][1]);
 
     if (idCasilla >= limites[!juegan_blancas][0] 
         &&  idCasilla <= limites[!juegan_blancas][1])
