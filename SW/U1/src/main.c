@@ -114,9 +114,9 @@ int main(void)
   //Server_Initialize();
 	//RTC_Initialize();
   
-	juegoInitialize();
-	osDelay(1000);
-	juegoTbInitialize();
+	//juegoInitialize();
+	//osDelay(1000);
+	//juegoTbInitialize();s
 	//LED_Initialize();
 	//LCD_Initialize();
 	//MemoriaInitialize();
