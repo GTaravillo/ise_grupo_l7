@@ -10,7 +10,6 @@
 #include "../posicion/PositionManager.h"
 #include "../led/LedStripManager.h"
 #include "../lcd/lcd.h"
-#include "stdlib.h"
 
 
 #include <time.h>

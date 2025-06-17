@@ -13,11 +13,8 @@
 #include PATH_MEMORIA
 #include PATH_COM_PLACAS
 #include PATH_PRINCIPAL
-<<<<<<< HEAD
 #include PATH_TEST_MEMORIA
-=======
 #include PATH_JUEGO
->>>>>>> testJuego
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -115,8 +112,8 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-  //Server_Initialize();
-	//RTC_Initialize();
+  Server_Initialize();
+	RTC_Initialize();
   
 	//juegoInitialize();
 	//osDelay(1000);
@@ -130,7 +127,7 @@ int main(void)
   //PrincipalInitialize();
   
   // Tests
-  TestMemoriaInitialize();
+  // TestMemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();

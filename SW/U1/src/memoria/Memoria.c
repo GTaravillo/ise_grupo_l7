@@ -157,9 +157,7 @@ static void ProcesarPeticion(PartidaInMsg_t mensajeRx)
 
     case RETOMAR_ULTIMA_PARTIDA:
       ProcesarRetomarPartida();
-	  break;
-
-    case 
+	  break;    
 
     case LIMPIAR_MEMORIA:
       LimpiarMemoria();

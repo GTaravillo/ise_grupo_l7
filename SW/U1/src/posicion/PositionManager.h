@@ -10,11 +10,12 @@
 #define HALL_DETECTED_4 0x08  // Flag ligada al cuarto expansor (filas de casillas 7 y 8)
 
 extern osThreadId_t e_positionManagerThreadId;
+extern osMessageQueueId_t  e_positionMessageId;
 
 void PositionManagerInitialize(void);
 
 typedef struct {
-    uint8_t casilla;  // Número de la casilla de ajedrez, siguiendo el g_numeroHallMap del .c
+    uint8_t casilla;  // Nï¿½mero de la casilla de ajedrez, siguiendo el g_numeroHallMap del .c
 } ECasilla;
 
 #endif

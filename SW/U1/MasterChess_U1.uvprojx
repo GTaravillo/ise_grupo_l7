@@ -424,29 +424,19 @@
           <GroupName>Server</GroupName>
           <Files>
             <File>
-              <FileName>server.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\servidor\server.c</FilePath>
-            </File>
-            <File>
-              <FileName>server.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\servidor\server.h</FilePath>
-            </File>
-            <File>
-              <FileName>server_CGI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\servidor\server_CGI.c</FilePath>
-            </File>
-            <File>
-              <FileName>server_CGI.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\servidor\server_CGI.h</FilePath>
-            </File>
-            <File>
               <FileName>Web.c</FileName>
               <FileType>1</FileType>
               <FilePath>src\web\Web.c</FilePath>
+            </File>
+            <File>
+              <FileName>servidor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\servidor\servidor.c</FilePath>
+            </File>
+            <File>
+              <FileName>servidor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\servidor\servidor.h</FilePath>
             </File>
           </Files>
         </Group>

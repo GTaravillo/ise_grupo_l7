@@ -258,12 +258,12 @@ t     <form action="nuevaPartida.cgi" method="post" name="nuevaPartida" onsubmit
 t       <div class="bloque-jugadores">
 t         <span class="blancas"><b>Blancas</b></span>
 t         <span class="jugador1">
-t           <input type="text" id="player1Name" name="player1Name" placeholder="Nombre jugador" maxlength="20">
+t           <input type="text" id="player1Name" name="player1Name" placeholder="Nombre jugador" maxlength="12">
 t         </span>
 t         <span class="espacio-blancas-negras"></span>
 t         <span class="negras"><b>Negras</b></span>
 t         <span class="jugador2">
-t           <input type="text" id="player2Name" name="player2Name" placeholder="Nombre jugador" maxlength="20">
+t           <input type="text" id="player2Name" name="player2Name" placeholder="Nombre jugador" maxlength="12">
 t         </span>
 t       </div>
 t       <div class="bloque-tiempo">
