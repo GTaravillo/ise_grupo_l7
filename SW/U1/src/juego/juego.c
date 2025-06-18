@@ -214,7 +214,6 @@ static void stateMachine(void* argument)
       break;
       case Lectura:
          _colocaPiezas(&tablero, map);
-         estado_juego.segundos_blancas = 600;
          estado_juego.segundos_negras = 600;
          osTimerStart(tick_segundos, 1000);
          modo = Idle;
@@ -561,6 +560,8 @@ void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACI�N NFC
    memset(&estado_juego, 0, sizeof (AJD_Estado));
    estado_juego.juegan_blancas = 1;
 
+   estado_juego.segundos_blancas = 600;
+   estado_juego.segundos_negras  = 600;
    // Turno
    // estado_juego.turno = 1;
 
@@ -718,6 +719,13 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
             if(status == osOK && position.casilla == convertNum(j)){
                ledMsg.nuevaJugada = true;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+            }else{
+              //printf("[Error] Posicion no encontrada\n");
+               i--;
+               ledMsg.posicion = position.casilla;
+               ledMsg.nuevaJugada = false;
+               ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
             found = 1;
