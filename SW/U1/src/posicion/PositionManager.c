@@ -123,7 +123,7 @@ static void Run(void *argument)
   I2Cdrv->PowerControl (ARM_POWER_FULL);
   I2Cdrv->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
   I2Cdrv->Control(ARM_I2C_BUS_CLEAR, NULL);
-  osDelay(1000);
+  //osDelay(1000);
 	
 	Pcf8575Initialize();
   INTpinsInitialize();
@@ -151,7 +151,7 @@ static void Run(void *argument)
 			case HALL_DETECTED_4:
 				leerExpansor(SLAVE_4_ADDR, buff_exp4);
         detectarCambiosHall(3, buff_exp4, last_buff_exp4);
-        //osDelay(300);
+        osDelay(300);
         //osThreadFlagsClear(HALL_DETECTED_4);
 				break;
 			

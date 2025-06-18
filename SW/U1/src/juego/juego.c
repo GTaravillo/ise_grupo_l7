@@ -255,14 +255,18 @@ static void stateMachine(void* argument)
                for(int i=0; i<64; i++){
                   if (predict[i] == 1) {
                      //predict_64b |= (1ULL << i);
-                     if(tablero.casilla[movedId].pieza == NONE){
+                     if(tablero.casilla[i].pieza == NONE){
                         ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
+                        ledMsg.posicion = convertNum(i);
+                        ledMsg.nuevaJugada = false;
+                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                      }else{
                         ledMsg.tipoJugada = CAPTURA;
+                        ledMsg.posicion = convertNum(i);
+                        ledMsg.nuevaJugada = false;
+                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                      }
-                     ledMsg.posicion = convertNum(i);
-                     ledMsg.nuevaJugada = false;
-                     osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+                     
                   }
                } 
                //status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
@@ -854,6 +858,7 @@ static void juegoTestBench(void* argument){
 
    // tbPaq.map = tbMap;
    // tbPaq.turno_color = 
+    osDelay(500);
    for(int i = 0; i < 32; i++){
       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
       osDelay(100); // 10ms delay between sending each piece
