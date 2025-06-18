@@ -818,7 +818,7 @@ static void juegoTestBench(void* argument){
    e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PartidaOutMsg_t), NULL);
    //tbPaq = malloc(sizeof(PAQ_status));
 
-   //osThreadFlagsSet(e_juegoThreadId, FLAG_START);
+   osThreadFlagsSet(e_juegoThreadId, FLAG_START);
 	//osDelay(300);
 
    tbPos[0] = TORRE1 | WHITE;
@@ -846,10 +846,10 @@ static void juegoTestBench(void* argument){
 
    // tbPaq.map = tbMap;
    // tbPaq.turno_color = 
-   // for(int i = 0; i < 32; i++){
-   //    osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-   //    osDelay(100); // 10ms delay between sending each piece
-   // }
+   for(int i = 0; i < 32; i++){
+      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+      osDelay(100); // 10ms delay between sending each piece
+   }
    // printChessboard();
    // osDelay(100);
    // printf("[Test] basic move:\n");
@@ -1099,32 +1099,32 @@ static void juegoTestBench(void* argument){
    // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	// osDelay(500);
-   osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
-	osDelay(500);
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	// osDelay(500);
 
-   memset(tbMap, 0, 64*sizeof(uint8_t));
+   // memset(tbMap, 0, 64*sizeof(uint8_t));
 
-   tbMap[11] = DAMA | WHITE;
+   // tbMap[11] = DAMA | WHITE;
 
    //tbPaq.map = tbMap;
-	memcpy(tbPaq.dato, tbMap, 64 * sizeof(uint8_t));
-   tbPaq.turno = 1;
-   //tbPaq.turno = estado_juego.juegan_blancas;
-   tbPaq.tiempoBlancas[0] = (600/60)/10 + '0';
-   tbPaq.tiempoBlancas[1] = (600/60)%10 + '0';
-   tbPaq.tiempoBlancas[2] = (600%60)/10 + '0';
-   tbPaq.tiempoBlancas[3] = (600%60)%10 + '0';
-   tbPaq.tiempoNegras[0] = (600/60)/10 + '0';
-   tbPaq.tiempoNegras[1] = (600/60)%10 + '0';
-   tbPaq.tiempoNegras[2] = (600%60)/10 + '0';
-   tbPaq.tiempoNegras[3] = (600%60)%10 + '0';
-  // status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
+// 	memcpy(tbPaq.dato, tbMap, 64 * sizeof(uint8_t));
+//    tbPaq.turno = 1;
+//    //tbPaq.turno = estado_juego.juegan_blancas;
+//    tbPaq.tiempoBlancas[0] = (600/60)/10 + '0';
+//    tbPaq.tiempoBlancas[1] = (600/60)%10 + '0';
+//    tbPaq.tiempoBlancas[2] = (600%60)/10 + '0';
+//    tbPaq.tiempoBlancas[3] = (600%60)%10 + '0';
+//    tbPaq.tiempoNegras[0] = (600/60)/10 + '0';
+//    tbPaq.tiempoNegras[1] = (600/60)%10 + '0';
+//    tbPaq.tiempoNegras[2] = (600%60)/10 + '0';
+//    tbPaq.tiempoNegras[3] = (600%60)%10 + '0';
+//   // status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
 
-   osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
-   for(int i = 0; i < 32; i++){
-      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-      osDelay(100); // 10ms delay between sending each piece
-   }
+//    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+//    for(int i = 0; i < 32; i++){
+//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+//       osDelay(100); // 10ms delay between sending each piece
+//    }
    // printChessboard();
 	//  osDelay(100);
 	 
