@@ -172,7 +172,7 @@ static void stateMachine(void* argument)
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
          //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
          e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
-         e_juegoRxMessageId = osMessageQueueNew(5, sizeof(uint8_t), NULL);
+         e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
          memset(predict,0,8*8*sizeof(uint8_t));
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          memset(&lcdMsg, 0, sizeof(lcdMessage_t));
@@ -716,7 +716,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             ledMsg.nuevaJugada = false;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
-            if(status == osOK && position.casilla == ledMsg.posicion){
+            if(status == osOK && position.casilla == convertNum(j)){
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
