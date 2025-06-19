@@ -720,18 +720,21 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
+           do{ 
+           status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
+           
             if(status == osOK && position.casilla == convertNum(j)){
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }else{
               //printf("[Error] Posicion no encontrada\n");
-               i--;
+               //i--;
                ledMsg.posicion = position.casilla;
                ledMsg.nuevaJugada = false;
                ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
+          }while(position.casilla != convertNum(j));
             found = 1;
             break;
          }
@@ -766,7 +769,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
 
 void newGameMap(void)
 {
-   AJD_Pieza piezasMayores[8] = {TORRE1, CABALLO1, ALFIL1, DAMA, REY, ALFIL2, CABALLO2, TORRE2};
+   AJD_Pieza piezasMayores[8] = {TORRE1, CABALLO1, ALFIL1, REY, DAMA, ALFIL2, CABALLO2, TORRE2};
    AJD_Pieza piezaPeon[8] = {PEON1, PEON2, PEON3, PEON4, PEON5, PEON6, PEON7, PEON8};
    for (int col=0; col < 8; col++)
   {
