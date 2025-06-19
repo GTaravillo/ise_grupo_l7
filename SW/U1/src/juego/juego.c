@@ -260,7 +260,7 @@ static void stateMachine(void* argument)
                         ledMsg.posicion = convertNum(i);
                         ledMsg.nuevaJugada = false;
                         osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-                     }else{
+                     }else if(tablero.casilla[i].color_pieza != estado_juego.juegan_blancas){
                         ledMsg.tipoJugada = CAPTURA;
                         ledMsg.posicion = convertNum(i);
                         ledMsg.nuevaJugada = false;
@@ -719,6 +719,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x80) >> 7);
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
+            ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
            do{ 
            status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
