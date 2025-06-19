@@ -4,7 +4,6 @@
 #include "stm32f4xx_hal.h"
 /* std */
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 /* Interfaces */
@@ -98,7 +97,7 @@ void leerExpansor(uint8_t slave_addr, uint8_t *buffer);
 
 void detectarCambiosHall(uint8_t exp_num, uint8_t* buffer_actual, uint8_t* buffer_anterior);
 
-static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios);
+static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios, uint8_t* buffer_actual, bool* ocupada);
 
 
 /**************************************/
@@ -135,6 +134,7 @@ static void Run(void *argument)
 		switch(flags){
 			case HALL_DETECTED_1:
 				leerExpansor(SLAVE_1_ADDR, buff_exp1);
+      printf("LECTURA [0x%02X][0x%02X]\n", buff_exp1[0], buff_exp1[1]);
         detectarCambiosHall(0, buff_exp1, last_buff_exp1);
 				break;
 			
@@ -233,14 +233,17 @@ void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
 			printf("Error reading from slave 0x%02X\n", slave_addr);
 			return;
 	}
+  
 	osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
+  
+  printf("LECTURA I2C [0x%04X]\n", *buffer);
 }
 
 
 //Función que se encarga de devolver el número de la casilla que se va a enviar al módulo de juego
 // siguiendo el mapeado g_numeroHallMap[][], mediante los atributos del número del expansor y el resultado
 // de la XOR entre la última situcación de los hall y la actual (cambios)
-static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios)
+static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios, uint8_t* buffer_actual, bool* ocupada)
 {
 	//numero_expansor -> del 0 al 3 el número del expansor que ha realizado la interrupción
 	//cambios -> XOR entre buff_expX y last_buff_expX (compara la última situación de los hall y la actual, 
@@ -248,14 +251,19 @@ static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios)
   int casilla = 0;	
 	
 	printf("Cambios: %d \n", cambios);
-	
+ 
 	for(uint8_t i = 0; i < 16; i++){
 		if (cambios == CASILLAS[i]){
 			casilla = i;
+      
+      uint16_t actual = buffer_actual[0] << 8 | buffer_actual[1];
+      *ocupada = (actual & cambios) == 0;
+      printf("CASILLA[%d] ACTUAL[0x%02X] CAMBIOS[0x%02X] PIEZA %s\n", i, actual, cambios, (actual & cambios) != 0 ? "LEVANTADA" : "OCUPADA");
+      break;
 		}
 	}	
 	casilla = (numero_expansor * 16) + casilla;
-
+  
 	return casilla;
 }
 
@@ -269,32 +277,31 @@ void detectarCambiosHall(uint8_t numero_expansor, uint8_t* buffer_actual, uint8_
 
   ECasilla casilla;
 	uint16_t cambios = ((buffer_actual[0] << 8)|buffer_actual[1]) ^ ((buffer_anterior[0] << 8)|buffer_anterior[1]); // XOR: bits que cambiaron
+  bool ocupada;
   
 	if(cambios != 0){
-	casilla.casilla = mapPinToHallIndex(numero_expansor, cambios);
+	casilla.casilla = mapPinToHallIndex(numero_expansor, cambios, buffer_actual, &ocupada);
+  casilla.ocupada = ocupada;
     
-    int posicion;
-    uint16_t cambios_temp;
-    
-    for(int i = 0; i < 16; i++){
-      if(cambios_temp == 1){
-        posicion = i;
-        
-        if(buffer_actual[i] == 1){
-          casilla.ocupada = true;
-        } else{
-          casilla.ocupada = false;
-        }
-        break;
-      }
-      cambios_temp = cambios_temp >> 1;
-    }
+//  if(buffer_actual[0] && cambios == 0){
+//    casilla.okupada = 1;
+//  } else{
+//    casilla.okupada = 0;
+//  }
+//  
+//  if(buffer_actual[1] && cambios == 0){
+//    casilla.okupada = 1;
+//  } else{
+//    casilla.okupada = 0;
+//  }
+  
+  printf("Buffer actual: %d y %d\n", buffer_actual[0], buffer_actual[1]);
 
 //  LedStripMsg_t mensajeLed;
 //  mensajeLed.posicion = casilla;
 //  mensajeLed.tipoJugada = ESPECIAL;
 	
-    printf("Movimiento en la casilla %d, casilla ocupada: %d (1 es true)\n", casilla.casilla, casilla.ocupada);
+    printf("Movimiento en la casilla %d, casilla ocupada: %d\n", casilla.casilla, casilla.ocupada);
 	
 	//osStatus_t status = osMessageQueuePut(e_ledStripMessageId, &mensajeLed, 0, 0);
 	osStatus_t status = osMessageQueuePut(e_positionMessageId, &casilla, 0, 0);

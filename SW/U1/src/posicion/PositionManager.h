@@ -17,7 +17,7 @@ void PositionManagerInitialize(void);
 
 typedef struct {
     uint8_t casilla;  // N�mero de la casilla de ajedrez, siguiendo el g_numeroHallMap del .c
-    bool ocupada;
+    bool ocupada;  // Si 0, está vacía, si 1, está okupada
 } ECasilla;
 
 #endif
