@@ -302,6 +302,7 @@ static void stateMachine(void* argument)
                   modo = Win;
                   if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
                   else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+                  modo = Win;
                }
                
                if(peonUltimaFila(&tablero, &estado_juego)){

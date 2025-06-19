@@ -58,8 +58,8 @@ void predPeon(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero
 				predict[id+8] = 1;
 			}
 		}
-		predict[id+7] = tablero->casilla[id+7].pieza != NONE ? 1 : 0;
-		predict[id+9] = tablero->casilla[id+9].pieza != NONE ? 1 : 0;
+		predict[id+7] = (tablero->casilla[id+7].pieza != NONE) && (id%8 != 0) ? 1 : 0;
+		predict[id+9] = (tablero->casilla[id+9].pieza != NONE) && (id%8 != 7) ? 1 : 0;
 
 	}else if(origin->color_pieza == BLANCO){
 		if(id < 6*8+8 && id >= 6*8){
@@ -75,8 +75,8 @@ void predPeon(uint8_t predict[64], AJD_CasillaPtr origin, AJD_TableroPtr tablero
 				predict[id-8] = 1;
 			}
 		}
-		predict[id-7] = tablero->casilla[id-7].pieza != NONE ? 1 : 0;
-		predict[id-9] = tablero->casilla[id-9].pieza != NONE ? 1 : 0;
+		predict[id-7] = (tablero->casilla[id-7].pieza != NONE) && (id%8 != 0) ? 1 : 0;
+		predict[id-9] = (tablero->casilla[id-9].pieza != NONE) && (id%8 != 7) ? 1 : 0;
 	}
 }
 
