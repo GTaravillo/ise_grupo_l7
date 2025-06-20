@@ -172,7 +172,7 @@ static void stateMachine(void* argument)
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
          //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
          e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
-         e_juegoRxMessageId = osMessageQueueNew(5, sizeof(uint8_t), NULL);
+         e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
          memset(predict,0,8*8*sizeof(uint8_t));
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          memset(&lcdMsg, 0, sizeof(lcdMessage_t));
@@ -214,7 +214,6 @@ static void stateMachine(void* argument)
       break;
       case Lectura:
          _colocaPiezas(&tablero, map);
-         estado_juego.segundos_blancas = 600;
          estado_juego.segundos_negras = 600;
          osTimerStart(tick_segundos, 1000);
          modo = Idle;
@@ -256,14 +255,18 @@ static void stateMachine(void* argument)
                for(int i=0; i<64; i++){
                   if (predict[i] == 1) {
                      //predict_64b |= (1ULL << i);
-                     if(tablero.casilla[movedId].pieza == NONE){
+                     if(tablero.casilla[i].pieza == NONE){
                         ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
-                     }else{
+                        ledMsg.posicion = convertNum(i);
+                        ledMsg.nuevaJugada = false;
+                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+                     }else if(tablero.casilla[i].color_pieza != estado_juego.juegan_blancas){
                         ledMsg.tipoJugada = CAPTURA;
+                        ledMsg.posicion = convertNum(i);
+                        ledMsg.nuevaJugada = false;
+                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                      }
-                     ledMsg.posicion = convertNum(i);
-                     ledMsg.nuevaJugada = false;
-                     osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+                     
                   }
                } 
                //status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
@@ -299,6 +302,7 @@ static void stateMachine(void* argument)
                   modo = Win;
                   if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
                   else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+                  modo = Win;
                }
                
                if(peonUltimaFila(&tablero, &estado_juego)){
@@ -561,6 +565,8 @@ void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACI�N NFC
    memset(&estado_juego, 0, sizeof (AJD_Estado));
    estado_juego.juegan_blancas = 1;
 
+   estado_juego.segundos_blancas = 600;
+   estado_juego.segundos_negras  = 600;
    // Turno
    // estado_juego.turno = 1;
 
@@ -714,12 +720,23 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x80) >> 7);
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
+            ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
-            if(status == osOK && position.casilla == ledMsg.posicion){
+           do{ 
+           status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
+           
+            if(status == osOK && position.casilla == convertNum(j)){
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+            }else{
+              //printf("[Error] Posicion no encontrada\n");
+               //i--;
+               ledMsg.posicion = position.casilla;
+               ledMsg.nuevaJugada = false;
+               ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
+          }while(position.casilla != convertNum(j));
             found = 1;
             break;
          }
@@ -754,7 +771,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
 
 void newGameMap(void)
 {
-   AJD_Pieza piezasMayores[8] = {TORRE1, CABALLO1, ALFIL1, DAMA, REY, ALFIL2, CABALLO2, TORRE2};
+   AJD_Pieza piezasMayores[8] = {TORRE1, CABALLO1, ALFIL1, REY, DAMA, ALFIL2, CABALLO2, TORRE2};
    AJD_Pieza piezaPeon[8] = {PEON1, PEON2, PEON3, PEON4, PEON5, PEON6, PEON7, PEON8};
    for (int col=0; col < 8; col++)
   {
@@ -818,7 +835,7 @@ static void juegoTestBench(void* argument){
    e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PartidaOutMsg_t), NULL);
    //tbPaq = malloc(sizeof(PAQ_status));
 
-   //osThreadFlagsSet(e_juegoThreadId, FLAG_START);
+   osThreadFlagsSet(e_juegoThreadId, FLAG_START);
 	//osDelay(300);
 
    tbPos[0] = TORRE1 | WHITE;
@@ -846,10 +863,11 @@ static void juegoTestBench(void* argument){
 
    // tbPaq.map = tbMap;
    // tbPaq.turno_color = 
-   // for(int i = 0; i < 32; i++){
-   //    osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-   //    osDelay(100); // 10ms delay between sending each piece
-   // }
+    osDelay(500);
+   for(int i = 0; i < 32; i++){
+      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+      osDelay(100); // 10ms delay between sending each piece
+   }
    // printChessboard();
    // osDelay(100);
    // printf("[Test] basic move:\n");
@@ -1099,32 +1117,32 @@ static void juegoTestBench(void* argument){
    // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	// osDelay(500);
-   osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
-	osDelay(500);
+   // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+	// osDelay(500);
 
-   memset(tbMap, 0, 64*sizeof(uint8_t));
+   // memset(tbMap, 0, 64*sizeof(uint8_t));
 
-   tbMap[11] = DAMA | WHITE;
+   // tbMap[11] = DAMA | WHITE;
 
    //tbPaq.map = tbMap;
-	memcpy(tbPaq.dato, tbMap, 64 * sizeof(uint8_t));
-   tbPaq.turno = 1;
-   //tbPaq.turno = estado_juego.juegan_blancas;
-   tbPaq.tiempoBlancas[0] = (600/60)/10 + '0';
-   tbPaq.tiempoBlancas[1] = (600/60)%10 + '0';
-   tbPaq.tiempoBlancas[2] = (600%60)/10 + '0';
-   tbPaq.tiempoBlancas[3] = (600%60)%10 + '0';
-   tbPaq.tiempoNegras[0] = (600/60)/10 + '0';
-   tbPaq.tiempoNegras[1] = (600/60)%10 + '0';
-   tbPaq.tiempoNegras[2] = (600%60)/10 + '0';
-   tbPaq.tiempoNegras[3] = (600%60)%10 + '0';
-  // status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
+// 	memcpy(tbPaq.dato, tbMap, 64 * sizeof(uint8_t));
+//    tbPaq.turno = 1;
+//    //tbPaq.turno = estado_juego.juegan_blancas;
+//    tbPaq.tiempoBlancas[0] = (600/60)/10 + '0';
+//    tbPaq.tiempoBlancas[1] = (600/60)%10 + '0';
+//    tbPaq.tiempoBlancas[2] = (600%60)/10 + '0';
+//    tbPaq.tiempoBlancas[3] = (600%60)%10 + '0';
+//    tbPaq.tiempoNegras[0] = (600/60)/10 + '0';
+//    tbPaq.tiempoNegras[1] = (600/60)%10 + '0';
+//    tbPaq.tiempoNegras[2] = (600%60)/10 + '0';
+//    tbPaq.tiempoNegras[3] = (600%60)%10 + '0';
+//   // status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
 
-   osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
-   for(int i = 0; i < 32; i++){
-      osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-      osDelay(100); // 10ms delay between sending each piece
-   }
+//    osMessageQueuePut(e_memoriaTxMessageId, &tbPaq, 1, osWaitForever);
+//    for(int i = 0; i < 32; i++){
+//       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
+//       osDelay(100); // 10ms delay between sending each piece
+//    }
    // printChessboard();
 	//  osDelay(100);
 	 
