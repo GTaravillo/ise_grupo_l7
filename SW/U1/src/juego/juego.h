@@ -10,6 +10,7 @@
  	#define FLAG_PAUSE		0X04U
 	#define FLAG_STOP		0X08U
 	#define FLAG_RESUME		0X10U
+  #define FLAG_TURN 0x20U
 
   //typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	// #define NONE	0x00
@@ -20,7 +21,7 @@
 	// #define DAMA	0x05
 	// #define REY		0x06
 
-	#define WHITE	0X80
+	#define WHITE	0X10
 	#define BLACK	0X00
 
 	#define FLAG_ERROR_MOV 0X02

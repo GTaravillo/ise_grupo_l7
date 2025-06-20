@@ -62,12 +62,12 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
-  uint32_t flag;
-  // int bytesMensaje = sizeof(mensajeTx);
-  // printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+//  uint32_t flag;
+//   int bytesMensaje = sizeof(mensajeTx);
+//   printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
-  while(1) 
-  {
+//  while(1) 
+//  {
 //    printf("[com::%s] Esperando mensaje...\n", __func__);
 //    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
 //    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
@@ -79,7 +79,7 @@ static void RunTx(void *argument)
 //	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
 //		
 //		osDelay(5000);
-  }
+//  }
 }
 
 // Recibe bytes (char) y propaga la información a los modulos correspondientes
