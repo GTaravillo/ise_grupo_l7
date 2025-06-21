@@ -12,6 +12,7 @@
 #include PATH_MAIN
 #include PATH_RTC
 #include PATH_COMMON
+#include PATH_COM_PLACAS
 
 // Main stack size must be multiple of 8 Bytes
 #define SERVER_STK_SZ (1024U)
@@ -154,12 +155,12 @@ static void Run(void *argument)
 void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     char var[40];
 
-    char player1Name[13] = {0};
-    char player2Name[13] = {0};
-    char matchTimeStr[4] = {0};
-    char incrementTimeStr[4] = {0};
-    char incrementEnabledStr[8] = {0};
-    char ayudaStr[8] = {0};
+    char player1Name[TAM_NOMBRE_JUGADOR + 1] = {0};
+    char player2Name[TAM_NOMBRE_JUGADOR + 1] = {0};
+    char matchTimeStr[2 + 1] = {0};        // [5, 90]
+    char incrementTimeStr[2 + 1] = {0};    // [2, 30]
+    char incrementEnabledStr[5 + 1] = {0}; // true/false
+    char ayudaStr[5 + 1] = {0};            // true/false
 
     printf("[CGI] Received POST data: %s\n", data);
 
@@ -171,13 +172,13 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
       } else if (strncmp(var, "player2Name=", TAM_NOMBRE_JUGADOR) == 0) {
         strncpy(player2Name, var + TAM_NOMBRE_JUGADOR, sizeof(player2Name) - 1);
       } else if (strncmp(var, "matchTime=", 2) == 0) {
-        strncpy(matchTimeStr, var + 10, sizeof(matchTimeStr) - 1);
+        strncpy(matchTimeStr, var + 2, sizeof(matchTimeStr) - 1);
       } else if (strncmp(var, "incrementTime=", 2) == 0) {
-        strncpy(incrementTimeStr, var + 14, sizeof(incrementTimeStr) - 1);
-      } else if (strncmp(var, "incrementEnabled=", 17) == 0) {
-        strncpy(incrementEnabledStr, var + 17, sizeof(incrementEnabledStr) - 1);
-      } else if (strncmp(var, "ayuda=", 6) == 0) {
-        strncpy(ayudaStr, var + 6, sizeof(ayudaStr) - 1);
+        strncpy(incrementTimeStr, var + 2, sizeof(incrementTimeStr) - 1);
+      } else if (strncmp(var, "incrementEnabled=", 5) == 0) {
+        strncpy(incrementEnabledStr, var + 5, sizeof(incrementEnabledStr) - 1);
+      } else if (strncmp(var, "ayuda=", 5) == 0) {
+        strncpy(ayudaStr, var + 5, sizeof(ayudaStr) - 1);
       }
     } while (data);
 
@@ -191,6 +192,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     printf("[CGI] matchTime: %d\n", matchTime);
     printf("[CGI] incrementTime: %d\n", incrementTime);
     printf("[CGI] incrementEnabled: %d\n", incrementEnabled);
+
     // printf("[CGI] ayuda: %d\n", ayuda);
 }
 

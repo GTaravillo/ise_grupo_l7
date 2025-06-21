@@ -117,13 +117,13 @@ int main(void)
   
 	juegoInitialize();
 	//osDelay(1000);
-	juegoTbInitialize();
+	//juegoTbInitialize();
 	//LED_Initialize();
 	//LCD_Initialize();
-	//MemoriaInitialize();
-  LedStripManagerInitialize();
-	PositionManagerInitialize();
-	//ComunicacionPlacasInitialize();
+	MemoriaInitialize();
+  //LedStripManagerInitialize();
+	// PositionManagerInitialize();
+	ComunicacionPlacasInitialize();
   //PrincipalInitialize();
   
   // Tests
@@ -192,12 +192,12 @@ static void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /* STM32F405x/407x/415x/417x Revision Z devices: prefetch is supported */
-  if (HAL_GetREVID() == 0x1001)
-  {
-    /* Enable the Flash prefetch */
-    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
-  }
+  // /* STM32F405x/407x/415x/417x Revision Z devices: prefetch is supported */
+  // if (HAL_GetREVID() == 0x1001)
+  // {
+  //   /* Enable the Flash prefetch */
+  //   __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+  // }
 }
 
 /**

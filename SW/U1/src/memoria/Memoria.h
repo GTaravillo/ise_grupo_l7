@@ -19,6 +19,7 @@ extern osMessageQueueId_t  e_memoriaRxMessageId;
 extern osMessageQueueId_t  e_memoriaTxMessageId;
 
 typedef enum {
+  ERROR_SIN_DATOS               = 0,
   GUARDAR_PARTIDA_SIN_FINALIZAR = 1,
   GUARDAR_PARTIDA_FINALIZADA    = 2,
   RETOMAR_ULTIMA_PARTIDA        = 3,
@@ -26,26 +27,17 @@ typedef enum {
   LIMPIAR_MEMORIA               = 0xFF   // Cuidado! Elimina todos los datos en memoria
 } ETipoPeticion;
 
-
 typedef struct {
   ETipoPeticion tipoPeticion;
-  uint8_t fechaPartida[TAM_FECHA];           // Fecha finalizacion/suspension. Solo numeros (ddmmaa)
-  uint8_t horaPartida[TAM_HORA];             // Hora finalizacion/suspension. Solo numeros (hhmmss)
-  uint8_t nombreBlancas[TAM_NOMBRE_JUGADOR];
-  uint8_t nombreNegras[TAM_NOMBRE_JUGADOR];
-  uint8_t turno_victoria;                    // 1 = blancas. Turno si partida sin finalizar. Victoria si finalizada.
-  uint8_t tiempoBlancas[TAM_TIEMPO_JUGADOR]; // Tiempo restante blancas. Solo numeros (mmss)
-  uint8_t tiempoNegras[TAM_TIEMPO_JUGADOR];  // Tiempo restante negras. Solo numeros (mmss)
-  uint8_t dato[TAM_DATOS];                   // 0-63
-} PartidaInMsg_t;
-
-typedef struct {
-  ETipoPeticion tipoPeticion;
-  uint8_t turno;                             // 1 = turno actual blancas
-  uint8_t tiempoBlancas[TAM_TIEMPO_JUGADOR]; // Tiempo restante blancas. Solo numeros (mmss)
-  uint8_t tiempoNegras[TAM_TIEMPO_JUGADOR];  // Tiempo restante negras. Solo numeros (mmss)
-  uint8_t dato[TAM_DATOS];                   // 0-63
-} PartidaOutMsg_t;
+  uint8_t fechaPartida[TAM_FECHA + 1];           // Fecha finalizacion/suspension. Solo numeros (ddmmaa)
+  uint8_t horaPartida[TAM_HORA + 1];             // Hora finalizacion/suspension. Solo numeros (hhmmss)
+  uint8_t nombreBlancas[TAM_NOMBRE_JUGADOR + 1];
+  uint8_t nombreNegras[TAM_NOMBRE_JUGADOR + 1];
+  uint8_t turno_victoria;                        // 1 = blancas. Turno si partida sin finalizar. Victoria si finalizada.
+  uint8_t tiempoBlancas[TAM_TIEMPO_JUGADOR + 1]; // Tiempo restante blancas. Solo numeros (mmss)
+  uint8_t tiempoNegras[TAM_TIEMPO_JUGADOR + 1];  // Tiempo restante negras. Solo numeros (mmss)
+  uint8_t dato[TAM_DATOS];                       // 0-63
+} MemoriaMsg_t;
 
 // typedef struct {
 //   ETipoPeticion tipoPeticion;
@@ -78,5 +70,8 @@ typedef struct {
 
 
 void MemoriaInitialize(void);
+// Solo para servidor
+uint16_t ObtenerNumeroPartidasFinalizadas(void);
+MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida);
 
 #endif  // __MEMORIA_H

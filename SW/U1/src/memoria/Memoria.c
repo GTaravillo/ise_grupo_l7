@@ -17,7 +17,7 @@
 
 // #define ID_FIN_PARTIDA    0xEE     // Byte que identifica el final de una partida en memoria
 #define NUM_BYTES_PARTIDA_FINALIZADA    TAM_FECHA + TAM_HORA + (2 * TAM_NOMBRE_JUGADOR) + 1 + (2 * TAM_TIEMPO_JUGADOR) // 45 BYTES
-#define NUM_BYTES_PARTIDA_SIN_FINALIZAR NUM_BYTES_PARTIDA_FINALIZADA + TAM_DATOS  // 109 bytes
+#define NUM_BYTES_PARTIDA_SIN_FINALIZAR NUM_BYTES_PARTIDA_FINALIZADA + TAM_DATOS  // 110 bytes
 /**
  * 32768 bytes de almacenamiento
  * Mapa bits: almacena num byte de registro en el que se encuentra la partida. Requiere 2 bytes por partida
@@ -29,9 +29,16 @@
  */
 #define NUM_PARTIDAS_MAX 694
 
-#define OFFSET_NUM_PARTIDAS   0
-#define OFFSET_MAPA_REGISTROS OFFSET_NUM_PARTIDAS + 2
-#define DIRECCION_PARTIDA_RETOMAR OFFSET_MAPA_REGISTROS + (NUM_PARTIDAS_MAX * 2)
+#define TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR 1 
+#define TAM_NUM_PARTIDAS   2
+#define TAM_DIRECCION_MAPA 2
+#define TAM_TURNO_VICTORIA 1
+
+#define DIRECCION_EXISTE_PARTIDA_RETOMAR 0
+#define DIRECCION_NUM_PARTIDAS DIRECCION_EXISTE_PARTIDA_RETOMAR + TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR   // 2 bytes (694 partidas)
+#define DIRECCION_MAPA_REGISTROS DIRECCION_NUM_PARTIDAS + TAM_NUM_PARTIDAS
+
+#define DIRECCION_PARTIDA_RETOMAR DIRECCION_MAPA_REGISTROS + (NUM_PARTIDAS_MAX * TAM_DIRECCION_MAPA)
 #define DIRECCION_PRIMERA_FINALIZADA DIRECCION_PARTIDA_RETOMAR + NUM_BYTES_PARTIDA_SIN_FINALIZAR
 
 #define OFFSET_FECHA_PARTIDA  0
@@ -39,9 +46,11 @@
 #define OFFSET_NOMBRE_BLANCAS OFFSET_HORA_PARTIDA   + TAM_HORA
 #define OFFSET_NOMBRE_NEGRAS  OFFSET_NOMBRE_BLANCAS + TAM_NOMBRE_JUGADOR
 #define OFFSET_TURNO_VICTORIA OFFSET_NOMBRE_NEGRAS  + TAM_NOMBRE_JUGADOR
-#define OFFSET_TIEMPO_BLANCAS OFFSET_TURNO_VICTORIA + 1
+#define OFFSET_TIEMPO_BLANCAS OFFSET_TURNO_VICTORIA + TAM_TURNO_VICTORIA
 #define OFFSET_TIEMPO_NEGRAS  OFFSET_TIEMPO_BLANCAS + TAM_TIEMPO_JUGADOR
 #define OFFSET_TABLERO        OFFSET_TIEMPO_NEGRAS  + TAM_TIEMPO_JUGADOR
+
+#define EXISTE_PARTIDA_RETOMAR 0xAA
 
 /* Driver I2C */
 extern ARM_DRIVER_I2C Driver_I2C2;
@@ -50,6 +59,7 @@ static ARM_DRIVER_I2C *I2Cdrv = &Driver_I2C2;
 osThreadId_t        e_memoriaThreadId;
 osMessageQueueId_t  e_memoriaRxMessageId;
 osMessageQueueId_t  e_memoriaTxMessageId;
+osSemaphoreId_t     e_accessSemaphoreId;
 
 uint16_t numPartidasTerminadas;
 
@@ -60,10 +70,11 @@ static void SoftwareReset(void);
 static void ActualizarNumPartidasTerminadas(void);
 
 static void LimpiarMemoria(void);
+static void LimpiarPartidaARetomar(void);
 
-static void ProcesarPeticion(PartidaInMsg_t mensajeRx);
-static void ProcesarGuardarPartidaSinFinalizar(PartidaInMsg_t mensajeRx);
-static void ProcesarGuardarPartidaFinalizada(PartidaInMsg_t mensajeRx);
+static void ProcesarPeticion(MemoriaMsg_t mensajeRx);
+static void ProcesarGuardarPartidaSinFinalizar(MemoriaMsg_t mensajeRx);
+static void ProcesarGuardarPartidaFinalizada(MemoriaMsg_t mensajeRx);
 static void ProcesarRetomarPartida(void);
 
 static uint8_t LeerByte(uint16_t direccion);
@@ -76,13 +87,95 @@ static void  I2C_SignalEvent(uint32_t event);
 void MemoriaInitialize(void)
 {
   e_memoriaThreadId    = osThreadNew(Run, NULL, NULL);
-  e_memoriaRxMessageId = osMessageQueueNew(TAM_COLA_MSGS_RX, sizeof(PartidaInMsg_t), NULL);
-  e_memoriaTxMessageId = osMessageQueueNew(TAM_COLA_MSGS_TX, sizeof(PartidaOutMsg_t), NULL);
+  e_memoriaRxMessageId = osMessageQueueNew(TAM_COLA_MSGS_RX, sizeof(MemoriaMsg_t), NULL);
+  e_memoriaTxMessageId = osMessageQueueNew(TAM_COLA_MSGS_TX, sizeof(MemoriaMsg_t), NULL);
+  e_accessSemaphoreId  = osSemaphoreNew(1, 1, NULL);
 
-  if ((e_memoriaThreadId == NULL) || (e_memoriaRxMessageId == NULL) || (e_memoriaTxMessageId == NULL))
+  const bool newThreadError    = e_memoriaThreadId == NULL;
+  const bool newRxQueueError   = e_memoriaRxMessageId == NULL;
+  const bool newTxQueueError   = e_memoriaTxMessageId == NULL;
+  const bool newSemaphoreError = e_accessSemaphoreId == NULL;
+
+  const bool error = newThreadError || newRxQueueError || newTxQueueError || newSemaphoreError;
+
+  if (error)
   {
-    printf("[memoria::%s] ERROR! osThreadNew [%d]\n", __func__, (e_memoriaThreadId == NULL));
+    printf("[memoria::%s] ERROR! thread[%d] queue Rx[%d]Tx[%d] semaphore[%d]\n", __func__, 
+           newThreadError, newRxQueueError, newTxQueueError, newSemaphoreError);
   }
+}
+
+uint16_t ObtenerNumeroPartidasFinalizadas(void)
+{
+  uint16_t val;
+  osSemaphoreAcquire(e_accessSemaphoreId, 0);
+  val = numPartidasTerminadas;
+  osSemaphoreRelease(e_accessSemaphoreId);
+
+  return val;
+}
+
+MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
+{
+  MemoriaMsg_t infoPartida = { 0 };
+
+  if ((numPartidasTerminadas == 0) || (numPartida > numPartidasTerminadas))
+  {
+    infoPartida.tipoPeticion = ERROR_SIN_DATOS;
+    return infoPartida;
+  }
+  
+  numPartida -= 1;
+  
+  uint16_t direccionPartidaMapa = DIRECCION_MAPA_REGISTROS + (numPartida * TAM_DIRECCION_MAPA);
+  uint16_t direccionPartida = LeerByte(direccionPartidaMapa) << 8 | LeerByte(direccionPartida + 1);
+  
+  if (direccionPartida == 0)
+  {
+    printf("[memoria::%s] ERROR! Dirección de partida vacia\n", __func__);
+    infoPartida.tipoPeticion = ERROR_SIN_DATOS;
+    return infoPartida;
+  }
+
+  // Fecha
+  for (int i = 0; i < TAM_FECHA; i++)
+  {
+    int offset = OFFSET_FECHA_PARTIDA + i;
+    infoPartida.fechaPartida[i] = LeerByte(direccionPartida + offset);
+  }
+  infoPartida.fechaPartida[TAM_FECHA + 1] = '\0';
+  // Hora
+  for (int i = 0; i < TAM_HORA; i++)
+  {
+    int offset = OFFSET_HORA_PARTIDA + i;
+    infoPartida.horaPartida[i] = LeerByte(direccionPartida + offset);
+  }
+  infoPartida.horaPartida[TAM_HORA + 1] = '\0';
+  // Nombre blancas
+  for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
+  {
+    int offset = OFFSET_NOMBRE_BLANCAS + i;
+    infoPartida.nombreBlancas[i] = LeerByte(direccionPartida + offset);
+  }
+  infoPartida.nombreBlancas[TAM_NOMBRE_JUGADOR + 1] = '\0';
+  // Nombre negras
+  for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
+  {
+    int offset = OFFSET_NOMBRE_NEGRAS + i;
+    infoPartida.nombreNegras[i] = LeerByte(direccionPartida + offset);
+  }
+  infoPartida.nombreNegras[TAM_NOMBRE_JUGADOR + 1] = '\0';
+  // Victoria
+  infoPartida.turno_victoria = LeerByte(direccionPartida + OFFSET_TURNO_VICTORIA);
+
+  printf("[memoria::%s] Mensaje a devolver:\n", __func__);
+  printf("[memoria::%s] Fecha[%s]\n", __func__, infoPartida.fechaPartida);
+  printf("[memoria::%s] Hora[%s]\n", __func__, infoPartida.horaPartida);
+  printf("[memoria::%s] Nombre blancas[%s]\n", __func__, infoPartida.nombreBlancas);
+  printf("[memoria::%s] Nombre negras[%s]\n", __func__, infoPartida.nombreNegras);
+  printf("[memoria::%s] Victoria[%d]\n", __func__, infoPartida.turno_victoria);
+
+  return infoPartida;
 }
 
 static void Run(void *argument)
@@ -106,7 +199,7 @@ static void Run(void *argument)
   osThreadFlagsSet(e_testMemoriaThreadId, FLAG_INIT_COMPLETE);
   
   //SoftwareReset();
-  PartidaInMsg_t mensajeRx;
+  MemoriaMsg_t mensajeRx;
 
   while (1)
   {
@@ -133,34 +226,42 @@ static void ActualizarNumPartidasTerminadas(void)
 {
   numPartidasTerminadas = 0;
 
-  uint8_t msb = LeerByte(OFFSET_NUM_PARTIDAS);
-  uint8_t lsb = LeerByte(OFFSET_NUM_PARTIDAS + 1);
+  uint8_t msb = LeerByte(DIRECCION_NUM_PARTIDAS);
+  uint8_t lsb = LeerByte(DIRECCION_NUM_PARTIDAS + 1);
 
   numPartidasTerminadas = msb | lsb;
 
   printf("[memoria::%s] Numero partidas terminadas [%d]\n", __func__, numPartidasTerminadas);
 }
 
-static void ProcesarPeticion(PartidaInMsg_t mensajeRx)
+static void ProcesarPeticion(MemoriaMsg_t mensajeRx)
 {
   printf("[memoria::%s] TIPO MENSAJE: [%d]\n", __func__, mensajeRx.tipoPeticion);
   
   switch(mensajeRx.tipoPeticion)
   {
     case GUARDAR_PARTIDA_SIN_FINALIZAR:
+      osSemaphoreAcquire(e_accessSemaphoreId, 0);
       ProcesarGuardarPartidaSinFinalizar(mensajeRx);
+      osSemaphoreRelease(e_accessSemaphoreId);
     break;
 
     case GUARDAR_PARTIDA_FINALIZADA:
+      osSemaphoreAcquire(e_accessSemaphoreId, 0);
       ProcesarGuardarPartidaFinalizada(mensajeRx);
+      osSemaphoreRelease(e_accessSemaphoreId);
     break;
 
     case RETOMAR_ULTIMA_PARTIDA:
+      osSemaphoreAcquire(e_accessSemaphoreId, 0);
       ProcesarRetomarPartida();
+      osSemaphoreRelease(e_accessSemaphoreId);
 	  break;    
 
     case LIMPIAR_MEMORIA:
+      osSemaphoreAcquire(e_accessSemaphoreId, 0);
       LimpiarMemoria();
+      osSemaphoreRelease(e_accessSemaphoreId);
     break;
 
 	  default:
@@ -168,7 +269,7 @@ static void ProcesarPeticion(PartidaInMsg_t mensajeRx)
   }
 }
 
-static void ProcesarGuardarPartidaSinFinalizar(PartidaInMsg_t mensajeRx)
+static void ProcesarGuardarPartidaSinFinalizar(MemoriaMsg_t mensajeRx)
 {
   osStatus_t status;
 
@@ -226,9 +327,11 @@ static void ProcesarGuardarPartidaSinFinalizar(PartidaInMsg_t mensajeRx)
     printf("[Memoria::%s] Tablero:\n", __func__);
     EscribirByte(direccionGuardado, mensajeRx.dato[i]);
   }
+
+  EscribirByte(DIRECCION_EXISTE_PARTIDA_RETOMAR, EXISTE_PARTIDA_RETOMAR);
 }
 
-static void ProcesarGuardarPartidaFinalizada(PartidaInMsg_t mensajeRx)
+static void ProcesarGuardarPartidaFinalizada(MemoriaMsg_t mensajeRx)
 {
   osStatus_t status;
 
@@ -237,13 +340,13 @@ static void ProcesarGuardarPartidaFinalizada(PartidaInMsg_t mensajeRx)
   if ((numPartidasTerminadas + 1) < NUM_PARTIDAS_MAX)
   {
     numPartidasTerminadas += 1;
-    direccionMapa = OFFSET_MAPA_REGISTROS + (numPartidasTerminadas * 2);
+    direccionMapa = DIRECCION_MAPA_REGISTROS + (numPartidasTerminadas * TAM_NUM_PARTIDAS);
   }
   else 
   {
     numPartidasTerminadas = NUM_PARTIDAS_MAX;
     // Si no queda espacio en memoria, sobreescribe la primera partida
-    direccionMapa = OFFSET_MAPA_REGISTROS;
+    direccionMapa = DIRECCION_MAPA_REGISTROS;
   }
 
   uint16_t direccionGuardado;
@@ -298,23 +401,36 @@ static void ProcesarGuardarPartidaFinalizada(PartidaInMsg_t mensajeRx)
   }
 
   printf("[Memoria::%s] Num partidas terminadas:\n", __func__);
-  EscribirByte(OFFSET_NUM_PARTIDAS, (numPartidasTerminadas & 0xFF00));
-  EscribirByte(OFFSET_NUM_PARTIDAS + 1, (numPartidasTerminadas & 0x00FF));
+  EscribirByte(DIRECCION_NUM_PARTIDAS, (numPartidasTerminadas & 0xFF00));
+  EscribirByte(DIRECCION_NUM_PARTIDAS + 1, (numPartidasTerminadas & 0x00FF));
   printf("[Memoria::%s] Direccion partida:\n", __func__);
   EscribirByte(direccionMapa, (direccionGuardado & 0xFF00));
   EscribirByte(direccionMapa + 1, (direccionGuardado & 0x00FF));
+
+  //Si había una partida a retomar, la limpia
+  LimpiarPartidaARetomar();
 }
 
 static void ProcesarRetomarPartida()
 {
   osStatus_t status;
 
-  PartidaOutMsg_t mensajeTx;
+  MemoriaMsg_t mensajeTx;
+
+  if (LeerByte(DIRECCION_EXISTE_PARTIDA_RETOMAR) != EXISTE_PARTIDA_RETOMAR)
+  {
+    // No hay partida a retomar. Limpio datos retomar partida y devuelvo error en tipo petición
+    LimpiarPartidaARetomar();
+    mensajeTx.tipoPeticion = ERROR_SIN_DATOS;
+
+    status = osMessageQueuePut(e_memoriaTxMessageId, &mensajeTx, 1, 0);
+    return;
+  }
   
   mensajeTx.tipoPeticion  = RETOMAR_ULTIMA_PARTIDA;
 
   printf("[Memoria::%s] Turno:\n", __func__);
-  mensajeTx.turno = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TURNO_VICTORIA);
+  mensajeTx.turno_victoria = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TURNO_VICTORIA);
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
     printf("[Memoria::%s] Tiempo blancas:\n", __func__);
@@ -345,6 +461,15 @@ static void LimpiarMemoria(void)
   }
 
   numPartidasTerminadas = 0;
+}
+
+static void LimpiarPartidaARetomar(void)
+{
+  for (int direccion = DIRECCION_PARTIDA_RETOMAR; direccion < DIRECCION_PRIMERA_FINALIZADA; direccion++)
+  {
+    EscribirByte(direccion, 0);
+  }
+  EscribirByte(DIRECCION_EXISTE_PARTIDA_RETOMAR, 0);
 }
 
 // Max: 0x7FFF

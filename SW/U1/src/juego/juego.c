@@ -57,6 +57,14 @@ osMessageQueueId_t  e_juegoRxMessageId;
 // osThreadId_t e_juegoEsperaThreadId;
  osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
+MemoriaMsg_t paq;
+MemoriaMsg_t paqIn;
+uint8_t* map;
+uint8_t firstRound = 0;
+
+osStatus_t status;
+osStatus_t flag;
+osStatus_t flagPause;
 AJD_Tablero tablero;
 uint8_t predict[64];
 lcdMessage_t lcdMsg;
@@ -133,8 +141,8 @@ char* tiempoNegrasMinStr;
 char* tiempoNegrasSegStr;
 
 modo_t modot;
-PartidaOutMsg_t paq;
-PartidaInMsg_t paqIn;
+MemoriaMsg_t paq;
+MemoriaMsg_t paqIn;
 uint8_t firstRound = 0;
 osStatus_t status;
 osStatus_t flag;
@@ -180,20 +188,18 @@ AJD_CasillaPtr tPromo;
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
             status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-            if(status == osOK && paq.tipoPeticion == RETOMAR_ULTIMA_PARTIDA){
-               memcpy(map, paq.dato, 64 * sizeof(uint8_t));
-               estado_juego.juegan_blancas = paq.turno;
-               memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
-               memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
-               memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
-               memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
-               estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
-               estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
-               free(tiempoBlancasMinStr);
-               free(tiempoNegrasMinStr);
-               free(tiempoBlancasSegStr);
-               free(tiempoNegrasSegStr);
-            }
+            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
+            estado_juego.juegan_blancas = paq.turno_victoria;
+            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
+            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
+            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
+            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
+            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
+            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
+            free(tiempoBlancasMinStr);
+            free(tiempoNegrasMinStr);
+            free(tiempoBlancasSegStr);
+            free(tiempoNegrasSegStr);
             
              
          }else if(flag == FLAG_START){
@@ -348,16 +354,16 @@ AJD_CasillaPtr tPromo;
       break;
       case Stop:
 			osTimerStop(tick_segundos);
-         memset(&paqIn, 0, sizeof(PartidaInMsg_t));
+         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
          for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
-         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
-         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
-         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
-         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
-         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
-         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
-         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
          paqIn.turno_victoria = estado_juego.juegan_blancas;
          paqIn.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
          status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
@@ -365,16 +371,16 @@ AJD_CasillaPtr tPromo;
       break;
       case Win:
          osTimerStop(tick_segundos);
-         memset(&paqIn, 0, sizeof(PartidaInMsg_t));
+         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
          for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
-         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
-         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
-         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
-         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
-         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
-         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
-         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
          paqIn.turno_victoria = estado_juego.juegan_blancas;
          paqIn.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
          status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
@@ -836,14 +842,14 @@ static void juegoTestBench(void* argument){
    //osMessageQueueId_t e_comPlacasRxThreadId;
 
    uint8_t tbPos[32];
-   PartidaOutMsg_t tbPaq;
+   MemoriaMsg_t tbPaq;
    uint8_t tbMap[64];
    ECasilla tbCasilla;
    //e_positionMessageId = osMessageQueueNew(10, sizeof(ECasilla), NULL);
    //e_juegoTxMessageId = osMessageQueueNew(10, sizeof(uint64_t), NULL);
    //e_juegoRxMessageId = osMessageQueueNew(10, sizeof(uint8_t), NULL);
-   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(PartidaOutMsg_t), NULL);
-   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PartidaOutMsg_t), NULL);
+   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(MemoriaMsg_t), NULL);
+   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(MemoriaMsg_t), NULL);
    //tbPaq = malloc(sizeof(PAQ_status));
 
    osThreadFlagsSet(e_juegoThreadId, FLAG_START);

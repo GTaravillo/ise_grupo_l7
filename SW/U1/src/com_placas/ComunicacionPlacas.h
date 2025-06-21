@@ -25,15 +25,17 @@ typedef enum
   MENSAJE_RTC          = 4,
   MENSAJE_POSICION     = 5,
   MENSAJE_MEMORIA      = 6,
-  MENSAJE_DISTANCIA    = 7,
-  MENSAJE_NFC          = 8,
-  MENSAJE_ALIMENTACION = 9,
-  MENSAJE_MICROFONO    = 10
-} ERemitente;
+  MENSAJE_JUEGO        = 7,
+  MENSAJE_DISTANCIA    = 8,
+  MENSAJE_NFC          = 9,
+  MENSAJE_ALIMENTACION = 10,
+  MENSAJE_MICROFONO    = 11
+} EModulos;
 
 typedef struct
 {
-  ERemitente remitente;
+  EModulos remitente;
+  EModulos destinatario;
   char mensaje[TAM_MENSAJE_MAX];
 } mensaje_t;
 
