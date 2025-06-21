@@ -533,12 +533,20 @@ void RC_RUN(void *argument){
 				printf("Read: ");
 				for(i = 0; i < 16; i++)
 				{
-					printf("%02x", pData[i]);
+          if (i < 9)
+					printf("%02x ", pData[i]);
+          if (i == 9)
+            printf("\n pieza =");
+          if (i >= 9)
+            printf("%c ", pData[i]);
 				}
+        printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
 				printf("\n");
-				msg.mensaje[0] = (char)pData[0];
+        msg.remitente = MENSAJE_NFC;
+				msg.mensaje[0] = (char)(pData[9]-48);
+        
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
-        osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
+        //osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
 				MFRC522_Halt();
        
 			}
@@ -548,10 +556,12 @@ void RC_RUN(void *argument){
 			}
 		}
 		
+    
 	}else if(state == MI_NOTAGERR){
 		printf("No card read\n");
 	}else{
 		printf("Error\n");
+    printf("%d \n", state);
 	}
   
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);
