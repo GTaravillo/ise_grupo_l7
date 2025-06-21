@@ -49,42 +49,22 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero);
 AJD_Estado estado_juego;   // Estado del juego
 //static time_t crono;       // Temporizador para contar tiempo
 modo_t modo = Init;
-modo_t modot;
-// osMessageQueueId_t  e_ConsultPosition;
-// osMessageQueueId_t  e_ConsultStatus;
-// osMessageQueueId_t  e_PiezaLevantada;
+
 osMessageQueueId_t  e_juegoTxMessageId;
 osMessageQueueId_t  e_juegoRxMessageId;
 
-//osMessageQueueId_t e_positionMessageId;
-//   //osMessageQueueId_t e_juegoTxMessageId;
-//   //osMessageQueueId_t e_juegoRxMessageId;
-//   osMessageQueueId_t e_memoriaTxMessageId;
-//   osMessageQueueId_t e_memoriaRxMessageId;
-osThreadId_t e_juegoThreadId;
-osThreadId_t e_juegoEsperaThreadId;
-osThreadId_t e_juegoTestbenchThreadId;
+ osThreadId_t e_juegoThreadId;
+// osThreadId_t e_juegoEsperaThreadId;
+ osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
-PartidaOutMsg_t paq;
-PartidaInMsg_t paqIn;
-uint8_t* map;
-uint8_t firstRound = 0;
-
-osStatus_t status;
-osStatus_t flag;
-osStatus_t flagPause;
 AJD_Tablero tablero;
-
+uint8_t predict[64];
 lcdMessage_t lcdMsg;
- 
-//uint8_t posCl[32];
- 
- ECasilla movedCasilla;
- uint8_t movedId;
- uint8_t predict[64];
- //uint64_t predict_64b = 0;
- AJD_CasillaPtr tPromo;
- LedStripMsg_t ledMsg;
+LedStripMsg_t ledMsg;
+uint8_t* map;
+
+
+
  
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ P�BLICA
@@ -147,10 +127,21 @@ void tick_segundos_callback(void *argument){
 static void stateMachine(void* argument)
 {
  
- char* tiempoBlancasMinStr;
- char* tiempoBlancasSegStr;
- char* tiempoNegrasMinStr;
- char* tiempoNegrasSegStr;
+char* tiempoBlancasMinStr;
+char* tiempoBlancasSegStr;
+char* tiempoNegrasMinStr;
+char* tiempoNegrasSegStr;
+
+modo_t modot;
+PartidaOutMsg_t paq;
+PartidaInMsg_t paqIn;
+uint8_t firstRound = 0;
+osStatus_t status;
+osStatus_t flag;
+osStatus_t flagPause;
+ECasilla movedCasilla;
+uint8_t movedId;
+AJD_CasillaPtr tPromo;
 
  while(true){
 
@@ -189,18 +180,20 @@ static void stateMachine(void* argument)
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
             status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
-            estado_juego.juegan_blancas = paq.turno;
-            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
-            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
-            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
-            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
-            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
-            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
-            free(tiempoBlancasMinStr);
-            free(tiempoNegrasMinStr);
-            free(tiempoBlancasSegStr);
-            free(tiempoNegrasSegStr);
+            if(status == osOK && paq.tipoPeticion == RETOMAR_ULTIMA_PARTIDA){
+               memcpy(map, paq.dato, 64 * sizeof(uint8_t));
+               estado_juego.juegan_blancas = paq.turno;
+               memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
+               memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
+               memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
+               memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
+               estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
+               estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
+               free(tiempoBlancasMinStr);
+               free(tiempoNegrasMinStr);
+               free(tiempoBlancasSegStr);
+               free(tiempoNegrasSegStr);
+            }
             
              
          }else if(flag == FLAG_START){
@@ -345,7 +338,7 @@ static void stateMachine(void* argument)
          }
       break;
       case Pause:
-				osTimerStop(tick_segundos);
+			osTimerStop(tick_segundos);
          flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
          if (flag == FLAG_RESUME){
             modo = modot;
@@ -356,21 +349,35 @@ static void stateMachine(void* argument)
       case Stop:
 			osTimerStop(tick_segundos);
          memset(&paqIn, 0, sizeof(PartidaInMsg_t));
-         for(int i = 0; i < 64; i++) paq.dato[i] = tablero.casilla[i].pieza | (tablero.casilla[i].color_pieza << 7);
-         paq.turno = estado_juego.juegan_blancas;
-         paq.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
-         paq.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
-         paq.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
-         paq.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
-         paq.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
-         paq.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
-         paq.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
-         paq.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
-         status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
+         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
+         paqIn.turno_victoria = estado_juego.juegan_blancas;
+         paqIn.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
+         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
          modo = Init;
       break;
       case Win:
          osTimerStop(tick_segundos);
+         memset(&paqIn, 0, sizeof(PartidaInMsg_t));
+         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
+         paqIn.turno_victoria = estado_juego.juegan_blancas;
+         paqIn.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
+         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
          modo = Init;
          //osThreadFlagsSet(e_serverThreadId, FLAG_WIN);
       break;
