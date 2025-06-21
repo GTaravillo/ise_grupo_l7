@@ -163,7 +163,7 @@ extern void MFRC522_AntennaOff(void);
 extern void MFRC522_Halt(void);
 
 extern SPI_HandleTypeDef hspi3;
-extern osMessageQueueId_t cola_nfc;
+// extern osMessageQueueId_t cola_nfc;
 extern osThreadId_t tid_Thread_NFC;
 
 /* Para probaci�n

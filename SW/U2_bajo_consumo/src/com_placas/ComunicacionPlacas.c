@@ -43,10 +43,9 @@ static void UartCallback(uint32_t event);
 void ComunicacionPlacasInitialize(void)	{
   InitUart();
   e_comPlacasRxThreadId  = osThreadNew(RunRx, NULL, NULL);
-  osDelay(100);
   e_comPlacasTxThreadId  = osThreadNew(RunTx, NULL, NULL);
-  e_comPlacasTxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, TAM_MENSAJE_MAX, NULL);
-  e_comPlacasRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, TAM_MENSAJE_MAX, NULL);
+  e_comPlacasTxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, sizeof(ComPlacasMsg_t), NULL);
+  e_comPlacasRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, sizeof(ComPlacasMsg_t), NULL);
 	
   if ((e_comPlacasRxThreadId == NULL)  || (e_comPlacasTxThreadId == NULL) || 
       (e_comPlacasTxMessageId == NULL) || (e_comPlacasRxMessageId == NULL)) 
@@ -88,12 +87,12 @@ static void RunTx(void *argument)
   {
     printf("[com::%s] Esperando mensaje...\n", __func__);
     status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
-    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.remitente);
+    printf("[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
 	  {
-	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
+	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
 	  }
-    USARTdrv->Send(&mensajeTx, sizeof(mensajeTx));
+    USARTdrv->Send(&mensajeTx, sizeof(ComPlacasMsg_t));
 	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
   }
 }
@@ -104,7 +103,7 @@ static void RunRx(void *argument)
 
   uint32_t flag;
   ComPlacasMsg_t mensajeRx = {};
-  int bytesMensaje = sizeof(mensajeRx);
+  int bytesMensaje = sizeof(ComPlacasMsg_t);
   printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
@@ -112,8 +111,14 @@ static void RunRx(void *argument)
 		memset(&mensajeRx, 0, sizeof mensajeRx);
     printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
-    flag = osThreadFlagsWait(RECEIVE_COMPLETE, osFlagsWaitAny, osWaitForever);	// Espero 5 seg a que se reciban los 3 bytes
-	
+    flag = osThreadFlagsWait(0xFFF, osFlagsWaitAny, osWaitForever);
+    
+    if (flag == ERROR_FRAMING)
+    {
+      USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
+
     printf("[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
     {
@@ -794,5 +799,9 @@ static void UartCallback(uint32_t event)
   else if (event & ARM_USART_EVENT_RECEIVE_COMPLETE)
   {
     osThreadFlagsSet(e_comPlacasRxThreadId, RECEIVE_COMPLETE);
+  }
+  else if (event & ARM_USART_EVENT_RX_FRAMING_ERROR)
+  {
+    osThreadFlagsSet(e_comPlacasRxThreadId, ERROR_FRAMING);
   }
 }

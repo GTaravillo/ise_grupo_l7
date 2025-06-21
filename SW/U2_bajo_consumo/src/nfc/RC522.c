@@ -32,7 +32,7 @@
 #include "../com_placas/ComunicacionPlacas.h"  //PATH_COM_PLACAS
 
 SPI_HandleTypeDef hspi3;
-osMessageQueueId_t cola_nfc;
+// osMessageQueueId_t cola_nfc;
 osThreadId_t tid_Thread_NFC;
 osStatus_t status_cola;
 ComPlacasMsg_t msg;
@@ -70,7 +70,7 @@ int Init_Thread_NFC (void);
 
 int Init_Thread_NFC (void) {
  
-  //cola_nfc = osMessageQueueNew(10, sizeof(ComPlacasMsg_t), NULL);
+  // cola_nfc = osMessageQueueNew(10, sizeof(ComPlacasMsg_t), NULL);
   tid_Thread_NFC = osThreadNew(RC_RUN, NULL, NULL);
   if (tid_Thread_NFC == NULL) {
     return(-1);
@@ -479,6 +479,7 @@ void RC_RUN(void *argument){
     /* USER CODE END WHILE */
    
 	  state = MFRC522_Request(PICC_REQALL, CT);
+    printf("[RC522::%s] state[%d]\n", __func__, state);
 	if (state == MI_OK)
 	{
 		
@@ -542,12 +543,14 @@ void RC_RUN(void *argument){
 				}
         printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
 				printf("\n");
-        msg.remitente = MENSAJE_NFC;
+        msg.destinatario = MENSAJE_JUEGO;
 				msg.mensaje[0] = (char)(pData[9]-48);
         
-        status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 0U, 0U);
-        //osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAny, osWaitForever);
+        printf("[RC522::%s] Mensaje a enviar:\n", __func__);
+        printf("[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
+        status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
 				MFRC522_Halt();
+        osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAll, osWaitForever);
        
 			}
 			else
@@ -560,8 +563,7 @@ void RC_RUN(void *argument){
 	}else if(state == MI_NOTAGERR){
 		printf("No card read\n");
 	}else{
-		printf("Error\n");
-    printf("%d \n", state);
+		printf("[RC522::%s]Error! State[%d]\n", __func__, state);
 	}
   
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);

@@ -69,7 +69,6 @@ AJD_Tablero tablero;
 uint8_t predict[64];
 lcdMessage_t lcdMsg;
 LedStripMsg_t ledMsg;
-uint8_t* map;
 
 
 
@@ -164,7 +163,8 @@ AJD_CasillaPtr tPromo;
 
    switch(modo){
       case Init:
-         flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+        //  flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+        flag = FLAG_START;
          map = malloc(64*sizeof(uint8_t));
          memset(map, 0, 64*sizeof(uint8_t));
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
@@ -717,8 +717,9 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t k2 = 0;
  uint8_t found = 0;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
- for (int i = 0; i < 32; i++) {
+ for (int i = 0; i < 32;) {
    status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
+   printf("[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
 	 //posCl[i] = pos;
    if(status == osOK) {
       uint8_t pos = msgRx.pieza;
@@ -732,16 +733,19 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
       for (int j=0; j<64; j++) {
+        printf("[RC522::%s] pos[%d] map[%d] = [%d]\n", __func__, pos, j, map[j]);
          if(map[j] == pos) {
             map[j] = 0;
-            tablero->casilla[j].pieza = (AJD_Pieza)((pos & 0x0F) +1);
+            tablero->casilla[j].pieza       = (AJD_Pieza)((pos & 0x0F) +1);
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x10) >> 4);
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
             ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
+            printf("[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
+            printf("[juego::%s] Led: posicion[%d]\n" __func__, ledMsg.posicion);
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
            do{ 
-           status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
+            status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
            
             if(status == osOK && position.casilla == convertNum(j)){
                ledMsg.nuevaJugada = true;
@@ -762,7 +766,10 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
               .mensaje[0]   = 0x01U,  // FLAG_PIEZA_LEIDA
               .mensaje[1]   = 0
             };
+            printf("[juego::%s] Mensaje a enviar:\n", __func__);
+            printf("[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
             osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
+            i++;
             break;
          }
       }
@@ -830,7 +837,7 @@ void juegoInitialize(void)
 {
   tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
   e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
-	osMessageQueueId_t e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, 3, NULL);
+	osMessageQueueId_t e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, sizeof(JuegoMsg_t), NULL);
 
   if ((e_juegoThreadId == NULL))
   {

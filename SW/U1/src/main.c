@@ -120,11 +120,11 @@ int main(void)
 	//juegoTbInitialize();
 	//LED_Initialize();
 	//LCD_Initialize();
-	MemoriaInitialize();
-  //LedStripManagerInitialize();
-	// PositionManagerInitialize();
+	//MemoriaInitialize();
+  LedStripManagerInitialize();
+	PositionManagerInitialize();
 	ComunicacionPlacasInitialize();
-  //PrincipalInitialize();
+  PrincipalInitialize();
   
   // Tests
   // TestMemoriaInitialize();
