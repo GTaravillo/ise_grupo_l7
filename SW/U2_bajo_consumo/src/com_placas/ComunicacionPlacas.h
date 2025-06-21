@@ -36,8 +36,8 @@ typedef struct
 {
   EModulos remitente;
   EModulos destinatario;
-  char mensaje[TAM_MENSAJE_MAX];
-} mensaje_t;
+  uint8_t mensaje[TAM_MENSAJE_MAX];
+} ComPlacasMsg_t;
 
 extern osThreadId_t        e_comPlacasRxThreadId;
 extern osThreadId_t        e_comPlacasTxThreadId;

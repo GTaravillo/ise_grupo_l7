@@ -8,6 +8,7 @@
       "memoria.h": "c",
       "paths.h": "c",
       "testmemoria.h": "c",
-      "cstdlib": "c"
+      "cstdlib": "c",
+      "comunicacionplacas.h": "c"
     }
 }

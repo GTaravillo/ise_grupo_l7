@@ -113,7 +113,7 @@
 #define MFRC522_MAX_LEN					16			// Buf len byte
 
 #define FLAG_PIEZA_LEIDA	0x01U
-#define FLAG_FINALIZA	0x02U
+#define FLAG_FINALIZA	    0x02U
 #define COLOR_MASK 0x10000000
 
 typedef enum{

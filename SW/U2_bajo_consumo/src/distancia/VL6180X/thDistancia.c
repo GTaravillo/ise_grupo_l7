@@ -14,7 +14,7 @@ void I2C_SignalEvent_dis(uint32_t event);
 
 ARM_DRIVER_I2C* I2Cdrv = &Driver_I2C2;
 VL6180x_RangeData_t Range;
-mensaje_t msg_dis;
+ComPlacasMsg_t msg_dis;
 uint8_t read_h = 0;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,7 +96,7 @@ void Thread_Dis(void* argument){
 
 }
 
-/* Para probación
+/* Para probaciï¿½n
 int ThSimDis(void){
     tid_ThSimDis = osThreadNew(dis_sim, NULL, NULL);
     if (tid_ThSimDis == NULL) {

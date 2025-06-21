@@ -143,28 +143,28 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
     int offset = OFFSET_FECHA_PARTIDA + i;
     infoPartida.fechaPartida[i] = LeerByte(direccionPartida + offset);
   }
-  infoPartida.fechaPartida[TAM_FECHA + 1] = '\0';
+  infoPartida.fechaPartida[TAM_FECHA] = '\0';
   // Hora
   for (int i = 0; i < TAM_HORA; i++)
   {
     int offset = OFFSET_HORA_PARTIDA + i;
     infoPartida.horaPartida[i] = LeerByte(direccionPartida + offset);
   }
-  infoPartida.horaPartida[TAM_HORA + 1] = '\0';
+  infoPartida.horaPartida[TAM_HORA] = '\0';
   // Nombre blancas
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
     int offset = OFFSET_NOMBRE_BLANCAS + i;
     infoPartida.nombreBlancas[i] = LeerByte(direccionPartida + offset);
   }
-  infoPartida.nombreBlancas[TAM_NOMBRE_JUGADOR + 1] = '\0';
+  infoPartida.nombreBlancas[TAM_NOMBRE_JUGADOR] = '\0';
   // Nombre negras
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
     int offset = OFFSET_NOMBRE_NEGRAS + i;
     infoPartida.nombreNegras[i] = LeerByte(direccionPartida + offset);
   }
-  infoPartida.nombreNegras[TAM_NOMBRE_JUGADOR + 1] = '\0';
+  infoPartida.nombreNegras[TAM_NOMBRE_JUGADOR] = '\0';
   // Victoria
   infoPartida.turno_victoria = LeerByte(direccionPartida + OFFSET_TURNO_VICTORIA);
 

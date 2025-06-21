@@ -35,7 +35,7 @@ SPI_HandleTypeDef hspi3;
 osMessageQueueId_t cola_nfc;
 osThreadId_t tid_Thread_NFC;
 osStatus_t status_cola;
-mensaje_t msg;
+ComPlacasMsg_t msg;
 
 //osThreadId_t tid_ThSimNfc;
 
@@ -70,7 +70,7 @@ int Init_Thread_NFC (void);
 
 int Init_Thread_NFC (void) {
  
-  //cola_nfc = osMessageQueueNew(10, sizeof(mensaje_t), NULL);
+  //cola_nfc = osMessageQueueNew(10, sizeof(ComPlacasMsg_t), NULL);
   tid_Thread_NFC = osThreadNew(RC_RUN, NULL, NULL);
   if (tid_Thread_NFC == NULL) {
     return(-1);

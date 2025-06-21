@@ -50,7 +50,7 @@ AJD_Estado estado_juego;   // Estado del juego
 //static time_t crono;       // Temporizador para contar tiempo
 modo_t modo = Init;
 
-osMessageQueueId_t  e_juegoTxMessageId;
+// osMessageQueueId_t  e_juegoTxMessageId;
 osMessageQueueId_t  e_juegoRxMessageId;
 
  osThreadId_t e_juegoThreadId;
@@ -170,8 +170,8 @@ AJD_CasillaPtr tPromo;
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
          //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
-         e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
-         e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
+        //  e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
+        //  e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
          memset(predict,0,8*8*sizeof(uint8_t));
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          memset(&lcdMsg, 0, sizeof(lcdMessage_t));
@@ -709,7 +709,7 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
 {
  osStatus_t status;
- uint8_t pos;
+ JuegoMsg_t msgRx = { 0 };
  uint8_t placeHolder;
  //uint8_t position;
  ECasilla position;
@@ -717,10 +717,11 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t k2 = 0;
  uint8_t found = 0;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
- for (int i = 0; i < 32; i++){
-   status = osMessageQueueGet(e_juegoRxMessageId, &pos, NULL, osWaitForever);
+ for (int i = 0; i < 32; i++) {
+   status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
 	 //posCl[i] = pos;
-   if(status == osOK){
+   if(status == osOK) {
+      uint8_t pos = msgRx.pieza;
       found = 0;
       // do{
       //    if(k2 < 7){
@@ -731,7 +732,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
       for (int j=0; j<64; j++) {
-         if(map[j] == pos){
+         if(map[j] == pos) {
             map[j] = 0;
             tablero->casilla[j].pieza = (AJD_Pieza)((pos & 0x0F) +1);
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x10) >> 4);
@@ -753,8 +754,15 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
                ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
-          }while(position.casilla != convertNum(j));
+          } while(position.casilla != convertNum(j));
             found = 1;
+            ComPlacasMsg_t msgTx = {
+              .remitente    = MENSAJE_JUEGO,
+              .destinatario = MENSAJE_NFC,
+              .mensaje[0]   = 0x01U,  // FLAG_PIEZA_LEIDA
+              .mensaje[1]   = 0
+            };
+            osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
             break;
          }
       }
@@ -771,6 +779,13 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       
    }
  }
+ ComPlacasMsg_t msgTx = {
+  .remitente    = MENSAJE_JUEGO,
+  .destinatario = MENSAJE_NFC,
+  .mensaje[0]   = 0x02U,  // FLAG_FINALIZA
+  .mensaje[1]   = 0
+ };
+ osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
 }
 
 //void actualizaCrono()
@@ -813,9 +828,9 @@ uint8_t convertNum(uint8_t n){
 
 void juegoInitialize(void)
 {
-   tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
-   e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
-	
+  tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
+  e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
+	osMessageQueueId_t e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, 3, NULL);
 
   if ((e_juegoThreadId == NULL))
   {
@@ -883,7 +898,7 @@ static void juegoTestBench(void* argument){
     osDelay(500);
    for(int i = 0; i < 32; i++){
       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-      osDelay(100); // 10ms delay between sending each piece
+      osDelay(100); // 100ms delay between sending each piece
    }
    // printChessboard();
    // osDelay(100);
