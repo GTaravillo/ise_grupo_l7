@@ -172,7 +172,7 @@ static void TestGuardarPartidaSinFinalizar(int numTest);
 static void TestGuardarPartidaFinalizada(int numTest);
 static void TestRetomarUltimaPartida();
 static void TestLimpiarMemoria();
-static bool ConfirmarDatosRecibidos(int numTest, PartidaOutMsg_t mensajeRx);
+static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx);
 
 void TestMemoriaInitialize(void)
 {
@@ -191,7 +191,7 @@ static void Run(void *argument)
 	uint32_t flag = osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll, osWaitForever);
   printf("[TestMemoria::%s] Modulo memoria inicializado\n", __func__);
   
-  PartidaOutMsg_t mensajeRx = {0};
+  MemoriaMsg_t mensajeRx = {0};
   #if TEST_RETOMAR_PARTIDA_1 == 1
 		flag = osThreadFlagsWait(FLAG_READY, osFlagsWaitAll, osWaitForever);
     TestGuardarPartidaSinFinalizar(1);
@@ -230,7 +230,7 @@ static void TestGuardarPartidaSinFinalizar(int numTest)
   osStatus_t status;
 	printf("[TestMemoria::%s] Envio datos:\n", __func__);
 
-  PartidaInMsg_t ultimaPartida = {0};
+  MemoriaMsg_t ultimaPartida = {0};
 
   switch (numTest)
   {
@@ -281,7 +281,7 @@ static void TestGuardarPartidaFinalizada(int numTest)
 	osStatus_t status;
 	printf("[TestMemoria::%s] Envio datos:\n", __func__);
 
-  PartidaInMsg_t partidaFinalizada = {0};
+  MemoriaMsg_t partidaFinalizada = {0};
 
   switch (numTest)
   {
@@ -332,7 +332,7 @@ static void TestRetomarUltimaPartida()
   osStatus_t status;
 	printf("[TestMemoria::%s] Peticion retomar ultima partida\n", __func__);
 
-  PartidaInMsg_t ultimaPartida = {0};
+  MemoriaMsg_t ultimaPartida = {0};
 
   ultimaPartida.tipoPeticion = RETOMAR_ULTIMA_PARTIDA;
 
@@ -342,10 +342,10 @@ static void TestRetomarUltimaPartida()
 
 static void TestLimpiarMemoria()
 {
-
+  
 }
 
-static bool ConfirmarDatosRecibidos(int numTest, PartidaOutMsg_t mensajeRx)
+static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
 {
   printf("[TestMemoria::%s] Confirmo datos recibidos:\n", __func__);
   bool turnoCorrecto;
@@ -353,7 +353,7 @@ static bool ConfirmarDatosRecibidos(int numTest, PartidaOutMsg_t mensajeRx)
   bool tiempoNegrasCorrecto;
   bool datoCorrecto;
 
-	printf("[TestMemoria::%s] Turno: [0x%02X] = [0x%02X]\n", __func__, mensajeRx.turno, turno_victoria1);
+	printf("[TestMemoria::%s] Turno: [0x%02X] = [0x%02X]\n", __func__, mensajeRx.turno_victoria, turno_victoria1);
 
 	printf("[TestMemoria::%s] Tiempo blancas:\n", __func__);
 	for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
@@ -379,14 +379,14 @@ static bool ConfirmarDatosRecibidos(int numTest, PartidaOutMsg_t mensajeRx)
   switch (numTest)
   {
     case 1:
-      turnoCorrecto         = mensajeRx.turno == turno_victoria1;
+      turnoCorrecto         = mensajeRx.turno_victoria == turno_victoria1;
       tiempoBlancasCorrecto = memcmp(mensajeRx.tiempoBlancas, tiempoBlancas1, TAM_TIEMPO_JUGADOR) == 0;
       tiempoNegrasCorrecto  = memcmp(mensajeRx.tiempoNegras, tiempoNegras1, TAM_TIEMPO_JUGADOR) == 0;
       datoCorrecto          = memcmp(mensajeRx.dato, tablero1, TAM_DATOS) == 0;
     break;
 
     case 2:
-      turnoCorrecto         = mensajeRx.turno == turno_victoria2;
+      turnoCorrecto         = mensajeRx.turno_victoria == turno_victoria2;
       tiempoBlancasCorrecto = memcmp(mensajeRx.tiempoBlancas, tiempoBlancas2, TAM_TIEMPO_JUGADOR) == 0;
       tiempoNegrasCorrecto  = memcmp(mensajeRx.tiempoNegras, tiempoNegras2, TAM_TIEMPO_JUGADOR) == 0;
       datoCorrecto          = memcmp(mensajeRx.dato, tablero2, TAM_DATOS) == 0;

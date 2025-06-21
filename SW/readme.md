@@ -51,6 +51,10 @@ Printf:         PB3
     **I2C1**  
     SDA:        PB8  
     SCL:        PB9  
+    INT1:       PC9
+    INT2:       PF12
+    INT3:       PF14
+    INT4:       PF15
   
 ### Memoria  
     **I2C2**  

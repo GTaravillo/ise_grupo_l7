@@ -1,10 +1,10 @@
 #include "ComunicacionPlacas.h"
 
-#include "../config/Paths.h"
-#include PATH_LED_STRIP
+#include <stdio.h>
+#include <string.h>
 
-#include "stdio.h"
-#include "string.h"
+#include "../Config/Paths.h"
+#include PATH_JUEGO
 
 /*USART Driver*/
 extern 	ARM_DRIVER_USART Driver_USART7;
@@ -21,6 +21,21 @@ void ComunicacionPlacasInitialize(void);
 static void InitUart(void);
 static void RunRx(void *argument);
 static void RunTx(void *argument);
+
+static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx);
+
+static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajePosicion(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeMemoria(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeJuego(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeAlimentacion(ComPlacasMsg_t mensajeRx);
+static void ProcesarMensajeMicrofono(ComPlacasMsg_t mensajeRx);
+
 static void UartCallback(uint32_t event);
 
 void ComunicacionPlacasInitialize(void)	{
@@ -62,92 +77,714 @@ static void InitUart(void)
 
 static void RunTx(void *argument) 
 {
+  ComPlacasMsg_t mensajeTx;
   uint32_t flag;
-  // int bytesMensaje = sizeof(mensajeTx);
-  // printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
-
+  int bytesMensaje = sizeof(mensajeTx);
+  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+  
   while(1) 
   {
-//    printf("[com::%s] Esperando mensaje...\n", __func__);
-//    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
-//    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.tipoMensaje);
-//	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
-//	  {
-//	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
-//	  }
-//    USARTdrv->Send(&mensajeTx, bytesMensaje);
-//	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
-//		
-//		osDelay(5000);
+    printf("[com::%s] Esperando mensaje...\n", __func__);
+    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
+    printf("[com::%s] Mensaje a enviar: tipo [%d]\n", __func__, mensajeTx.remitente);
+	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
+	  {
+	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
+	  }
+    USARTdrv->Send(&mensajeTx, sizeof(mensajeTx));
+	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
   }
 }
 
-// Recibe bytes (char) y propaga la información a los modulos correspondientes
 static void RunRx(void *argument) 
 {
+  printf("[com::%s]\n", __func__);
+
   uint32_t flag;
-  mensaje_t mensajeRx = {};
+  ComPlacasMsg_t mensajeRx = {};
   int bytesMensaje = sizeof(mensajeRx);
   printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
   {
-		memset(&mensajeRx, 0, sizeof(mensajeRx));
+		memset(&mensajeRx, 0, sizeof mensajeRx);
     printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
     flag = osThreadFlagsWait(RECEIVE_COMPLETE, osFlagsWaitAny, osWaitForever);	// Espero 5 seg a que se reciban los 3 bytes
 	
-    switch (mensajeRx.remitente)
-    {
-      case MENSAJE_LCD:
-
-        break;
-
-      case MENSAJE_LED_STRIP:
-
-        break;
-
-      case MENSAJE_SERVIDOR:
-
-        break;
-
-      case MENSAJE_RTC:
-
-        break;
-
-      case MENSAJE_POSICION:
-        
-        break;
-
-      case MENSAJE_MEMORIA:
-        
-        break;
-
-      case MENSAJE_DISTANCIA:
-        
-        break;
-
-      case MENSAJE_NFC:
-        
-        break;
-
-      case MENSAJE_ALIMENTACION:
-
-        break;
-
-      case MENSAJE_MICROFONO:
-
-        break;
-
-      default:
-        break;
-
-    }
-    printf("[com::%s] Mensaje recibido: remitente [%d]\n", __func__, mensajeRx.remitente);
-	  for (int i = 0; i < (TAM_MENSAJE_MAX - 1); i++)
+    printf("[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
+	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
     {
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
     }
+
+    ProcesarMensajeRecibido(mensajeRx);
+  }
+}
+
+static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.remitente);
+  switch (mensajeRx.remitente)
+  {
+    case MENSAJE_LCD:
+      ProcesarMensajeLcd(mensajeRx);
+    break;
+
+    case MENSAJE_LED_STRIP:
+      ProcesarMensajeLedStrip(mensajeRx);
+    break;
+
+    case MENSAJE_SERVIDOR:
+      ProcesarMensajeServidor(mensajeRx);
+    break;
+
+    case MENSAJE_RTC:
+      ProcesarMensajeRtc(mensajeRx);
+    break;
+
+    case MENSAJE_POSICION:
+      ProcesarMensajePosicion(mensajeRx);
+    break;
+
+    case MENSAJE_MEMORIA:
+      ProcesarMensajeMemoria(mensajeRx);
+    break;
+
+    case MENSAJE_JUEGO:
+      ProcesarMensajeJuego(mensajeRx);
+    break;
+
+    case MENSAJE_DISTANCIA:
+      ProcesarMensajeDistancia(mensajeRx);
+    break;
+
+    case MENSAJE_NFC:
+      ProcesarMensajeNfc(mensajeRx);
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      ProcesarMensajeAlimentacion(mensajeRx);
+    break;
+
+    case MENSAJE_MICROFONO:
+      ProcesarMensajeMicrofono(mensajeRx);
+    break;
+
+    default:
+      printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
+    break;
+  }
+}
+
+static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Destinatario [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajePosicion(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeMemoria(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeJuego(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+    {
+      JuegoMsg_t msg = {
+        .remitente = mensajeRx.remitente,
+        .pieza     = mensajeRx.mensaje[0]
+      };
+      osMessageQueuePut(e_juegoRxMessageId, &msg, 1, 0);
+    }
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeAlimentacion(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
+  }
+}
+
+static void ProcesarMensajeMicrofono(ComPlacasMsg_t mensajeRx)
+{
+  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+  switch (mensajeRx.destinatario)
+  {
+    case MENSAJE_LCD:
+      
+    break;
+
+    case MENSAJE_LED_STRIP:
+      
+    break;
+
+    case MENSAJE_SERVIDOR:
+      
+    break;
+
+    case MENSAJE_RTC:
+      
+    break;
+
+    case MENSAJE_POSICION:
+      
+    break;
+
+    case MENSAJE_MEMORIA:
+      
+    break;
+
+    case MENSAJE_JUEGO:
+      
+    break;
+
+    case MENSAJE_DISTANCIA:
+      
+    break;
+
+    case MENSAJE_NFC:
+      
+    break;
+
+    case MENSAJE_ALIMENTACION:
+      
+    break;
+
+    case MENSAJE_MICROFONO:
+      
+    break;
+
+    default:
+      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+    break;
   }
 }
 

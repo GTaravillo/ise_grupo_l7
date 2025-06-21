@@ -1,12 +1,14 @@
 {
     "files.associations": {
-        "*.cgi": "perl",
-        "stdio.h": "c",
-        "ledstripmanager.h": "c",
-        "stdbool.h": "c",
-        "compare": "c",
-        "memoria.h": "c",
-        "paths.h": "c",
-        "testmemoria.h": "c"
+      "*.cgi": "perl",
+      "stdio.h": "c",
+      "ledstripmanager.h": "c",
+      "stdbool.h": "c",
+      "compare": "c",
+      "memoria.h": "c",
+      "paths.h": "c",
+      "testmemoria.h": "c",
+      "cstdlib": "c",
+      "comunicacionplacas.h": "c"
     }
 }

@@ -4,12 +4,18 @@
 	#include "tablero.h"
 	#include <stdint.h>
 	#include <time.h>
+	
+  #include "../Config/Paths.h"
+  #include PATH_COM_PLACAS
   
-  	#define FLAG_START		0x01U
-  	#define FLAG_RETOCAR	0x02U
- 	#define FLAG_PAUSE		0X04U
-	#define FLAG_STOP		0X08U
-	#define FLAG_RESUME		0X10U
+  #define FLAG_START   0x01U
+  #define FLAG_RETOCAR 0x02U
+ 	#define FLAG_PAUSE   0X04U
+	#define FLAG_STOP    0X08U
+	#define FLAG_RESUME  0X10U
+  #define FLAG_TURN    0x20U
+
+  #define NUMERO_MENSAJES_JUEGO_MAX 3
 
   //typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	// #define NONE	0x00
@@ -20,7 +26,7 @@
 	// #define DAMA	0x05
 	// #define REY		0x06
 
-	#define WHITE	0X80
+	#define WHITE	0X10
 	#define BLACK	0X00
 
 	#define FLAG_ERROR_MOV 0X02
@@ -58,7 +64,13 @@
 		 uint8_t        fin_juego : 1;          // Salir del juego?
 	} AJD_Estado, *AJD_EstadoPtr;
   
+  typedef struct {
+    EModulos remitente;
+    uint8_t pieza;
+  } JuegoMsg_t;
   
+  extern osMessageQueueId_t e_juegoRxMessageId;
+
 	/////////////////////////////////////////////////////////////////////
 	// INTERFAZ PUBLICA
 	//
@@ -69,8 +81,8 @@
 //	void menu();
 //	void liberaRecursos();
 	
-	extern void juegoInitialize(void);
-	extern void juegoTbInitialize(void);
+	void juegoInitialize(void);
+	void juegoTbInitialize(void);
 
 #endif // JUEGO_H
 

@@ -49,24 +49,16 @@ bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero);
 AJD_Estado estado_juego;   // Estado del juego
 //static time_t crono;       // Temporizador para contar tiempo
 modo_t modo = Init;
-modo_t modot;
-// osMessageQueueId_t  e_ConsultPosition;
-// osMessageQueueId_t  e_ConsultStatus;
-// osMessageQueueId_t  e_PiezaLevantada;
-osMessageQueueId_t  e_juegoTxMessageId;
+
+// osMessageQueueId_t  e_juegoTxMessageId;
 osMessageQueueId_t  e_juegoRxMessageId;
 
-//osMessageQueueId_t e_positionMessageId;
-//   //osMessageQueueId_t e_juegoTxMessageId;
-//   //osMessageQueueId_t e_juegoRxMessageId;
-//   osMessageQueueId_t e_memoriaTxMessageId;
-//   osMessageQueueId_t e_memoriaRxMessageId;
-osThreadId_t e_juegoThreadId;
-osThreadId_t e_juegoEsperaThreadId;
-osThreadId_t e_juegoTestbenchThreadId;
+ osThreadId_t e_juegoThreadId;
+// osThreadId_t e_juegoEsperaThreadId;
+ osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
-PartidaOutMsg_t paq;
-PartidaInMsg_t paqIn;
+MemoriaMsg_t paq;
+MemoriaMsg_t paqIn;
 uint8_t* map;
 uint8_t firstRound = 0;
 
@@ -74,17 +66,13 @@ osStatus_t status;
 osStatus_t flag;
 osStatus_t flagPause;
 AJD_Tablero tablero;
-
+uint8_t predict[64];
 lcdMessage_t lcdMsg;
- 
-//uint8_t posCl[32];
- 
- ECasilla movedCasilla;
- uint8_t movedId;
- uint8_t predict[64];
- //uint64_t predict_64b = 0;
- AJD_CasillaPtr tPromo;
- LedStripMsg_t ledMsg;
+LedStripMsg_t ledMsg;
+uint8_t* map;
+
+
+
  
 ////////////////////////////////////////////////////////////////////////////
 // INTERFAZ P�BLICA
@@ -147,10 +135,21 @@ void tick_segundos_callback(void *argument){
 static void stateMachine(void* argument)
 {
  
- char* tiempoBlancasMinStr;
- char* tiempoBlancasSegStr;
- char* tiempoNegrasMinStr;
- char* tiempoNegrasSegStr;
+char* tiempoBlancasMinStr;
+char* tiempoBlancasSegStr;
+char* tiempoNegrasMinStr;
+char* tiempoNegrasSegStr;
+
+modo_t modot;
+MemoriaMsg_t paq;
+MemoriaMsg_t paqIn;
+uint8_t firstRound = 0;
+osStatus_t status;
+osStatus_t flag;
+osStatus_t flagPause;
+ECasilla movedCasilla;
+uint8_t movedId;
+AJD_CasillaPtr tPromo;
 
  while(true){
 
@@ -171,8 +170,8 @@ static void stateMachine(void* argument)
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
          //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
-         e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
-         e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
+        //  e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
+        //  e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
          memset(predict,0,8*8*sizeof(uint8_t));
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          memset(&lcdMsg, 0, sizeof(lcdMessage_t));
@@ -190,7 +189,7 @@ static void stateMachine(void* argument)
             //Flagset Placeholder
             status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
             memcpy(map, paq.dato, 64 * sizeof(uint8_t));
-            estado_juego.juegan_blancas = paq.turno;
+            estado_juego.juegan_blancas = paq.turno_victoria;
             memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
             memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
             memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
@@ -214,6 +213,7 @@ static void stateMachine(void* argument)
       break;
       case Lectura:
          _colocaPiezas(&tablero, map);
+         
          estado_juego.segundos_negras = 600;
          osTimerStart(tick_segundos, 1000);
          modo = Idle;
@@ -233,7 +233,7 @@ static void stateMachine(void* argument)
       case LevantaPieza:
          //esperaPausaDetener();
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
-         if(status == osOK){
+         if(status == osOK && !movedCasilla.ocupada){
             movedId = convertNum(movedCasilla.casilla);
             estado_juego.casilla_origen = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = ORIGEN_SELECCIONADO;
@@ -286,7 +286,7 @@ static void stateMachine(void* argument)
       break;
       case CompMov:
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
-         if(status == osOK){
+         if(status == osOK && movedCasilla.ocupada){
             //ledMsg.nuevaJugada = true;
             //osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             movedId = convertNum(movedCasilla.casilla);
@@ -324,7 +324,7 @@ static void stateMachine(void* argument)
                  printf(" [Test] Jaque al negro\n");
                   estado_juego.negro_jaque = 0;
                }
-               modo = Idle;
+               
 
             }else{
                //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
@@ -335,13 +335,16 @@ static void stateMachine(void* argument)
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
             
+            //flag = osThreadFlagsWait(FLAG_TURN, osFlagsWaitAny, 200);
+            //modo = flag == FLAG_TURN ? Idle : modo;
+            modo = Idle;
             // movInfo.dstY = movedId/8;
             // movInfo.dstX = movedId%8;
             // movInfo.destino = &(tablero->casillas[movInfo.dstY*8+movInfo.dstX]);
          }
       break;
       case Pause:
-				osTimerStop(tick_segundos);
+			osTimerStop(tick_segundos);
          flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
          if (flag == FLAG_RESUME){
             modo = modot;
@@ -351,22 +354,36 @@ static void stateMachine(void* argument)
       break;
       case Stop:
 			osTimerStop(tick_segundos);
-         memset(&paqIn, 0, sizeof(PartidaInMsg_t));
-         for(int i = 0; i < 64; i++) paq.dato[i] = tablero.casilla[i].pieza | (tablero.casilla[i].color_pieza << 7);
-         paq.turno = estado_juego.juegan_blancas;
-         paq.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '0';
-         paq.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '0';
-         paq.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '0';
-         paq.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '0';
-         paq.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '0';
-         paq.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '0';
-         paq.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '0';
-         paq.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '0';
-         status = osMessageQueuePut(e_memoriaRxMessageId, &paq, 1, 0);
+         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
+         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
+         paqIn.turno_victoria = estado_juego.juegan_blancas;
+         paqIn.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
+         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
          modo = Init;
       break;
       case Win:
          osTimerStop(tick_segundos);
+         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
+         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
+         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
+         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
+         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
+         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
+         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
+         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
+         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
+         paqIn.turno_victoria = estado_juego.juegan_blancas;
+         paqIn.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
+         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
          modo = Init;
          //osThreadFlagsSet(e_serverThreadId, FLAG_WIN);
       break;
@@ -692,7 +709,7 @@ void ejecutaPartida (AJD_TableroPtr tablero)
 void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
 {
  osStatus_t status;
- uint8_t pos;
+ JuegoMsg_t msgRx = { 0 };
  uint8_t placeHolder;
  //uint8_t position;
  ECasilla position;
@@ -700,10 +717,11 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t k2 = 0;
  uint8_t found = 0;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
- for (int i = 0; i < 32; i++){
-   status = osMessageQueueGet(e_juegoRxMessageId, &pos, NULL, osWaitForever);
+ for (int i = 0; i < 32; i++) {
+   status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
 	 //posCl[i] = pos;
-   if(status == osOK && pos != 0){
+   if(status == osOK) {
+      uint8_t pos = msgRx.pieza;
       found = 0;
       // do{
       //    if(k2 < 7){
@@ -714,10 +732,10 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
       for (int j=0; j<64; j++) {
-         if(map[j] == pos){
+         if(map[j] == pos) {
             map[j] = 0;
-            tablero->casilla[j].pieza = (AJD_Pieza)(pos & 0x1F);
-            tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x80) >> 7);
+            tablero->casilla[j].pieza = (AJD_Pieza)((pos & 0x0F) +1);
+            tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x10) >> 4);
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
             ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
@@ -736,8 +754,15 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
                ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
             }
-          }while(position.casilla != convertNum(j));
+          } while(position.casilla != convertNum(j));
             found = 1;
+            ComPlacasMsg_t msgTx = {
+              .remitente    = MENSAJE_JUEGO,
+              .destinatario = MENSAJE_NFC,
+              .mensaje[0]   = 0x01U,  // FLAG_PIEZA_LEIDA
+              .mensaje[1]   = 0
+            };
+            osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
             break;
          }
       }
@@ -754,6 +779,13 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       
    }
  }
+ ComPlacasMsg_t msgTx = {
+  .remitente    = MENSAJE_JUEGO,
+  .destinatario = MENSAJE_NFC,
+  .mensaje[0]   = 0x02U,  // FLAG_FINALIZA
+  .mensaje[1]   = 0
+ };
+ osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
 }
 
 //void actualizaCrono()
@@ -775,11 +807,11 @@ void newGameMap(void)
    AJD_Pieza piezaPeon[8] = {PEON1, PEON2, PEON3, PEON4, PEON5, PEON6, PEON7, PEON8};
    for (int col=0; col < 8; col++)
   {
-      map[col] = (piezasMayores[col] | BLACK);
-      map[col + 7*8] = (piezasMayores[col] | WHITE);
+      map[col] = ((piezasMayores[col] -1)| BLACK);
+      map[col + 7*8] = ((piezasMayores[col] -1)| WHITE);
 
-      map[col + 8] = (piezaPeon[col] | BLACK);
-      map[col + 6*8] = (piezaPeon[col] | WHITE);        
+      map[col + 8] = ((piezaPeon[col] -1)| BLACK);
+      map[col + 6*8] = ((piezaPeon[col] -1)| WHITE);        
   }
 
 }
@@ -796,9 +828,9 @@ uint8_t convertNum(uint8_t n){
 
 void juegoInitialize(void)
 {
-   tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
-   e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
-	
+  tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
+  e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
+	osMessageQueueId_t e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, 3, NULL);
 
   if ((e_juegoThreadId == NULL))
   {
@@ -825,48 +857,48 @@ static void juegoTestBench(void* argument){
    //osMessageQueueId_t e_comPlacasRxThreadId;
 
    uint8_t tbPos[32];
-   PartidaOutMsg_t tbPaq;
+   MemoriaMsg_t tbPaq;
    uint8_t tbMap[64];
    ECasilla tbCasilla;
    //e_positionMessageId = osMessageQueueNew(10, sizeof(ECasilla), NULL);
    //e_juegoTxMessageId = osMessageQueueNew(10, sizeof(uint64_t), NULL);
    //e_juegoRxMessageId = osMessageQueueNew(10, sizeof(uint8_t), NULL);
-   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(PartidaOutMsg_t), NULL);
-   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(PartidaOutMsg_t), NULL);
+   e_memoriaTxMessageId = osMessageQueueNew(32, sizeof(MemoriaMsg_t), NULL);
+   e_memoriaRxMessageId = osMessageQueueNew(10, sizeof(MemoriaMsg_t), NULL);
    //tbPaq = malloc(sizeof(PAQ_status));
 
    osThreadFlagsSet(e_juegoThreadId, FLAG_START);
 	//osDelay(300);
 
-   tbPos[0] = TORRE1 | WHITE;
-   tbPos[1] = CABALLO1 | WHITE;
-   tbPos[2] = ALFIL1 | WHITE;
-   tbPos[3] = DAMA | WHITE;
-   tbPos[4] = REY | WHITE;
-   tbPos[5] = ALFIL2 | WHITE;
-   tbPos[6] = CABALLO2 | WHITE;
-   tbPos[7] = TORRE2 | WHITE;
+   tbPos[0] = (TORRE1 - 1)| WHITE;
+   tbPos[1] = (CABALLO1 - 1)| WHITE;
+   tbPos[2] = (ALFIL1 - 1)| WHITE;
+   tbPos[3] = (DAMA - 1)| WHITE;
+   tbPos[4] = (REY - 1)| WHITE;
+   tbPos[5] = (ALFIL2 - 1)| WHITE;
+   tbPos[6] = (CABALLO2 - 1)| WHITE;
+   tbPos[7] = (TORRE2 - 1)| WHITE;
     for (int i = 8; i < 16; i++) {
-       tbPos[i] = (PEON1 + (i - 8)) | WHITE;
-       tbPos[i+8] = (PEON1 + (i - 8)) | BLACK;
+       tbPos[i] = (PEON1 - 1 + (i - 8)) | WHITE;
+       tbPos[i+8] = (PEON1  - 1 + (i - 8)) | BLACK;
     }
     
     // 黑方
-   tbPos[24] = TORRE1 | BLACK;
-   tbPos[25] = CABALLO1 | BLACK;
-   tbPos[26] = ALFIL1 | BLACK;
-   tbPos[27] = DAMA | BLACK;
-   tbPos[28] = REY | BLACK;
-   tbPos[29] = ALFIL2 | BLACK;
-   tbPos[30] = CABALLO2 | BLACK;
-   tbPos[31] = TORRE2 | BLACK;
+   tbPos[24] = (TORRE1 - 1)| BLACK;
+   tbPos[25] = (CABALLO1 - 1)| BLACK;
+   tbPos[26] = (ALFIL1 - 1)| BLACK;
+   tbPos[27] = (DAMA - 1)| BLACK;
+   tbPos[28] = (REY - 1)| BLACK;
+   tbPos[29] = (ALFIL2 - 1)| BLACK;
+   tbPos[30] = (CABALLO2 - 1)| BLACK;
+   tbPos[31] = (TORRE2 - 1)| BLACK;
 
    // tbPaq.map = tbMap;
    // tbPaq.turno_color = 
     osDelay(500);
    for(int i = 0; i < 32; i++){
       osMessageQueuePut(e_juegoRxMessageId, &tbPos[i], 1, osWaitForever);
-      osDelay(100); // 10ms delay between sending each piece
+      osDelay(100); // 100ms delay between sending each piece
    }
    // printChessboard();
    // osDelay(100);

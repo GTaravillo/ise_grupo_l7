@@ -25,17 +25,19 @@ typedef enum
   MENSAJE_RTC          = 4,
   MENSAJE_POSICION     = 5,
   MENSAJE_MEMORIA      = 6,
-  MENSAJE_DISTANCIA    = 7,
-  MENSAJE_NFC          = 8,
-  MENSAJE_ALIMENTACION = 9,
-  MENSAJE_MICROFONO    = 10
-} ERemitente;
+  MENSAJE_JUEGO        = 7,
+  MENSAJE_DISTANCIA    = 8,
+  MENSAJE_NFC          = 9,
+  MENSAJE_ALIMENTACION = 10,
+  MENSAJE_MICROFONO    = 11
+} EModulos;
 
 typedef struct
 {
-  ERemitente remitente;
-  char mensaje[TAM_MENSAJE_MAX];
-} mensaje_t;
+  EModulos remitente;
+  EModulos destinatario;
+  uint8_t mensaje[TAM_MENSAJE_MAX];
+} ComPlacasMsg_t;
 
 extern osThreadId_t        e_comPlacasRxThreadId;
 extern osThreadId_t        e_comPlacasTxThreadId;
