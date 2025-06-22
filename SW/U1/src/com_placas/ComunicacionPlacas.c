@@ -89,7 +89,7 @@ static void RunTx(void *argument)
 
     if (status != osOK)
     {
-      // printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
+     // printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
       continue;
     }
 
@@ -100,7 +100,7 @@ static void RunTx(void *argument)
 	  }
     USARTdrv->Send(&mensajeTx, sizeof(ComPlacasMsg_t));
 	  flag = osThreadFlagsWait(ERROR_FRAMING | SEND_COMPLETE, osFlagsWaitAll, 1000);
-  
+    
     if (flag == ERROR_FRAMING)
     {
       USARTdrv->Control(ARM_USART_ABORT_SEND, 0);
@@ -109,7 +109,7 @@ static void RunTx(void *argument)
     }
     else if (flag & osFlagsError)
     {
-      continue;
+      continue; 
     }
   }
 }
@@ -138,7 +138,7 @@ static void RunRx(void *argument)
     }
     else if (flag & osFlagsError)
     {
-      continue;
+      continue; 
     }
 
     printf("[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
@@ -201,7 +201,7 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      // printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
+     // printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
     break;
   }
 }
@@ -621,7 +621,7 @@ static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
     break;
 
     case MENSAJE_JUEGO:
-      
+      osThreadFlagsSet(e_juegoThreadId, FLAG_SENSOR_DISTANCIA);
     break;
 
     case MENSAJE_DISTANCIA:

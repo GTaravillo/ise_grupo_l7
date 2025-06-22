@@ -104,7 +104,7 @@ void tick_segundos_callback(void *argument){
          sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
          osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
          lcdMsg.printMsg.printLine = PRINT_LINE_2;
-         sprintf(lcdMsg.printMsg.msg, "VICTORIA NEGRA");
+         sprintf(lcdMsg.printMsg.msg, "NEGRAS GANAN");
          osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
          modo = Win;
      }
@@ -120,7 +120,7 @@ void tick_segundos_callback(void *argument){
          sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
          osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
          lcdMsg.printMsg.printLine = PRINT_LINE_2;
-         sprintf(lcdMsg.printMsg.msg, "VICTORIA BLANCA");
+         sprintf(lcdMsg.printMsg.msg, "BLANCAS GANAN");
          osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
          modo = Win;
       }
@@ -140,6 +140,7 @@ char* tiempoNegrasSegStr;
 modo_t modot;
 MemoriaMsg_t paq;
 MemoriaMsg_t paqIn;
+ComPlacasMsg_t msg_dis;
 uint8_t firstRound = 0;
 osStatus_t status;
 osStatus_t flag;
@@ -216,16 +217,20 @@ AJD_CasillaPtr tPromo;
          modo = Idle;
          break;
          case Idle:
-         if (!firstRound) {
-           estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
-           estado_juego.casilla_seleccionada = NO_SELECCION;
-           // ledMsg.nuevaJugada = true;
-           memset(predict, 0, 64*sizeof(uint8_t));
-           // osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+				osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
+			
+			  osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+
+         if(!firstRound){
+            estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
+            estado_juego.casilla_seleccionada = NO_SELECCION;
+            // ledMsg.nuevaJugada = true;
+            memset(predict, 0, 64*sizeof(uint8_t));
+            // osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
           } else {
             osTimerStart(tick_segundos, 1000);
             firstRound = 0;
-          }
+         }
          modo = LevantaPieza;
          break;
       case LevantaPieza:
@@ -291,8 +296,8 @@ AJD_CasillaPtr tPromo;
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
             if(estado_juego.casilla_origen == estado_juego.casilla_destino){
-              ledMsg.nuevaJugada = true;
-              osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+               ledMsg.nuevaJugada = true;
+               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
               modo = LevantaPieza;
                break;
             }else if(esMovimientoValido(&tablero, &estado_juego)){

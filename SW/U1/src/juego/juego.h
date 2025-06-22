@@ -25,11 +25,15 @@
 	// #define ALFIL	0x04
 	// #define DAMA	0x05
 	// #define REY		0x06
+	
+	extern osThreadId_t e_juegoThreadId;
+
 
 	#define WHITE	0X10
 	#define BLACK	0X00
 
 	#define FLAG_ERROR_MOV 0X02
+	#define FLAG_SENSOR_DISTANCIA 0X20
 
 
 	typedef enum { NO_SELECCION, ORIGEN_SELECCIONADO, DESTINO_SELECCIONADO } AJD_Seleccion;

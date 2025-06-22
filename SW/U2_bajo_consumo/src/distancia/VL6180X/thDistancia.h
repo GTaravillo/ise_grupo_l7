@@ -9,6 +9,7 @@
 extern int ThDistancia(void);
 extern VL6180x_RangeData_t Range;
 
+extern osThreadId_t tid_ThDistancia;
 
 /* Para probación
 extern void dis_sim(void* argument);

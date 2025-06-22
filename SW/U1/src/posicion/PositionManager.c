@@ -71,7 +71,7 @@ uint8_t last_buff_exp4[2] = {0xFF, 0xFF};
 	P17 - 0xFF,0x7F / P16 - 0xFF,0xBF / P15 - 0xFF,0xDF / P14 - 0xFF,0xEF / 	TODO EL RATO, 1ER BYTE A FF
 	P13 - 0xFF,0xF7 / P12 - 0xFF,0xFB / P11 - 0xFF,0xFD / P10 - 0xFF,0xFE
 	
-	P00 - 0xFE,0xFF / P01 - 0xFD,0xFF / P02 - 0xFB,0xFF / P03 - 0xF7,0xFF /   TODO EL RATO, 2ï¿½ BYTE A FF
+	P00 - 0xFE,0xFF / P01 - 0xFD,0xFF / P02 - 0xFB,0xFF / P03 - 0xF7,0xFF /   TODO EL RATO, 2º BYTE A FF
 	P04 - 0xEF,0xFF / P05 - 0xDF,0xFF / P06 - 0xBF,0xFF / P07 - 0x7F,0xFF
 */
 
@@ -101,7 +101,7 @@ static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios, uint8_t*
 
 
 /**************************************/
-//Inicializaciï¿½n del hilo
+//Inicialización del hilo
 void PositionManagerInitialize(void)
 {
   e_positionManagerThreadId = osThreadNew(Run, NULL, NULL);
@@ -129,7 +129,7 @@ static void Run(void *argument)
 	
   while (1)
   {
-		uint32_t flags = osThreadFlagsWait(HALL_DETECTED_1 | HALL_DETECTED_2 | HALL_DETECTED_3 | HALL_DETECTED_4, osFlagsWaitAny, osWaitForever);  // Espera a que haya interrupciï¿½n (cambio de estado de algï¿½n hall)
+		uint32_t flags = osThreadFlagsWait(HALL_DETECTED_1 | HALL_DETECTED_2 | HALL_DETECTED_3 | HALL_DETECTED_4, osFlagsWaitAny, osWaitForever);  // Espera a que haya interrupción (cambio de estado de algún hall)
 
 		switch(flags){
 			case HALL_DETECTED_1:
@@ -170,7 +170,7 @@ void I2C_SignalEvent(uint32_t event){
   }
 }
 
-//Inicializaciï¿½n de los 4 pines que conectados a los INT de cada expansor, 
+//Inicialización de los 4 pines que conectados a los INT de cada expansor, 
 // sus IRQHandler y callbacks se encuentran en stm32f4xx_it.c (carpeta irq)
 void INTpinsInitialize(void){
 	
@@ -200,7 +200,7 @@ void INTpinsInitialize(void){
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
-//Inicializaciï¿½n de los 4 expansores
+//Inicialización de los 4 expansores
 void Pcf8575Initialize(void){
 	uint8_t writeBuffer[2] = {0xFF, 0xFF}; // Configura todos los pines como entradas (1 = High)
 
@@ -223,7 +223,7 @@ void Pcf8575Initialize(void){
 	
 }
 
-//Funciï¿½n que lee el estado de un expansor, pasada su SLAVE_X_ADDR 
+//Función que lee el estado de un expansor, pasada su SLAVE_X_ADDR 
 // y lo guarda en su buff_expX[2] correspondiente
 void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
 	
@@ -240,13 +240,13 @@ void leerExpansor(uint8_t slave_addr, uint8_t *buffer) {
 }
 
 
-//Funciï¿½n que se encarga de devolver el nï¿½mero de la casilla que se va a enviar al mï¿½dulo de juego
-// siguiendo el mapeado g_numeroHallMap[][], mediante los atributos del nï¿½mero del expansor y el resultado
-// de la XOR entre la ï¿½ltima situcaciï¿½n de los hall y la actual (cambios)
+//Función que se encarga de devolver el número de la casilla que se va a enviar al módulo de juego
+// siguiendo el mapeado g_numeroHallMap[][], mediante los atributos del número del expansor y el resultado
+// de la XOR entre la última situcación de los hall y la actual (cambios)
 static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios, uint8_t* buffer_actual, bool* ocupada)
 {
-	//numero_expansor -> del 0 al 3 el nï¿½mero del expansor que ha realizado la interrupciï¿½n
-	//cambios -> XOR entre buff_expX y last_buff_expX (compara la ï¿½ltima situaciï¿½n de los hall y la actual, 
+	//numero_expansor -> del 0 al 3 el número del expansor que ha realizado la interrupción
+	//cambios -> XOR entre buff_expX y last_buff_expX (compara la última situación de los hall y la actual, 
 																														// y entrega los bits que han cambiado)
   int casilla = 0;	
 	
@@ -267,13 +267,13 @@ static uint8_t mapPinToHallIndex(int numero_expansor, uint16_t cambios, uint8_t*
 	return casilla;
 }
 
-//Funciï¿½n que pasados el exp_num, y los punteros al buffer_actual y al buffer_anterior, detecta en quï¿½ casilla
-// se ha levantado o colocado pieza y se la envï¿½a al mï¿½dulo de juego.c
+//Función que pasados el exp_num, y los punteros al buffer_actual y al buffer_anterior, detecta en qué casilla
+// se ha levantado o colocado pieza y se la envía al módulo de juego.c
 void detectarCambiosHall(uint8_t numero_expansor, uint8_t* buffer_actual, uint8_t* buffer_anterior)
 {
-	//numero_expansor -> del 1 al 4 el nï¿½mero del expansor que ha realizado la interrupciï¿½n
-	//buffer_actual -> buffer con la situaciï¿½n actual de las casillas
-	//buffer_anterior -> buffer con la situcaciï¿½n pasada de las casillas
+	//numero_expansor -> del 1 al 4 el número del expansor que ha realizado la interrupción
+	//buffer_actual -> buffer con la situación actual de las casillas
+	//buffer_anterior -> buffer con la situcación pasada de las casillas
 
   ECasilla casilla;
 	uint16_t cambios = ((buffer_actual[0] << 8)|buffer_actual[1]) ^ ((buffer_anterior[0] << 8)|buffer_anterior[1]); // XOR: bits que cambiaron
