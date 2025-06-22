@@ -79,20 +79,34 @@ static void RunTx(void *argument)
 {
   ComPlacasMsg_t mensajeTx;
   uint32_t flag;
-  int bytesMensaje = sizeof(ComPlacasMsg_t);
+  int bytesMensaje = sizeof(mensajeTx);
   printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
   
   while(1) 
   {
     printf("[com::%s] Esperando mensaje...\n", __func__);
-    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, osWaitForever);
+    status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, 1000);
+
+    if (status != osOK)
+    {
+      printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
+      continue;
+    }
+
     printf("[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
 	  {
-	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [%d]\n", __func__, i, mensajeTx.mensaje[i]);
+	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
 	  }
     USARTdrv->Send(&mensajeTx, sizeof(ComPlacasMsg_t));
-	  flag = osThreadFlagsWait(SEND_COMPLETE, osFlagsWaitAll, osWaitForever);
+	  flag = osThreadFlagsWait(ERROR_FRAMING | SEND_COMPLETE, osFlagsWaitAll, 1000);
+  
+    if (flag == ERROR_FRAMING)
+    {
+      USARTdrv->Control(ARM_USART_ABORT_SEND, 0);
+      USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
   }
 }
 
@@ -102,7 +116,7 @@ static void RunRx(void *argument)
 
   uint32_t flag;
   ComPlacasMsg_t mensajeRx = {};
-  int bytesMensaje = sizeof(mensajeRx);
+  int bytesMensaje = sizeof(ComPlacasMsg_t);
   printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
@@ -110,18 +124,19 @@ static void RunRx(void *argument)
 		memset(&mensajeRx, 0, sizeof mensajeRx);
     printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
-    flag = osThreadFlagsWait(RECEIVE_COMPLETE, osFlagsWaitAll, osWaitForever);	// Espero 5 seg a que se reciban los 3 bytes
-	
+    flag = osThreadFlagsWait(ERROR_FRAMING | RECEIVE_COMPLETE, osFlagsWaitAny, 1000);
+    
+    if (flag == ERROR_FRAMING)
+    {
+      USARTdrv->Control(ARM_USART_ABORT_SEND, 0);
+      USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
+
     printf("[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
     {
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
-    }
-
-    if (flag == ERROR_FRAMING)
-    {
-      USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
-      continue;
     }
 
     ProcesarMensajeRecibido(mensajeRx);
