@@ -742,7 +742,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             ledMsg.nuevaJugada = false;
             ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
             printf("[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
-            printf("[juego::%s] Led: posicion[%d]\n" __func__, ledMsg.posicion);
+            printf("[juego::%s] Led: posicion[%d]\n", __func__, ledMsg.posicion);
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
            do{ 
             status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
