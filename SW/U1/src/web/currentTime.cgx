@@ -1,7 +1,7 @@
 t <form>
 t <text>
 t <id>timeOut</id>
-c v<value>%s</value>
+c b<value>%s</value>
 t </text>
 t </form>
 .

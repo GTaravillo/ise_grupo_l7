@@ -17,45 +17,6 @@
 // Main stack size must be multiple of 8 Bytes
 #define SERVER_STK_SZ (1024U)
 
-// typedef enum
-// {
-//   PAGINA_PRINCIPAL       = '0',
-//   PAGINA_NUEVA_PARTIDA   = '1',
-//   PAGINA_RETOMAR_PARTIDA = '2',
-//   PAGINA_LEADERBOARD     = '3',
-//   PAGINA_HISTORICO       = '4'
-// } EPaginaWeb;
-
-// typedef enum {
-//   // Global
-//   HORA                = 'a',
-//   FECHA               = 'b',
-//   CONSUMO             = 'c',
-//   // Nueva partida
-//   NOMBRE_BLANCAS      = 'd',
-//   NOMBRE_NEGRAS       = 'e',
-//   TIEMPO_PARTIDA      = 'f',
-//   INCREMENTO_CHECKBOX = 'g',
-//   TIEMPO_INCREMENTO   = 'h',
-//   AYUDA               = 'v',
-//   INICIAR             = 'w',
-// } EVariableIn;
-
-// typedef enum {
-//   // Global
-//   HORA                = 'a',
-//   FECHA               = 'b',
-//   CONSUMO             = 'c',
-//   // Nueva partida
-//   NOMBRE_BLANCAS      = 'd',
-//   NOMBRE_NEGRAS       = 'e',
-//   TIEMPO_PARTIDA      = 'f',
-//   INCREMENTO_CHECKBOX = 'g',
-//   TIEMPO_INCREMENTO   = 'h',
-//   AYUDA               = 'v',
-//   INICIAR             = 'w',
-// } EVariableOut;
-
 /* Public */
 osThreadId_t        e_serverThreadId;
 osMessageQueueId_t  e_serverInputMessageId;
@@ -63,6 +24,11 @@ osMessageQueueId_t  e_serverOutputMessageId;
 
 /* Private */
 static  uint64_t g_serverStk[SERVER_STK_SZ / 8];
+
+// Nueva Partida
+static uint8_t matchTime[5 + 1];     // mm:ss [5, 90]
+static uint8_t incrementTime[2 + 1]; // ss    [2, 30]
+static bool incrementEnabled; 
 
 static  const osThreadAttr_t g_serverAttr = 
 {
@@ -153,82 +119,82 @@ static void Run(void *argument)
 }
 
 void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
-    char var[40];
+  char var[40];
 
-    char player1Name[TAM_NOMBRE_JUGADOR + 1] = {0};
-    char player2Name[TAM_NOMBRE_JUGADOR + 1] = {0};
-    char matchTimeStr[2 + 1] = {0};        // [5, 90]
-    char incrementTimeStr[2 + 1] = {0};    // [2, 30]
-    char incrementEnabledStr[5 + 1] = {0}; // true/false
-    char ayudaStr[5 + 1] = {0};            // true/false
+  char player1Name[TAM_NOMBRE_JUGADOR + 1] = {0};
+  char player2Name[TAM_NOMBRE_JUGADOR + 1] = {0};
+  char matchTimeStr[2 + 1] = {0};        // [5, 90]
+  char incrementTimeStr[2 + 1] = {0};    // [2, 30]
+  char incrementEnabledStr[5 + 1] = {0}; // true/false
+  char ayudaStr[5 + 1] = {0};            // true/false
 
-    printf("[CGI] Received POST data: %s\n", data);
+  printf("[CGI] Received POST data: %s\n", data);
 
-    do 
-    {
-      data = netCGI_GetEnvVar(data, var, sizeof(var));
-      if (strncmp(var, "player1Name=", TAM_NOMBRE_JUGADOR) == 0) {
-        strncpy(player1Name, var + TAM_NOMBRE_JUGADOR, sizeof(player1Name) - 1);
-      } else if (strncmp(var, "player2Name=", TAM_NOMBRE_JUGADOR) == 0) {
-        strncpy(player2Name, var + TAM_NOMBRE_JUGADOR, sizeof(player2Name) - 1);
-      } else if (strncmp(var, "matchTime=", 2) == 0) {
-        strncpy(matchTimeStr, var + 2, sizeof(matchTimeStr) - 1);
-      } else if (strncmp(var, "incrementTime=", 2) == 0) {
-        strncpy(incrementTimeStr, var + 2, sizeof(incrementTimeStr) - 1);
-      } else if (strncmp(var, "incrementEnabled=", 5) == 0) {
-        strncpy(incrementEnabledStr, var + 5, sizeof(incrementEnabledStr) - 1);
-      } else if (strncmp(var, "ayuda=", 5) == 0) {
-        strncpy(ayudaStr, var + 5, sizeof(ayudaStr) - 1);
-      }
-    } while (data);
+  do 
+  {
+    data = netCGI_GetEnvVar(data, var, sizeof(var));
+    if (strncmp(var, "player1Name=", 12) == 0) {
+      strncpy(player1Name, var + 12, sizeof(player1Name) - 1);
+    } else if (strncmp(var, "player2Name=", 12) == 0) {
+      strncpy(player2Name, var + 12, sizeof(player2Name) - 1);
+    } else if (strncmp(var, "matchTime=", 9) == 0) {
+      strncpy(matchTimeStr, var + 9, sizeof(matchTimeStr) - 1);
+    } else if (strncmp(var, "incrementTime=", 14) == 0) {
+      strncpy(incrementTimeStr, var + 14, sizeof(incrementTimeStr) - 1);
+    } else if (strncmp(var, "incrementEnabled=", 16) == 0) {
+      strncpy(incrementEnabledStr, var + 16, sizeof(incrementEnabledStr) - 1);
+      bool enabled = (strcmp(incrementEnabledStr, "true") == 0);
+      incrementEnabled = enabled;
+    } else if (strncmp(var, "ayuda=", 6) == 0) {
+      strncpy(ayudaStr, var + 6, sizeof(ayudaStr) - 1);
+      
+    }
+  } while (data);
 
-    uint8_t matchTime     = atoi(matchTimeStr);
-    uint8_t incrementTime = atoi(incrementTimeStr);
-    bool incrementEnabled = (strcmp(incrementEnabledStr, "true") == 0);
-    bool ayuda            = (strcmp(ayudaStr, "true") == 0);
+  uint8_t matchTime     = atoi(matchTimeStr);
+  uint8_t incrementTime = atoi(incrementTimeStr);
+  bool ayuda            = (strcmp(ayudaStr, "true") == 0);
 
-    printf("[CGI] player1Name: %s\n", player1Name);
-    printf("[CGI] player2Name: %s\n", player2Name);
-    printf("[CGI] matchTime: %d\n", matchTime);
-    printf("[CGI] incrementTime: %d\n", incrementTime);
-    printf("[CGI] incrementEnabled: %d\n", incrementEnabled);
-
-    // printf("[CGI] ayuda: %d\n", ayuda);
+  printf("[CGI] player1Name: %s\n", player1Name);
+  printf("[CGI] player2Name: %s\n", player2Name);
+  printf("[CGI] matchTime: %d\n", matchTime);
+  printf("[CGI] incrementTime: %d\n", incrementTime);
+  printf("[CGI] incrementEnabled: %d\n", incrementEnabled);
 }
 
 uint32_t netCGI_Script(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi) {
-    uint32_t len = 0U;
-    printf("[CGI] netCGI_Script called with env: %s\n", env);
+  uint32_t len = 0U;
+  printf("[CGI] netCGI_Script called with env: %s\n", env);
 
-    const char* fmt = &env[1]; // format string starts after the code
+  const char* fmt = &env[1]; // format string starts after the code
 
-    switch (env[0]) {
-        case 'v': { // currentTime.cgx
-            const char* timeStr = GetRtcTime();
-            len = (uint32_t)sprintf(buf, fmt, timeStr);
-            printf("[CGI] Returning time: %s\n", timeStr);
-            break;
-        }
-        case 'w': { // currentDate.cgx
-            const char* dateStr = GetRtcDate();
-            len = (uint32_t)sprintf(buf, fmt, dateStr);
-            printf("[CGI] Returning date: %s\n", dateStr);
-            break;
-        }
-        case 'x': { // currentConsumo.cgx
-            len = (uint32_t)sprintf(buf, fmt, "500mA");
-            printf("[CGI] Returning consumo: 500mA\n");
-            break;
-        }
-        default:
-            printf("[CGI] Unknown script code: %c\n", env[0]);
-            buf[0] = '\0';
-            len = 0;
-            break;
-    }
+  switch (env[0]) {
+    case 'a': { // currentDate.cgx
+      const char* dateStr = GetRtcDate();
+      len = (uint32_t)sprintf(buf, fmt, dateStr);
+      printf("[CGI] Returning date: %s\n", dateStr);
+    break; }
 
-    printf("[CGI] Response buffer: %s\n", buf);
-    return len;
+    case 'b': { // currentTime.cgx
+      const char* timeStr = GetRtcTime();
+      len = (uint32_t)sprintf(buf, fmt, timeStr);
+      printf("[CGI] Returning time: %s\n", timeStr);
+    break; }
+
+    case 'c': { // currentConsumo.cgx
+      len = (uint32_t)sprintf(buf, fmt, "500mA");
+      printf("[CGI] Returning consumo: 500mA\n");
+    break; }
+
+    default:
+      printf("[CGI] Unknown script code: %c\n", env[0]);
+      buf[0] = '\0';
+      len = 0;
+    break; 
+  }
+
+  printf("[CGI] Response buffer: %s\n", buf);
+  return len;
 }
 
 static void Error_Handler(void) 

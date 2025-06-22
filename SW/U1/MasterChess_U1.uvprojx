@@ -454,11 +454,6 @@
               <FilePath>.\src\web\index.htm</FilePath>
             </File>
             <File>
-              <FileName>leaderboard.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\leaderboard.cgi</FilePath>
-            </File>
-            <File>
               <FileName>nuevaPartida.cgi</FileName>
               <FileType>9</FileType>
               <FilePath>.\src\web\nuevaPartida.cgi</FilePath>

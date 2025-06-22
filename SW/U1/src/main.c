@@ -112,15 +112,15 @@ int main(void)
 	
 
   /* Create thread functions that start executing*/
-  //Server_Initialize();
-	//RTC_Initialize();
+  Server_Initialize();
+	RTC_Initialize();
   
 	juegoInitialize();
 	//osDelay(1000);
 	//juegoTbInitialize();
 	//LED_Initialize();
 	//LCD_Initialize();
-	//MemoriaInitialize();
+	MemoriaInitialize();
   LedStripManagerInitialize();
 	PositionManagerInitialize();
 	ComunicacionPlacasInitialize();

@@ -2,7 +2,7 @@ t <!DOCTYPE html>
 t <html>
 t <head>
 t   <meta charset="UTF-8">
-t     <title>Nueva partida</title>
+t     <title>Nueva Partida</title>
 t     <script language="JavaScript" type="text/javascript" src="xml_http.js"></script>
 t     <style>
 t       :root {

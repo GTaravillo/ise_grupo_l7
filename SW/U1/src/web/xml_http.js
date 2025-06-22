@@ -22,7 +22,9 @@ const UI_IDS = {
 };
 
 const WEBPAGE_NAME = {
-  nuevaPartida: "nuevaPartida"
+  nuevaPartida: "nuevaPartida",
+  retomarPartida: "retomarPartida",
+  historico: "historico"
 };
 
 const ENDPOINTS = {
