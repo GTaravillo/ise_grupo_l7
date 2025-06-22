@@ -735,7 +735,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       for (int j=0; j<64; j++) {
         printf("[RC522::%s] pos[%d] map[%d] = [%d]\n", __func__, pos, j, map[j]);
          if(map[j] == pos) {
-            map[j] = 0;
+            map[j] = 0xFF;
             tablero->casilla[j].pieza       = (AJD_Pieza)((pos & 0x0F) +1);
             tablero->casilla[j].color_pieza = (AJD_Color)((pos & 0x10) >> 4);
             ledMsg.posicion = convertNum(j);
