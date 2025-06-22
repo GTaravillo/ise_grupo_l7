@@ -533,11 +533,11 @@ void RC_RUN(void *argument){
 				printf("Read: ");
 				for(i = 0; i < 16; i++)
 				{
-          if (i < 9)
+          //if (i < 9)
 					printf("%02x ", pData[i]);
-          if (i == 9)
+          //if (i == 9)
             printf("\n pieza =");
-          if (i >= 9)
+          //if (i >= 9)
             printf("%c ", pData[i]);
 				}
         printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);

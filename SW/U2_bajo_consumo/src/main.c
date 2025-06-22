@@ -10,6 +10,8 @@
 #include "nfc/rc522.h"
 #include "adc/adc.h"
 
+#include "bajo_consumo/BajoConsumo.h"
+
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
   * Override default HAL_GetTick function
@@ -111,6 +113,7 @@ int main(void)
   //ThDistancia();
   //ThSimNfc();
   //Init_ADC();
+	BajoConsumoInitialize();
   
   /* Start thread execution */
   osKernelStart();

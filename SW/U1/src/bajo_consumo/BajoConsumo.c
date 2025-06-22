@@ -22,6 +22,7 @@ void Run(void *argument)
 {
     GpioInit();
 
+
     while (1)
     {
       printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
