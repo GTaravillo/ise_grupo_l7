@@ -2,12 +2,15 @@
 
 #include "stm32f4xx_hal.h"
 
+#include <stdio.h>
+
 osThreadId_t e_bajoConsumoThreadId;
 
 void BajoConsumoInitialize(void);
 
 static void Run(void *argument);
 static void GpioInit(void);
+static void StopOtheBoard(void);
 static void WakeUpOtherBoard(void);
 
 void BajoConsumoInitialize(void)
@@ -15,11 +18,11 @@ void BajoConsumoInitialize(void)
   e_bajoConsumoThreadId = osThreadNew(Run, NULL, NULL);
 }
 
-int Run(void *argument)
+void Run(void *argument)
 {
     GpioInit();
 
-    while (true)
+    while (1)
     {
       printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
       uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);

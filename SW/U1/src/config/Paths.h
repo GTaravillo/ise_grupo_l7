@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 5
+#define WORKSPACE 1
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian
@@ -24,7 +24,7 @@
 	#define PATH_RTC        	"C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
   #define PATH_SERVER     	"C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/servidor/servidor.h"
 	#define PATH_UART       	"C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/uart/uart.h"
-	
+	#define PATH_BAJO_CONSUMO "C:/Users/Fabian/Desktop/workspace/UPM/Laboratorio/ISE/Bloque_II/ise_grupo_l7/SW/U1/src/bajo_consumo/BajoConsumo.h"
 
 #elif WORKSPACE == 2		// Yuanze
   #define PATH_MAIN       	"D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/main.h"

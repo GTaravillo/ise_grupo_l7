@@ -15,6 +15,7 @@
 #include PATH_PRINCIPAL
 #include PATH_TEST_MEMORIA
 #include PATH_JUEGO
+#include PATH_BAJO_CONSUMO
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**

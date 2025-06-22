@@ -2,6 +2,8 @@
 
 #include "stm32f4xx_hal.h"
 
+#include <stdio.h>
+
 #include "../config/Paths.h"
 #include PATH_ADC
 #include PATH_COM_PLACAS
@@ -10,7 +12,7 @@
 
 osThreadId_t e_bajoConsumoThreadId;
 
-static void BajoConsumoInitialize(void);
+void BajoConsumoInitialize(void);
 static void Run(void *argument);
 static void GpioInitialize(void);
 static void EntrarModoBajoConsumo(void);
@@ -25,9 +27,7 @@ void BajoConsumoInitialize(void)
 
   if (e_bajoConsumoThreadId == NULL) 
   {
-    printf("[rtc::%s] ERROR! osThreadNew [%d]\n", __func__, (e_rtcThreadId == NULL));
-    
-    Error_Handler();
+    printf("[bajo_consumo::%s] ERROR! osThreadNew [%d]\n", __func__, (e_bajoConsumoThreadId == NULL));
   }
 }
 
@@ -35,7 +35,7 @@ static void Run(void *argument)
 {
     HAL_Init();
     SystemClock_Config();
-    MX_GPIO_Init();
+    GpioInitialize();
 
     while (1)
     {
@@ -132,7 +132,7 @@ static void SystemClock_Config(void)
     /* Initialization Error */
     printf("[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
     
-    Error_Handler();
+
   }
 	
 	if(HAL_PWREx_EnableOverDrive() != HAL_OK)
@@ -140,7 +140,7 @@ static void SystemClock_Config(void)
     /* Initialization Error */
     printf("[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
     
-    Error_Handler();
+
   }
 
   /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
@@ -155,6 +155,6 @@ static void SystemClock_Config(void)
     /* Initialization Error */
     printf("[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
     
-    Error_Handler();
+
   }
 }

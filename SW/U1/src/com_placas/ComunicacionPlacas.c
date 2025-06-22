@@ -824,7 +824,7 @@ static void ProcesarMensajeMicrofono(ComPlacasMsg_t mensajeRx)
   //   default:
   //     printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
   //   break;
-  }
+  //}
 }
 
 static void UartCallback(uint32_t event) 
