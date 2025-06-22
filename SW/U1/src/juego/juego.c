@@ -218,8 +218,14 @@ AJD_CasillaPtr tPromo;
          break;
          case Idle:
 				osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
-			
-			  osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+				
+				ComPlacasMsg_t msg = {
+					.remitente = MENSAJE_JUEGO,
+					.destinatario = MENSAJE_DISTANCIA,
+					.mensaje[0] = 0X04U
+				};
+				
+			  osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
 
          if(!firstRound){
             estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
