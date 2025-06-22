@@ -8,12 +8,13 @@
 #include PATH_DISTANCIA
 #include PATH_NFC
 
+osThreadId_t e_bajoConsumoThreadId;
+
 static void BajoConsumoInitialize(void);
 static void Run(void *argument);
 static void GpioInitialize(void);
 static void EntrarModoBajoConsumo(void);
 static void SalirModoBajoConsumo(void);
-
 
 static void SystemClock_Config(void);
 
@@ -38,6 +39,7 @@ static void Run(void *argument)
 
     while (1)
     {
+      printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
       uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);
       
       if (flags == ENTRADA_BAJO_CONSUMO)
@@ -48,18 +50,6 @@ static void Run(void *argument)
       {
         SalirModoBajoConsumo();
       }
-      
-      HAL_SuspendTick();  // Stop SysTick for max power saving
-
-        // Enter STOP Mode with low power regulator ON, wait for interrupt (WFI)
-        HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-
-        HAL_ResumeTick();   // Restart SysTick
-
-        // MUST reconfigure clock after waking from STOP mode
-        SystemClock_Config();
-
-        // Optional: Indicate wake-up (e.g., toggle LED)
     }
 }
 
@@ -80,8 +70,24 @@ static void GpioInitialize(void)
     HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
-static void EntrarModoBajoConsumo(void);
-static void SalirModoBajoConsumo(void);
+static void EntrarModoBajoConsumo(void)
+{
+  printf("[bajo_consumo::%s] ENTRO EN BAJO CONSUMO\n", __func__);
+  HAL_SuspendTick();  // Stop SysTick for max power saving
+
+  // Enter STOP Mode with low power regulator ON, wait for interrupt (WFI)
+  HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+}
+
+static void SalirModoBajoConsumo(void)
+{
+  HAL_ResumeTick();   // Restart SysTick
+
+  // MUST reconfigure clock after waking from STOP mode
+  SystemClock_Config();
+  printf("[bajo_consumo::%s] SALGO DE BAJO CONSUMO\n", __func__);
+
+}
 
 void EXTI0_IRQHandler(void)
 {
@@ -91,10 +97,10 @@ void EXTI0_IRQHandler(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == GPIO_PIN_0) {
         GPIO_PinState state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
-        if (state == GPIO_PIN_SET) {
-            // Enter stop mode
+        if (state == GPIO_PIN_RESET) {
+          osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
         } else {
-            // Exit stop mode
+          osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
         }
     }
 }

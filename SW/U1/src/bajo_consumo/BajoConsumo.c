@@ -21,6 +21,7 @@ int Run(void *argument)
 
     while (true)
     {
+      printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
       uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);
       if (flags == ENTRADA_BAJO_CONSUMO)
       {
@@ -49,10 +50,12 @@ void GpioInit(void)
 
 static void WakeUpOtherBoard(void)
 {
+  printf("[bajo_consumo::%s] Mando interrupcion DESPERTAR\n", __func__);
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }
 
 static void StopOtheBoard(void)
 {
+  printf("[bajo_consumo::%s] Mando interrupcion DORMIR\n", __func__);
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 }

@@ -12,6 +12,7 @@
 #include "../lcd/lcd.h"
 #include <stdlib.h>
 
+#include "../bajo_consumo/BajoConsumo.h"
 
 #include <time.h>
 
@@ -713,6 +714,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t k1 = 0;
  uint8_t k2 = 0;
  uint8_t found = 0;
+ bool testBajoConsumo = false;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
  for (int i = 0; i < 32;) {
    status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
@@ -766,6 +768,15 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             printf("[juego::%s] Mensaje a enviar:\n", __func__);
             printf("[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
             osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
+            testBajoConsumo = !testBajoConsumo;
+            if (testBajoConsumo)
+            {
+              osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
+            }
+            else 
+            {
+              osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
+            }
             i++;
             break;
          }
