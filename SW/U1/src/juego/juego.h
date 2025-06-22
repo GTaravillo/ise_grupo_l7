@@ -15,7 +15,7 @@
 	#define FLAG_RESUME  0X10U
   #define FLAG_TURN    0x20U
 
-  #define NUMERO_MENSAJES_JUEGO_MAX 8
+  #define NUMERO_MENSAJES_JUEGO_MAX 3
 
   //typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;
 	// #define NONE	0x00
