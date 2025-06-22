@@ -108,7 +108,6 @@ static void RunTx(void *argument)
       USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
       continue;
     }
-
   }
 }
 
