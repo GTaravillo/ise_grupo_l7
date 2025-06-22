@@ -21,6 +21,7 @@ void BajoConsumoInitialize(void)
 void Run(void *argument)
 {
     GpioInit();
+	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 
 
     while (1)
