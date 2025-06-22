@@ -118,6 +118,12 @@ static void RunRx(void *argument)
       printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
     }
 
+    if (flag == ERROR_FRAMING)
+    {
+      USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
+
     ProcesarMensajeRecibido(mensajeRx);
   }
 }
@@ -801,9 +807,8 @@ static void UartCallback(uint32_t event)
   {
     osThreadFlagsSet(e_comPlacasRxThreadId, RECEIVE_COMPLETE);
   }
-  else if (event & ARM_USART_EVENT_RX_FRAMING_ERROR)
+else if (event & ARM_USART_EVENT_RX_FRAMING_ERROR)
   {
-    printf("ADELANTE\n");
-    USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+    osThreadFlagsSet(e_comPlacasRxThreadId, ERROR_FRAMING);
   }
 }

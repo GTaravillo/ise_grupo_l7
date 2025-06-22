@@ -124,7 +124,7 @@ int main(void)
   LedStripManagerInitialize();
 	PositionManagerInitialize();
 	ComunicacionPlacasInitialize();
-  PrincipalInitialize();
+  //PrincipalInitialize();
   
   // Tests
   // TestMemoriaInitialize();

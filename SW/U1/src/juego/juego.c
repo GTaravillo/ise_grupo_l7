@@ -837,7 +837,7 @@ void juegoInitialize(void)
 {
   tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
   e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
-	osMessageQueueId_t e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, sizeof(JuegoMsg_t), NULL);
+	e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, sizeof(JuegoMsg_t), NULL);
 
   if ((e_juegoThreadId == NULL))
   {

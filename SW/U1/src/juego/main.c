@@ -1,23 +1,23 @@
-#include <interfaz.h>
-#include <juego.h>
-#include <menu.h>
-#include <tablero.h>
-///////////////////////////////////////////////////////////////////////////////
-// MAIN
-//
-int main()
-{
-   AJD_Tablero tablero;
+// #include <interfaz.h>
+// #include <juego.h>
+// #include <menu.h>
+// #include <tablero.h>
+// ///////////////////////////////////////////////////////////////////////////////
+// // MAIN
+// //
+// int main()
+// {
+//    AJD_Tablero tablero;
 
-   inicializa (&tablero);
+//    inicializa (&tablero);
 
-   menu();
-   nuevoJuego (&tablero);
+//    menu();
+//    nuevoJuego (&tablero);
    
-   ejecutaPartida (&tablero);
+//    ejecutaPartida (&tablero);
    
    
-   liberaRecursos();
+//    liberaRecursos();
 
-   return 0;
-}
+//    return 0;
+// }
