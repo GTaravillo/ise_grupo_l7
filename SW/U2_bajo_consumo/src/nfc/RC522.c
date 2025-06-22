@@ -479,7 +479,6 @@ void RC_RUN(void *argument){
     /* USER CODE END WHILE */
    
 	  state = MFRC522_Request(PICC_REQALL, CT);
-    printf("[RC522::%s] state[%d]\n", __func__, state);
 	if (state == MI_OK)
 	{
 		
@@ -550,7 +549,7 @@ void RC_RUN(void *argument){
         printf("[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
 				MFRC522_Halt();
-        osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAll, 5000);
+        osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAll, 10000);
        
 			}
 			else
@@ -563,7 +562,7 @@ void RC_RUN(void *argument){
 	}else if(state == MI_NOTAGERR){
 		printf("No card read\n");
 	}else{
-		printf("[RC522::%s]Error! State[%d]\n", __func__, state);
+		// printf("[RC522::%s]Error! State[%d]\n", __func__, state);
 	}
   
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);

@@ -1,11 +1,20 @@
+#include "BajoConsumo.h"
 
 #include "stm32f4xx_hal.h"
 
-
+#include "../config/Paths.h"
+#include PATH_ADC
+#include PATH_COM_PLACAS
+#include PATH_DISTANCIA
+#include PATH_NFC
 
 static void BajoConsumoInitialize(void);
 static void Run(void *argument);
 static void GpioInitialize(void);
+static void EntrarModoBajoConsumo(void);
+static void SalirModoBajoConsumo(void);
+
+
 static void SystemClock_Config(void);
 
 void BajoConsumoInitialize(void)
@@ -29,7 +38,18 @@ static void Run(void *argument)
 
     while (1)
     {
-        HAL_SuspendTick();  // Stop SysTick for max power saving
+      uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);
+      
+      if (flags == ENTRADA_BAJO_CONSUMO)
+      {
+        EntrarModoBajoConsumo();
+      }
+      else if (flags == SALIDA_BAJO_CONSUMO)
+      {
+        SalirModoBajoConsumo();
+      }
+      
+      HAL_SuspendTick();  // Stop SysTick for max power saving
 
         // Enter STOP Mode with low power regulator ON, wait for interrupt (WFI)
         HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
@@ -50,8 +70,8 @@ static void GpioInitialize(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     // PA0 as EXTI input (wake-up trigger)
-    GPIO_InitStruct.Pin = GPIO_PIN_0;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pin  = GPIO_PIN_0;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -60,16 +80,22 @@ static void GpioInitialize(void)
     HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
+static void EntrarModoBajoConsumo(void);
+static void SalirModoBajoConsumo(void);
+
 void EXTI0_IRQHandler(void)
 {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-    if (GPIO_Pin == GPIO_PIN_0)
-    {
-        // Optional: Code executed upon wake-up
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == GPIO_PIN_0) {
+        GPIO_PinState state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+        if (state == GPIO_PIN_SET) {
+            // Enter stop mode
+        } else {
+            // Exit stop mode
+        }
     }
 }
 
@@ -88,7 +114,7 @@ static void SystemClock_Config(void)
 
   /* Enable HSE Oscillator and activate PLL with HSE as source */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState 	   = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEState 	     = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState   = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM       = 8;

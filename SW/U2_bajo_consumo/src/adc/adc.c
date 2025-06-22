@@ -38,7 +38,7 @@ void ADC1_pins_F429ZI_config(){
 
 int Init_ADC (void) {
  
-   //Inicialización potenciometros
+   //Inicializaciï¿½n potenciometros
    
 	ADC1_pins_F429ZI_config();
    
@@ -144,7 +144,7 @@ void ThADC (void *argument) {
 		adc_queue_msg.ruido = (uint32_t)(value_ruido);
 		adc_queue_msg.consumo =(uint32_t)(value_consumo);
     
-    printf("Valor de ruido medido: %f, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
+    // printf("Valor de ruido medido: %f, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
     
     osDelay(1000);
 		

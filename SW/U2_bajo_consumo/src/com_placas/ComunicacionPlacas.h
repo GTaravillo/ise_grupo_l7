@@ -14,9 +14,9 @@
 #define RECEIVE_COMPLETE  0x02
 #define ERROR_FRAMING     0x80
 #define	SEND_RECEIVE      (RECEIVE_COMPLETE | SEND_COMPLETE)
+#define TAM_MENSAJE_MAX   2
 
-#define NUMERO_MENSAJES_MAX 10    // Maximum number of messages in queue
-#define TAM_MENSAJE_MAX      2    // Maximum message size in bytes
+#define NUMERO_MENSAJES_COM_PLACAS_MAX 10    // Maximum number of messages in queue
 
 typedef enum
 {

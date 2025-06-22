@@ -40,6 +40,7 @@ void I2C_SignalEvent_dis(uint32_t event){
 int ThDistancia(void){
     tid_ThDistancia = osThreadNew(Thread_Dis, NULL, NULL);
     if (tid_ThDistancia == NULL) {
+      printf("[distancia::%s] ERROR HILO!", __func__);
         return(-1);
     }
     return(0);
@@ -61,15 +62,16 @@ void Thread_Dis(void* argument){
     //printf("VL6180x Preparado\n");
     do {
         if(key == 0){
-          flag = osThreadFlagsWait(FLAG_EMPIEZA_DIS, osFlagsWaitAny, osWaitForever);
+          flag = FLAG_EMPIEZA_DIS;//osThreadFlagsWait(FLAG_EMPIEZA_DIS, osFlagsWaitAny, osWaitForever);
           osThreadFlagsClear(FLAG_EMPIEZA_DIS);
           key = (flag & FLAG_EMPIEZA_DIS) == FLAG_EMPIEZA_DIS ? 1 : 0;
+					printf("[distancia::%s] key[%d]\n", __func__, key);
           flag = 0;
           
-        }else{
+        } else {
           
           VL6180x_RangePollMeasurement(dev, &Range);
-          //printf("VL6180x Detecta una medida\n");
+          printf("VL6180x Detecta una medida\n");
           if (Range.errorStatus == 0 ){
               
               if (read_h == 0){

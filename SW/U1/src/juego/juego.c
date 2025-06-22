@@ -91,9 +91,6 @@ LedStripMsg_t ledMsg;
 //}
 
 void tick_segundos_callback(void *argument){
-
-   
-
    if(estado_juego.juegan_blancas){
       estado_juego.segundos_blancas--;
       lcdMsg.printMsg.printLine = PRINT_LINE_1;
@@ -176,13 +173,13 @@ AJD_CasillaPtr tPromo;
          memset(&estado_juego, 0, sizeof(AJD_Estado));
          memset(&lcdMsg, 0, sizeof(lcdMessage_t));
          inicializa(&tablero);
-         modo = Espera;
          lcdMsg.mode = PRINT_NORMAL;
-         ledMsg.nuevaJugada = false;
+         ledMsg.nuevaJugada  = false;
          tiempoBlancasMinStr = malloc(2*sizeof(char));
-         tiempoNegrasMinStr = malloc(2*sizeof(char));
+         tiempoNegrasMinStr  = malloc(2*sizeof(char));
          tiempoBlancasSegStr = malloc(2*sizeof(char));
-         tiempoNegrasSegStr = malloc(2*sizeof(char));
+         tiempoNegrasSegStr  = malloc(2*sizeof(char));
+         modo = Espera;
       break;
       case Espera:
          if(flag == FLAG_RETOCAR){
@@ -215,19 +212,19 @@ AJD_CasillaPtr tPromo;
          _colocaPiezas(&tablero, map);
          
          estado_juego.segundos_negras = 600;
-         osTimerStart(tick_segundos, 1000);
          modo = Idle;
-      break;
-      case Idle:
-         if(!firstRound){
-            estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
-            estado_juego.casilla_seleccionada = NO_SELECCION;
-            // ledMsg.nuevaJugada = true;
-            memset(predict, 0, 64*sizeof(uint8_t));
-            // osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-         }else{
+         break;
+         case Idle:
+         if (!firstRound) {
+           estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
+           estado_juego.casilla_seleccionada = NO_SELECCION;
+           // ledMsg.nuevaJugada = true;
+           memset(predict, 0, 64*sizeof(uint8_t));
+           // osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+          } else {
+            osTimerStart(tick_segundos, 1000);
             firstRound = 0;
-         }
+          }
          modo = LevantaPieza;
          break;
       case LevantaPieza:
@@ -293,9 +290,9 @@ AJD_CasillaPtr tPromo;
             estado_juego.casilla_destino = &(tablero.casilla[movedId]);
             estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
             if(estado_juego.casilla_origen == estado_juego.casilla_destino){
-               modo = LevantaPieza;
-               ledMsg.nuevaJugada = true;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+              ledMsg.nuevaJugada = true;
+              osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+              modo = LevantaPieza;
                break;
             }else if(esMovimientoValido(&tablero, &estado_juego)){
                if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){

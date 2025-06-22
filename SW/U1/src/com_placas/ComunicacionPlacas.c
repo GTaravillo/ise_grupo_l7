@@ -43,8 +43,8 @@ void ComunicacionPlacasInitialize(void)	{
   e_comPlacasRxThreadId  = osThreadNew(RunRx, NULL, NULL);
   osDelay(100);
   e_comPlacasTxThreadId  = osThreadNew(RunTx, NULL, NULL);
-  e_comPlacasTxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, sizeof(ComPlacasMsg_t), NULL);
-  e_comPlacasRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_MAX, sizeof(ComPlacasMsg_t), NULL);
+  e_comPlacasTxMessageId = osMessageQueueNew(NUMERO_MENSAJES_COM_PLACAS_MAX, sizeof(ComPlacasMsg_t), NULL);
+  e_comPlacasRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_COM_PLACAS_MAX, sizeof(ComPlacasMsg_t), NULL);
 	
   if ((e_comPlacasRxThreadId == NULL)  || (e_comPlacasTxThreadId == NULL) || 
       (e_comPlacasTxMessageId == NULL) || (e_comPlacasRxMessageId == NULL)) 
@@ -89,7 +89,7 @@ static void RunTx(void *argument)
 
     if (status != osOK)
     {
-      printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
+      // printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
       continue;
     }
 
@@ -105,6 +105,10 @@ static void RunTx(void *argument)
     {
       USARTdrv->Control(ARM_USART_ABORT_SEND, 0);
       USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
+    else if (flag & osFlagsError)
+    {
       continue;
     }
   }
@@ -125,11 +129,15 @@ static void RunRx(void *argument)
     printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
     flag = osThreadFlagsWait(ERROR_FRAMING | RECEIVE_COMPLETE, osFlagsWaitAny, 1000);
-    
+    printf("flag[%d]", flag);
     if (flag == ERROR_FRAMING)
     {
       USARTdrv->Control(ARM_USART_ABORT_SEND, 0);
       USARTdrv->Control(ARM_USART_ABORT_RECEIVE, 0);
+      continue;
+    }
+    else if (flag & osFlagsError)
+    {
       continue;
     }
 
@@ -193,7 +201,7 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
+      // printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
     break;
   }
 }

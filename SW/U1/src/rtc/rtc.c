@@ -501,8 +501,8 @@ static void EventCB(ERtcPrivateFlag event)
     osThreadFlagsClear(WAKE_UP_1s);
     UpdateTime();
     UpdateDate();
-    PrintTimeLCD();
-    PrintDateLCD();
+    // PrintTimeLCD();
+    // PrintDateLCD();
   }
 
   if (alarmAEv)
