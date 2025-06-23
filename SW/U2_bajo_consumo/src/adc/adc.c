@@ -158,7 +158,7 @@ void ThADC (void *argument) {
 
 		printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",adc_queue_msg.ruido,adc_queue_msg.consumo);
 
-		msg.destinatario=MENSAJE_JUEGO;
+		msg.destinatario= MENSAJE_SERVIDOR;
 		msg.remitente = MENSAJE_ADC;
 		msg.mensaje[0] = (uint8_t)adc_queue_msg.ruido;
 		msg.mensaje[1] = (uint8_t)adc_queue_msg.consumo;
@@ -167,7 +167,7 @@ void ThADC (void *argument) {
     
     //osDelay(1000);
 		
-		//osMessageQueuePut(queueADC,&adc_queue_msg,NULL,100);
+		osMessageQueuePut(e_comPlacasTxMessageId,&msg,NULL,100);
 		
 	  osThreadYield();      
 	
