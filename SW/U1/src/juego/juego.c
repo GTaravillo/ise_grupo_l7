@@ -428,6 +428,25 @@ const char* GetMap(){
   return map;
 }
 
+uint8_t GetMinutosBlancas(){
+  return (uint8_t)(estado_juego.segundos_blancas/60);
+}
+
+uint8_t GetSegundosBlancas(){
+  return (uint8_t)(estado_juego.segundos_blancas%60);
+}
+
+uint8_t GetMinutosNegras(){
+  return (uint8_t)(estado_juego.segundos_negras/60);
+}
+
+uint8_t GetSegundosNegras(){
+  return (uint8_t)(estado_juego.segundos_negras%60);
+}
+
+bool GetTurno(){
+  return (estado_juego.juegan_blancas == 1);
+}
 
 void setTiempoNuevaPartida(uint16_t minutos){
   estado_juego.segundos_blancas = minutos*60;
@@ -626,6 +645,8 @@ void nuevoJuego(AJD_TableroPtr tablero)					// IMPLEMENTACI�N NFC
    memset(&estado_juego, 0, sizeof (AJD_Estado));
    estado_juego.juegan_blancas = 1;
 
+   //estado_juego.segundos_blancas = 600;
+   //estado_juego.segundos_negras  = 600;
    // Turno
    // estado_juego.turno = 1;
 
