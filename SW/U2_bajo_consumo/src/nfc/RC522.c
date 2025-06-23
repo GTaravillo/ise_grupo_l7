@@ -479,7 +479,7 @@ void RC_RUN(void *argument){
     /* USER CODE END WHILE */
    
 	  state = MFRC522_Request(PICC_REQALL, CT);
-    printf("[RC522::%s] state[%d]\n", __func__, state);
+    //printf("[RC522::%s] state[%d]\n", __func__, state);
 	if (state == MI_OK)
 	{
 		
@@ -563,7 +563,7 @@ void RC_RUN(void *argument){
 	}else if(state == MI_NOTAGERR){
 		printf("No card read\n");
 	}else{
-		printf("[RC522::%s]Error! State[%d]\n", __func__, state);
+		//printf("[RC522::%s]Error! State[%d]\n", __func__, state);
 	}
   
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);

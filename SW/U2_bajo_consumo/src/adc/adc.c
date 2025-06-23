@@ -2,6 +2,9 @@
 #include "cmsis_os2.h"     
 #include "adc.h"
 #include "stdio.h"
+#include "../com_placas/ComunicacionPlacas.h"  //PATH_COM_PLACAS
+
+
 #define RESOLUTION_12B 4096U
 #define VREF 3.3f
 
@@ -129,6 +132,9 @@ void ThADC (void *argument) {
 	float value_ruido;
 	MSG_POT adc_queue_msg;
 	
+	ComPlacasMsg_t msg;
+
+	
 	
 	
 	ADC_Init_Single_Conversion(&adchandle , ADC1); //ADC1 configuration
@@ -138,12 +144,17 @@ void ThADC (void *argument) {
 	  value_ruido=ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
 		value_consumo=ADC_getVoltage(&adchandle , 13 );
 		
-		value_ruido = (((3.3*value_ruido)/4096)-2) ;
+		value_ruido = (((3.3*value_ruido)/4096)-2.3)/3 ;
 		value_consumo = ((3.3*value_consumo)/4096)/10;
     
 		adc_queue_msg.ruido = (uint32_t)(value_ruido);
 		adc_queue_msg.consumo =(uint32_t)(value_consumo);
-    
+		
+		msg.destinatario=MENSAJE_JUEGO;
+		msg.remitente = MENSAJE_ADC;
+		msg.mensaje[0] = (uint8_t)adc_queue_msg.ruido;
+		msg.mensaje[1] = (uint8_t)adc_queue_msg.consumo;
+    		
     printf("Valor de ruido medido: %f, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
     
     osDelay(1000);

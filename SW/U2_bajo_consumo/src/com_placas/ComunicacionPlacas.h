@@ -29,8 +29,7 @@ typedef enum
   MENSAJE_JUEGO        = 7,
   MENSAJE_DISTANCIA    = 8,
   MENSAJE_NFC          = 9,
-  MENSAJE_ALIMENTACION = 10,
-  MENSAJE_MICROFONO    = 11
+  MENSAJE_ADC					 = 10,
 } EModulos;
 
 typedef struct

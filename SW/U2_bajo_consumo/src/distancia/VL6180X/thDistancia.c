@@ -49,8 +49,9 @@ int ThDistancia(void){
 void Thread_Dis(void* argument){
     uint8_t dev = 0x29;
 		osStatus_t status_cola;
-		msg_dis.mensaje[1] = 0;
-		msg_dis.remitente = MENSAJE_DISTANCIA;
+	  msg_dis.remitente    = MENSAJE_DISTANCIA;
+	  msg_dis.destinatario = MENSAJE_JUEGO;
+		
     int flag;
     uint8_t key = 0;
     MyDev_Init();
@@ -71,7 +72,7 @@ void Thread_Dis(void* argument){
         } else {
           
           VL6180x_RangePollMeasurement(dev, &Range);
-          printf("VL6180x Detecta una medida\n");
+          //printf("VL6180x Detecta una medida\n");
           if (Range.errorStatus == 0 ){
               
               if (read_h == 0){
@@ -84,8 +85,11 @@ void Thread_Dis(void* argument){
               read_h = 0;
               printf("Error\n");
           }
-          
-          flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 10U);
+          printf("ESPERO FLAG JUEGO\n");
+          flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 2000U);
+					VL6180x_ClearErrorInterrupt(dev);
+					VL6180x_Prepare(dev);
+					printf("FLAG [%d] JUEGO RECIBIDA\n", flag);
           osThreadFlagsClear(FLAG_PARA_DIS);
           key = flag == FLAG_PARA_DIS ? 0 : 1;
           flag = 0;
