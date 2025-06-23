@@ -2,9 +2,9 @@ historico.cgi,
 index.htm,
 nuevaPartida.cgi,
 retomarPartida.cgi,
-xml_http.js,
 currentDate.cgx,
 currentTime.cgx,
 favicon.ico,
-currentConsumo.cgx 
+currentConsumo.cgx,
+nuevaPartida.js 
 TO Web.c RTE NOPRINT ROOT(.\src\web)

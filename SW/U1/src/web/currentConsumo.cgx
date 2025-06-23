@@ -1,7 +1,7 @@
 t <form>
 t <text>
 t <id>consumoActual</id>
-c c<value>%s</value>
+c 0 c <value>%s</value>
 t </text>
 t </form>
 .

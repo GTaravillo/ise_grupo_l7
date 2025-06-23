@@ -307,6 +307,7 @@ t             </button>
 t       </div>
 t       <input type="hidden" id="matchTimeInput" name="matchTime" value="15">
 t       <input type="hidden" id="incrementTimeInput" name="incrementTime" value="2">
+t       <a href="index.htm" style="display:block; margin-top:50px; text-align:center;">Menu principal</a>
 t     </form>
 t   </body>
 t </html>

@@ -13,14 +13,11 @@ typedef enum {
   SERVER_RUNNING = 0x01
 } EServerFlags;
 
-typedef struct {
-  
-} serverMsg_t;
-
 extern osThreadId_t        e_serverThreadId;
 extern osMessageQueueId_t  e_serverInputMessageId;
 extern osMessageQueueId_t  e_serverOutputMessageId;
 
 void Server_Initialize(void);
+void SetConsumoActual(const char* consumo); // 3 bytes
 
 #endif
