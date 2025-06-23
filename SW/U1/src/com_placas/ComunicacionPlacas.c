@@ -84,7 +84,7 @@ static void RunTx(void *argument)
   
   while(1) 
   {
-    printf("[com::%s] Esperando mensaje...\n", __func__);
+    //printf("[com::%s] Esperando mensaje...\n", __func__);
     status = osMessageQueueGet(e_comPlacasTxMessageId, &mensajeTx, NULL, 1000);
 
     if (status != osOK)
@@ -126,10 +126,10 @@ static void RunRx(void *argument)
   while(1) 
   {
 		memset(&mensajeRx, 0, sizeof mensajeRx);
-    printf("[com::%s] Esperando mensaje...\n", __func__);
+    //printf("[com::%s] Esperando mensaje...\n", __func__);
     USARTdrv->Receive(&mensajeRx, bytesMensaje); // Hasta el byte que indica la longitud total de la trama
     flag = osThreadFlagsWait(ERROR_FRAMING | RECEIVE_COMPLETE, osFlagsWaitAny, 1000);
-    printf("flag[%d]", flag);
+    //printf("flag[%d]", flag);
     if (flag == ERROR_FRAMING)
     {
       USARTdrv->Control(ARM_USART_ABORT_SEND, 0);

@@ -72,6 +72,8 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores);
 static void EnviarDatos(void);
 static void TestLeds(void);
 static void TurnOff(void);
+static void StartAckPattern(void);
+static void StartNackPattern(void);
 
 void  ARM_LedSPI_SignalEvent(uint32_t event);
 
@@ -91,7 +93,8 @@ void LedStripManagerInitialize(void)
 static void Run(void *argument)
 {
   InitializeSpiDriver();
-  //TestLeds();
+  TestLeds();
+  TurnOff();
 
   osStatus_t    status;
   LedStripMsg_t mensajeRx;
@@ -103,7 +106,19 @@ static void Run(void *argument)
     memset(&mensajeRx, 0, sizeof(mensajeRx));
     EnviarDatos();
     status = osMessageQueueGet(e_ledStripMessageId, &mensajeRx, NULL, osWaitForever);
-    if (RecepcionCorrecta(status) && PosicionRecibidaValida(mensajeRx))
+    if (mensajeRx.tipoJugada == ACK)
+    {
+      TurnOff();
+      StartAckPattern();
+      TurnOff();
+    }
+    else if (mensajeRx.tipoJugada == NACK)
+    {
+      TurnOff();
+      StartNackPattern();
+      TurnOff();
+    }
+    else if (RecepcionCorrecta(status) && PosicionRecibidaValida(mensajeRx))
     {
       ProcesarMensaje(mensajeRx);
       EnviarDatos();
@@ -227,6 +242,18 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
 		  colores->blue  = 255;
 		  //printf("[LedStrip::%s] COLOR BLANCO\n", __func__);
       break;
+    
+    case ACK:
+      colores->red   = 0;
+		  colores->green = 255;
+		  colores->blue  = 0;
+    break;
+    
+    case NACK:
+      colores->red   = 255;
+		  colores->green = 0;
+		  colores->blue  = 0;
+    break;
 		
 		default:
 			//printf("[LedStrip::%s] Tipo de jugada desconocida\n", __func__);
@@ -295,28 +322,79 @@ static void TestLeds(void)
     EnviarComando(azul);  // B
     EnviarComando(verde); // G
     EnviarComando(rojo);  // R
-    osDelay(100);
+    osDelay(5);
 	}
   StopCommunication();
 }
 
 static void TurnOff(void)
 {
+  memset(g_leds, 0, sizeof(g_leds));
   StartCommunication();
   for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
 	{
-    const uint8_t azul  = 0;
-    const uint8_t verde = 0;
-    const uint8_t rojo  = 0;
+    const uint8_t azul  = g_leds[i].blue;
+    const uint8_t verde = g_leds[i].green;
+    const uint8_t rojo  = g_leds[i].red;
 		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | 0);
     EnviarComando(azul);  // B
     EnviarComando(verde); // G
     EnviarComando(rojo);  // R
-    osDelay(100);
+    osDelay(5);
 	}
   StopCommunication();
+}
+
+static void StartAckPattern(void)
+{
+  ColorLed_t colores;
+  const ETipoJugada tipoJugada = ACK;
+  GetColor(tipoJugada, &colores);
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    g_leds[i]           = colores;
+    const uint8_t azul  = g_leds[i].blue;
+    const uint8_t verde = g_leds[i].green;
+    const uint8_t rojo  = g_leds[i].red;
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | brillo);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(5);
+	}
+  StopCommunication();
+  osDelay(5);
+}
+
+static void StartNackPattern(void)
+{
+  ColorLed_t colores;
+  const ETipoJugada tipoJugada = NACK;
+  GetColor(tipoJugada, &colores);
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    g_leds[i]           = colores;
+    const uint8_t azul  = g_leds[i].blue;
+    const uint8_t verde = g_leds[i].green;
+    const uint8_t rojo  = g_leds[i].red;
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+
+		EnviarComando(BRIGHTNESS_MASK | brillo);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+    osDelay(5);
+	}
+  StopCommunication();
+  osDelay(5);
 }
 
 void ARM_LedSPI_SignalEvent(uint32_t event)
