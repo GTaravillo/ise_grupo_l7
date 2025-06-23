@@ -116,16 +116,16 @@ int main(void)
   Server_Initialize();
 	RTC_Initialize();
   
-	//juegoInitialize();
+	juegoInitialize();
 	//osDelay(1000);
 	//juegoTbInitialize();
 	//LED_Initialize();
 	//LCD_Initialize();
 	MemoriaInitialize();
-  //LedStripManagerInitialize();
-	//PositionManagerInitialize();
-	//ComunicacionPlacasInitialize();
-	//BajoConsumoInitialize();
+  LedStripManagerInitialize();
+	PositionManagerInitialize();
+	ComunicacionPlacasInitialize();
+	BajoConsumoInitialize();
   //PrincipalInitialize();
   
   // Tests
