@@ -1,0 +1,7 @@
+t <form>
+t <text>
+t <id>tiempoBlancas</id>
+c c b <value>%s</value>
+t </text>
+t </form>
+.

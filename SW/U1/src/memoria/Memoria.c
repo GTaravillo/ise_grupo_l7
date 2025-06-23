@@ -5,10 +5,10 @@
 #include "stm32f4xx_hal.h"
 /* std */
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include PATH_TEST_MEMORIA
+#include PATH_SERVER
 
 #define SLAVE_ADDR 0x50
 
@@ -75,6 +75,7 @@ static void LimpiarPartidaARetomar(void);
 static void ProcesarPeticion(MemoriaMsg_t mensajeRx);
 static void ProcesarGuardarPartidaSinFinalizar(MemoriaMsg_t mensajeRx);
 static void ProcesarGuardarPartidaFinalizada(MemoriaMsg_t mensajeRx);
+
 static void ProcesarRetomarPartida(void);
 
 static uint8_t LeerByte(uint16_t direccion);
@@ -105,6 +106,18 @@ void MemoriaInitialize(void)
   }
 }
 
+bool HayPartidaARetomar(void)
+{
+  bool hayPartidaARetomar = false;
+  printf("INTENTO LEER MEMORIA\n");
+  osSemaphoreAcquire(e_accessSemaphoreId, 0);
+  hayPartidaARetomar = LeerByte(DIRECCION_EXISTE_PARTIDA_RETOMAR) != EXISTE_PARTIDA_RETOMAR;
+  osSemaphoreRelease(e_accessSemaphoreId);
+  printf("TERMINO LEER MEMORIA\n");
+
+  return hayPartidaARetomar;
+}
+
 uint16_t ObtenerNumeroPartidasFinalizadas(void)
 {
   uint16_t val;
@@ -117,11 +130,14 @@ uint16_t ObtenerNumeroPartidasFinalizadas(void)
 
 MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
 {
+  osSemaphoreAcquire(e_accessSemaphoreId, 0);
+  
   MemoriaMsg_t infoPartida = { 0 };
 
   if ((numPartidasTerminadas == 0) || (numPartida > numPartidasTerminadas))
   {
     infoPartida.tipoPeticion = ERROR_SIN_DATOS;
+    osSemaphoreRelease(e_accessSemaphoreId);
     return infoPartida;
   }
   
@@ -134,6 +150,7 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
   {
     printf("[memoria::%s] ERROR! Dirección de partida vacia\n", __func__);
     infoPartida.tipoPeticion = ERROR_SIN_DATOS;
+    osSemaphoreRelease(e_accessSemaphoreId);
     return infoPartida;
   }
 
@@ -167,6 +184,7 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
   infoPartida.nombreNegras[TAM_NOMBRE_JUGADOR] = '\0';
   // Victoria
   infoPartida.turno_victoria = LeerByte(direccionPartida + OFFSET_TURNO_VICTORIA);
+  osSemaphoreRelease(e_accessSemaphoreId);
 
   printf("[memoria::%s] Mensaje a devolver:\n", __func__);
   printf("[memoria::%s] Fecha[%s]\n", __func__, infoPartida.fechaPartida);
@@ -196,7 +214,7 @@ static void Run(void *argument)
   // osDelay(100000);
   // LimpiarMemoria(); // CUIDADO! Elimina todos los datos en memoria
   ActualizarNumPartidasTerminadas();
-  osThreadFlagsSet(e_testMemoriaThreadId, FLAG_INIT_COMPLETE);
+  osThreadFlagsSet(e_serverThreadId, FLAG_INIT_COMPLETE);
   
   //SoftwareReset();
   MemoriaMsg_t mensajeRx;
@@ -206,7 +224,12 @@ static void Run(void *argument)
     memset(&mensajeRx, 0, sizeof(mensajeRx));
 	  printf("[memoria::%s] ESPERANDO MENSAJE\n", __func__);
     osThreadFlagsSet(e_testMemoriaThreadId, FLAG_READY);
+    osThreadFlagsSet(e_serverThreadId, FLAG_READY);
     status = osMessageQueueGet(e_memoriaRxMessageId, &mensajeRx, NULL, osWaitForever);
+    if (status != osOK)
+    {
+      continue;
+    }
     printf("[memoria::%s] MENSAJE RECIBIDO\n", __func__);
     ProcesarPeticion(mensajeRx);
   }
@@ -417,7 +440,7 @@ static void ProcesarRetomarPartida()
 
   MemoriaMsg_t mensajeTx;
 
-  if (LeerByte(DIRECCION_EXISTE_PARTIDA_RETOMAR) != EXISTE_PARTIDA_RETOMAR)
+  if (!HayPartidaARetomar())
   {
     // No hay partida a retomar. Limpio datos retomar partida y devuelvo error en tipo petición
     LimpiarPartidaARetomar();
@@ -429,25 +452,65 @@ static void ProcesarRetomarPartida()
   
   mensajeTx.tipoPeticion  = RETOMAR_ULTIMA_PARTIDA;
 
-  printf("[Memoria::%s] Turno:\n", __func__);
-  mensajeTx.turno_victoria = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TURNO_VICTORIA);
+  uint16_t direccionPartida = DIRECCION_PARTIDA_RETOMAR;
+
+  // Fecha
+  for (int i = 0; i < TAM_FECHA; i++)
+  {
+    int offset = OFFSET_FECHA_PARTIDA + i;
+    mensajeTx.fechaPartida[i] = LeerByte(direccionPartida + offset);
+  }
+  mensajeTx.fechaPartida[TAM_FECHA] = '\0';
+  // Hora
+  for (int i = 0; i < TAM_HORA; i++)
+  {
+    int offset = OFFSET_HORA_PARTIDA + i;
+    mensajeTx.horaPartida[i] = LeerByte(direccionPartida + offset);
+  }
+  mensajeTx.horaPartida[TAM_HORA] = '\0';
+  // Nombre blancas
+  for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
+  {
+    int offset = OFFSET_NOMBRE_BLANCAS + i;
+    mensajeTx.nombreBlancas[i] = LeerByte(direccionPartida + offset);
+  }
+  mensajeTx.nombreBlancas[TAM_NOMBRE_JUGADOR] = '\0';
+  // Nombre negras
+  for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
+  {
+    int offset = OFFSET_NOMBRE_NEGRAS + i;
+    mensajeTx.nombreNegras[i] = LeerByte(direccionPartida + offset);
+  }
+  mensajeTx.nombreNegras[TAM_NOMBRE_JUGADOR] = '\0';
+  // Turno
+  mensajeTx.turno_victoria = LeerByte(direccionPartida + OFFSET_TURNO_VICTORIA);
+  // Tiempo blancas
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Tiempo blancas:\n", __func__);
     mensajeTx.tiempoBlancas[i] = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TIEMPO_BLANCAS + i);
   }
-
+  mensajeTx.tiempoBlancas[TAM_TIEMPO_JUGADOR] = '\0';
+  // Tiempo negras
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Tiempo negras:\n", __func__);
     mensajeTx.tiempoNegras[i]  = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TIEMPO_NEGRAS + i);
   }
-  
+  mensajeTx.tiempoNegras[TAM_TIEMPO_JUGADOR] = '\0';
+  // Tablero
   for (int i = 0; i < TAM_DATOS; i++)
   {
-    printf("[Memoria::%s] Tablero:\n", __func__);
     mensajeTx.dato[i] = LeerByte(DIRECCION_PARTIDA_RETOMAR + OFFSET_TABLERO + i);
   }
+  osSemaphoreRelease(e_accessSemaphoreId);
+
+  printf("[memoria::%s] Mensaje a devolver:\n", __func__);
+  printf("[memoria::%s] Fecha[%s]\n", __func__, mensajeTx.fechaPartida);
+  printf("[memoria::%s] Hora[%s]\n", __func__, mensajeTx.horaPartida);
+  printf("[memoria::%s] Nombre blancas[%s]\n", __func__, mensajeTx.nombreBlancas);
+  printf("[memoria::%s] Nombre negras[%s]\n", __func__, mensajeTx.nombreNegras);
+  printf("[memoria::%s] Turno[%d]\n", __func__, mensajeTx.turno_victoria);
+  printf("[memoria::%s] Tiempo blancas[%s]\n", __func__, mensajeTx.tiempoBlancas);
+  printf("[memoria::%s] Tiempo negras[%s]\n", __func__, mensajeTx.tiempoNegras);
 
   status = osMessageQueuePut(e_memoriaTxMessageId, &mensajeTx, 1, 0);
 }

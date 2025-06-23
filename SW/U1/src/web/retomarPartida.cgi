@@ -3,7 +3,7 @@ t <html>
 t <head>
 t   <meta charset="UTF-8">
 t     <title>Retomar Partida</title>
-t     <script language="JavaScript" type="text/javascript" src="xml_http.js"></script>
+t     <script language="JavaScript" type="text/javascript" src="retomarPartida.js"></script>
 t     <style>
 t       :root {
 #         Bloque Fecha - Hora - Consumo actual
@@ -248,65 +248,26 @@ t     </style>
 t   </head>
 t   <body>
 t     <div class="bloqueFechaHoraConsumo">
-t       <span id="dateOut" class="fecha">%s</span>
-t       <span id="timeOut" class="hora">%s</span>
-t       <span class="espacio-hora-consumo"></span>
-t       <span id="consumoActual" class="consumo">Consumo actual: </span>
+t         <span id="dateOut" class="fecha">%s</span>
+t         <span id="timeOut" class="hora">%s</span>
+t         <span class="espacio-hora-consumo"></span>
+t         <span id="consumoActual" class="consumo">Consumo actual: %s</span>
 t     </div>
 t     <h2 class="titulo-nueva-partida" align="center"><br>Nueva partida</h2>
-t     <form action="nuevaPartida.cgi" method="post" name="nuevaPartida" onsubmit="return submitFormAjax();">
+t     <form>
 t       <div class="bloque-jugadores">
-t         <span class="blancas"><b>Blancas</b></span>
-t         <span class="jugador1">
-t           <input type="text" id="player1Name" name="player1Name" placeholder="Nombre jugador" maxlength="12" readonly>
-t         </span>
+c b b     <span class="blancas"><b>Blancas</b> %s</span>
 t         <span class="espacio-blancas-negras"></span>
-t         <span class="negras"><b>Negras</b></span>
-t         <span class="jugador2">
-t           <input type="text" id="player2Name" name="player2Name" placeholder="Nombre jugador" maxlength="12" readonly>
-t         </span>
+c b n     <span class="negras"><b>Negras</b> %s</span>
 t       </div>
 t       <div class="bloque-tiempo">
-t         <span class="tiempo-label"><b>Tiempo partida</b></span>
-t         <span class="tiempo-controles">
-t           <button type="button" onclick="changeMatchTime(-5)">&#8595;</button>
-t           <span id="matchTime" class="time-cell">15:00</span>
-t           <button type="button" onclick="changeMatchTime(5)">&#8593;</button>
-t         </span>
-t       </div>
-t       <div class="bloque-incremento">
-t         <span class="incremento-label">
-t           <input type="checkbox" id="incrementEnabled" disabled>
-t           <input type="hidden" id="incrementEnabledHidden" name="incrementEnabled" value="false">
-t           <b>Incremento</b>
-t         </span>
-t         <span class="incremento-controles">
-t           <button type="button" onclick="changeIncrement(-2)" id="incDown">&#8595;</button>
-t           <span id="incrementTime" class="time-cell">+2</span>
-t           <button type="button" onclick="changeIncrement(2)" id="incUp">&#8593;</button>
-t         </span>
-t       </div>
-t       <div class="bloque-ayuda">
-t         <span class="ayuda-label">
-t           <input type="checkbox" id="ayuda" onchange="updateAyudaHidden()">
-t           <input type="hidden" id="ayudaHidden" name="ayuda" value="false">
-t           <label for="ayuda"><b>Ayuda</b></label>
-t         </span>
+c b 1     <span class="tiempo-label"><b>Tiempo blancas</b> %s</span>
+t         <span class="espacio-blancas-negras"></span>
+c b 2     <span class="tiempo-label"><b>Tiempo negras</b> %s</span>
 t       </div>
 t       <div class="bloque-botones">
-t             <button type="submit" id="btnIniciar" class="btnIniciar">&#9654; INICIAR</button>
-t             <button type="button" id="btnPausar" class="btnPausar" onclick="pauseGame()">| |  PAUSAR</button>
-t             <button type="button" id="btnSuspender" class="btnSuspender" onclick="suspendGame()">&#9632; SUSPENDER</button>
-t             <button type="button" id="btnRendirse" class="btnRendirse" onclick="stopGame()">
-t               <svg width="18" height="18" viewBox="0 0 18 18" style="vertical-align:middle; margin-right:4px;">
-t                 <rect x="2" y="2" width="2" height="14" fill="#888"/>
-t                 <polygon points="4,2 16,5 4,8" fill="#fff" stroke="#888" stroke-width="0.5"/>
-t               </svg>
-t               BLANCAS SE RINDE
-t             </button>
+t         <button type="submit" id="btnReanudar" class="btnIniciar">&#9654; REANUDAR</button>
 t       </div>
-t       <input type="hidden" id="matchTimeInput" name="matchTime" value="15">
-t       <input type="hidden" id="incrementTimeInput" name="incrementTime" value="2">
 t       <a href="index.htm" style="display:block; margin-top:50px; text-align:center;">Menu principal</a>
 t     </form>
 t   </body>

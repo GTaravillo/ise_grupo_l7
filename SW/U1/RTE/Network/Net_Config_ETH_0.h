@@ -22,7 +22,11 @@
 //   <i>Value FF-FF-FF-FF-FF-FF is not allowed,
 //   <i>LSB of first byte must be 0 (an ethernet Multicast bit).
 //   <i>Default: "1E-30-6C-A2-45-5E"
-#define ETH0_MAC_ADDR           "1E-30-6C-A2-45-7A"
+#if TESTBENCH_LABORATORIO == 2
+  #define ETH0_MAC_ADDR           "1E-30-6C-A2-45-8A"
+#else
+  #define ETH0_MAC_ADDR           "1E-30-6C-A2-45-7A"
+#endif
 
 //   <e>VLAN
 //   <i>Enable or disable Virtual LAN
@@ -43,6 +47,8 @@
 //     <i>Default: "192.168.0.100"
 #if TESTBENCH_LABORATORIO == 1
 	#define ETH0_IP4_ADDR           "10.48.11.122"
+#elif TESTBENCH_LABORATORIO == 2
+  #define ETH0_IP4_ADDR           "10.48.11.190"
 #else
 	#define ETH0_IP4_ADDR           "192.168.1.122"
 #endif
@@ -50,18 +56,19 @@
 //     <s.15>Subnet mask
 //     <i>Local Subnet mask in text representation
 //     <i>Default: "255.255.255.0"
-#if TESTBENCH_LABORATORIO == 1
-	#define ETH0_IP4_MASK           "255.255.0.0"
-#else
+
+#if TESTBENCH_LABORATORIO == 0
 	#define ETH0_IP4_MASK           "255.255.255.0"
+#else
+	#define ETH0_IP4_MASK           "255.255.0.0"
 #endif
 //     <s.15>Default Gateway
 //     <i>IP Address of Default Gateway in text representation
 //     <i>Default: "192.168.0.254"
-#if TESTBENCH_LABORATORIO == 1
-	#define ETH0_IP4_GATEWAY        "10.48.0.1"
-#else
+#if TESTBENCH_LABORATORIO == 0
 	#define ETH0_IP4_GATEWAY        "192.168.1.1"
+#else
+	#define ETH0_IP4_GATEWAY        "10.48.0.1"
 #endif
 
 //     <s.15>Primary DNS Server

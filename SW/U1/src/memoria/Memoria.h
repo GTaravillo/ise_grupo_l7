@@ -1,6 +1,8 @@
 #ifndef __MEMORIA_H
 #define __MEMORIA_H
 
+/* std */
+#include <stdbool.h>
 /* ARM */
 #include "cmsis_os2.h"
 /* Interfaces */
@@ -71,6 +73,7 @@ typedef struct {
 
 void MemoriaInitialize(void);
 // Solo para servidor
+bool HayPartidaARetomar(void);
 uint16_t ObtenerNumeroPartidasFinalizadas(void);
 MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida);
 

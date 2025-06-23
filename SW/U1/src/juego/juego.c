@@ -166,6 +166,9 @@ AJD_CasillaPtr tPromo;
       else if(flagPause == FLAG_FINALIZAR){
           modo = Win;
       }
+      else if (flagPause == FLAG_FINALIZAR) {
+        modo = Win;
+      }
 
    switch(modo){
       case Init:

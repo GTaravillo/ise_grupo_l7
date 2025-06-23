@@ -258,7 +258,7 @@ t     <div class="bloqueFechaHoraConsumo">
 t       <span id="dateOut" class="fecha">%s</span>
 t       <span id="timeOut" class="hora">%s</span>
 t       <span class="espacio-hora-consumo"></span>
-t       <span id="consumoActual" class="consumo">Consumo actual: </span>
+t       <span id="consumoActual" class="consumo">Consumo actual: %s</span>
 t     </div>
 t     <h2 class="titulo-nueva-partida" align="center"><br>Nueva partida</h2>
 t     <form action="nuevaPartida.cgi" method="post" name="nuevaPartida" onsubmit="return submitFormAjax();">

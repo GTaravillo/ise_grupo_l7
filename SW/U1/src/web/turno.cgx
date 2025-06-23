@@ -1,0 +1,7 @@
+t <form>
+t <text>
+t <id>turno</id>
+c c t <value>%s</value>
+t </text>
+t </form>
+.

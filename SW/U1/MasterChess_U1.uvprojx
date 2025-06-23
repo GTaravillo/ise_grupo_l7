@@ -444,24 +444,9 @@
           <GroupName>Web files</GroupName>
           <Files>
             <File>
-              <FileName>historico.cgi</FileName>
+              <FileName>currentConsumo.cgx</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\historico.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>index.htm</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\index.htm</FilePath>
-            </File>
-            <File>
-              <FileName>nuevaPartida.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\nuevaPartida.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>retomarPartida.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\retomarPartida.cgi</FilePath>
+              <FilePath>.\src\web\currentConsumo.cgx</FilePath>
             </File>
             <File>
               <FileName>currentDate.cgx</FileName>
@@ -479,14 +464,49 @@
               <FilePath>.\src\web\favicon.ico</FilePath>
             </File>
             <File>
-              <FileName>currentConsumo.cgx</FileName>
+              <FileName>historico.cgi</FileName>
               <FileType>9</FileType>
-              <FilePath>.\src\web\currentConsumo.cgx</FilePath>
+              <FilePath>.\src\web\historico.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>index.htm</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\index.htm</FilePath>
+            </File>
+            <File>
+              <FileName>nuevaPartida.cgi</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\nuevaPartida.cgi</FilePath>
             </File>
             <File>
               <FileName>nuevaPartida.js</FileName>
               <FileType>9</FileType>
               <FilePath>.\src\web\nuevaPartida.js</FilePath>
+            </File>
+            <File>
+              <FileName>retomarPartida.cgi</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\retomarPartida.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>retomarPartida.js</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\retomarPartida.js</FilePath>
+            </File>
+            <File>
+              <FileName>tiempoBlancas.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\tiempoBlancas.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>tiempoNegras.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\tiempoNegras.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>turno.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\turno.cgx</FilePath>
             </File>
           </Files>
         </Group>

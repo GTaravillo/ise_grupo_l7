@@ -1,16 +1,16 @@
 // === UI ELEMENT IDS AND CLASSES USED IN THIS FILE ===
 const UI_IDS = {
-  dateOut:                "dateOut",
-  timeOut:                "timeOut",
-  consumoActual:          "consumoActual",
-  player1Name:            "player1Name",
-  player2Name:            "player2Name",
-  matchTime:              "matchTime",
-  matchTimeInput:         "matchTimeInput",
-  btnIniciar:             "btnIniciar",
-  btnPausar:              "btnPausar",
-  btnSuspender:           "btnSuspender",
-  btnRendirse:            "btnRendirse"
+  dateOut:        "dateOut",
+  timeOut:        "timeOut",
+  consumoActual:  "consumoActual",
+  player1Name:    "player1Name",
+  player2Name:    "player2Name",
+  matchTime:      "matchTime",
+  matchTimeInput: "matchTimeInput",
+  btnIniciar:     "btnIniciar",
+  btnPausar:      "btnPausar",
+  btnSuspender:   "btnSuspender",
+  btnRendirse:    "btnRendirse"
 };
 
 const WEBPAGE_NAME = "nuevaPartida.cgi";
