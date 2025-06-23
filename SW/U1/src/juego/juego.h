@@ -8,12 +8,13 @@
   #include "../Config/Paths.h"
   #include PATH_COM_PLACAS
   
-  #define FLAG_START   0x01U
-  #define FLAG_RETOCAR 0x02U
- 	#define FLAG_PAUSE   0X04U
-	#define FLAG_STOP    0X08U
-	#define FLAG_RESUME  0X10U
-  #define FLAG_TURN    0x20U
+  #define FLAG_START      0x01U
+  #define FLAG_RETOCAR    0x02U
+ 	#define FLAG_PAUSE      0X04U
+	#define FLAG_STOP       0X08U
+	#define FLAG_RESUME     0X10U
+  #define FLAG_TURN       0x20U
+  #define FLAG_FINALIZAR  0x40U
 
   #define NUMERO_MENSAJES_JUEGO_MAX 3
 
