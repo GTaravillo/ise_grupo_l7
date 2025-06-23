@@ -38,6 +38,8 @@
 #include "cmsis_os2.h"
 #define QUEUE_ADC_SIZE 3
 
+#define FLAG_MEDIDA_ANALOGICA 0x01
+
 #include <stdint.h>
 
 /**

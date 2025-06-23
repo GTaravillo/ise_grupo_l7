@@ -193,11 +193,7 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
       ProcesarMensajeNfc(mensajeRx);
     break;
 
-    case MENSAJE_ALIMENTACION:
-      ProcesarMensajeAlimentacion(mensajeRx);
-    break;
-
-    case MENSAJE_MICROFONO:
+    case MENSAJE_ADC:
       ProcesarMensajeMicrofono(mensajeRx);
     break;
 

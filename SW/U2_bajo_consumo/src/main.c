@@ -112,7 +112,7 @@ int main(void)
   Init_Thread_NFC();
   ThDistancia();
   //ThSimNfc();
-  //Init_ADC();
+  Init_ADC();
 	//BajoConsumoInitialize();
   
   /* Start thread execution */
