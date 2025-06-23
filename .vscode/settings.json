@@ -9,6 +9,7 @@
       "paths.h": "c",
       "testmemoria.h": "c",
       "cstdlib": "c",
-      "comunicacionplacas.h": "c"
+      "comunicacionplacas.h": "c",
+      "bajoconsumo.h": "c"
     }
 }

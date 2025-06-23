@@ -3,7 +3,7 @@ t <html>
 t <head>
 t   <meta charset="UTF-8">
 t     <title>Nueva Partida</title>
-t     <script language="JavaScript" type="text/javascript" src="xml_http.js"></script>
+t     <script language="JavaScript" type="text/javascript" src="nuevaPartida.js"></script>
 t     <style>
 t       :root {
 #         Bloque Fecha - Hora - Consumo actual
@@ -53,18 +53,18 @@ t         --distancia-tiempoPartida-boton: 10px;
 t         --distancia-boton-tiempoPartida: 3px;
 t         --tamaño-celda-tiempoPartida-incremento: 50px;
 t         --alineacion-celda-tiempoPartida-incremento: center;
-#         Bloque Incremento
-t         --incremento-label-font-family:     'Arial', sans-serif;
-t         --incremento-label-font-size:       25px;
-t         --incremento-label-color:           rgb(0, 0, 0);
-t         --distancia-checkbox-tagIncremento: 3px;
-t         --distancia-incremento-boton:       10px;
-t         --distancia-boton-tiempoIncremento: 3px;
-#         Bloque Ayuda
-t         --ayuda-label-font-family:     'Arial', sans-serif;
-t         --ayuda-label-font-size:       25px;
-t         --ayuda-label-color:           rgb(0, 0, 0);
-t         --distancia-checkbox-tagAyuda: 3px;
+# #         Bloque Incremento
+# t         --incremento-label-font-family:     'Arial', sans-serif;
+# t         --incremento-label-font-size:       25px;
+# t         --incremento-label-color:           rgb(0, 0, 0);
+# t         --distancia-checkbox-tagIncremento: 3px;
+# t         --distancia-incremento-boton:       10px;
+# t         --distancia-boton-tiempoIncremento: 3px;
+# #         Bloque Ayuda
+# t         --ayuda-label-font-family:     'Arial', sans-serif;
+# t         --ayuda-label-font-size:       25px;
+# t         --ayuda-label-color:           rgb(0, 0, 0);
+# t         --distancia-checkbox-tagAyuda: 3px;
 #         Bloque Botones
 t         --margen-izq-botones:   20%;
 t         --margen-der-botones:   20%;
@@ -167,42 +167,42 @@ t         text-align:   var(--alineacion-celda-tiempoPartida-incremento);
 t         margin-left:  var(--distancia-boton-tiempoPartida);
 t         margin-right: var(--distancia-boton-tiempoPartida);
 t       }
-t       .bloque-incremento {
-t         display:       flex;
-t         align-items:   center;
-t         margin-left:   var(--margen-izq);
-t         margin-right:  var(--margen-der);
-t         margin-top:    var(--margen-body-sup);
-t         margin-bottom: var(--margen-body-inf);
-t       }
-t       .incremento-label {
-t         font-family:  var(--tiempo-label-font-family);
-t         font-size:    var(--tiempo-label-font-size);
-t         color:        var(--tiempo-label-color);
-t         margin-right: var(--distancia-tiempoPartida-boton);
-t         margin-right: var(--distancia-incremento-boton);
-t       }
-t       .incremento-controles {
-t         display:     flex;
-t         align-items: center;
-t       }
-t       .incremento-controles button {
-t       }
-t       .incremento-controles .time-cell {
-t       }
-t       .bloque-ayuda {
-t         display:       flex;
-t         align-items:   center;
-t         margin-left:   var(--margen-izq);
-t         margin-right:  var(--margen-der);
-t         margin-top:    var(--margen-body-sup);
-t         margin-bottom: var(--margen-body-inf);
-t       }
-t       .ayuda-label {
-t         font-family: var(--ayuda-label-font-family);
-t         font-size:   var(--ayuda-label-font-size);
-t         color:       var(--ayuda-label-color);
-t       }
+# t       .bloque-incremento {
+# t         display:       flex;
+# t         align-items:   center;
+# t         margin-left:   var(--margen-izq);
+# t         margin-right:  var(--margen-der);
+# t         margin-top:    var(--margen-body-sup);
+# t         margin-bottom: var(--margen-body-inf);
+# t       }
+# t       .incremento-label {
+# t         font-family:  var(--tiempo-label-font-family);
+# t         font-size:    var(--tiempo-label-font-size);
+# t         color:        var(--tiempo-label-color);
+# t         margin-right: var(--distancia-tiempoPartida-boton);
+# t         margin-right: var(--distancia-incremento-boton);
+# t       }
+# t       .incremento-controles {
+# t         display:     flex;
+# t         align-items: center;
+# t       }
+# t       .incremento-controles button {
+# t       }
+# t       .incremento-controles .time-cell {
+# t       }
+# t       .bloque-ayuda {
+# t         display:       flex;
+# t         align-items:   center;
+# t         margin-left:   var(--margen-izq);
+# t         margin-right:  var(--margen-der);
+# t         margin-top:    var(--margen-body-sup);
+# t         margin-bottom: var(--margen-body-inf);
+# t       }
+# t       .ayuda-label {
+# t         font-family: var(--ayuda-label-font-family);
+# t         font-size:   var(--ayuda-label-font-size);
+# t         color:       var(--ayuda-label-color);
+# t       }
 t       .bloque-botones {
 t         display:         flex;
 t         align-items:     center;
@@ -234,7 +234,7 @@ t         height:           40px;
 t         font-size:        20px;
 t         font-family:      'Arial Black', Arial, sans-serif;
 t         color:            white;
-t         background-color: rgb(160, 160, 160);
+t         background-color: rgb(255, 150, 0);
 t       }
 t       .btnRendirse {
 t         width:            280px;
@@ -243,6 +243,13 @@ t         font-size:        20px;
 t         font-family:      'Arial Black', Arial, sans-serif;
 t         color:            white;
 t         background-color: rgb(255, 0, 0);
+t       }
+t       button:disabled {
+t         background-color: #cccccc !important;
+t         color: #888888 !important;
+t         border-color: #aaaaaa !important;
+t         cursor: not-allowed;
+t         opacity: 0.7;
 t       }
 t     </style>
 t   </head>
@@ -274,30 +281,33 @@ t           <span id="matchTime" class="time-cell">15:00</span>
 t           <button type="button" onclick="changeMatchTime(5)">&#8593;</button>
 t         </span>
 t       </div>
-t       <div class="bloque-incremento">
-t         <span class="incremento-label">
-t           <input type="checkbox" id="incrementEnabled" onchange="updateIncrementHidden()">
-t           <input type="hidden" id="incrementEnabledHidden" name="incrementEnabled" value="false">
-t           <b>Incremento</b>
-t         </span>
-t         <span class="incremento-controles">
-t           <button type="button" onclick="changeIncrement(-2)" id="incDown">&#8595;</button>
-t           <span id="incrementTime" class="time-cell">+2</span>
-t           <button type="button" onclick="changeIncrement(2)" id="incUp">&#8593;</button>
-t         </span>
-t       </div>
-t       <div class="bloque-ayuda">
-t         <span class="ayuda-label">
-t           <input type="checkbox" id="ayuda" onchange="updateAyudaHidden()">
-t           <input type="hidden" id="ayudaHidden" name="ayuda" value="false">
-t           <label for="ayuda"><b>Ayuda</b></label>
-t         </span>
-t       </div>
+# t       <div class="bloque-incremento">
+# t         <span class="incremento-label">
+# t           <input type="checkbox" id="incrementEnabled" onchange="updateIncrementHidden()">
+# t           <input type="hidden" id="incrementEnabledHidden" name="incrementEnabled" value="false">
+# t           <b>Incremento</b>
+# t         </span>
+# t         <span class="incremento-controles">
+# t           <button type="button" onclick="changeIncrement(-2)" id="incDown">&#8595;</button>
+# t           <span id="incrementTime" class="time-cell">+2</span>
+# t           <button type="button" onclick="changeIncrement(2)" id="incUp">&#8593;</button>
+# t         </span>
+# t       </div>
+# t       <div class="bloque-ayuda">
+# t         <span class="ayuda-label">
+# t           <input type="checkbox" id="ayuda" onchange="updateAyudaHidden()">
+# t           <input type="hidden" id="ayudaHidden" name="ayuda" value="false">
+# t           <label for="ayuda"><b>Ayuda</b></label>
+# t         </span>
+# t       </div>
 t       <div class="bloque-botones">
-t             <button type="submit" id="btnIniciar" class="btnIniciar">&#9654; INICIAR</button>
-t             <button type="button" id="btnPausar" class="btnPausar" onclick="pauseGame()">| |  PAUSAR</button>
-t             <button type="button" id="btnSuspender" class="btnSuspender" onclick="suspendGame()">&#9632; SUSPENDER</button>
-t             <button type="button" id="btnRendirse" class="btnRendirse" onclick="stopGame()">
+t             <button type="submit" id="btnIniciar" class="btnIniciar" onclick="return iniciar(event);">
+t               &#9654; INICIAR</button>
+t             <button type="submit" id="btnPausar" class="btnPausar" onclick="pausar()" disabled>
+t               | |  PAUSAR</button>
+t             <button type="submit" id="btnSuspender" class="btnSuspender" onclick="suspender()" disabled>
+t               &#9632; SUSPENDER</button>
+t             <button type="submit" id="btnRendirse" class="btnRendirse" onclick="rendirse()" disabled>
 t               <svg width="18" height="18" viewBox="0 0 18 18" style="vertical-align:middle; margin-right:4px;">
 t                 <rect x="2" y="2" width="2" height="14" fill="#888"/>
 t                 <polygon points="4,2 16,5 4,8" fill="#fff" stroke="#888" stroke-width="0.5"/>
@@ -306,7 +316,8 @@ t               BLANCAS SE RINDE
 t             </button>
 t       </div>
 t       <input type="hidden" id="matchTimeInput" name="matchTime" value="15">
-t       <input type="hidden" id="incrementTimeInput" name="incrementTime" value="2">
+# t       <input type="hidden" id="incrementTimeInput" name="incrementTime" value="2">
+t       <a href="index.htm" style="display:block; margin-top:50px; text-align:center;">Menu principal</a>
 t     </form>
 t   </body>
 t </html>

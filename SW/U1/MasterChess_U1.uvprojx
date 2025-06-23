@@ -464,11 +464,6 @@
               <FilePath>.\src\web\retomarPartida.cgi</FilePath>
             </File>
             <File>
-              <FileName>xml_http.js</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\xml_http.js</FilePath>
-            </File>
-            <File>
               <FileName>currentDate.cgx</FileName>
               <FileType>9</FileType>
               <FilePath>.\src\web\currentDate.cgx</FilePath>
@@ -487,6 +482,11 @@
               <FileName>currentConsumo.cgx</FileName>
               <FileType>9</FileType>
               <FilePath>.\src\web\currentConsumo.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>nuevaPartida.js</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\nuevaPartida.js</FilePath>
             </File>
           </Files>
         </Group>

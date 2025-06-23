@@ -56,14 +56,14 @@
 extern ARM_DRIVER_I2C Driver_I2C2;
 static ARM_DRIVER_I2C *I2Cdrv = &Driver_I2C2;
 
+/* Public */
 osThreadId_t        e_memoriaThreadId;
 osMessageQueueId_t  e_memoriaRxMessageId;
 osMessageQueueId_t  e_memoriaTxMessageId;
-osSemaphoreId_t     e_accessSemaphoreId;
-
-uint16_t numPartidasTerminadas;
-
 /* Private */
+static osSemaphoreId_t     e_accessSemaphoreId;
+static uint16_t numPartidasTerminadas;
+
 static void Run(void *argument);
 
 static void SoftwareReset(void);

@@ -1,10 +1,9 @@
 t <!DOCTYPE html>
 t <html>
 t <head>
-t   <title>Histórico de Partidas</title>
+t   <title>Historico de Partidas</title>
 t </head>
-i   pg_header.inc
-t <h2 align=center>Histórico de Partidas</h2>
+t <h2 align=center>Historico de Partidas</h2>
 t <form action=historico.cgi method=post name=historico>
 t   <table border=1 width=99% align=center>
 t     <tr bgcolor=#aaccff>
@@ -16,7 +15,7 @@ t     </tr>
 # 10 rows of data
 t     <tr>
 t       <td>
-t         <input type=text name=fechaPartida1 size=9 maxlength=8 value="%s" readonly>
+t         <span>%s</span>
 t       </td>
 t       <td>
 t         <input type=text name=nombreBlancas1 size=12 maxlength=12 value="%s" readonly>
@@ -155,6 +154,6 @@ t         <input type=text name=victoria10 size=8 maxlength=8 value="%s" readonl
 t       </td>
 t     </tr>
 t   </table>
+t   <a href="index.htm" style="display:block; margin-top:50px; text-align:center;">Menu principal</a>
 t </form>
-i   pg_footer.inc
 . End of script must be closed with period.
