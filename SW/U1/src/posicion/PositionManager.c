@@ -14,8 +14,8 @@
 #define POWER_ON_RESET  150     // Tiempo (ms) que debe mantenerse en reset al inicializar
 #define SLAVE_1_ADDR    0x20    // 0x20 en 7 bits es 0x40 en 8 bits - A0, A1 Y A2 SIN SOLDAR
 #define SLAVE_2_ADDR    0x21	  // 0x21 en 7 bits es 0x42 en 8 bits - A0 SOLDADO A VCC
-#define SLAVE_3_ADDR    0x22	  // 0x20 en 7 bits es 0x40 en 8 bits - A1 SOLDADO A VCC
-#define SLAVE_4_ADDR    0x24	  // 0x20 en 7 bits es 0x40 en 8 bits - A2 SOLDADO A VCC
+#define SLAVE_3_ADDR    0x22	  // 0x20 en 7 bits es 0x44 en 8 bits - A1 SOLDADO A VCC
+#define SLAVE_4_ADDR    0x24	  // 0x20 en 7 bits es 0x48 en 8 bits - A2 SOLDADO A VCC
 
 const uint16_t CASILLAS[16] = {
     0x0100,  // CASILLA_0 desde el expansor

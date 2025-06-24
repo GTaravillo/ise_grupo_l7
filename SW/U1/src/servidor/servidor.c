@@ -215,7 +215,11 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   char var[40];
 
   printf("[CGI] Received POST data: %s\n", data);
-
+  btnIniciarPulsado   = 0;
+  btnPausarPulsado    = 0;
+  btnSuspenderPulsado = 0;
+  btnRendirsePulsado  = 0;
+  btnReanudarPulsado  = 0;
   do 
   {
     data = netCGI_GetEnvVar(data, var, sizeof(var));
@@ -237,7 +241,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
                                             esBtnRendirse   ? NUEVA_PARTIDA_BOTON_RENDIRSE   :
 																															NUEVA_PARTIDA_VAR_DESCONOCIDA;
 		
-		const bool esBtnRetomar = strncmp(var, "btnRetomar=", 11) == 0;
+		const bool esBtnRetomar = strncmp(var, "btnReanudar=", 11) == 0;
 		
 		const EVariablesRetomarPartida varRetomar = esBtnRetomar ? RETOMAR_PARTIDA_BOTON_REANUDAR :
                                                                RETOMAR_PARTIDA_VAR_DESCONOCIDA;
@@ -299,7 +303,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
 			switch (varRetomar)
 			{
 				case RETOMAR_PARTIDA_BOTON_REANUDAR:
-					btnReanudarPulsado = (strcmp(var + 11, "1") == 0);
+					btnReanudarPulsado = (atoi(var + 12) == 1);
 				break;
 				
 				default:
@@ -314,8 +318,8 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   printf("[servidor::%s] player2Name: %s\n", __func__, nombreNegras);
   printf("[servidor::%s] Minutos blancas: %d\n", __func__, minutosBlancas);
 	printf("[servidor::%s] Minutos negras: %d\n", __func__, minutosNegras);
-  printf("[servidor::%s] Estado botones: INICIAR[%d] PAUSAR[%d] SUSPENDER[%d] RENDIRSE[%d]\n", 
-         __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado);
+  printf("[servidor::%s] Estado botones: INICIAR[%d] PAUSAR[%d] SUSPENDER[%d] RENDIRSE[%d] REANUDAR[%d]\n", 
+         __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado, btnReanudarPulsado);
   if (btnIniciarPulsado)
   {
 		setTiempoBlancas(minutosBlancas, 0);
@@ -328,7 +332,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   }
   else if (btnSuspenderPulsado)
   {
-    char tiempo[5];
+    char tiempo[TAM_TIEMPO_JUGADOR+1];
     MemoriaMsg_t msgTx = {0};
     msgTx.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
     
@@ -359,7 +363,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
     strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
     msgTx.turno_victoria = GetTurno() ? 0 : 1;
-    char tiempo[5];
+    char tiempo[TAM_TIEMPO_JUGADOR+1];
     snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
     strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
 
@@ -393,6 +397,8 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     setTiempoNegras(minutos, segundos);
     SetTurno(msgRx.turno_victoria);
     setMap(msgRx.dato, TAM_DATOS);
+    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR); 
+    printf("Se envia FLAG_RETOCAR desde el servidor\n");
   }
 }
 
@@ -590,12 +596,11 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
     break;
 
     case RETOMAR_PARTIDA_TURNO: {
-      //minutosNegras  = GetMinutosNegras();
-      //segundosNegras = GetSegundosNegras();
-      //char tiempoNegras[6];
-      //snprintf(tiempoNegras, sizeof(tiempoNegras), "%02d:%02d", minutosNegras, segundosNegras);
-      len = snprintf(buf, buflen, xml, turno); }
-    break;
+       const char* turnoStr = (turno == 1) ? "Blancas" : "Negras";
+      len = snprintf(buf, buflen, xml, turnoStr);
+      break;
+    } 
+      
 
     case RETOMAR_PARTIDA_TIEMPO_BLANCAS: {
       //minutosNegras  = GetMinutosNegras();

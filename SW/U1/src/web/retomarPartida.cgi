@@ -212,7 +212,7 @@ t         margin-right:  var(--margen-der-botones);
 t         margin-top:    var(--margen-body-sup);
 t         margin-bottom: var(--margen-body-inf);
 t       }
-t       .btnIniciar {
+t       .btnReanudar {
 t         width:            200px;
 t         height:           40px;
 t         font-size:        20px;
@@ -253,7 +253,7 @@ t         <span id="timeOut" class="hora">%s</span>
 t         <span class="espacio-hora-consumo"></span>
 t         <span id="consumoActual" class="consumo">Consumo actual: %s</span>
 t     </div>
-t     <h2 class="titulo-nueva-partida" align="center"><br>Nueva partida</h2>
+t     <h2 class="titulo-nueva-partida" align="center"><br>Retomar partida</h2>
 t     <form>
 t       <div class="bloque-jugadores">
 c b b     <span class="blancas"><b>Blancas</b> %s</span>
@@ -266,7 +266,8 @@ t         <span class="espacio-blancas-negras"></span>
 c b 2     <span class="tiempo-label"><b>Tiempo negras</b> %s</span>
 t       </div>
 t       <div class="bloque-botones">
-t         <button type="submit" id="btnReanudar" class="btnIniciar">&#9654; REANUDAR</button>
+t         <button type="submit" id="btnReanudar" class="btnReanudar" onclick="return reanudar(event);">
+t           &#9654; REANUDAR</button>
 t       </div>
 t       <a href="index.htm" style="display:block; margin-top:50px; text-align:center;">Menu principal</a>
 t     </form>

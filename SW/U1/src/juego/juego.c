@@ -173,7 +173,9 @@ AJD_CasillaPtr tPromo;
 
    switch(modo){
       case Init:
+        printf("ESTAMOS EN MODO: INIT\n");
          flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+         printf("RECIBIDO FLAG\n");
          map = malloc(64*sizeof(uint8_t));
          memset(map, 0, 64*sizeof(uint8_t));
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
@@ -194,21 +196,22 @@ AJD_CasillaPtr tPromo;
          modo = Espera;
       break;
       case Espera:
+        printf("ESTAMOS EN MODO: ESPERA\n");
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
-            status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
-            estado_juego.juegan_blancas = paq.turno_victoria;
-            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
-            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
-            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
-            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
-            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
-            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
-            free(tiempoBlancasMinStr);
-            free(tiempoNegrasMinStr);
-            free(tiempoBlancasSegStr);
-            free(tiempoNegrasSegStr);
+//            status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
+//            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
+//            estado_juego.juegan_blancas = paq.turno_victoria;
+//            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
+//            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
+//            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
+//            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
+//            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
+//            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
+//            free(tiempoBlancasMinStr);
+//            free(tiempoNegrasMinStr);
+//            free(tiempoBlancasSegStr);
+//            free(tiempoNegrasSegStr);
             
              
          }else if(flag == FLAG_START){
@@ -221,12 +224,12 @@ AJD_CasillaPtr tPromo;
          modo = Lectura;
       break;
       case Lectura:
+        printf("ESTAMOS EN MODO: LECTURA\n");
          _colocaPiezas(&tablero, map);
-         estado_juego.segundos_negras = 600;
          modo = Idle;
          break;
       case Idle:
-        
+        printf("ESTAMOS EN MODO: IDLE\n");
          if(!firstRound){
             estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
             estado_juego.casilla_seleccionada = NO_SELECCION;
@@ -241,6 +244,7 @@ AJD_CasillaPtr tPromo;
          modo = LevantaPieza;
          break;
       case LevantaPieza:
+        printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
          //esperaPausaDetener();
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
          if(status == osOK && !movedCasilla.ocupada){
@@ -295,6 +299,7 @@ AJD_CasillaPtr tPromo;
          //}
       break;
       case CompMov:
+        printf("ESTAMOS EN MODO: COMPMOV\n");
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
          if(status == osOK && movedCasilla.ocupada){
             //ledMsg.nuevaJugada = true;
@@ -335,7 +340,7 @@ AJD_CasillaPtr tPromo;
                  printf(" [Test] Jaque al negro\n");
                   estado_juego.negro_jaque = 0;
                } else {
-                 printf("Esperando flag distancia\n");
+                printf("Esperando flag distancia\n");
                 osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
                 printf("Recibido flag distancia\n");
                 
@@ -345,6 +350,10 @@ AJD_CasillaPtr tPromo;
                   .mensaje[0] = 0x04U
                 };
                 osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
+                
+                
+                ledMsg.tipoJugada = ACK;
+                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                }
                
 
@@ -366,6 +375,7 @@ AJD_CasillaPtr tPromo;
          }
       break;
       case Pause:
+        printf("ESTAMOS EN MODO: PAUSE\n");
 			osTimerStop(tick_segundos);
          flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
          if (flag == FLAG_RESUME){
@@ -375,6 +385,7 @@ AJD_CasillaPtr tPromo;
          }
       break;
       case Stop:
+        printf("ESTAMOS EN MODO: STOP\n");
 			osTimerStop(tick_segundos);
       // const char* mapa_prueba = GetMap();
 //         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
@@ -393,6 +404,7 @@ AJD_CasillaPtr tPromo;
          modo = Init;
       break;
       case Win:
+        printf("ESTAMOS EN MODO: WIN\n");
          osTimerStop(tick_segundos);
 //         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
 //         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
@@ -426,7 +438,12 @@ void setMap(const uint8_t* mapIn, size_t len) {
 }
 
 void getMap(uint8_t* mapOut, size_t len) {
+    uint8_t map[64];
     if (len > 64) len = 64;
+    for(int i = 0; i < 64; i++) {
+      map[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+      printf("Guarda pieza:%d %s como [%x]", tablero.casilla[i].pieza-1, tablero.casilla[i].color_pieza?"negra":"blanca", map[i]);
+    }
     osMutexAcquire(mapMutex, osWaitForever);
     memcpy(mapOut, map, len);
     osMutexRelease(mapMutex);
@@ -434,42 +451,66 @@ void getMap(uint8_t* mapOut, size_t len) {
 
 uint8_t GetMinutosBlancas(void)
 {
+  uint8_t minutosblancas = (uint8_t)(estado_juego.segundos_blancas/60);
+  printf("MINUTOS BLANCAS QUE SE ENVIAN A WEB: %d\n", minutosblancas);
   return (uint8_t)(estado_juego.segundos_blancas/60);
 }
 
 uint8_t GetSegundosBlancas(void)
 {
+  uint8_t segundosblancas = (uint8_t)(estado_juego.segundos_blancas%60);
+  printf("SEGUNDOS BLANCAS QUE SE ENVIAN A WEB: %d\n", segundosblancas);
+  printf("segundos bien blancas: %d\n", estado_juego.segundos_blancas);
   return (uint8_t)(estado_juego.segundos_blancas%60);
 }
 
 uint8_t GetMinutosNegras(void)
 {
+  uint8_t minutosnegras = (uint8_t)(estado_juego.segundos_negras/60);
+  printf("segundos bien negras: %d\n", estado_juego.segundos_negras);
+
+  printf("MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
   return (uint8_t)(estado_juego.segundos_negras/60);
 }
 
 uint8_t GetSegundosNegras(void)
 {
+  uint8_t segundosnegras = (uint8_t)(estado_juego.segundos_negras%60);
+  printf("SEGUNDOS NEGRAS QUE SE ENVIAN A WEB: %d\n", segundosnegras);
   return (uint8_t)(estado_juego.segundos_negras%60);
 }
 
 void SetTurno(const bool turnoBlancas)
 {
   estado_juego.juegan_blancas = turnoBlancas ? 1 : 0;
+  printf("TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
+  printf("TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
+
+
 }
 
 bool GetTurno(void)
 {
+  bool turno = (estado_juego.juegan_blancas == 1);
+  printf("TURNO QUE SE ENVIA %s\n", turno ? "BLANCAS" : "NEGRAS");
   return (estado_juego.juegan_blancas == 1);
 }
 
 void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
 {
   estado_juego.segundos_blancas = minutos * 60 + segundos;
+  printf("TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
+
+
 }
 
 void setTiempoNegras(uint8_t minutos, uint8_t segundos)
 {
   estado_juego.segundos_negras = minutos * 60 + segundos;
+  printf("TIEMPO NEGRAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_negras);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////

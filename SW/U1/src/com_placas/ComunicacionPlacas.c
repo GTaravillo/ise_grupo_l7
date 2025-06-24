@@ -691,9 +691,9 @@ static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
     break;
 
     case MENSAJE_SERVIDOR: {				
-			  SetConsumoActual(mensajeRx.mensaje[0]); // 3 bytes
+			  SetConsumoActual(mensajeRx.mensaje[1]); // 3 bytes
 		
-				if(mensajeRx.mensaje[1] > 50)
+				if(mensajeRx.mensaje[0] > 50)
 				{
 					osThreadFlagsSet(e_juegoThreadId,FLAG_PAUSE );
 				}
