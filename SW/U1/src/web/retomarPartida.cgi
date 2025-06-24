@@ -253,7 +253,7 @@ t         <span id="timeOut" class="hora">%s</span>
 t         <span class="espacio-hora-consumo"></span>
 t         <span id="consumoActual" class="consumo">Consumo actual: %s</span>
 t     </div>
-t     <h2 class="titulo-nueva-partida" align="center"><br>Retomar partida</h2>
+t     <h2 class="titulo-nueva-partida" align="center"><br>Retomar Partida</h2>
 t     <form>
 t       <div class="bloque-jugadores">
 c b b     <span class="blancas"><b>Blancas</b> %s</span>
@@ -264,6 +264,7 @@ t       <div class="bloque-tiempo">
 c b 1     <span class="tiempo-label"><b>Tiempo blancas</b> %s</span>
 t         <span class="espacio-blancas-negras"></span>
 c b 2     <span class="tiempo-label"><b>Tiempo negras</b> %s</span>
+c b t     <span class="turno-actual"><b>Turno Actual</b> %s</span>
 t       </div>
 t       <div class="bloque-botones">
 t         <button type="submit" id="btnReanudar" class="btnReanudar" onclick="return reanudar(event);">

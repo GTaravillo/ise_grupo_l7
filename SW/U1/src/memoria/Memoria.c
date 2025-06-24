@@ -208,8 +208,9 @@ static void Run(void *argument)
 
   // EscribirByte(0, 0);
   // EscribirByte(1, 0);
-  // osDelay(100000);
-  // LimpiarMemoria(); // CUIDADO! Elimina todos los datos en memoria
+  
+//  LimpiarMemoria(); // CUIDADO! Elimina todos los datos en memoria
+//	osDelay(100000);
   ActualizarNumPartidasTerminadas();
   osThreadFlagsSet(e_serverThreadId, FLAG_INIT_COMPLETE);
   osThreadFlagsSet(e_testMemoriaThreadId, FLAG_INIT_COMPLETE);

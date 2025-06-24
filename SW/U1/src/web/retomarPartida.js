@@ -8,7 +8,7 @@ const UI_IDS = {
   tiempoBlancas: "tiempoBlancas",
   tiempoNegras:  "tiempoNegras",
   turno:         "turno",
-  btnReanudar:    "btnReanudar"
+  btnReanudar:   "btnReanudar"
 };
 
 const ENDPOINTS = {
@@ -102,12 +102,12 @@ function updateConsumoField() {
   xhr.send();
 }
 
-// Boton reanudar
+// Boton iniciar
 function reanudar(event) {
-  document.getElementById(UI_IDS.btnReanudar).disabled   = true;
+  document.getElementById(UI_IDS.btnReanudar).disabled = true;
 
   buttonStates = {
-    btnReanudar:   1
+    btnReanudar:   1,
   };
 
   return submitFormAjax();

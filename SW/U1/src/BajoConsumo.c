@@ -14,8 +14,6 @@ int main(void)
     {
         // Simulate wake-up trigger (e.g., button press or timed pulse)
         WakeUpOtherBoard();
-
-        HAL_Delay(5000);  // Delay between pulses
     }
 }
 

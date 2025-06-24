@@ -332,7 +332,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   }
   else if (btnSuspenderPulsado)
   {
-    char tiempo[TAM_TIEMPO_JUGADOR+1];
+    char tiempo[TAM_TIEMPO_JUGADOR + 1];
     MemoriaMsg_t msgTx = {0};
     msgTx.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
     
@@ -363,7 +363,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
     strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
     msgTx.turno_victoria = GetTurno() ? 0 : 1;
-    char tiempo[TAM_TIEMPO_JUGADOR+1];
+    char tiempo[TAM_TIEMPO_JUGADOR + 1];
     snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
     strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
 
@@ -397,8 +397,8 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     setTiempoNegras(minutos, segundos);
     SetTurno(msgRx.turno_victoria);
     setMap(msgRx.dato, TAM_DATOS);
-    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR); 
-    printf("Se envia FLAG_RETOCAR desde el servidor\n");
+
+    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
   }
 }
 
@@ -596,11 +596,9 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
     break;
 
     case RETOMAR_PARTIDA_TURNO: {
-       const char* turnoStr = (turno == 1) ? "Blancas" : "Negras";
+      const char* turnoStr = (turno == 1) ? "Blancas" : "Negras";
       len = snprintf(buf, buflen, xml, turnoStr);
-      break;
-    } 
-      
+    } break;
 
     case RETOMAR_PARTIDA_TIEMPO_BLANCAS: {
       //minutosNegras  = GetMinutosNegras();
