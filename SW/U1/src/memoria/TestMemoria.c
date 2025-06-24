@@ -12,15 +12,15 @@
 #define TEST_RETOMAR_PARTIDA_1 0
 #define TEST_RETOMAR_PARTIDA_2 0
 #define TEST_GUARDAR_PARTIDA_FINALIZADA_1 0
-#define TEST_GUARDAR_PARTIDA_FINALIZADA_2 1
+#define TEST_GUARDAR_PARTIDA_FINALIZADA_2 0
 
 osThreadId_t e_testMemoriaThreadId;
 
-static const uint8_t fecha1[TAM_FECHA] = "010101";
-static const uint8_t fecha2[TAM_FECHA] = "160625";
+static const uint8_t fecha1[TAM_FECHA] = "01/01/01";
+static const uint8_t fecha2[TAM_FECHA] = "16/06/25";
 
-static const uint8_t hora1[TAM_HORA] = "120000";
-static const uint8_t hora2[TAM_HORA] = "123456";
+static const uint8_t hora1[TAM_HORA] = "12:00:00";
+static const uint8_t hora2[TAM_HORA] = "12:34:56";
 
 static const uint8_t nombreBlancas1[TAM_NOMBRE_JUGADOR] = "Test Blancas";
 static const uint8_t nombreBlancas2[TAM_NOMBRE_JUGADOR] = "Obi-Wan";
@@ -31,11 +31,11 @@ static const uint8_t nombreNegras2[TAM_NOMBRE_JUGADOR] = "x_Shurmano_x";
 static const uint8_t turno_victoria1 = 1;
 static const uint8_t turno_victoria2 = 0;
 
-static const uint8_t tiempoBlancas1[TAM_TIEMPO_JUGADOR] = "1000";
-static const uint8_t tiempoBlancas2[TAM_TIEMPO_JUGADOR] = "0349";
+static const uint8_t tiempoBlancas1[TAM_TIEMPO_JUGADOR] = "10:00";
+static const uint8_t tiempoBlancas2[TAM_TIEMPO_JUGADOR] = "03:49";
 
-static const uint8_t tiempoNegras1[TAM_TIEMPO_JUGADOR] = "1234";
-static const uint8_t tiempoNegras2[TAM_TIEMPO_JUGADOR] = "4321";
+static const uint8_t tiempoNegras1[TAM_TIEMPO_JUGADOR] = "12:34";
+static const uint8_t tiempoNegras2[TAM_TIEMPO_JUGADOR] = "43:21";
 
 static const uint8_t tablero1[TAM_DATOS] = {BLANCO | TORRE1, 		
 																						BLANCO | CABALLO1,

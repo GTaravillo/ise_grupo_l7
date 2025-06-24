@@ -25,7 +25,7 @@ typedef enum {
   GUARDAR_PARTIDA_SIN_FINALIZAR = 1,
   GUARDAR_PARTIDA_FINALIZADA    = 2,
   RETOMAR_ULTIMA_PARTIDA        = 3,
-  OBTENER_INFO_PARTIDAS         = 4,
+  // OBTENER_INFO_PARTIDAS         = 4,
   LIMPIAR_MEMORIA               = 0xFF   // Cuidado! Elimina todos los datos en memoria
 } ETipoPeticion;
 
@@ -73,8 +73,8 @@ typedef struct {
 
 void MemoriaInitialize(void);
 // Solo para servidor
-bool HayPartidaARetomar(void);
-uint16_t ObtenerNumeroPartidasFinalizadas(void);
-MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida);
+// bool HayPartidaARetomar(void);
+// uint16_t ObtenerNumeroPartidasFinalizadas(void);
+// MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida);
 
 #endif  // __MEMORIA_H

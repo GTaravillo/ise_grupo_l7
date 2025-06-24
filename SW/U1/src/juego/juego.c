@@ -44,7 +44,7 @@ void juegoEsperaInitialize(void);
 void tick_segundos_callback(void *argument);
 void checkJaque(AJD_TableroPtr tablero);
 bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero);
-const char* GetMap();
+
 void setTiempoNuevaPartida(uint16_t minutos);
 
 ////////////////////////////////////////////////////////////////////////////
@@ -55,6 +55,7 @@ modo_t modo = Init;
 
 // osMessageQueueId_t  e_juegoTxMessageId;
 osMessageQueueId_t  e_juegoRxMessageId;
+osMutexId_t mapMutex;
 
  osThreadId_t e_juegoThreadId;
 // osThreadId_t e_juegoEsperaThreadId;
@@ -375,7 +376,7 @@ AJD_CasillaPtr tPromo;
       break;
       case Stop:
 			osTimerStop(tick_segundos);
-      const char* mapa_prueba = GetMap();
+      // const char* mapa_prueba = GetMap();
 //         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
 //         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
 //         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
@@ -417,45 +418,59 @@ AJD_CasillaPtr tPromo;
  //osThreadYield();
 }
 
-const char* GetMap(){
-  char* map;
-  char* piezas[16] = {"PEON1","PEON2","PEON3","PEON4","PEON5","PEON6","PEON7","PEON8","CABALLO1","CABALLO2","TORRE1","TORRE2","ALFIL1", "ALFIL2", "DAMA", "REY"};
-  map = malloc(64*sizeof(uint8_t));
-  for(int i = 0; i < 64; i++) map[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-  for(int j = 0; j < 64; j++){
-    if(map[j] != 0xFF){
-      printf("%s %s en [%d]\n", ((map[j]&0x10) == WHITE) ? "BLANCA" : "NEGRA", piezas[map[j]&~WHITE], j);
-      osDelay(10);
-    }
-  }
-  return map;
+void setMap(const uint8_t* mapIn, size_t len) {
+    if (len > 64) len = 64; // Prevent overflow
+    osMutexAcquire(mapMutex, osWaitForever);
+    memcpy(map, mapIn, len);
+    osMutexRelease(mapMutex);
 }
 
-uint8_t GetMinutosBlancas(){
+void getMap(uint8_t* mapOut, size_t len) {
+    if (len > 64) len = 64;
+    osMutexAcquire(mapMutex, osWaitForever);
+    memcpy(mapOut, map, len);
+    osMutexRelease(mapMutex);
+}
+
+uint8_t GetMinutosBlancas(void)
+{
   return (uint8_t)(estado_juego.segundos_blancas/60);
 }
 
-uint8_t GetSegundosBlancas(){
+uint8_t GetSegundosBlancas(void)
+{
   return (uint8_t)(estado_juego.segundos_blancas%60);
 }
 
-uint8_t GetMinutosNegras(){
+uint8_t GetMinutosNegras(void)
+{
   return (uint8_t)(estado_juego.segundos_negras/60);
 }
 
-uint8_t GetSegundosNegras(){
+uint8_t GetSegundosNegras(void)
+{
   return (uint8_t)(estado_juego.segundos_negras%60);
 }
 
-bool GetTurno(){
+void SetTurno(const bool turnoBlancas)
+{
+  estado_juego.juegan_blancas = turnoBlancas ? 1 : 0;
+}
+
+bool GetTurno(void)
+{
   return (estado_juego.juegan_blancas == 1);
 }
 
-void setTiempoNuevaPartida(uint16_t minutos){
-  estado_juego.segundos_blancas = minutos*60;
-  estado_juego.segundos_negras = minutos*60;
+void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
+{
+  estado_juego.segundos_blancas = minutos * 60 + segundos;
 }
 
+void setTiempoNegras(uint8_t minutos, uint8_t segundos)
+{
+  estado_juego.segundos_negras = minutos * 60 + segundos;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 // INICIALIZA
@@ -915,6 +930,7 @@ void juegoInitialize(void)
   tick_segundos = osTimerNew((osTimerFunc_t)tick_segundos_callback, osTimerPeriodic, NULL, NULL);
   e_juegoThreadId = osThreadNew(stateMachine, NULL, NULL);
 	e_juegoRxMessageId = osMessageQueueNew(NUMERO_MENSAJES_JUEGO_MAX, sizeof(JuegoMsg_t), NULL);
+  mapMutex = osMutexNew(NULL);
 
   if ((e_juegoThreadId == NULL))
   {

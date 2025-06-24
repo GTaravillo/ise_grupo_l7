@@ -678,7 +678,6 @@ static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
 
 static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
 {
-	char *str;
 	
   printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
@@ -691,16 +690,14 @@ static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
       
     break;
 
-    case MENSAJE_SERVIDOR:
-					    
-				sprintf(str, "%d", mensajeRx.mensaje[0]);
-				
-			  SetConsumoActual(str); // 3 bytes
+    case MENSAJE_SERVIDOR: {				
+			  SetConsumoActual(mensajeRx.mensaje[0]); // 3 bytes
 		
 				if(mensajeRx.mensaje[1] > 50)
 				{
 					osThreadFlagsSet(e_juegoThreadId,FLAG_PAUSE );
 				}
+    }
     break;
 
     case MENSAJE_RTC:

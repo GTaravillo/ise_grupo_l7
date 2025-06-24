@@ -1,14 +1,14 @@
 // === UI ELEMENT IDS AND CLASSES USED IN THIS FILE ===
 const UI_IDS = {
-  dateOut:           "dateOut",
-  timeOut:           "timeOut",
-  consumoActual:     "consumoActual",
-  player1Name:       "player1Name",
-  player2Name:       "player2Name",
-  tiempoBlancas:     "tiempoBlancas",
-  tiempoNegras:      "tiempoNegras",
-  turno:             "turno",
-  btnRetomarPartida: "btnRetomarPartida"
+  dateOut:       "dateOut",
+  timeOut:       "timeOut",
+  consumoActual: "consumoActual",
+  player1Name:   "player1Name",
+  player2Name:   "player2Name",
+  tiempoBlancas: "tiempoBlancas",
+  tiempoNegras:  "tiempoNegras",
+  turno:         "turno",
+  btnRetomar:    "btnRetomar"
 };
 
 const ENDPOINTS = {

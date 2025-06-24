@@ -58,7 +58,8 @@ typedef enum {
   RETOMAR_PARTIDA_HORA           = 'h',
   RETOMAR_PARTIDA_NOMBRE_NEGRAS  = 'n',
   RETOMAR_PARTIDA_BOTON_REANUDAR = 'r',
-  RETOMAR_PARTIDA_TURNO          = 't'
+  RETOMAR_PARTIDA_TURNO          = 't',
+	RETOMAR_PARTIDA_VAR_DESCONOCIDA
 } EVariablesRetomarPartida;
 
 // typedef enum {
@@ -78,7 +79,7 @@ static osSemaphoreId_t  e_consumoSemaphoreId;
 static bool existePartidaRetomar;
 static uint16_t numPartidasFinalizadas;
 // Top Bar
-static char consumoActual[3] = { '0', '0', '0' };
+static char consumoActual[4] = { '0', '0', '0' };
 // Nueva Partida
 static char nombreBlancas[TAM_NOMBRE_JUGADOR + 1];
 static char nombreNegras[TAM_NOMBRE_JUGADOR + 1];
@@ -91,6 +92,8 @@ static bool btnIniciarPulsado;
 static bool btnPausarPulsado;
 static bool btnSuspenderPulsado;
 static bool btnRendirsePulsado;
+
+static bool btnReanudarPulsado;
 
 static  const osThreadAttr_t g_serverAttr = 
 {
@@ -123,12 +126,24 @@ void Server_Initialize(void)
   }
 }
 
-void SetConsumoActual(const char* consumo)
+void SetConsumoActual(uint8_t consumo)
 {
   osSemaphoreAcquire(e_consumoSemaphoreId, 0);
-	strncmp(consumoActual, consumo, sizeof(consumoActual));
+  snprintf(consumoActual, sizeof(consumoActual), "%u", consumo);
   osSemaphoreRelease(e_consumoSemaphoreId);
 }
+
+
+static const char* GetConsumoActual(void)
+{
+  const char* consumo;
+  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
+  consumo = consumoActual;
+  osSemaphoreRelease(e_consumoSemaphoreId);
+
+  return consumo;
+}
+
 
 static void Run(void *argument) 
 {
@@ -191,19 +206,9 @@ static void Run(void *argument)
   printf("[servidor::Run] HTTP server inicializado correctamente\n");
   
   // Espera a que la memoria este inicializada y coge datos
-  osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll, osWaitForever);
+  osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll | osFlagsNoClear , osWaitForever);
   // existePartidaRetomar   = HayPartidaARetomar();
   // numPartidasFinalizadas = ObtenerNumeroPartidasFinalizadas();
-}
-
-static const char* GetConsumoActual(void)
-{
-  const char* consumo;
-  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
-  consumo = consumoActual;
-  osSemaphoreRelease(e_consumoSemaphoreId);
-
-  return consumo;
 }
 
 void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
@@ -219,68 +224,89 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
     const bool esNombreNegras  = strncmp(var, "player2Name=", 12) == 0;
     const bool esTiempoPartida = strncmp(var, "matchTime=", 10) == 0;
     const bool esBtnIniciar    = strncmp(var, "btnIniciar=", 11) == 0;
-    const bool esbtnPausar     = strncmp(var, "btnPausar=", 10) == 0;
-    const bool esbtnSuspender  = strncmp(var, "btnSuspender=", 13) == 0;
-    const bool esbtnRendirse   = strncmp(var, "btnRendirse=", 12) == 0;
+    const bool esBtnPausar     = strncmp(var, "btnPausar=", 10) == 0;
+    const bool esBtnSuspender  = strncmp(var, "btnSuspender=", 13) == 0;
+    const bool esBtnRendirse   = strncmp(var, "btnRendirse=", 12) == 0;
 
-    const EVariablesNuevaPartida variable = esNombreBlancas ? NUEVA_PARTIDA_NOMBRE_BLANCAS  :
-                                            esNombreNegras  ? NUEVA_PARTIDA_NOMBRE_NEGRAS   :
-                                            esTiempoPartida ? NUEVA_PARTIDA_TIEMPO_PARTIDA  :
-                                            esBtnIniciar    ? NUEVA_PARTIDA_BOTON_INICIAR   :
-                                            esbtnPausar     ? NUEVA_PARTIDA_BOTON_PAUSAR    :
-                                            esbtnSuspender  ? NUEVA_PARTIDA_BOTON_SUSPENDER :
-                                            esbtnRendirse   ? NUEVA_PARTIDA_BOTON_RENDIRSE  :
-                                                              NUEVA_PARTIDA_VAR_DESCONOCIDA;
+    const EVariablesNuevaPartida varNueva = esNombreBlancas ? NUEVA_PARTIDA_NOMBRE_BLANCAS   :
+                                            esNombreNegras  ? NUEVA_PARTIDA_NOMBRE_NEGRAS    :
+                                            esTiempoPartida ? NUEVA_PARTIDA_TIEMPO_PARTIDA   :
+                                            esBtnIniciar    ? NUEVA_PARTIDA_BOTON_INICIAR    :
+                                            esBtnPausar     ? NUEVA_PARTIDA_BOTON_PAUSAR     :
+                                            esBtnSuspender  ? NUEVA_PARTIDA_BOTON_SUSPENDER  :
+                                            esBtnRendirse   ? NUEVA_PARTIDA_BOTON_RENDIRSE   :
+																															NUEVA_PARTIDA_VAR_DESCONOCIDA;
+		
+		const bool esBtnRetomar = strncmp(var, "btnRetomar=", 11) == 0;
+		
+		const EVariablesRetomarPartida varRetomar = esBtnRetomar ? RETOMAR_PARTIDA_BOTON_REANUDAR :
+                                                               RETOMAR_PARTIDA_VAR_DESCONOCIDA;
     
-    switch (variable)
-    {
-      case NUEVA_PARTIDA_NOMBRE_BLANCAS: {
-        const char* varId = "player1Name=";
-        strncpy(nombreBlancas, var + strlen(varId), sizeof(nombreBlancas) - 1);
+		if (varNueva != NUEVA_PARTIDA_VAR_DESCONOCIDA)
+		{
+			switch (varNueva)
+			{
+				case NUEVA_PARTIDA_NOMBRE_BLANCAS: {
+					const char* varId = "player1Name=";
+					strncpy(nombreBlancas, var + strlen(varId), sizeof(nombreBlancas) - 1);
+				}
+				break;
+
+				case NUEVA_PARTIDA_NOMBRE_NEGRAS: {
+					const char* varId = "player2Name=";
+					strncpy(nombreNegras, var + strlen(varId), sizeof(nombreNegras) - 1);
+				}
+				break;
+					
+				case NUEVA_PARTIDA_TIEMPO_PARTIDA: {
+					const char* varId = "matchTime=";
+					char tiempoPartida[3];
+					strncpy(tiempoPartida, var + strlen(varId), sizeof(tiempoPartida) - 1);
+					minutosBlancas  = atoi(tiempoPartida);
+					segundosBlancas = 0;
+					minutosNegras  = atoi(tiempoPartida);
+					segundosNegras = 0;
+				}
+				break;
+
+				case NUEVA_PARTIDA_BOTON_INICIAR: {
+					btnIniciarPulsado = (strcmp(var + 11, "1") == 0);
+				}
+				break;
+
+				case NUEVA_PARTIDA_BOTON_PAUSAR: {
+					btnPausarPulsado = (strcmp(var + 10, "1") == 0);
+				}
+				break;
+
+				case NUEVA_PARTIDA_BOTON_SUSPENDER: {
+					btnSuspenderPulsado = (strcmp(var + 13, "1") == 0);
+				}
+				break;
+
+				case NUEVA_PARTIDA_BOTON_RENDIRSE: {
+					btnRendirsePulsado = (strcmp(var + 12, "1") == 0);
+				}
+				break;
+				
+				default:
+				break;
 			}
-      break;
+		}
+		
+		else if (varRetomar != RETOMAR_PARTIDA_VAR_DESCONOCIDA)
+		{
+			switch (varRetomar)
+			{
+				case RETOMAR_PARTIDA_BOTON_REANUDAR:
+					btnReanudarPulsado = (strcmp(var + 11, "1") == 0);
+				break;
+				
+				default:
+				break;
+			}	
+		}
 
-      case NUEVA_PARTIDA_NOMBRE_NEGRAS: {
-        const char* varId = "player2Name=";
-        strncpy(nombreNegras, var + strlen(varId), sizeof(nombreNegras) - 1);
-      }
-      break;
-        
-      case NUEVA_PARTIDA_TIEMPO_PARTIDA: {
-        const char* varId = "matchTime=";
-        char tiempoPartida[3];
-        strncpy(tiempoPartida, var + strlen(varId), sizeof(tiempoPartida) - 1);
-        minutosBlancas  = atoi(tiempoPartida);
-        segundosBlancas = 0;
-				minutosNegras  = atoi(tiempoPartida);
-        segundosNegras = 0;
-      }
-      break;
-
-      case NUEVA_PARTIDA_BOTON_INICIAR: {
-        btnIniciarPulsado = (strcmp(var + 11, "1") == 0);
-      }
-      break;
-
-      case NUEVA_PARTIDA_BOTON_PAUSAR: {
-        btnPausarPulsado = (strcmp(var + 10, "1") == 0);
-      }
-      break;
-
-      case NUEVA_PARTIDA_BOTON_SUSPENDER: {
-        btnSuspenderPulsado = (strcmp(var + 13, "1") == 0);
-      }
-      break;
-
-      case NUEVA_PARTIDA_BOTON_RENDIRSE: {
-        btnRendirsePulsado = (strcmp(var + 12, "1") == 0);
-      }
-      break;
-      
-      default:
-      break;
-    }
-    
   } while (data);
 
   printf("[servidor::%s] Recibido:\n", __func__);
@@ -292,8 +318,9 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
          __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado);
   if (btnIniciarPulsado)
   {
-    osThreadFlagsSet(e_juegoThreadId, FLAG_START);
-    //SetTiempoPartida(minutosPartida);
+		setTiempoBlancas(minutosBlancas, 0);
+		setTiempoNegras(minutosNegras, 0);
+    osThreadFlagsSet(e_juegoThreadId, FLAG_START); 
   }
   else if (btnPausarPulsado)
   {
@@ -301,11 +328,71 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   }
   else if (btnSuspenderPulsado)
   {
+    char tiempo[5];
+    MemoriaMsg_t msgTx = {0};
+    msgTx.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
+    
+    strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
+    strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
+    strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
+    strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
+    msgTx.turno_victoria = GetTurno() ? 0 : 1;
+    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
+    strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
+    memset(&tiempo, 0, TAM_TIEMPO_JUGADOR);
+    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
+    strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
+    getMap(msgTx.dato, TAM_DATOS);
+
+    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+    
     osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
   }
   else if (btnRendirsePulsado)
   {
+    MemoriaMsg_t msgTx = {0};
+
+    msgTx.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
+
+    strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
+    strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
+    strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
+    strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
+    msgTx.turno_victoria = GetTurno() ? 0 : 1;
+    char tiempo[5];
+    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
+    strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
+
+    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
+    strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
+    
+    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+
     osThreadFlagsSet(e_juegoThreadId, FLAG_FINALIZAR);
+  }
+  else if (btnReanudarPulsado)
+  {
+    MemoriaMsg_t msgTx = {
+      .tipoPeticion = RETOMAR_ULTIMA_PARTIDA,
+    };
+
+    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+
+    MemoriaMsg_t msgRx = {0};
+    osMessageQueueGet(e_memoriaTxMessageId, &msgRx, NULL, osWaitForever);
+
+    if (msgRx.tipoPeticion == ERROR_SIN_DATOS)
+    {
+      printf("[servidor::%s] ERROR!\n", __func__);
+      return;
+    }
+    int minutos = 0, segundos = 0;
+    sscanf((const char*)msgRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
+    setTiempoBlancas(minutos, segundos);
+    sscanf((const char*)msgRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
+    setTiempoNegras(minutos, segundos);
+    SetTurno(msgRx.turno_victoria);
+    setMap(msgRx.dato, TAM_DATOS);
   }
 }
 
@@ -430,23 +517,33 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
     return len;
   }
 
-  const char* fechaPartida   = (const char*)msgRx.fechaPartida;
-  const char* horaPartida    = (const char*)msgRx.horaPartida;
-  const char* nombreJugador1 = (const char*)msgRx.nombreBlancas;
-  const char* nombreJugador2 = (const char*)msgRx.nombreNegras;
-  const uint8_t turno        = msgRx.turno_victoria;
-  const char* tiempoBlancas  = (const char*)msgRx.tiempoBlancas;
-  const char* tiempoNegras   = (const char*)msgRx.tiempoNegras;
-  const char* tablero        = (const char*)msgRx.dato;
+  char fechaPartida[TAM_FECHA + 1];
+  char horaPartida[TAM_HORA + 1];
+  char nombreJugador1[TAM_NOMBRE_JUGADOR + 1];
+  char nombreJugador2[TAM_NOMBRE_JUGADOR + 1];
+  char tiempoBlancas[TAM_TIEMPO_JUGADOR + 1];
+  char tiempoNegras[TAM_TIEMPO_JUGADOR + 1];
+  uint8_t turno;
 
-  printf("[servidor::%s] Mensaje recibido:\n", __func__);
-  printf("[servidor::%s] Fecha[%s]\n", __func__, fechaPartida);
-  printf("[servidor::%s] Hora[%s]\n", __func__, horaPartida);
-  printf("[servidor::%s] Nombre blancas[%s]\n", __func__, nombreBlancas);
-  printf("[servidor::%s] Nombre negras[%s]\n", __func__, nombreNegras);
-  printf("[servidor::%s] Turno[%d]\n", __func__, turno);
-  printf("[servidor::%s] Tiempo blancas[%s]\n", __func__, tiempoBlancas);
-  printf("[servidor::%s] Tiempo negras[%s]\n", __func__, tiempoNegras);
+  strncpy(fechaPartida, (const char*)msgRx.fechaPartida, TAM_FECHA);
+  fechaPartida[TAM_FECHA] = '\0';
+
+  strncpy(horaPartida, (const char*)msgRx.horaPartida, TAM_HORA);
+  horaPartida[TAM_HORA] = '\0';
+
+  strncpy(nombreJugador1, (const char*)msgRx.nombreBlancas, TAM_NOMBRE_JUGADOR);
+  nombreJugador1[TAM_NOMBRE_JUGADOR] = '\0';
+
+  strncpy(nombreJugador2, (const char*)msgRx.nombreNegras, TAM_NOMBRE_JUGADOR);
+  nombreJugador2[TAM_NOMBRE_JUGADOR] = '\0';
+
+  strncpy(tiempoBlancas, (const char*)msgRx.tiempoBlancas, TAM_TIEMPO_JUGADOR);
+  tiempoBlancas[TAM_TIEMPO_JUGADOR] = '\0';
+
+  strncpy(tiempoNegras, (const char*)msgRx.tiempoNegras, TAM_TIEMPO_JUGADOR);
+  tiempoNegras[TAM_TIEMPO_JUGADOR] = '\0';
+
+  turno = msgRx.turno_victoria;
 
   const EVariablesRetomarPartida variable = env[0];
   const char* xml = &env[2];
@@ -481,7 +578,7 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
       // {
       //   nombreTurno = "Negras";
       // }
-      len = snprintf(buf, buflen, xml, nombreBlancas); }
+      len = snprintf(buf, buflen, xml, nombreJugador1); }
     break;
 
     case RETOMAR_PARTIDA_NOMBRE_NEGRAS: {
@@ -489,7 +586,7 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
       //segundosNegras = GetSegundosNegras();
       //char tiempoNegras[6];
       //snprintf(tiempoNegras, sizeof(tiempoNegras), "%02d:%02d", minutosNegras, segundosNegras);
-      len = snprintf(buf, buflen, xml, nombreNegras); }
+      len = snprintf(buf, buflen, xml, nombreJugador2); }
     break;
 
     case RETOMAR_PARTIDA_TURNO: {
@@ -528,8 +625,6 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
       buf[0] = '\0';
     break;
   }
-	
-	return len;
 	
 	return len;
 }

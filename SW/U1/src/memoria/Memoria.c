@@ -15,19 +15,18 @@
 #define TAM_MEMORIA      512 * 64 // AT24C256C
 #define LAST_ACCESS_BYTE 0x7FFF
 
-// #define ID_FIN_PARTIDA    0xEE     // Byte que identifica el final de una partida en memoria
-#define NUM_BYTES_PARTIDA_FINALIZADA    TAM_FECHA + TAM_HORA + (2 * TAM_NOMBRE_JUGADOR) + 1 + (2 * TAM_TIEMPO_JUGADOR) // 45 BYTES
-#define NUM_BYTES_PARTIDA_SIN_FINALIZAR NUM_BYTES_PARTIDA_FINALIZADA + TAM_DATOS  // 110 bytes
+#define NUM_BYTES_PARTIDA_FINALIZADA    TAM_FECHA + TAM_HORA + (2 * TAM_NOMBRE_JUGADOR) + 1 + (2 * TAM_TIEMPO_JUGADOR) // 51 BYTES
+#define NUM_BYTES_PARTIDA_SIN_FINALIZAR NUM_BYTES_PARTIDA_FINALIZADA + TAM_DATOS  // 115 bytes
 /**
  * 32768 bytes de almacenamiento
  * Mapa bits: almacena num byte de registro en el que se encuentra la partida. Requiere 2 bytes por partida
  *   Primeros dos bytes: Posicion ultima partida en mapa memoria
  * Solo se puede almacenar una partida sin finalizar, por lo que el número máximo de partidas finalizadas es:
- *   TAM_MEMORIA - NUM_BYTES_PARTIDA_SIN_FINALIZAR - NUM_PARTIDAS_MAX * (NUM_BYTES_PARTIDA_FINALIZADA + 2) > 0
- *   NUM_PARTIDAS_MAX < (TAM_MEMORIA - NUM_BYTES_PARTIDA_SIN_FINALIZAR) / (NUM_BYTES_PARTIDA_FINALIZADA + 2)
- * De lo que se saca que NUM_PARTIDAS_MAX = 694
+ *   TAM_MEMORIA - TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR - TAM_NUM_PARTIDAS - (NUM_PARTIDAS_MAX * TAM_DIRECCION_MAPA) - NUM_BYTES_PARTIDA_SIN_FINALIZAR - (NUM_PARTIDAS_MAX * NUM_BYTES_PARTIDA_FINALIZADA) > 0
+ *   NUM_PARTIDAS_MAX < (TAM_MEMORIA - TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR - TAM_NUM_PARTIDAS - NUM_BYTES_PARTIDA_SIN_FINALIZAR) / (TAM_DIRECCION_MAPA + NUM_BYTES_PARTIDA_FINALIZADA)
+ * De lo que se saca que NUM_PARTIDAS_MAX = 616 y sobran 2 bytes
  */
-#define NUM_PARTIDAS_MAX 694
+#define NUM_PARTIDAS_MAX 616
 
 #define TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR 1 
 #define TAM_NUM_PARTIDAS   2
@@ -35,7 +34,7 @@
 #define TAM_TURNO_VICTORIA 1
 
 #define DIRECCION_EXISTE_PARTIDA_RETOMAR 0
-#define DIRECCION_NUM_PARTIDAS DIRECCION_EXISTE_PARTIDA_RETOMAR + TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR   // 2 bytes (694 partidas)
+#define DIRECCION_NUM_PARTIDAS DIRECCION_EXISTE_PARTIDA_RETOMAR + TAM_DIRECCION_EXISTE_PARTIDA_RETOMAR
 #define DIRECCION_MAPA_REGISTROS DIRECCION_NUM_PARTIDAS + TAM_NUM_PARTIDAS
 
 #define DIRECCION_PARTIDA_RETOMAR DIRECCION_MAPA_REGISTROS + (NUM_PARTIDAS_MAX * TAM_DIRECCION_MAPA)
@@ -109,11 +108,9 @@ void MemoriaInitialize(void)
 bool HayPartidaARetomar(void)
 {
   bool hayPartidaARetomar = false;
-  printf("INTENTO LEER MEMORIA\n");
   osSemaphoreAcquire(e_accessSemaphoreId, 0);
-  hayPartidaARetomar = LeerByte(DIRECCION_EXISTE_PARTIDA_RETOMAR) != EXISTE_PARTIDA_RETOMAR;
+  hayPartidaARetomar = LeerByte(DIRECCION_EXISTE_PARTIDA_RETOMAR) == EXISTE_PARTIDA_RETOMAR;
   osSemaphoreRelease(e_accessSemaphoreId);
-  printf("TERMINO LEER MEMORIA\n");
 
   return hayPartidaARetomar;
 }
@@ -215,6 +212,7 @@ static void Run(void *argument)
   // LimpiarMemoria(); // CUIDADO! Elimina todos los datos en memoria
   ActualizarNumPartidasTerminadas();
   osThreadFlagsSet(e_serverThreadId, FLAG_INIT_COMPLETE);
+  osThreadFlagsSet(e_testMemoriaThreadId, FLAG_INIT_COMPLETE);
   
   //SoftwareReset();
   MemoriaMsg_t mensajeRx;

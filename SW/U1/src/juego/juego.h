@@ -89,5 +89,16 @@
 	void juegoInitialize(void);
 	void juegoTbInitialize(void);
 
+void setMap(const uint8_t* mapIn, size_t len);
+void getMap(uint8_t* mapOut, size_t len);
+uint8_t GetMinutosBlancas(void);
+uint8_t GetSegundosBlancas(void);
+uint8_t GetMinutosNegras(void);
+uint8_t GetSegundosNegras(void);
+void SetTurno(const bool turnoBlancas);
+bool GetTurno(void);
+void setTiempoBlancas(uint8_t minutos, uint8_t segundos);
+void setTiempoNegras(uint8_t minutos, uint8_t segundos);
+
 #endif // JUEGO_H
 

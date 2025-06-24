@@ -18,6 +18,6 @@ extern osMessageQueueId_t  e_serverInputMessageId;
 extern osMessageQueueId_t  e_serverOutputMessageId;
 
 void Server_Initialize(void);
-void SetConsumoActual(const char* consumo); // 3 bytes
+void SetConsumoActual(uint8_t consumo);
 
 #endif

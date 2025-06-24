@@ -8,10 +8,10 @@
 #include <string.h>
 
 // Tamaños datos (bytes)
-#define TAM_FECHA           6   // fecha juego (ddmmaa)
-#define TAM_HORA            6   // hora juego (hhmmss)
+#define TAM_FECHA           8   // fecha juego (dd/mm/aa)
+#define TAM_HORA            8   // hora juego (hh:mm:ss)
 #define TAM_NOMBRE_JUGADOR 12   // nombre jugador
-#define TAM_TIEMPO_JUGADOR  4   // tiempo restante jugador (mmss)
+#define TAM_TIEMPO_JUGADOR  5   // tiempo restante jugador (mmss)
 #define TAM_DATOS          64   // casillas tablero 
 
 /**

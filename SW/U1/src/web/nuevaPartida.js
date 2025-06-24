@@ -186,16 +186,30 @@ function iniciar(event) {
 
 // Boton pausar
 function pausar() {
-  // Add your pause logic here
+  buttonStates = {
+    btnIniciar:   0,
+    btnPausar:    1,
+    btnSuspender: 0,
+    btnRendirse:  0
+  };
 }
 
 // Boton rendirse
 function rendirse() {
-  // Add your stop logic here
+  buttonStates = {
+    btnIniciar:   0,
+    btnPausar:    0,
+    btnSuspender: 0,
+    btnRendirse:  1
+  };
 }
 
 // Boton suspender
 function suspender() {
-  // Your suspend logic here
-  alert("Partida suspendida");
+  buttonStates = {
+    btnIniciar:   0,
+    btnPausar:    0,
+    btnSuspender: 1,
+    btnRendirse:  0
+  };
 }
