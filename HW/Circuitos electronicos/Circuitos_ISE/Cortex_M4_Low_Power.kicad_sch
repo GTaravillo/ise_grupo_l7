@@ -2688,6 +2688,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 35.56) (xy 83.82 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0cf83053-d49b-47c1-8f4a-718b64496f27")
+	)
+	(wire
+		(pts
 			(xy 38.1 53.34) (xy 50.8 53.34)
 		)
 		(stroke
@@ -2698,13 +2708,93 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 107.95) (xy 144.78 120.65)
+			(xy 119.38 107.95) (xy 119.38 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32cb22d8-0fc6-477e-a819-1e19c270d8ba")
+	)
+	(wire
+		(pts
+			(xy 142.24 38.1) (xy 142.24 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3dceee36-9bca-479e-a680-603bc95af571")
+	)
+	(wire
+		(pts
+			(xy 243.84 62.23) (xy 252.73 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f9bfd06-df42-42b5-92eb-5e1a57168b58")
+	)
+	(wire
+		(pts
+			(xy 193.04 107.95) (xy 193.04 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b00312b-90ef-4d90-a1d6-65dfa72a54ef")
+	)
+	(wire
+		(pts
+			(xy 127 36.83) (xy 127 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "90b561aa-963e-40c2-8a50-07bc4f619457")
+	)
+	(wire
+		(pts
+			(xy 144.78 107.95) (xy 144.78 116.84)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "90f4b63f-36f7-458c-8f62-b428f460fc5a")
+	)
+	(wire
+		(pts
+			(xy 116.84 107.95) (xy 116.84 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "948ca7a2-c6e7-4a27-93ed-0abe665ad934")
+	)
+	(wire
+		(pts
+			(xy 114.3 107.95) (xy 114.3 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9772c328-3f5a-435f-8164-8102e5ee7316")
+	)
+	(wire
+		(pts
+			(xy 243.84 64.77) (xy 252.73 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9877e57b-4bdb-426d-98c6-755c1019e388")
 	)
 	(wire
 		(pts
@@ -2725,6 +2815,16 @@
 			(type default)
 		)
 		(uuid "b429beba-1c10-43de-81c9-a76a44939781")
+	)
+	(wire
+		(pts
+			(xy 144.78 38.1) (xy 144.78 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be710679-f3a7-4cef-b65f-e637b3bffd71")
 	)
 	(wire
 		(pts
@@ -2766,15 +2866,35 @@
 		)
 		(uuid "f237fdd6-34b1-4a83-9d8a-cbb2397a7dd5")
 	)
-	(label "PA3"
-		(at 220.98 119.38 180)
+	(label "5v"
+		(at 252.73 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4b01e4bd-fbdb-4b31-86c7-3334d72447fe")
+	)
+	(label "PC11"
+		(at 116.84 113.03 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "5e1c8346-55b5-4d84-9226-2e57856b6103")
+		(uuid "56634b6d-2636-4ca7-af11-33d0da028674")
+	)
+	(label "PE7"
+		(at 83.82 35.56 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7228759c-f1bb-47d2-8006-aeb864e7b3ef")
 	)
 	(label "Vbat-"
 		(at 38.1 53.34 180)
@@ -2786,8 +2906,18 @@
 		)
 		(uuid "88f28d5a-8812-445c-bda5-8882f01fb324")
 	)
+	(label "PF7"
+		(at 127 36.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9fc1dc37-6723-4a5e-a262-2fa4cf5df82b")
+	)
 	(label "PC0"
-		(at 144.78 120.65 180)
+		(at 144.78 116.84 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2795,6 +2925,16 @@
 			(justify right bottom)
 		)
 		(uuid "a0738f3d-b06f-4e3e-9cb1-cc41e37a3954")
+	)
+	(label "3V3"
+		(at 252.73 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "aca6bcef-c3f9-4640-ab43-d3889dc95ead")
 	)
 	(label "V_Cortex"
 		(at 252.73 57.15 0)
@@ -2815,6 +2955,56 @@
 			(justify right bottom)
 		)
 		(uuid "bd7e2e23-df22-41bd-8163-ef98b3d2438e")
+	)
+	(label "PC10"
+		(at 119.38 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c4a754c3-060d-4ab9-b44a-49df5f72b1ac")
+	)
+	(label "PA15"
+		(at 193.04 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c56597bb-b4be-468e-831f-0c7b9e2bbe1f")
+	)
+	(label "PC12"
+		(at 114.3 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c9649628-eb72-48cf-8768-71969ee66107")
+	)
+	(label "PF1"
+		(at 142.24 38.1 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d9a2963f-fb87-4062-b64d-ef2e040693b7")
+	)
+	(label "PF0"
+		(at 144.78 38.1 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e02f4b35-aa4e-4211-9e4d-2f5d92b87c9f")
 	)
 	(symbol
 		(lib_id "MCU_Module:NUCLEO144-F429ZI")

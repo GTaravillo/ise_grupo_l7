@@ -140,13 +140,13 @@ void ThADC (void *argument) {
 	
 	ADC_Init_Single_Conversion(&adchandle , ADC1); //ADC1 configuration
   while (1) {
-    osThreadFlagsWait(FLAG_MEDIDA_ANALOGICA,osFlagsWaitAny,1000U);
+    osThreadFlagsWait(FLAG_MEDIDA_ANALOGICA,osFlagsWaitAny,5000U);
 		
 	  value_ruido=ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
 		value_consumo=ADC_getVoltage(&adchandle , 13 );
 		
 		printf(" rudio %f \n", ((3.3*value_ruido)/4096));
-		value_ruido = ((((3.3*value_ruido)/4096)-2.18)/(2.7-2.18))*100 ;
+		value_ruido = ((((3.3*value_ruido)/4096)-2.1)/(2.7-2.1))*100 ;
 		value_consumo = ((3.3*value_consumo)/4096)*100;
 		
 		

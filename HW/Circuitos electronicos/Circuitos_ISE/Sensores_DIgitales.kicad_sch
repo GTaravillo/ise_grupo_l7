@@ -5,27 +5,28 @@
 	(uuid "71701b42-2580-4f7a-8459-1130283d1c2c")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Interface_Expansion:PCF8575DBR"
+		(symbol "Memory_EEPROM:CAT24C256"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at -6.35 24.13 0)
+				(at -6.35 6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "PCF8575DBR"
-				(at 7.62 -24.13 0)
+			(property "Value" "CAT24C256"
+				(at 1.27 6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
-			(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
+			(property "Footprint" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -34,7 +35,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcf8575.pdf"
+			(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/CAT24C256-D.PDF"
 				(at 0 0 0)
 				(effects
 					(font
@@ -43,7 +44,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "16 Bits Port/Expander to I2C Bus, SSOP-24"
+			(property "Description" "256 kb CMOS Serial EEPROM, DIP-8/SOIC-8/TSSOP-8/DFN-8"
 				(at 0 0 0)
 				(effects
 					(font
@@ -52,7 +53,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "I2C Expander"
+			(property "ki_keywords" "I2C EEPROM Serial 256kb"
 				(at 0 0 0)
 				(effects
 					(font
@@ -61,7 +62,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SSOP*5.3x8.2mm*P0.65mm*"
+			(property "ki_fp_filters" "DIP*W7.62mm* SOIC*3.9x4.9mm* TSSOP*4.4x3mm*P0.65mm* DFN*3x2mm*P0.5mm*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -70,10 +71,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "PCF8575DBR_0_1"
+			(symbol "CAT24C256_1_1"
 				(rectangle
-					(start -7.62 22.86)
-					(end 7.62 -22.86)
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -82,46 +83,8 @@
 						(type background)
 					)
 				)
-			)
-			(symbol "PCF8575DBR_1_1"
 				(pin input line
-					(at -10.16 20.32 0)
-					(length 2.54)
-					(name "SCL"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "22"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -10.16 17.78 0)
-					(length 2.54)
-					(name "SDA"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "23"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 12.7 0)
+					(at -10.16 2.54 0)
 					(length 2.54)
 					(name "A0"
 						(effects
@@ -130,7 +93,7 @@
 							)
 						)
 					)
-					(number "21"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -139,7 +102,7 @@
 					)
 				)
 				(pin input line
-					(at -10.16 10.16 0)
+					(at -10.16 0 0)
 					(length 2.54)
 					(name "A1"
 						(effects
@@ -157,7 +120,7 @@
 					)
 				)
 				(pin input line
-					(at -10.16 7.62 0)
+					(at -10.16 -2.54 0)
 					(length 2.54)
 					(name "A2"
 						(effects
@@ -174,26 +137,8 @@
 						)
 					)
 				)
-				(pin open_collector output_low
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "~{INT}"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin power_in line
-					(at 0 25.4 270)
+					(at 0 7.62 270)
 					(length 2.54)
 					(name "VCC"
 						(effects
@@ -202,7 +147,7 @@
 							)
 						)
 					)
-					(number "24"
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -211,27 +156,9 @@
 					)
 				)
 				(pin power_in line
-					(at 0 -25.4 90)
+					(at 0 -7.62 90)
 					(length 2.54)
 					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "12"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 20.32 180)
-					(length 2.54)
-					(name "P0"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -247,9 +174,9 @@
 					)
 				)
 				(pin bidirectional line
-					(at 10.16 17.78 180)
+					(at 10.16 2.54 180)
 					(length 2.54)
-					(name "P1"
+					(name "SDA"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -264,10 +191,10 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 10.16 15.24 180)
+				(pin input line
+					(at 10.16 0 180)
 					(length 2.54)
-					(name "P2"
+					(name "SCL"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -282,10 +209,10 @@
 						)
 					)
 				)
-				(pin bidirectional line
-					(at 10.16 12.7 180)
+				(pin input line
+					(at 10.16 -2.54 180)
 					(length 2.54)
-					(name "P3"
+					(name "WP"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -293,222 +220,6 @@
 						)
 					)
 					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 10.16 180)
-					(length 2.54)
-					(name "P4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 7.62 180)
-					(length 2.54)
-					(name "P5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 5.08 180)
-					(length 2.54)
-					(name "P6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "10"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 2.54 180)
-					(length 2.54)
-					(name "P7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "11"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -2.54 180)
-					(length 2.54)
-					(name "P10"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "13"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -5.08 180)
-					(length 2.54)
-					(name "P11"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "14"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -7.62 180)
-					(length 2.54)
-					(name "P12"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "15"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -10.16 180)
-					(length 2.54)
-					(name "P13"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "16"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -12.7 180)
-					(length 2.54)
-					(name "P14"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "17"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -15.24 180)
-					(length 2.54)
-					(name "P15"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "18"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -17.78 180)
-					(length 2.54)
-					(name "P16"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "19"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -20.32 180)
-					(length 2.54)
-					(name "P17"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "20"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -992,145 +703,387 @@
 			(embedded_fonts no)
 		)
 	)
-	(symbol
-		(lib_id "Interface_Expansion:PCF8575DBR")
-		(at 180.34 91.44 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "087e2446-8dc6-4e71-8549-d32b247f40a0")
-		(property "Reference" "U9"
-			(at 182.4833 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+	(junction
+		(at 208.28 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1ce8b0eb-8d1c-4d25-976d-3ca87bfa2144")
+	)
+	(no_connect
+		(at 92.71 92.71)
+		(uuid "5c1be987-7255-4259-b938-9f7fd4ba234e")
+	)
+	(no_connect
+		(at 92.71 97.79)
+		(uuid "6ca12c96-e1fc-4704-a628-5f41386610ef")
+	)
+	(no_connect
+		(at 163.83 88.9)
+		(uuid "cb02f5e4-ef0d-4ee6-a524-c68d97f5a4ff")
+	)
+	(wire
+		(pts
+			(xy 213.36 88.9) (xy 208.28 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0156f84e-1f78-4485-baa5-c68e7f29cfef")
+	)
+	(wire
+		(pts
+			(xy 203.2 91.44) (xy 208.28 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09f9e7cf-59a0-4b24-90f2-61f61683ccf9")
+	)
+	(wire
+		(pts
+			(xy 208.28 88.9) (xy 208.28 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d1098e6-dd1f-415e-a9e9-7d196abd8bd7")
+	)
+	(wire
+		(pts
+			(xy 81.28 82.55) (xy 92.71 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1e485684-f4fd-4166-a598-f3f980199504")
+	)
+	(wire
+		(pts
+			(xy 161.29 93.98) (xy 163.83 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38d7fea9-f64f-4d67-ba40-fa7d673f1a84")
+	)
+	(wire
+		(pts
+			(xy 233.68 93.98) (xy 238.76 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3932ad46-9b06-43b4-9994-4cb67a01d1c3")
+	)
+	(wire
+		(pts
+			(xy 208.28 93.98) (xy 208.28 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "409301b5-5065-48d2-9b12-260b8743c97b")
+	)
+	(wire
+		(pts
+			(xy 173.99 109.22) (xy 173.99 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "420bb99a-fc05-4c05-b4e0-310921b50bc7")
+	)
+	(wire
+		(pts
+			(xy 223.52 105.41) (xy 223.52 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bdb3d25-edd8-4eb3-bd1e-44791b284aa8")
+	)
+	(wire
+		(pts
+			(xy 81.28 90.17) (xy 92.71 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c528151-e91c-4bde-8f55-c698fb581c41")
+	)
+	(wire
+		(pts
+			(xy 233.68 88.9) (xy 238.76 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ed3c634-8164-40aa-987e-578eb995312e")
+	)
+	(wire
+		(pts
+			(xy 161.29 96.52) (xy 163.83 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86c543be-2ba8-4828-ab80-6732413ff97d")
+	)
+	(wire
+		(pts
+			(xy 208.28 91.44) (xy 213.36 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8877df33-5017-4f53-8c27-153a5c912cb1")
+	)
+	(wire
+		(pts
+			(xy 82.55 100.33) (xy 92.71 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "927b3755-ffaf-4250-9da4-96358c5c46f2")
+	)
+	(wire
+		(pts
+			(xy 82.55 95.25) (xy 92.71 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a28d2ca5-1b95-42c8-a698-dd124046348e")
+	)
+	(wire
+		(pts
+			(xy 81.28 85.09) (xy 92.71 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "acbc6229-e5bb-45dd-902c-11a1f868ebcd")
+	)
+	(wire
+		(pts
+			(xy 213.36 93.98) (xy 208.28 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7532432-6884-491b-85f1-7591fe99c9d6")
+	)
+	(wire
+		(pts
+			(xy 81.28 87.63) (xy 92.71 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf3bec5c-3f3d-4422-855c-2ccd326e3130")
+	)
+	(wire
+		(pts
+			(xy 173.99 73.66) (xy 173.99 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dfef8949-7388-4b74-be35-7991a056354c")
+	)
+	(wire
+		(pts
+			(xy 233.68 91.44) (xy 238.76 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f45fbf05-99da-4387-87b0-0bb43b11f89f")
+	)
+	(label "PF1_S"
+		(at 238.76 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left bottom)
 		)
-		(property "Value" "PCF8575DBR"
-			(at 182.4833 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+		(uuid "0d934fad-e1d1-480d-ad7f-0a08b587c4dd")
+	)
+	(label "PC11"
+		(at 81.28 87.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify right bottom)
 		)
-		(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
-			(at 180.34 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
+		(uuid "17bb9c2b-a1e2-477a-bc20-02e4b48e3f38")
+	)
+	(label "PF1"
+		(at 161.29 96.52 180)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify right bottom)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcf8575.pdf"
-			(at 180.34 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
+		(uuid "4189dabe-5be7-4724-a868-dce3f8bae099")
+	)
+	(label "Vbat-"
+		(at 223.52 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify right bottom)
 		)
-		(property "Description" "16 Bits Port/Expander to I2C Bus, SSOP-24"
-			(at 180.34 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
+		(uuid "4d8e815a-b3d3-47d4-8775-66c9ab27d006")
+	)
+	(label "PF0_S"
+		(at 238.76 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify left bottom)
 		)
-		(pin "12"
-			(uuid "8e265182-2fe7-4d06-ad2c-339f44fea1c3")
-		)
-		(pin "14"
-			(uuid "881f1849-b7f8-4517-8004-286f266bbaf3")
-		)
-		(pin "2"
-			(uuid "93a761d8-c5ab-4f00-8ae9-a5fb181675f4")
-		)
-		(pin "3"
-			(uuid "38ebfaae-0441-495c-be27-cdf4047f42a0")
-		)
-		(pin "20"
-			(uuid "c455451e-3cb0-4090-a8e0-3520a8ed700d")
-		)
-		(pin "11"
-			(uuid "cc89e0cb-8d7c-4f01-b96b-d872cc81a4b1")
-		)
-		(pin "21"
-			(uuid "00aa5a42-aa78-46da-8f8c-0a8109d055b2")
-		)
-		(pin "18"
-			(uuid "2c03d381-8160-4c80-8e1d-75a40fadac48")
-		)
-		(pin "1"
-			(uuid "8b83bf65-9b2a-428c-9668-8939f805d6e9")
-		)
-		(pin "22"
-			(uuid "541adc47-f927-4d0f-877d-8ac634732832")
-		)
-		(pin "5"
-			(uuid "23b82518-3af8-4d61-b3ac-4e8d6ce4e439")
-		)
-		(pin "6"
-			(uuid "cff8116c-c455-4886-affb-15646ec30499")
-		)
-		(pin "10"
-			(uuid "8289b40c-b7f1-4c01-a904-4fd3aaa5e152")
-		)
-		(pin "24"
-			(uuid "fc7ef8b2-3691-4274-ac51-cacad1d4aa41")
-		)
-		(pin "13"
-			(uuid "76011ae4-bdaa-41b7-8d6b-b23d6e1f6823")
-		)
-		(pin "17"
-			(uuid "c8223070-44b2-499c-a43d-6ec9fc182683")
-		)
-		(pin "4"
-			(uuid "2319268b-8a9c-4eed-ba11-fb79255c6415")
-		)
-		(pin "7"
-			(uuid "a37028b2-b64b-4cbf-b4e2-02f8c100cd36")
-		)
-		(pin "23"
-			(uuid "ec6f8f5f-f3ef-452f-8eb8-6b6ff32c1832")
-		)
-		(pin "8"
-			(uuid "ad4132ec-73e3-47db-9afb-8f65fdbc8c9d")
-		)
-		(pin "9"
-			(uuid "0eb93db1-1d4a-4a0a-a9e0-5f2f62c0102b")
-		)
-		(pin "19"
-			(uuid "87699d3c-7ce7-4eb4-b975-24b5b7b9a650")
-		)
-		(pin "15"
-			(uuid "8e2e2eb6-1a4b-4e5c-95b3-580dade22a5f")
-		)
-		(pin "16"
-			(uuid "70219c5b-5d23-4eb4-aa4f-bb79a7e33930")
-		)
-		(instances
-			(project "Circuitos_ISE"
-				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/8e38d074-5333-41ee-8247-11df878117c7"
-					(reference "U9")
-					(unit 1)
-				)
+		(uuid "53e7f410-f6e6-4213-abf7-ba16c295601c")
+	)
+	(label "PA15"
+		(at 81.28 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify right bottom)
 		)
+		(uuid "5dcc0e79-8fbd-4bfe-a649-118b3b90b36c")
+	)
+	(label "PC10"
+		(at 81.28 85.09 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "61c4962c-1897-4b34-a10c-936cb6033f96")
+	)
+	(label "Vbat-"
+		(at 82.55 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "653bf8ef-3991-4ae7-a723-6be67188bbcb")
+	)
+	(label "Vbat-"
+		(at 173.99 114.3 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8f816bb4-ec67-4db1-89eb-d68de4dfbbc0")
+	)
+	(label "5v"
+		(at 223.52 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9868d018-3bb2-4ecc-aefb-fc6bd6ecfef8")
+	)
+	(label "Vbat-"
+		(at 203.2 91.44 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9a2b1959-d46e-4601-b987-20fdb013756e")
+	)
+	(label "PF0"
+		(at 161.29 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9c85486b-4876-4853-9c0d-3d68fd7f01ec")
+	)
+	(label "5v"
+		(at 173.99 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9cc6803b-f876-4447-9a8e-7b42d6b9ca91")
+	)
+	(label "PC12"
+		(at 81.28 90.17 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c159e066-34fe-4c84-8a6a-bce012b6903d")
+	)
+	(label "3V3"
+		(at 82.55 100.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ce0fecf5-a29c-4368-96d1-71b30c08f370")
+	)
+	(label "Vbat-"
+		(at 238.76 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d430a736-9915-470b-99cf-895544b6fcf4")
 	)
 	(symbol
 		(lib_id "rc522:RC522")
-		(at 57.15 95.25 90)
+		(at 128.27 91.44 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1139,7 +1092,7 @@
 		(fields_autoplaced yes)
 		(uuid "3c306118-cedd-46ff-9e71-8696d40d5687")
 		(property "Reference" "RFID1"
-			(at 62.23 94.6149 90)
+			(at 133.35 90.8049 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1148,7 +1101,7 @@
 			)
 		)
 		(property "Value" "RC522"
-			(at 62.23 97.1549 90)
+			(at 133.35 93.3449 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1157,7 +1110,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 57.15 95.25 0)
+			(at 128.27 91.44 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1166,7 +1119,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 57.15 95.25 0)
+			(at 128.27 91.44 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -1175,7 +1128,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 57.15 95.25 0)
+			(at 128.27 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1218,7 +1171,7 @@
 	)
 	(symbol
 		(lib_id "Sensor_Distance:VL53L0CXV0DH1")
-		(at 86.36 95.25 0)
+		(at 173.99 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1227,7 +1180,7 @@
 		(fields_autoplaced yes)
 		(uuid "516881b2-1815-45db-b51e-afe43dd88389")
 		(property "Reference" "U8"
-			(at 95.25 93.9799 0)
+			(at 182.88 92.7099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1236,7 +1189,7 @@
 			)
 		)
 		(property "Value" "VL6180X"
-			(at 95.25 96.5199 0)
+			(at 182.88 95.2499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1245,7 +1198,7 @@
 			)
 		)
 		(property "Footprint" "Sensor_Distance:ST_VL53L1x"
-			(at 103.505 109.22 0)
+			(at 191.135 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1254,7 +1207,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.st.com/resource/en/datasheet/vl53l0x.pdf"
-			(at 88.392 127.254 0)
+			(at 176.022 125.984 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1263,7 +1216,7 @@
 			)
 		)
 		(property "Description" "2m distance ranging ToF sensor, Optical LGA12"
-			(at 86.36 95.25 0)
+			(at 173.99 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1308,17 +1261,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Interface_Expansion:PCF8575DBR")
-		(at 143.51 91.44 0)
+		(lib_id "Memory_EEPROM:CAT24C256")
+		(at 223.52 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "a1c1cca1-8970-4a79-b20d-40b4abf7274b")
-		(property "Reference" "U12"
-			(at 145.6533 63.5 0)
+		(uuid "d1fad641-ab97-41aa-9963-9890531392f5")
+		(property "Reference" "U9"
+			(at 225.6633 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1326,8 +1279,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "PCF8575DBR"
-			(at 145.6533 66.04 0)
+		(property "Value" "CAT24C256"
+			(at 225.6633 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1335,8 +1288,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
-			(at 143.51 91.44 0)
+		(property "Footprint" ""
+			(at 223.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1344,8 +1297,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcf8575.pdf"
-			(at 143.51 91.44 0)
+		(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/CAT24C256-D.PDF"
+			(at 223.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1353,363 +1306,43 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "16 Bits Port/Expander to I2C Bus, SSOP-24"
-			(at 143.51 91.44 0)
+		(property "Description" "256 kb CMOS Serial EEPROM, DIP-8/SOIC-8/TSSOP-8/DFN-8"
+			(at 223.52 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "12"
-			(uuid "58d973c6-dfe4-4262-9366-415fb63c3dbd")
-		)
-		(pin "14"
-			(uuid "b9678778-6672-4506-bfe1-684d74076f8f")
-		)
-		(pin "2"
-			(uuid "2daa825c-256f-4e21-8443-166ee26136bb")
-		)
-		(pin "3"
-			(uuid "a76efc84-1402-4367-8c6c-3fc93b23517c")
-		)
-		(pin "20"
-			(uuid "90abbcf0-afe4-4c74-9a97-4fbfccdd1324")
-		)
-		(pin "11"
-			(uuid "06cc5ca5-4e64-448f-a561-8bf4aa7e3577")
-		)
-		(pin "21"
-			(uuid "fd768c8d-70b2-422d-bd31-ecba97d3dfa7")
-		)
-		(pin "18"
-			(uuid "258c435e-eb9c-4ac3-a197-c330298ea018")
-		)
-		(pin "1"
-			(uuid "6ddaa94a-1855-47b9-ad43-96975065ab95")
-		)
-		(pin "22"
-			(uuid "24380e98-9cce-48de-9522-e2239f1daec5")
-		)
-		(pin "5"
-			(uuid "8d5dfdc4-3466-4e3c-a86e-82c7bdb345c9")
-		)
-		(pin "6"
-			(uuid "1530b08d-9220-4338-905c-fd369e839295")
-		)
-		(pin "10"
-			(uuid "b91be5ea-7853-4e88-9a56-1dd0ddad0593")
-		)
-		(pin "24"
-			(uuid "e41283b0-b021-4447-bf8b-ac3b54eb7240")
-		)
-		(pin "13"
-			(uuid "a087650c-9b40-463c-8915-88d4fa009f21")
-		)
-		(pin "17"
-			(uuid "b8ebb3b2-962c-4349-b733-151cb8b2e89a")
 		)
 		(pin "4"
-			(uuid "f930f133-581d-4757-85ae-bb5d1947933c")
+			(uuid "877101f2-b5b1-48fe-a1e5-923cb84e6922")
 		)
 		(pin "7"
-			(uuid "62753712-2891-4ba0-8dc3-5206778de3f8")
-		)
-		(pin "23"
-			(uuid "ccf8b0b6-5639-444d-9a19-14d4da111491")
+			(uuid "7491fc9a-79ea-4eac-8a90-8ead77db721e")
 		)
 		(pin "8"
-			(uuid "44277e7f-305c-4631-bd8b-6090618d6753")
-		)
-		(pin "9"
-			(uuid "6e3565a7-6182-42ce-974e-405bc7ca5246")
-		)
-		(pin "19"
-			(uuid "40717431-f193-4aed-9607-e9d54572bf06")
-		)
-		(pin "15"
-			(uuid "7b780c3b-639a-4623-b2cd-4a654f45ea05")
-		)
-		(pin "16"
-			(uuid "a0043717-7424-4f77-b2a2-0a25ec3a03a0")
-		)
-		(instances
-			(project "Circuitos_ISE"
-				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/8e38d074-5333-41ee-8247-11df878117c7"
-					(reference "U12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Interface_Expansion:PCF8575DBR")
-		(at 257.81 93.98 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c3d8d788-cc41-4322-a6c1-a055d83744e4")
-		(property "Reference" "U11"
-			(at 259.9533 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PCF8575DBR"
-			(at 259.9533 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
-			(at 257.81 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcf8575.pdf"
-			(at 257.81 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "16 Bits Port/Expander to I2C Bus, SSOP-24"
-			(at 257.81 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "12"
-			(uuid "7dfa281f-9dc8-47c8-b18f-408f950fc309")
-		)
-		(pin "14"
-			(uuid "bad891ce-ce3e-41bb-9725-3ab9ea1d6728")
-		)
-		(pin "2"
-			(uuid "bf80b15a-291d-44a9-9677-86a458e16b3f")
-		)
-		(pin "3"
-			(uuid "946e8335-a075-4b20-9eab-715e22146d23")
-		)
-		(pin "20"
-			(uuid "159aa0ef-1c26-4f00-8e3a-b4554bf39309")
-		)
-		(pin "11"
-			(uuid "1843cbfc-f8e6-4549-b7da-b7f72422562a")
-		)
-		(pin "21"
-			(uuid "fc1b3107-4981-4f39-90fa-db4e43f22ca1")
-		)
-		(pin "18"
-			(uuid "0e9f56b1-1e25-45d2-9537-cfa846b2369a")
+			(uuid "79764bf3-bac3-49dd-a835-d0e9b3945749")
 		)
 		(pin "1"
-			(uuid "c3ea2597-c577-4ddb-b66d-8388cd4e9ec5")
-		)
-		(pin "22"
-			(uuid "bcb5c031-e03b-4f6c-8f60-c947f0044c64")
-		)
-		(pin "5"
-			(uuid "6b24283e-63a1-42a5-83b0-38dcfdfacd43")
-		)
-		(pin "6"
-			(uuid "3fa0b809-ae74-4326-a778-09c1a8558f5d")
-		)
-		(pin "10"
-			(uuid "d75f4795-74e3-425b-b063-c9f47b069d7a")
-		)
-		(pin "24"
-			(uuid "011d2088-0bb3-436b-b993-4b104acd220f")
-		)
-		(pin "13"
-			(uuid "73c49b22-6cc5-4494-8268-04b3e578563a")
-		)
-		(pin "17"
-			(uuid "a1af0c16-0970-4f51-a900-67194be58c98")
-		)
-		(pin "4"
-			(uuid "3b1f7171-0718-468b-bd2c-f07bea62fb5e")
-		)
-		(pin "7"
-			(uuid "71933e87-0029-4833-9aa9-10b5686145f5")
-		)
-		(pin "23"
-			(uuid "ab4420f6-e5ee-49d7-affb-e1dcb6dd643d")
-		)
-		(pin "8"
-			(uuid "66467ef4-669f-436d-8319-86405690efc5")
-		)
-		(pin "9"
-			(uuid "9418f367-2c3e-4326-92e2-6b6687f63e5d")
-		)
-		(pin "19"
-			(uuid "66489ef3-30dc-48db-a6b2-00641ad573f1")
-		)
-		(pin "15"
-			(uuid "ecb69ed4-0c79-40d0-8f83-6f4fa4593faa")
-		)
-		(pin "16"
-			(uuid "c01d0b70-6df1-4885-9aab-1442e2012788")
-		)
-		(instances
-			(project "Circuitos_ISE"
-				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/8e38d074-5333-41ee-8247-11df878117c7"
-					(reference "U11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Interface_Expansion:PCF8575DBR")
-		(at 219.71 92.71 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "fa23cc58-6091-44ad-a85b-299afc4d7eca")
-		(property "Reference" "U10"
-			(at 221.8533 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PCF8575DBR"
-			(at 221.8533 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm"
-			(at 219.71 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcf8575.pdf"
-			(at 219.71 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "16 Bits Port/Expander to I2C Bus, SSOP-24"
-			(at 219.71 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "12"
-			(uuid "8a70ec30-e46d-473b-ae93-f1285239d15b")
-		)
-		(pin "14"
-			(uuid "b1753b66-fa18-4f88-b8a5-789c06db19c1")
-		)
-		(pin "2"
-			(uuid "cd294128-a79f-4894-862e-25da69b600ec")
+			(uuid "8add5270-42b1-4259-9982-3a69fa87e351")
 		)
 		(pin "3"
-			(uuid "0521bb22-cc3b-449b-9ddd-cdc41849dbf9")
-		)
-		(pin "20"
-			(uuid "b76ecdc0-5f82-4bb8-b026-9676a5ca0139")
-		)
-		(pin "11"
-			(uuid "e80f6207-fa39-4033-a3f7-77d0ef79186b")
-		)
-		(pin "21"
-			(uuid "1cb4fc99-5a46-4dad-ad40-64922d56cfe5")
-		)
-		(pin "18"
-			(uuid "aad5c7b8-4eb9-40bc-9c38-5d6fda4243a7")
-		)
-		(pin "1"
-			(uuid "16834395-5194-47f6-bc53-05b5f769ecdb")
-		)
-		(pin "22"
-			(uuid "97ddc596-77b8-438a-8c58-77089643ccc4")
+			(uuid "e2b73f37-19de-4541-a2b1-929da10bf2b6")
 		)
 		(pin "5"
-			(uuid "86d2383a-b057-411c-b991-45ae94736604")
+			(uuid "5190ae36-9e65-461a-8abc-4ce869e2cfa2")
+		)
+		(pin "2"
+			(uuid "c3a423fd-3e34-4f4a-81a7-64df7cefd5a2")
 		)
 		(pin "6"
-			(uuid "ff582caf-401a-4d30-860d-51e79b00fd7c")
-		)
-		(pin "10"
-			(uuid "5abcb50f-650f-4298-a11e-09966793fdea")
-		)
-		(pin "24"
-			(uuid "b1a4d55b-8cd9-498e-8f33-4f7427ab0dae")
-		)
-		(pin "13"
-			(uuid "4ac52b83-c5f8-4199-891d-278ff8ca8122")
-		)
-		(pin "17"
-			(uuid "e2e40790-4cc1-41f3-91f1-acbe8f5ffbe9")
-		)
-		(pin "4"
-			(uuid "f0b7e82b-54cc-4a6b-803c-c610bed77804")
-		)
-		(pin "7"
-			(uuid "dc3c9a30-468a-4241-a0a0-4c3637d0b2f4")
-		)
-		(pin "23"
-			(uuid "4e74ec92-86d4-4c29-a2fc-ff9bdec9affc")
-		)
-		(pin "8"
-			(uuid "5a9c7dc8-0c58-43f9-8962-3c8b293f242a")
-		)
-		(pin "9"
-			(uuid "28d8d277-e95a-47cb-a6d8-b48649bcfe5b")
-		)
-		(pin "19"
-			(uuid "7fb4e114-e698-40ad-84fc-b4eda0b7e63e")
-		)
-		(pin "15"
-			(uuid "a339fadd-0e04-4d5e-be23-9dfa7efac497")
-		)
-		(pin "16"
-			(uuid "d2d4cbe8-f949-4704-be14-32affef2a92d")
+			(uuid "06d3e53c-947d-48dd-b73f-909e7545545a")
 		)
 		(instances
-			(project "Circuitos_ISE"
+			(project ""
 				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/8e38d074-5333-41ee-8247-11df878117c7"
-					(reference "U10")
+					(reference "U9")
 					(unit 1)
 				)
 			)

@@ -86,7 +86,7 @@ void Thread_Dis(void* argument){
               printf("Error\n");
           }
           printf("ESPERO FLAG JUEGO\n");
-          flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 2000U);
+          flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 1000U);
 					VL6180x_ClearErrorInterrupt(dev);
 					VL6180x_Prepare(dev);
 					printf("FLAG [%d] JUEGO RECIBIDA\n", flag);
