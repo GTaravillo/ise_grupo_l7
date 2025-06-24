@@ -1395,6 +1395,12 @@
 		(uuid "bf0c80af-df29-4b7f-8681-f9310d333422")
 	)
 	(junction
+		(at 227.33 92.71)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c13d64b6-ccc8-4657-a263-081c0c1e1ad9")
+	)
+	(junction
 		(at 109.22 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1411,6 +1417,16 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "edd8a669-e21c-474d-b5cc-1916dac336d1")
+	)
+	(wire
+		(pts
+			(xy 236.22 90.17) (xy 236.22 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00116494-86bd-4542-92d6-cfa6d4073423")
 	)
 	(wire
 		(pts
@@ -1444,7 +1460,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 86.36) (xy 247.65 86.36)
+			(xy 236.22 90.17) (xy 252.73 90.17)
 		)
 		(stroke
 			(width 0)
@@ -1494,7 +1510,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 90.17) (xy 227.33 99.06)
+			(xy 227.33 90.17) (xy 227.33 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1584,7 +1600,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 86.36) (xy 247.65 85.09)
+			(xy 252.73 90.17) (xy 252.73 88.9)
 		)
 		(stroke
 			(width 0)
@@ -1611,6 +1627,16 @@
 			(type default)
 		)
 		(uuid "6937c79f-9114-446f-ba59-e37f74c24978")
+	)
+	(wire
+		(pts
+			(xy 227.33 92.71) (xy 227.33 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "695ff67d-2cda-42b3-b26a-86e8684d8210")
 	)
 	(wire
 		(pts
@@ -1714,6 +1740,16 @@
 	)
 	(wire
 		(pts
+			(xy 237.49 57.15) (xy 237.49 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96e16568-e553-4a54-ae79-2204421fd679")
+	)
+	(wire
+		(pts
 			(xy 53.34 95.25) (xy 53.34 104.14)
 		)
 		(stroke
@@ -1741,6 +1777,16 @@
 			(type default)
 		)
 		(uuid "aa796879-2d00-472a-85b0-ff885330ead8")
+	)
+	(wire
+		(pts
+			(xy 237.49 39.37) (xy 237.49 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b17a51a5-3d88-4686-b263-e59831c9e5bc")
 	)
 	(wire
 		(pts
@@ -1851,6 +1897,16 @@
 			(type default)
 		)
 		(uuid "d314ce0e-2d16-4137-9612-734818a9d546")
+	)
+	(wire
+		(pts
+			(xy 227.33 92.71) (xy 236.22 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dea60eb6-9c75-4edd-ac4b-3ccaf66141e2")
 	)
 	(wire
 		(pts
@@ -1972,6 +2028,26 @@
 		)
 		(uuid "3f6568a8-9f5c-4ae0-bba6-c8dc52586f8c")
 	)
+	(label "Vbat-"
+		(at 237.49 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4ea6f2b0-4ccc-4765-8e8b-7a7e00ffeb8f")
+	)
+	(label "10V"
+		(at 237.49 39.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a945e509-649d-4775-91f7-7db28b70a87e")
+	)
 	(label "Vmic"
 		(at 210.82 80.01 0)
 		(effects
@@ -1983,7 +2059,7 @@
 		(uuid "b1307658-0fa7-4610-b3df-8e7cc87f2947")
 	)
 	(label "PC0"
-		(at 247.65 85.09 0)
+		(at 252.73 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2054,6 +2130,73 @@
 			(project "Circuitos_ISE"
 				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
 					(reference "R37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 227.33 86.36 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "07632397-b02f-41a7-8468-7029ac8b78dc")
+		(property "Reference" "R36"
+			(at 220.98 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100K"
+			(at 223.52 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.314 86.106 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 227.33 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 227.33 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e35af724-37cd-4116-9a7e-c47e9c0b92eb")
+		)
+		(pin "1"
+			(uuid "3ae8c812-8c72-4ee4-9f21-de4c183b69f0")
+		)
+		(instances
+			(project "Circuitos_ISE"
+				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
+					(reference "R36")
 					(unit 1)
 				)
 			)
@@ -2446,80 +2589,6 @@
 			(project "Circuitos_ISE"
 				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
 					(reference "D1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Potentiometer_US")
-		(at 227.33 86.36 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "29179af5-f08e-40b2-bd8e-ccfad5fd9af1")
-		(property "Reference" "RG4"
-			(at 224.79 85.0899 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "R_Potentiometer_US"
-			(at 231.394 79.756 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 227.33 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 227.33 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Potentiometer, US symbol"
-			(at 227.33 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "cbbd6201-f638-432f-a104-dc081fcb32b0")
-		)
-		(pin "3"
-			(uuid "ef6ac5ff-2061-4b2b-affd-d0446365c860")
-		)
-		(pin "1"
-			(uuid "37255cc0-296f-4eb8-9b11-8a8aa1bef589")
-		)
-		(instances
-			(project "Circuitos_ISE"
-				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
-					(reference "RG4")
 					(unit 1)
 				)
 			)
@@ -3064,6 +3133,112 @@
 				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
 					(reference "#PWR08")
 					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Operational:TL074")
+		(at 240.03 49.53 0)
+		(unit 5)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "745d0b9e-b963-4439-a1e9-5d7314cad396")
+		(property "Reference" "U3"
+			(at 238.76 48.2599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TL074"
+			(at 238.76 50.7999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 238.76 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl071.pdf"
+			(at 241.3 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Quad Low-Noise JFET-Input Operational Amplifiers, DIP-14/SOIC-14"
+			(at 240.03 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "11"
+			(uuid "a1dc4ba7-3083-4733-9009-6d639827b5c6")
+		)
+		(pin "12"
+			(uuid "c4030657-cbe4-40ee-8065-cdbd726253af")
+		)
+		(pin "6"
+			(uuid "b968f724-618d-4de5-9500-5ffac934c055")
+		)
+		(pin "10"
+			(uuid "2c8e67c8-a608-43dc-ac73-299df3ea64ed")
+		)
+		(pin "5"
+			(uuid "a37e47ec-4bc7-4740-8a7a-e1d663ca344d")
+		)
+		(pin "13"
+			(uuid "330b4315-29de-48ab-896c-ae72fdfaa5e0")
+		)
+		(pin "14"
+			(uuid "be587922-cc17-4f4b-ade4-d68b0cc688ce")
+		)
+		(pin "8"
+			(uuid "92e5a534-0012-43f8-9685-5137241ce946")
+		)
+		(pin "9"
+			(uuid "9593a9c0-d42e-4c69-be72-24104bf8ce36")
+		)
+		(pin "1"
+			(uuid "684ecd66-49ef-4887-91a7-28e0cb929e63")
+		)
+		(pin "4"
+			(uuid "bf35d6b3-9fb0-43cc-a7d1-13db729cb412")
+		)
+		(pin "2"
+			(uuid "9aa7cc38-c0d9-4cb4-b924-5533b63c71b5")
+		)
+		(pin "7"
+			(uuid "9ab84950-d252-4b47-a43d-8240a32cf266")
+		)
+		(pin "3"
+			(uuid "9c6bad6d-76e2-475a-879a-8ad5951089ed")
+		)
+		(instances
+			(project "Circuitos_ISE"
+				(path "/fc1c7a48-e258-41da-82b5-172f051ec090/3a0694a3-df0f-4d25-944d-88c4e1913a02"
+					(reference "U3")
+					(unit 5)
 				)
 			)
 		)

@@ -2698,13 +2698,33 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 107.95) (xy 144.78 120.65)
+			(xy 127 39.37) (xy 127 41.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "90f4b63f-36f7-458c-8f62-b428f460fc5a")
+		(uuid "850b6099-aac8-47d1-926b-d00fdad024e3")
+	)
+	(wire
+		(pts
+			(xy 109.22 36.83) (xy 109.22 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f8c0f58-2c3e-4ffe-9e4f-e09ddd5e240f")
+	)
+	(wire
+		(pts
+			(xy 167.64 107.95) (xy 167.64 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5c872ab-490b-4ddb-b499-843859bcfe7f")
 	)
 	(wire
 		(pts
@@ -2718,63 +2738,153 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 119.38) (xy 231.14 107.95)
+			(xy 114.3 36.83) (xy 114.3 41.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b429beba-1c10-43de-81c9-a76a44939781")
+		(uuid "aea4ef60-c7ef-48c1-ab6c-dc51916f75d0")
 	)
 	(wire
 		(pts
-			(xy 223.52 119.38) (xy 223.52 107.95)
+			(xy 142.24 38.1) (xy 142.24 41.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cb2c3dd8-525f-4caa-a9bb-81617346f517")
+		(uuid "b184af34-a4ee-4668-a0c3-dfce4aa5e284")
 	)
 	(wire
 		(pts
-			(xy 220.98 119.38) (xy 223.52 119.38)
+			(xy 165.1 107.95) (xy 165.1 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d751e614-dccf-4a34-a031-52d800ed680f")
+		(uuid "c743e509-f88e-423a-bd67-4b695037bdf0")
 	)
 	(wire
 		(pts
-			(xy 229.87 119.38) (xy 231.14 119.38)
+			(xy 149.86 107.95) (xy 149.86 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d9dc3fe7-8b67-488a-9639-96b555487964")
+		(uuid "d4978b4e-9eda-4c94-b62d-9a8361e85b7e")
 	)
 	(wire
 		(pts
-			(xy 243.84 57.15) (xy 252.73 57.15)
+			(xy 121.92 107.95) (xy 121.92 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f237fdd6-34b1-4a83-9d8a-cbb2397a7dd5")
+		(uuid "d9f088b2-15b9-484f-8599-8418e812d9bb")
 	)
-	(label "PA3"
-		(at 220.98 119.38 180)
+	(wire
+		(pts
+			(xy 106.68 36.83) (xy 106.68 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e78af7f7-4de8-48a6-b6c5-e9fa53535536")
+	)
+	(wire
+		(pts
+			(xy 93.98 107.95) (xy 93.98 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb88951a-30e7-4f9d-aa35-1f4bc268123f")
+	)
+	(wire
+		(pts
+			(xy 144.78 38.1) (xy 144.78 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f800603f-f3df-41bb-9b03-620861871ca9")
+	)
+	(wire
+		(pts
+			(xy 83.82 38.1) (xy 83.82 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd885bfa-05ba-4f53-871b-51c93405306e")
+	)
+	(label "PB15"
+		(at 149.86 111.76 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "5e1c8346-55b5-4d84-9226-2e57856b6103")
+		(uuid "0f7e6079-4aab-41e4-912c-457c008a0dcd")
+	)
+	(label "PD3"
+		(at 93.98 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "138c01f1-2bc9-4f27-a2dd-67f98af27964")
+	)
+	(label "PF0_S"
+		(at 144.78 38.1 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1ce277aa-072f-4bb4-a966-4f705e8b9935")
+	)
+	(label "PF15"
+		(at 106.68 36.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2e24cc09-9f87-4661-b162-73bb33098d12")
+	)
+	(label "PE7"
+		(at 127 39.37 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "44a81d9d-776c-4136-a389-253d2e48513c")
+	)
+	(label "PF12"
+		(at 114.3 36.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "72360c3b-2d58-433d-8565-cfe16a1f7d7e")
 	)
 	(label "Vbat-"
 		(at 38.1 53.34 180)
@@ -2786,35 +2896,65 @@
 		)
 		(uuid "88f28d5a-8812-445c-bda5-8882f01fb324")
 	)
-	(label "PC0"
-		(at 144.78 120.65 180)
+	(label "PC9"
+		(at 121.92 111.76 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "a0738f3d-b06f-4e3e-9cb1-cc41e37a3954")
+		(uuid "ad8818a4-0bba-495b-89c9-ef4350bbe26e")
 	)
-	(label "V_Cortex"
-		(at 252.73 57.15 0)
+	(label "PF1_S"
+		(at 142.24 38.1 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "b3839c7f-b574-4563-9c0a-73fd5f99d4e5")
+		(uuid "b0eaa7d8-b6f6-4df5-af64-5155d8b89719")
 	)
-	(label "PA0"
-		(at 229.87 119.38 180)
+	(label "PF7"
+		(at 83.82 38.1 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c84d34f8-a7b0-4ff3-919f-024365f8ba50")
+	)
+	(label "PF14"
+		(at 109.22 36.83 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dfcd5678-c3ac-4dbd-808e-863727c477ed")
+	)
+	(label "PB8"
+		(at 167.64 113.03 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "bd7e2e23-df22-41bd-8163-ef98b3d2438e")
+		(uuid "dfd0dde4-3cf2-489e-ada9-6d899b0790da")
+	)
+	(label "PB9"
+		(at 165.1 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "fc94f1e4-51b0-4e38-ba60-97abbf340186")
 	)
 	(symbol
 		(lib_id "MCU_Module:NUCLEO144-F429ZI")
