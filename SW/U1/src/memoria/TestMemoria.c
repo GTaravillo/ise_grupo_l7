@@ -180,16 +180,16 @@ void TestMemoriaInitialize(void)
 
   if (e_testMemoriaThreadId == NULL)
   {
-    printf("[TestMemoria::%s] ERROR! osThreadNew [%d]\n", __func__, (e_testMemoriaThreadId == NULL));
+   // printf"[TestMemoria::%s] ERROR! osThreadNew [%d]\n", __func__, (e_testMemoriaThreadId == NULL));
   }
 }
 
 static void Run(void *argument)
 {
   osStatus_t status;
-  printf("[TestMemoria::%s] Esperando a que modulo memoria termine de inicializarse\n", __func__);
+ // printf"[TestMemoria::%s] Esperando a que modulo memoria termine de inicializarse\n", __func__);
 	uint32_t flag = osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll, osWaitForever);
-  printf("[TestMemoria::%s] Modulo memoria inicializado\n", __func__);
+ // printf"[TestMemoria::%s] Modulo memoria inicializado\n", __func__);
   
   MemoriaMsg_t mensajeRx = {0};
   #if TEST_RETOMAR_PARTIDA_1 == 1
@@ -262,18 +262,18 @@ static void TestGuardarPartidaSinFinalizar(int numTest)
     break;
   }
 	
-  printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, ultimaPartida.tipoPeticion);
-  printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, ultimaPartida.fechaPartida);
-  printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, ultimaPartida.horaPartida);
-  printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, ultimaPartida.nombreBlancas);
-  printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, ultimaPartida.nombreNegras);
-  printf("[TestMemoria::%s] Turno [%d]\n", __func__, ultimaPartida.turno_victoria);
-  printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, ultimaPartida.tiempoBlancas);
-  printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, ultimaPartida.tiempoNegras);
-  printf("[TestMemoria::%s] Tablero [%s]\n", __func__, ultimaPartida.dato);
+ // printf"[TestMemoria::%s] Tipo peticion [%d]\n", __func__, ultimaPartida.tipoPeticion);
+ // printf"[TestMemoria::%s] Fecha partida [%s]\n", __func__, ultimaPartida.fechaPartida);
+ // printf"[TestMemoria::%s] Hora partida [%s]\n", __func__, ultimaPartida.horaPartida);
+ // printf"[TestMemoria::%s] Nombre blancas [%s]\n", __func__, ultimaPartida.nombreBlancas);
+ // printf"[TestMemoria::%s] Nombre negras [%s]\n", __func__, ultimaPartida.nombreNegras);
+ // printf"[TestMemoria::%s] Turno [%d]\n", __func__, ultimaPartida.turno_victoria);
+ // printf"[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, ultimaPartida.tiempoBlancas);
+ // printf"[TestMemoria::%s] Tiempo negras [%s]\n", __func__, ultimaPartida.tiempoNegras);
+ // printf"[TestMemoria::%s] Tablero [%s]\n", __func__, ultimaPartida.dato);
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &ultimaPartida, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+ // printf"[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestGuardarPartidaFinalizada(int numTest)
@@ -313,18 +313,18 @@ static void TestGuardarPartidaFinalizada(int numTest)
     break;
   }
 	
-  printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, partidaFinalizada.tipoPeticion);
-  printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, partidaFinalizada.fechaPartida);
-  printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, partidaFinalizada.horaPartida);
-  printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, partidaFinalizada.nombreBlancas);
-  printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, partidaFinalizada.nombreNegras);
-  printf("[TestMemoria::%s] Turno [%d]\n", __func__, partidaFinalizada.turno_victoria);
-  printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, partidaFinalizada.tiempoBlancas);
-  printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, partidaFinalizada.tiempoNegras);
-  printf("[TestMemoria::%s] Tablero [%s]\n", __func__, partidaFinalizada.dato);
+ // printf"[TestMemoria::%s] Tipo peticion [%d]\n", __func__, partidaFinalizada.tipoPeticion);
+ // printf"[TestMemoria::%s] Fecha partida [%s]\n", __func__, partidaFinalizada.fechaPartida);
+ // printf"[TestMemoria::%s] Hora partida [%s]\n", __func__, partidaFinalizada.horaPartida);
+ // printf"[TestMemoria::%s] Nombre blancas [%s]\n", __func__, partidaFinalizada.nombreBlancas);
+ // printf"[TestMemoria::%s] Nombre negras [%s]\n", __func__, partidaFinalizada.nombreNegras);
+ // printf"[TestMemoria::%s] Turno [%d]\n", __func__, partidaFinalizada.turno_victoria);
+ // printf"[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, partidaFinalizada.tiempoBlancas);
+ // printf"[TestMemoria::%s] Tiempo negras [%s]\n", __func__, partidaFinalizada.tiempoNegras);
+ // printf"[TestMemoria::%s] Tablero [%s]\n", __func__, partidaFinalizada.dato);
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &partidaFinalizada, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+ // printf"[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestRetomarUltimaPartida()
@@ -337,7 +337,7 @@ static void TestRetomarUltimaPartida()
   ultimaPartida.tipoPeticion = RETOMAR_ULTIMA_PARTIDA;
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &ultimaPartida, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+ // printf"[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestLimpiarMemoria()
@@ -347,7 +347,7 @@ static void TestLimpiarMemoria()
 
 static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
 {
-  printf("[TestMemoria::%s] Confirmo datos recibidos:\n", __func__);
+ // printf"[TestMemoria::%s] Confirmo datos recibidos:\n", __func__);
   bool turnoCorrecto;
   bool tiempoBlancasCorrecto;
   bool tiempoNegrasCorrecto;
@@ -396,7 +396,7 @@ static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
     break;
   }
 
-  printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
-          __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
+ // printf"[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
+ //           __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
   return turnoCorrecto && tiempoBlancasCorrecto && tiempoNegrasCorrecto && datoCorrecto;
 }

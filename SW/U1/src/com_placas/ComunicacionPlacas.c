@@ -50,14 +50,14 @@ void ComunicacionPlacasInitialize(void)	{
   if ((e_comPlacasRxThreadId == NULL)  || (e_comPlacasTxThreadId == NULL) || 
       (e_comPlacasTxMessageId == NULL) || (e_comPlacasRxMessageId == NULL)) 
   {
-    printf("[com::%s] ERROR!\n", __func__);
+   // printf"[com::%s] ERROR!\n", __func__);
   }
 
 }
 
 static void InitUart(void)	
 {
-  printf("[com::%s]\n", __func__);
+ // printf"[com::%s]\n", __func__);
   ARM_USART_CAPABILITIES drv_capabilities;
 	
   /*Initialize the USART driver*/
@@ -81,7 +81,7 @@ static void RunTx(void *argument)
   ComPlacasMsg_t mensajeTx;
   uint32_t flag;
   int bytesMensaje = sizeof(mensajeTx);
-  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+ // printf"[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
   
   while(1) 
   {
@@ -90,14 +90,14 @@ static void RunTx(void *argument)
 
     if (status != osOK)
     {
-     // printf("[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
+     //// printf"[com::%s] Error! e_comPlacasTxMessageId status [%d]\n", __func__, status);
       continue;
     }
 
-    printf("[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
+   // printf"[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
 	  {
-	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
+	   // printf"[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
 	  }
     USARTdrv->Send(&mensajeTx, sizeof(ComPlacasMsg_t));
 	  flag = osThreadFlagsWait(ERROR_FRAMING | SEND_COMPLETE, osFlagsWaitAll, 1000);
@@ -117,12 +117,12 @@ static void RunTx(void *argument)
 
 static void RunRx(void *argument) 
 {
-  printf("[com::%s]\n", __func__);
+ // printf"[com::%s]\n", __func__);
 
   uint32_t flag;
   ComPlacasMsg_t mensajeRx = {};
   int bytesMensaje = sizeof(ComPlacasMsg_t);
-  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+ // printf"[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
 
   while(1) 
   {
@@ -142,10 +142,10 @@ static void RunRx(void *argument)
       continue; 
     }
 
-    printf("[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
+   // printf"[com::%s] Mensaje recibido: remitente[%d] destinatario[%d]\n", __func__, mensajeRx.remitente, mensajeRx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
     {
-      printf("[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
+     // printf"[com::%s] Mensaje recibido: mensaje[%d] = [%d]\n", __func__, i, mensajeRx.mensaje[i]);
     }
 
     ProcesarMensajeRecibido(mensajeRx);
@@ -154,7 +154,7 @@ static void RunRx(void *argument)
 
 static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.remitente);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.remitente);
   switch (mensajeRx.remitente)
   {
     case MENSAJE_LCD:
@@ -198,14 +198,14 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-     // printf("[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
+     //// printf"[com::%s] Remitente desconocido [%d]\n", __func__, mensajeRx.remitente);
     break;
   }
 }
 
 static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Destinatario [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Destinatario [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -250,14 +250,14 @@ static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx)
 
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -301,7 +301,7 @@ static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx)
 		break;
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
@@ -309,7 +309,7 @@ static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx)
 static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx)
 {
 
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
 	
   switch (mensajeRx.destinatario)
   {
@@ -355,14 +355,14 @@ static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx)
 
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -406,14 +406,14 @@ static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajePosicion(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -457,14 +457,14 @@ static void ProcesarMensajePosicion(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeMemoria(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -509,14 +509,14 @@ static void ProcesarMensajeMemoria(ComPlacasMsg_t mensajeRx)
 
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeJuego(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -561,14 +561,14 @@ static void ProcesarMensajeJuego(ComPlacasMsg_t mensajeRx)
 
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -612,14 +612,14 @@ static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
 
 static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
 {
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -652,8 +652,8 @@ static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
         .remitente = mensajeRx.remitente,
         .pieza     = mensajeRx.mensaje[0]
       };
-      printf("[com::%s] Enviar mensaje:\n", __func__);
-      printf("[com::%s] remitente[%d] pieza[%d]\n", __func__, msg.remitente, msg.pieza);
+     // printf"[com::%s] Enviar mensaje:\n", __func__);
+     // printf"[com::%s] remitente[%d] pieza[%d]\n", __func__, msg.remitente, msg.pieza);
       osMessageQueuePut(e_juegoRxMessageId, &msg, 1, 0);
     }
     break;
@@ -671,7 +671,7 @@ static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
     break;
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }
@@ -679,7 +679,7 @@ static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
 static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
 {
 	
-  printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
+ // printf"[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
     case MENSAJE_LCD:
@@ -730,7 +730,7 @@ static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
 
 
     default:
-      printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
+     // printf"[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
     break;
   }
 }

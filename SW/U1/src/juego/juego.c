@@ -91,7 +91,7 @@ LedStripMsg_t ledMsg;
 
 //  if ((e_juegoEsperaThreadId == NULL))
 //  {
-//    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoEsperaThreadId == NULL));
+//   // printf"[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoEsperaThreadId == NULL));
 //  }
 //}
 
@@ -173,9 +173,9 @@ AJD_CasillaPtr tPromo;
 
    switch(modo){
       case Init:
-        printf("ESTAMOS EN MODO: INIT\n");
+       // printf"ESTAMOS EN MODO: INIT\n");
          flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
-         printf("RECIBIDO FLAG\n");
+        // printf"RECIBIDO FLAG\n");
          map = malloc(64*sizeof(uint8_t));
          memset(map, 0, 64*sizeof(uint8_t));
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
@@ -196,7 +196,7 @@ AJD_CasillaPtr tPromo;
          modo = Espera;
       break;
       case Espera:
-        printf("ESTAMOS EN MODO: ESPERA\n");
+       // printf"ESTAMOS EN MODO: ESPERA\n");
          if(flag == FLAG_RETOCAR){
             //Flagset Placeholder
 //            status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
@@ -224,12 +224,12 @@ AJD_CasillaPtr tPromo;
          modo = Lectura;
       break;
       case Lectura:
-        printf("ESTAMOS EN MODO: LECTURA\n");
+       // printf"ESTAMOS EN MODO: LECTURA\n");
          _colocaPiezas(&tablero, map);
          modo = Idle;
          break;
       case Idle:
-        printf("ESTAMOS EN MODO: IDLE\n");
+       // printf"ESTAMOS EN MODO: IDLE\n");
          if(!firstRound){
             estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
             estado_juego.casilla_seleccionada = NO_SELECCION;
@@ -244,7 +244,7 @@ AJD_CasillaPtr tPromo;
          modo = LevantaPieza;
          break;
       case LevantaPieza:
-        printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
+       // printf"ESTAMOS EN MODO: LEVANTAPIEZA\n");
          //esperaPausaDetener();
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
          if(status == osOK && !movedCasilla.ocupada){
@@ -255,7 +255,7 @@ AJD_CasillaPtr tPromo;
             // movInfo.srcY = movedId/8;
             // movInfo.srcX = movedId%8;
             // movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
-           printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
+          // printf"Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
             if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
                predictPosition(&tablero, estado_juego.casilla_origen, predict);
             
@@ -287,7 +287,7 @@ AJD_CasillaPtr tPromo;
                //if(status == osOK){
                modo = CompMov;
             }else{
-               printf("[Error] Movimiento de pieza invalido: origen\n");
+              // printf"[Error] Movimiento de pieza invalido: origen\n");
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                ledMsg.nuevaJugada = false;
@@ -299,7 +299,7 @@ AJD_CasillaPtr tPromo;
          //}
       break;
       case CompMov:
-        printf("ESTAMOS EN MODO: COMPMOV\n");
+       // printf"ESTAMOS EN MODO: COMPMOV\n");
          status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
          if(status == osOK && movedCasilla.ocupada){
             //ledMsg.nuevaJugada = true;
@@ -315,8 +315,8 @@ AJD_CasillaPtr tPromo;
             }else if(esMovimientoValido(&tablero, &estado_juego)){
                if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
                   modo = Win;
-                  if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
-                  else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+                  //if(estado_juego.juegan_blancas)// printf" [Test] White Wins\n");
+                  //else if(!estado_juego.juegan_blancas)// printf"  [Test] Black Wins\n");
                   modo = Win;
                  continue;
                }
@@ -333,16 +333,16 @@ AJD_CasillaPtr tPromo;
                checkJaque(&tablero);
                
                if(estado_juego.blanco_jaque == 1){
-                  printf(" [Test] Jaque al blanco\n");
+                 // printf" [Test] Jaque al blanco\n");
                   estado_juego.blanco_jaque = 0;
 
                }else if(estado_juego.negro_jaque == 1){
-                 printf(" [Test] Jaque al negro\n");
+                // printf" [Test] Jaque al negro\n");
                   estado_juego.negro_jaque = 0;
                } else {
-                printf("Esperando flag distancia\n");
+               // printf"Esperando flag distancia\n");
                 osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
-                printf("Recibido flag distancia\n");
+               // printf"Recibido flag distancia\n");
                 
                 ComPlacasMsg_t msg = {
                   .remitente = MENSAJE_JUEGO,
@@ -359,7 +359,7 @@ AJD_CasillaPtr tPromo;
 
             }else{
                //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
-               printf("[Error] Movimiento de pieza invalido: destino\n");
+              // printf"[Error] Movimiento de pieza invalido: destino\n");
                ledMsg.nuevaJugada = false;
                ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
                ledMsg.posicion = movedCasilla.casilla;
@@ -375,7 +375,7 @@ AJD_CasillaPtr tPromo;
          }
       break;
       case Pause:
-        printf("ESTAMOS EN MODO: PAUSE\n");
+       // printf"ESTAMOS EN MODO: PAUSE\n");
 			osTimerStop(tick_segundos);
          flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
          if (flag == FLAG_RESUME){
@@ -385,7 +385,7 @@ AJD_CasillaPtr tPromo;
          }
       break;
       case Stop:
-        printf("ESTAMOS EN MODO: STOP\n");
+       // printf"ESTAMOS EN MODO: STOP\n");
 			osTimerStop(tick_segundos);
       // const char* mapa_prueba = GetMap();
 //         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
@@ -404,7 +404,7 @@ AJD_CasillaPtr tPromo;
          modo = Init;
       break;
       case Win:
-        printf("ESTAMOS EN MODO: WIN\n");
+       // printf"ESTAMOS EN MODO: WIN\n");
          osTimerStop(tick_segundos);
 //         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
 //         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
@@ -442,7 +442,7 @@ void getMap(uint8_t* mapOut, size_t len) {
     if (len > 64) len = 64;
     for(int i = 0; i < 64; i++) {
       map[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-      printf("Guarda pieza:%d %s como [%x]", tablero.casilla[i].pieza-1, tablero.casilla[i].color_pieza?"negra":"blanca", map[i]);
+     // printf"Guarda pieza:%d %s como [%x]", tablero.casilla[i].pieza-1, tablero.casilla[i].color_pieza?"negra":"blanca", map[i]);
     }
     osMutexAcquire(mapMutex, osWaitForever);
     memcpy(mapOut, map, len);
@@ -452,39 +452,39 @@ void getMap(uint8_t* mapOut, size_t len) {
 uint8_t GetMinutosBlancas(void)
 {
   uint8_t minutosblancas = (uint8_t)(estado_juego.segundos_blancas/60);
-  printf("MINUTOS BLANCAS QUE SE ENVIAN A WEB: %d\n", minutosblancas);
+ // printf"MINUTOS BLANCAS QUE SE ENVIAN A WEB: %d\n", minutosblancas);
   return (uint8_t)(estado_juego.segundos_blancas/60);
 }
 
 uint8_t GetSegundosBlancas(void)
 {
   uint8_t segundosblancas = (uint8_t)(estado_juego.segundos_blancas%60);
-  printf("SEGUNDOS BLANCAS QUE SE ENVIAN A WEB: %d\n", segundosblancas);
-  printf("segundos bien blancas: %d\n", estado_juego.segundos_blancas);
+ // printf"SEGUNDOS BLANCAS QUE SE ENVIAN A WEB: %d\n", segundosblancas);
+ // printf"segundos bien blancas: %d\n", estado_juego.segundos_blancas);
   return (uint8_t)(estado_juego.segundos_blancas%60);
 }
 
 uint8_t GetMinutosNegras(void)
 {
   uint8_t minutosnegras = (uint8_t)(estado_juego.segundos_negras/60);
-  printf("segundos bien negras: %d\n", estado_juego.segundos_negras);
+ // printf"segundos bien negras: %d\n", estado_juego.segundos_negras);
 
-  printf("MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
+ // printf"MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
   return (uint8_t)(estado_juego.segundos_negras/60);
 }
 
 uint8_t GetSegundosNegras(void)
 {
   uint8_t segundosnegras = (uint8_t)(estado_juego.segundos_negras%60);
-  printf("SEGUNDOS NEGRAS QUE SE ENVIAN A WEB: %d\n", segundosnegras);
+ // printf"SEGUNDOS NEGRAS QUE SE ENVIAN A WEB: %d\n", segundosnegras);
   return (uint8_t)(estado_juego.segundos_negras%60);
 }
 
 void SetTurno(const bool turnoBlancas)
 {
   estado_juego.juegan_blancas = turnoBlancas ? 1 : 0;
-  printf("TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
-  printf("TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
+ // printf"TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
+ // printf"TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
 
 
 }
@@ -492,15 +492,15 @@ void SetTurno(const bool turnoBlancas)
 bool GetTurno(void)
 {
   bool turno = (estado_juego.juegan_blancas == 1);
-  printf("TURNO QUE SE ENVIA %s\n", turno ? "BLANCAS" : "NEGRAS");
+ // printf"TURNO QUE SE ENVIA %s\n", turno ? "BLANCAS" : "NEGRAS");
   return (estado_juego.juegan_blancas == 1);
 }
 
 void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
 {
   estado_juego.segundos_blancas = minutos * 60 + segundos;
-  printf("TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
-  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
+ // printf"TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+ // printf"TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
 
 
 }
@@ -508,8 +508,8 @@ void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
 void setTiempoNegras(uint8_t minutos, uint8_t segundos)
 {
   estado_juego.segundos_negras = minutos * 60 + segundos;
-  printf("TIEMPO NEGRAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
-  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_negras);
+ // printf"TIEMPO NEGRAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+ // printf"TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_negras);
 
 }
 
@@ -782,7 +782,7 @@ void actualizaJuego (AJD_TableroPtr tablero)
    default:
       break;
    }
-	 printf("%d", (uint8_t)(estado_juego.casilla_destino->id));
+	// printf"%d", (uint8_t)(estado_juego.casilla_destino->id));
 
 }
 
@@ -841,7 +841,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
  for (int i = 0; i < 32;) {
    status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
-   printf("[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
+  // printf"[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
 	 //posCl[i] = pos;
    if(status == osOK) {
       uint8_t pos = msgRx.pieza;
@@ -855,7 +855,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
       for (int j=0; j<64; j++) {
-        printf("[RC522::%s] pos[%d] map[%d] = [%d]\n", __func__, pos, j, map[j]);
+       // printf"[RC522::%s] pos[%d] map[%d] = [%d]\n", __func__, pos, j, map[j]);
          if(map[j] == pos) {
             map[j] = 0xFF;
             tablero->casilla[j].pieza       = (AJD_Pieza)((pos & 0x0F) +1);
@@ -863,8 +863,8 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
             ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
-            printf("[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
-            printf("[juego::%s] Led: posicion[%d]\n", __func__, ledMsg.posicion);
+           // printf"[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
+           // printf"[juego::%s] Led: posicion[%d]\n", __func__, ledMsg.posicion);
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
            do{ 
             status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
@@ -888,8 +888,8 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
               .mensaje[0]   = 0x01U,  // FLAG_PIEZA_LEIDA
               .mensaje[1]   = 0
             };
-            printf("[juego::%s] Mensaje a enviar:\n", __func__);
-            printf("[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
+           // printf"[juego::%s] Mensaje a enviar:\n", __func__);
+           // printf"[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
             osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
             ledMsg.tipoJugada = ACK;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
@@ -898,7 +898,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
          }
       }
       if(!found){
-         printf("[Error] Pieza no encontrado\n");
+        // printf"[Error] Pieza no encontrado\n");
         ComPlacasMsg_t msgTx = {
           .remitente    = MENSAJE_JUEGO,
           .destinatario = MENSAJE_NFC,
@@ -975,7 +975,7 @@ void juegoInitialize(void)
 
   if ((e_juegoThreadId == NULL))
   {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoThreadId == NULL));
+   // printf"[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoThreadId == NULL));
   }
 }
 
@@ -986,7 +986,7 @@ void juegoTbInitialize(void)
 
   if ((e_juegoTestbenchThreadId == NULL))
   {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
+   // printf"[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
   }
 }
 
@@ -1043,8 +1043,8 @@ static void juegoTestBench(void* argument){
    }
    // printChessboard();
    // osDelay(100);
-   // printf("[Test] basic move:\n");
-   // printf("  [Test] peon:\n");
+   //// printf"[Test] basic move:\n");
+   //// printf"  [Test] peon:\n");
    
    // tbCasilla.casilla = 49; // b7位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -1083,7 +1083,7 @@ static void juegoTestBench(void* argument){
    // printChessboard();
    // osDelay(100);
 
-   // printf("  [Test] captura\n");
+   //// printf"  [Test] captura\n");
    // // 模拟用户操作：选择黑方兵前进
    // tbCasilla.casilla = 31; // b5位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -1099,7 +1099,7 @@ static void juegoTestBench(void* argument){
 		
 	// //tbCasilla.casilla = 255;
    // osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   //// printf"[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	// osDelay(500);
    // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
@@ -1134,7 +1134,7 @@ static void juegoTestBench(void* argument){
    //    osDelay(100); // 10ms delay between sending each piece
    // }
 
-   // printf("  [Test] torre:\n");
+   //// printf"  [Test] torre:\n");
    // tbCasilla.casilla = 0; // a1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1160,7 +1160,7 @@ static void juegoTestBench(void* argument){
    // osDelay(100);
 
 
-   // printf("  [Test] caballo:\n");
+   //// printf"  [Test] caballo:\n");
    // tbCasilla.casilla = 1; // b1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1185,7 +1185,7 @@ static void juegoTestBench(void* argument){
    // printChessboard();
    // osDelay(100);
 
-   // printf("  [Test] alfil:\n");
+   //// printf"  [Test] alfil:\n");
    // tbCasilla.casilla = 2; // b1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1210,7 +1210,7 @@ static void juegoTestBench(void* argument){
    // printChessboard();
    // osDelay(100);
 
-   // printf("  [Test] dama:\n");
+   //// printf"  [Test] dama:\n");
    // tbCasilla.casilla = 3; // b1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1260,7 +1260,7 @@ static void juegoTestBench(void* argument){
    // osDelay(100);
    
 
-   // printf("  [Test] rey:\n");
+   //// printf"  [Test] rey:\n");
    // tbCasilla.casilla = 4; // b1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1287,7 +1287,7 @@ static void juegoTestBench(void* argument){
    
    // //tbCasilla.casilla = 255;
    // osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   //// printf"[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    // //osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
 	// osDelay(500);
    // osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
@@ -1319,7 +1319,7 @@ static void juegoTestBench(void* argument){
    // printChessboard();
 	//  osDelay(100);
 	 
-   // printf("  [Test] Promoción:\n");
+   //// printf"  [Test] Promoción:\n");
    // tbCasilla.casilla = 12; // b8位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
    // osDelay(500);
@@ -1333,7 +1333,7 @@ static void juegoTestBench(void* argument){
    // osDelay(100);
 
    // estado_juego.juegan_blancas = 1;
-   // printf(" [Test] Manualmente cambia el turno a blanco\n");
+   //// printf" [Test] Manualmente cambia el turno a blanco\n");
 
    // tbCasilla.casilla = 3; // b8位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -1348,7 +1348,7 @@ static void juegoTestBench(void* argument){
    // osDelay(100);
 
    // estado_juego.juegan_blancas = 1;
-   // printf(" [Test] Manualmente cambia el turno a blanco\n");
+   //// printf" [Test] Manualmente cambia el turno a blanco\n");
 
    // tbCasilla.casilla = 39; // b8位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -1384,7 +1384,7 @@ static void juegoTestBench(void* argument){
    // }
    // printChessboard();
 	//  osDelay(100);
-   // printf(" [Test] Jaque y victoria\n");
+   //// printf" [Test] Jaque y victoria\n");
 
    // tbCasilla.casilla = 33; // b1位置
    // osMessageQueuePut(e_positionMessageId, &tbCasilla, 0, osWaitForever);
@@ -1447,8 +1447,8 @@ static void juegoTestBench(void* argument){
    // osDelay(100);
    
 	//  osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
-   // printf("[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
-   // printf("[Test] End\n");
+   //// printf"[Test] Time remained:  %d:%d for white; %d:%d for black\n", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   //// printf"[Test] End\n");
    
 
 
@@ -1522,11 +1522,11 @@ static void juegoTestBench(void* argument){
 //     AJD_Color color;
 // 		char* symbol;
     
-//     printf("     a   b   c   d   e   f   g   h\n");
-//     printf("   +---+---+---+---+---+---+---+---+\n");
+//    // printf"     a   b   c   d   e   f   g   h\n");
+//    // printf"   +---+---+---+---+---+---+---+---+\n");
     
 //     for (int row = 0; row < 8; row++) {
-//         printf("  %d|", 8 - row); // 行号从8到1
+//        // printf"  %d|", 8 - row); // 行号从8到1
         
 //         for (int col = 0; col < 8; col++) {
 //             index = row * 8 + col;
@@ -1544,12 +1544,12 @@ static void juegoTestBench(void* argument){
 //                symbol = " X";
 //             }
             
-//             printf(" %s|", symbol);
+//            // printf" %s|", symbol);
 //         }
         
-//         printf("\n   +---+---+---+---+---+---+---+---+\n");
+//        // printf"\n   +---+---+---+---+---+---+---+---+\n");
 //     }
     
-//     printf("     a   b   c   d   e   f   g   h\n");
+//    // printf"     a   b   c   d   e   f   g   h\n");
 // }
 

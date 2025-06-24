@@ -404,7 +404,7 @@ static void MX_SPI3_Init(void)
 	
   if (HAL_SPI_Init(&hspi3) == HAL_OK)
   {
-    printf("SPI inicialized succesfully.\n");
+   // printf"SPI inicialized succesfully.\n");
   }else if ((HAL_SPI_Init(&hspi3) == HAL_ERROR))
 	{
 		printf("Error ocurred during SPI inicializing.\n");
@@ -537,17 +537,17 @@ void RC_RUN(void *argument){
           if (i < 9)
 					printf("%02x ", pData[i]);
           if (i == 9)
-            printf("\n pieza =");
+           // printf"\n pieza =");
           if (i >= 9)
-            printf("%c ", pData[i]);
+           // printf"%c ", pData[i]);
 				}
-        printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
+       // printf"%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
 				printf("\n");
         msg.destinatario = MENSAJE_JUEGO;
 				msg.mensaje[0] = (char)(pData[9]-48);
         
-        printf("[RC522::%s] Mensaje a enviar:\n", __func__);
-        printf("[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
+       // printf"[RC522::%s] Mensaje a enviar:\n", __func__);
+       // printf"[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
 				MFRC522_Halt();
         osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAll, 5000);
@@ -597,11 +597,11 @@ void nfc_sim(void* argument){
   
   for(i=0; i<=3; i++){
     flag[1] =osThreadFlagsSet(tid_Thread_NFC, FLAG_PIEZA_LEIDA);
-    printf("Read finished: [%d]\n", flag[1]);
+   // printf"Read finished: [%d]\n", flag[1]);
     osDelay(5000);
   }
   flag[0]=osThreadFlagsSet(tid_Thread_NFC, FLAG_FINALIZA);
-  printf("End reading: [%d]\n", flag[0]);
+ // printf"End reading: [%d]\n", flag[0]);
   osThreadYield(); 
 }
 */

@@ -75,9 +75,9 @@ void RTC_Initialize(void)
 
   if ((e_rtcThreadId == NULL) /*|| (e_writeSemaphoreId == NULL)*/) 
   {
-    printf("[rtc::%s] ERROR! osThreadNew [%d]\n", __func__, 
-                                                       (e_rtcThreadId == NULL)/*, 
-                                                 (e_writeSemaphoreId == NULL)*/);
+   // printf"[rtc::%s] ERROR! osThreadNew [%d]\n", __func__, 
+   //                                                    (e_rtcThreadId == NULL)/*, 
+   //                                              (e_writeSemaphoreId == NULL)*/);
     
     Error_Handler();
   }

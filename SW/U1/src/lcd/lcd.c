@@ -108,9 +108,9 @@ void LCD_Initialize(void)
 
   if ((e_lcdThreadId == NULL) || (e_lcdInputMessageId == NULL)) 
   {
-    printf("[lcd::%s] ERROR! osThreadNew [%d] osMessageQueueNew [%d]\n", __func__, 
-                                                          (e_lcdThreadId == NULL), 
-                                                   (e_lcdInputMessageId == NULL));
+   // printf"[lcd::%s] ERROR! osThreadNew [%d] osMessageQueueNew [%d]\n", __func__, 
+   //                                                       (e_lcdThreadId == NULL), 
+   //                                                (e_lcdInputMessageId == NULL));
     
     Error_Handler();
   }
@@ -136,7 +136,7 @@ static void Run(void *argument)
    }
    else
    {
-     printf("[lcd::%s] osMessageQueueGet ERROR!\n", __func__);
+    // printf"[lcd::%s] osMessageQueueGet ERROR!\n", __func__);
      
      Error_Handler();
    }
@@ -176,7 +176,7 @@ static void HandleColumnPrintMsg(const lcdMessage_t lcdMsg)
 	
 	if (column >= LCD_COLUMNS)  // unsigned -> no negative values 
   {
-    printf("[lcd::%s] Error! Column [%d] > last calumn [%d]\n", __func__, column, (LCD_COLUMNS - 1));
+   // printf"[lcd::%s] Error! Column [%d] > last calumn [%d]\n", __func__, column, (LCD_COLUMNS - 1));
 		
 		return;
   }
@@ -456,7 +456,7 @@ static void PrintString(EPrintLine line, const char* string)
 {
 	if (!CheckString(string)) 
   {
-    printf("[lcd::%s] Error! String is larger than maximum [%d]\n", __func__, LCD_STR_MAX_LEN);
+   // printf"[lcd::%s] Error! String is larger than maximum [%d]\n", __func__, LCD_STR_MAX_LEN);
     
     return;
 	}

@@ -53,9 +53,9 @@ void LED_Initialize(void)
 
   if ((e_ledThreadId == NULL) || (e_ledInputMessageId == NULL)) 
   {
-    printf("[led::%s] ERROR! osThreadNew [%d] osMessageQueueNew [%d]\n", __func__, 
-                                                          (e_ledThreadId == NULL), 
-                                                   (e_ledInputMessageId == NULL));
+   // printf"[led::%s] ERROR! osThreadNew [%d] osMessageQueueNew [%d]\n", __func__, 
+   //                                                          (e_ledThreadId == NULL), 
+   //                                                (e_ledInputMessageId == NULL));
     
     Error_Handler();
   }
@@ -69,7 +69,7 @@ static void Run(void *argument)
   while(1) 
   {
     ledMessage_t ledMsg;
-    printf("[led::%s] Waiting for message...\n", __func__);
+   // printf"[led::%s] Waiting for message...\n", __func__);
 		
     status = osMessageQueueGet(e_ledInputMessageId, &ledMsg, NULL, osWaitForever);
     if (osOK == status) 
@@ -78,7 +78,7 @@ static void Run(void *argument)
     }
     else
     {
-      printf("[led::%s] osMessageQueueGet ERROR!\n", __func__);
+     // printf"[led::%s] osMessageQueueGet ERROR!\n", __func__);
       
       Error_Handler();
     }
@@ -87,7 +87,7 @@ static void Run(void *argument)
 
 static void InitLeds(void)
 {
-  printf("[led::%s] Initializing mbed LEDs...\n", __func__);
+ // printf"[led::%s] Initializing mbed LEDs...\n", __func__);
 	
   GPIO_InitTypeDef GPIO_InitStruct;
 	__GPIOB_CLK_ENABLE();
@@ -99,7 +99,7 @@ static void InitLeds(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
 	
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  printf("[led::%s] OK\n", __func__);
+ // printf"[led::%s] OK\n", __func__);
 	
 }
 

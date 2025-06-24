@@ -150,7 +150,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
+   // printf"[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -158,7 +158,7 @@ static void SystemClock_Config(void)
 	if(HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
+   // printf"[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -173,7 +173,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
+   // printf"[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -211,7 +211,7 @@ static void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 { 
   /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+     ex:// printf"Wrong parameters value: file %s on line %d\r\n", file, line) */
 
   /* Infinite loop */
   while (1)

@@ -163,7 +163,7 @@ void ThADC (void *argument) {
 		msg.mensaje[0] = (uint8_t)adc_queue_msg.ruido;
 		msg.mensaje[1] = (uint8_t)adc_queue_msg.consumo;
     		
-    printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",msg.mensaje[0],msg.mensaje[1]);
+   // printf"Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",msg.mensaje[0],msg.mensaje[1]);
     
     //osDelay(1000);
 		

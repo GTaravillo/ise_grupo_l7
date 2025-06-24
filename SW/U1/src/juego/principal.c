@@ -22,7 +22,7 @@ void PrincipalInitialize(void)
 
   if ((e_principalThreadId == NULL))
   {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_principalThreadId == NULL));
+   // printf"[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_principalThreadId == NULL));
   }
 }
 

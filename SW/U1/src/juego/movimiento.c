@@ -392,7 +392,7 @@ void efectuaEnroque (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 {
     AJD_idCasilla origen, destino;
 
-    printf("ENROCANDO!!!");
+   // printf"ENROCANDO!!!");
     // Mueve primero el rey
     muevePieza (tablero, estado_juego);
 

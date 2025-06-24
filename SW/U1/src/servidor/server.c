@@ -49,7 +49,7 @@ void Server_Initialize(void)
 
   if ((e_serverThreadId == NULL) /*|| (e_serverInputMessageId == NULL) || (e_serverOutputMessageId == NULL)*/) 
   {
-    printf("[server::%s] osThreadNew ERROR!\n", __func__);
+   // printf"[server::%s] osThreadNew ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -154,7 +154,7 @@ void SetWebTime(const char* time)
   }
 
   strncpy(g_time, time, c_timeLen - 1);
-  printf("[server::%s] Time set to [%s]", __func__, g_time);
+ // printf"[server::%s] Time set to [%s]", __func__, g_time);
 }
 
 void SetWebDate(const char* date)
@@ -165,18 +165,18 @@ void SetWebDate(const char* date)
   }
 
   strncpy(g_date, date, c_dateLen - 1);
-  printf("[server::%s] Time set to [%s]\n", __func__, g_date);
+ // printf"[server::%s] Time set to [%s]\n", __func__, g_date);
 }
 
 const char* GetTime(void)
 {
-  printf("[server::%s] Returning time [%s]\n", __func__, g_time);
+ // printf"[server::%s] Returning time [%s]\n", __func__, g_time);
   return g_time;
 }
 
 const char* GetDate(void)
 {
-  printf("[server::%s] Returning date [%s]\n", __func__, g_date);
+ // printf"[server::%s] Returning date [%s]\n", __func__, g_date);
   return g_date;
 }
 
@@ -187,13 +187,13 @@ bool IsTimeCorrect(const char* time)
 
   if (time == NULL)
   {
-    printf("[server::%s] Time input pointer is NULL", __func__);
+   // printf"[server::%s] Time input pointer is NULL", __func__);
     return correct;
   }
 
   if (time[8] != '\0') 
   {
-    printf("[server::%s] Incorrect time input format", __func__);
+   // printf"[server::%s] Incorrect time input format", __func__);
     return correct;
   }
 
@@ -216,13 +216,13 @@ bool IsDateCorrect(const char* date)
   // Check for NULL pointer
   if (date == NULL) 
   {
-    printf("[server::%s] Time input pointer is NULL", __func__);
+   // printf"[server::%s] Time input pointer is NULL", __func__);
     return 0;
   }
 
   if (date[8] != '\0') 
   {
-    printf("[server::%s] Incorrect time input format", __func__);
+   // printf"[server::%s] Incorrect time input format", __func__);
     return 0;
   }
 

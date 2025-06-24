@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 4
+#define WORKSPACE 1
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian

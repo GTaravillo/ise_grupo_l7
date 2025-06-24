@@ -86,7 +86,7 @@ void LedStripManagerInitialize(void)
 
   if ((e_ledStripManagerThreadId == NULL) || (e_ledStripMessageId == NULL))
   {
-    // printf("[lcd::%s] ERROR! osThreadNew [%d]\n", __func__, (e_ledStripManagerThreadId == NULL));
+    //// printf"[lcd::%s] ERROR! osThreadNew [%d]\n", __func__, (e_ledStripManagerThreadId == NULL));
   }
 }
 
@@ -145,19 +145,19 @@ static bool RecepcionCorrecta(osStatus_t status)
       return true;
 
     case osErrorTimeout:
-    //  printf("[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
+    // // printf"[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
       return false;
 
     case osErrorResource:
-     // printf("[LedStrip::%s] Nothing to get from the queue\n", __func__);
+     //// printf"[LedStrip::%s] Nothing to get from the queue\n", __func__);
       return false;
 
     case osErrorParameter:
-    //  printf("[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
+    // // printf"[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
       return false;
 
     default:
-    //  printf("[LedStrip::%s] Unknown error [%d]\n", __func__, status);
+    // // printf"[LedStrip::%s] Unknown error [%d]\n", __func__, status);
       return false;
   }
 }
@@ -168,13 +168,13 @@ static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 	char* posicionStr;
 	PositionToString(posicion, posicionStr);
 
- // printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
+ //// printf"[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
   if (posicion < 64)
   {
     return true;
   }
   
- // printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
+ //// printf"[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
   return false;
 }
 
@@ -184,7 +184,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const bool nuevaJugada = mensajeRx.nuevaJugada;
   if (nuevaJugada)
   {
-  //  printf("[LedStrip::%s] RESET LEDS\n", __func__);
+  // // printf"[LedStrip::%s] RESET LEDS\n", __func__);
     memset(g_leds, 0, sizeof(g_leds));
     return;
   }
@@ -194,7 +194,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const ETipoJugada tipoJugada = mensajeRx.tipoJugada;
   GetColor(tipoJugada, &colores);
 
-//  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
+// // printf"[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
   g_leds[mensajeRx.posicion] = colores;
 }
 
@@ -212,28 +212,28 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
 			colores->red   = 0;
 		  colores->green = 0;
 		  colores->blue  = 255;
-		 // printf("[LedStrip::%s] COLOR AZUL\n", __func__);
+		 //// printf"[LedStrip::%s] COLOR AZUL\n", __func__);
 		  break;
 		
 		case MOVIMIENTO_ILEGAL:
 			colores->red   = 255;
 		  colores->green = 0;
 		  colores->blue  = 0;
-		 // printf("[LedStrip::%s] COLOR ROJO\n", __func__);
+		 //// printf"[LedStrip::%s] COLOR ROJO\n", __func__);
 		  break;
 		
 		case CAPTURA:
 			colores->red   = 0;
 		  colores->green = 255;
 		  colores->blue  = 0;
-		 // printf("[LedStrip::%s] COLOR VERDE\n", __func__);
+		 //// printf"[LedStrip::%s] COLOR VERDE\n", __func__);
 		  break;
 		
 		case ESPECIAL:
 			colores->red   = 255;
 		  colores->green = 0;
 		  colores->blue  = 255;
-		//  printf("[LedStrip::%s] COLOR MORADO\n", __func__);
+		// // printf"[LedStrip::%s] COLOR MORADO\n", __func__);
 		  break;
 		
 		case ACTUAL:

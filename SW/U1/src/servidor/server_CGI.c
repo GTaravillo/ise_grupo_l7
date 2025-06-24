@@ -112,7 +112,7 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len)
 {
   char var[40];
   char passw[12] = {0};
-    printf("[server_CGI::%s] 1- code[%d] data[%s] len[%d]\n", __func__, code, data, len);
+   // printf"[server_CGI::%s] 1- code[%d] data[%s] len[%d]\n", __func__, code, data, len);
 
   if (code != 0) 
   {
@@ -141,8 +141,8 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len)
   {
     // Parse all parameters
     data = netCGI_GetEnvVar (data, var, sizeof (var));
-    printf("[server_CGI::%s] 2- code[%d] data[%s] len[%d]\n", __func__, code, data, len);
-    // printf("[server_CGI::%s] var [%s]\n", __func__, var);
+   // printf"[server_CGI::%s] 2- code[%d] data[%s] len[%d]\n", __func__, code, data, len);
+    //// printf"[server_CGI::%s] var [%s]\n", __func__, var);
     
     if (strcmp (var, "pg=led") == 0) 
     {
@@ -174,19 +174,19 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len)
       HandleDateData(data);
     }
     else if (strncmp(var, "player1Name=", 12) == 0) {
-        printf("[server_CGI] Player 1 Name: %s\n", var + 12);
+       // printf"[server_CGI] Player 1 Name: %s\n", var + 12);
     }
     else if (strncmp(var, "player2Name=", 12) == 0) {
-        printf("[server_CGI] Player 2 Name: %s\n", var + 12);
+       // printf"[server_CGI] Player 2 Name: %s\n", var + 12);
     }
     else if (strncmp(var, "matchTime=", 10) == 0) {
-        printf("[server_CGI] Match Time: %s\n", var + 10);
+       // printf"[server_CGI] Match Time: %s\n", var + 10);
     }
     else if (strncmp(var, "incrementTime=", 14) == 0) {
-        printf("[server_CGI] Increment Time: %s\n", var + 14);
+       // printf"[server_CGI] Increment Time: %s\n", var + 14);
     }
     else if (strncmp(var, "ayuda=", 6) == 0) {
-        printf("[server_CGI] Ayuda: %s\n", var + 6);
+       // printf"[server_CGI] Ayuda: %s\n", var + 6);
     }
   } while (data);
 }
@@ -196,7 +196,7 @@ void HandleLedData(const char *data) {
 	
   do {
     data = netCGI_GetEnvVar (data, var, sizeof (var));
-    printf("[server_CGI::%s] var [%s]\n", __func__, var);
+   // printf"[server_CGI::%s] var [%s]\n", __func__, var);
     
     if (var[0] != 0) {
       // First character is non-null, string exists
@@ -237,7 +237,7 @@ void GetLcdInput(const char *data) {
     data = netCGI_GetEnvVar (data, var, sizeof(var));
 		
     if (data == NULL) { break; }
-    printf("[server_CGI::%s] var [%s]\n", __func__, var);
+   // printf"[server_CGI::%s] var [%s]\n", __func__, var);
     
 		
     if (var[0] == NULL) { continue; }
@@ -282,7 +282,7 @@ static void HandleDateData(const char *data)
  do 
  {
    data = netCGI_GetEnvVar(data, var, sizeof (var));
-   printf("[server_CGI::%s] var [%s]\n", __func__, var);
+  // printf"[server_CGI::%s] var [%s]\n", __func__, var);
    if (var[0] != 0) 
    {
      if (strncmp (var, "timeIn=", 7) == 0) 
@@ -295,7 +295,7 @@ static void HandleDateData(const char *data)
        // flag = TIME_SET_WEB;
        // Time input text
        strcpy (time, var+7);
-			 printf("Time inserted: [%s]\n", time);
+			// printf"Time inserted: [%s]\n", time);
        // strcpy (lcd_text[0], var+5);
        int values = sscanf(time, "%02d:%02d:%02d", &hh, &mm, &ss);
        // Obtengo los valores a partir del string
@@ -305,7 +305,7 @@ static void HandleDateData(const char *data)
        } 
        else 
        {
-         printf("[server_CGI::%s] Hora introducida con formato incorrecto\n", __func__);
+        // printf"[server_CGI::%s] Hora introducida con formato incorrecto\n", __func__);
        }
      }
      else if (strncmp (var, "dateIn=", 7) == 0) 
@@ -315,7 +315,7 @@ static void HandleDateData(const char *data)
        // flag = DATE_SET_WEB;
        // LCD Module line 2 text
        strcpy (date, var+7);
-			 printf("Date inserted: [%s]", date);
+			// printf"Date inserted: [%s]", date);
        // strcpy (lcd_text[0], var+5);
        int values = sscanf(date, "%d/%d/%d", &dd, &mm, &yy);
        mm = RTC_ByteToBcd2(mm);
@@ -326,7 +326,7 @@ static void HandleDateData(const char *data)
        } 
        else 
        {
-         printf("[server_CGI::%s] Fecha introducida con formato incorrecto\n", __func__);
+        // printf"[server_CGI::%s] Fecha introducida con formato incorrecto\n", __func__);
        }
      }
    }
@@ -345,7 +345,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
   uint32_t len = 0U;
 
 	EScriptId scriptId = env[0];
-  printf("[server_CGI::%s] env[%s] buf[%s]\n", __func__, env, buf);
+ // printf"[server_CGI::%s] env[%s] buf[%s]\n", __func__, env, buf);
 
   switch (scriptId) {
     // Analyze a 'c' script line starting position 2
@@ -585,12 +585,12 @@ static uint32_t HandleLcdScript(const char *env, char *buf)
 	switch (line) {
 		case '1': {
 			const char* string = GetLcdTextInput(LCD_LINE_1);
-      printf("[server_CGI::%s] buf = [%c]\n", __func__, *buf);
-      printf("[server_CGI::%s] env[4] = [%c]\n", __func__, env[4]);
-      printf("[server_CGI::%s] string = [%s]\n", __func__, string);
+     // printf"[server_CGI::%s] buf = [%c]\n", __func__, *buf);
+     // printf"[server_CGI::%s] env[4] = [%c]\n", __func__, env[4]);
+     // printf"[server_CGI::%s] string = [%s]\n", __func__, string);
 			len = (uint32_t)sprintf(buf, &env[4], string);
-      printf("[server_CGI::%s] buf = [%c]\n", __func__, *buf);
-      printf("[server_CGI::%s] env[4] = [%c]\n", __func__, env[4]);
+     // printf"[server_CGI::%s] buf = [%c]\n", __func__, *buf);
+     // printf"[server_CGI::%s] env[4] = [%c]\n", __func__, env[4]);
 			break;
 		}
 			
@@ -614,7 +614,7 @@ static uint32_t HandleAdcScript(const char *env, char *buf, uint32_t *adv)
   switch (env[2]) {
 		case '1':
 			*adv = ADC_in (0);
-		  printf("[server_CGI] 1 adv [%d]\n", *adv);
+		 // printf"[server_CGI] 1 adv [%d]\n", *adv);
 			len = (uint32_t)sprintf (buf, &env[4], (*adv));
 		  break;
 		
@@ -625,7 +625,7 @@ static uint32_t HandleAdcScript(const char *env, char *buf, uint32_t *adv)
 		
 		case '3':
 			*adv = ((*adv) * 100) / 4096;
-		  printf("[server_CGI] 3 adv [%d]\n", *adv);
+		 // printf"[server_CGI] 3 adv [%d]\n", *adv);
 			len = (uint32_t)sprintf (buf, &env[4], (*adv));
 		  break;
 		
@@ -663,7 +663,7 @@ static uint32_t HandleDateInScript(const char *env, char *buf)
 		default:
 			break;
 	}
-  printf("[server_CGI::%s] OUT env[%s] buf[%s]\n", __func__, env, buf);
+ // printf"[server_CGI::%s] OUT env[%s] buf[%s]\n", __func__, env, buf);
 	return len;
 }
 
@@ -680,8 +680,8 @@ static uint32_t HandleDateOutScript(const char *env, char *buf)
 static uint32_t HandleAdcOutputScript(const char *env, char *buf, uint32_t *adv)
 {
   *adv = ADC_in (0);
-  printf("[server_CGI] 4 env: %s\n", env);
-  printf("[server_CGI] 4 adv [%d]\n", *adv);
+ // printf"[server_CGI] 4 env: %s\n", env);
+ // printf"[server_CGI] 4 adv [%d]\n", *adv);
   return (uint32_t)sprintf (buf, &env[1], *adv);
 }
 

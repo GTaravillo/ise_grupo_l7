@@ -27,7 +27,7 @@ void BajoConsumoInitialize(void)
 
   if (e_bajoConsumoThreadId == NULL) 
   {
-    printf("[bajo_consumo::%s] ERROR! osThreadNew [%d]\n", __func__, (e_bajoConsumoThreadId == NULL));
+   // printf"[bajo_consumo::%s] ERROR! osThreadNew [%d]\n", __func__, (e_bajoConsumoThreadId == NULL));
   }
 }
 
@@ -39,7 +39,7 @@ static void Run(void *argument)
 
     while (1)
     {
-      printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
+     // printf"[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
       uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);
       
       if (flags == ENTRADA_BAJO_CONSUMO)
@@ -72,7 +72,7 @@ static void GpioInitialize(void)
 
 static void EntrarModoBajoConsumo(void)
 {
-  printf("[bajo_consumo::%s] ENTRO EN BAJO CONSUMO\n", __func__);
+ // printf"[bajo_consumo::%s] ENTRO EN BAJO CONSUMO\n", __func__);
   HAL_SuspendTick();  // Stop SysTick for max power saving
 
   // Enter STOP Mode with low power regulator ON, wait for interrupt (WFI)
@@ -85,7 +85,7 @@ static void SalirModoBajoConsumo(void)
 
   // MUST reconfigure clock after waking from STOP mode
   SystemClock_Config();
-  printf("[bajo_consumo::%s] SALGO DE BAJO CONSUMO\n", __func__);
+ // printf"[bajo_consumo::%s] SALGO DE BAJO CONSUMO\n", __func__);
 
 }
 
@@ -130,7 +130,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
+   // printf"[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
     
 
   }
@@ -138,7 +138,7 @@ static void SystemClock_Config(void)
 	if(HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
+   // printf"[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
     
 
   }
@@ -153,7 +153,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
+   // printf"[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
     
 
   }
