@@ -86,7 +86,7 @@ void LedStripManagerInitialize(void)
 
   if ((e_ledStripManagerThreadId == NULL) || (e_ledStripMessageId == NULL))
   {
-    printf("[lcd::%s] ERROR! osThreadNew [%d]\n", __func__, (e_ledStripManagerThreadId == NULL));
+    //printf("[lcd::%s] ERROR! osThreadNew [%d]\n", __func__, (e_ledStripManagerThreadId == NULL));
   }
 }
 
@@ -145,19 +145,19 @@ static bool RecepcionCorrecta(osStatus_t status)
       return true;
 
     case osErrorTimeout:
-      printf("[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
+     // printf("[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
       return false;
 
     case osErrorResource:
-     printf("[LedStrip::%s] Nothing to get from the queue\n", __func__);
+     //printf("[LedStrip::%s] Nothing to get from the queue\n", __func__);
       return false;
 
     case osErrorParameter:
-      printf("[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
+      //printf("[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
       return false;
 
     default:
-      printf("[LedStrip::%s] Unknown error [%d]\n", __func__, status);
+      //printf("[LedStrip::%s] Unknown error [%d]\n", __func__, status);
       return false;
   }
 }
@@ -168,13 +168,13 @@ static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 	char* posicionStr;
 	PositionToString(posicion, posicionStr);
 
-  printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
+  //printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
   if (posicion < 64)
   {
     return true;
   }
   
- printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
+// printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
   return false;
 }
 
@@ -270,13 +270,13 @@ static void EnviarDatos(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | brillo);
     EnviarComando(azul);  // B
     EnviarComando(verde); // G
     EnviarComando(rojo);  // R
-    osDelay(5);
+   // osDelay(5);
 	}
 
 	StopCommunication();
@@ -370,7 +370,7 @@ static void StartAckPattern(void)
     osDelay(5);
 	}
   StopCommunication();
-  osDelay(5);
+  //osDelay(5);
 }
 
 static void StartNackPattern(void)
@@ -395,7 +395,7 @@ static void StartNackPattern(void)
     osDelay(5);
 	}
   StopCommunication();
-  osDelay(5);
+  //osDelay(5);
 }
 
 void ARM_LedSPI_SignalEvent(uint32_t event)

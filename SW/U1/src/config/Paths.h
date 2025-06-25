@@ -1,7 +1,7 @@
 #ifndef __PATHS_H
 #define __PATHS_H
 
-#define WORKSPACE 1
+#define WORKSPACE 2
 
 /* Headers */
 #if WORKSPACE == 1		// Fabian
@@ -46,6 +46,7 @@
 	#define PATH_RTC        	"D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/rtc/rtc.h"
   #define PATH_SERVER     	"D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/servidor/servidor.h"
 	#define PATH_UART       	"D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/uart/uart.h"
+	#define PATH_BAJO_CONSUMO "D:/Estudio/ISE/Bloq2/ise_grupo_l7/SW/U1/src/bajo_consumo/BajoConsumo.h"
 
 #elif WORKSPACE == 3		// Raul
   #define PATH_MAIN       	"C:/Users/Olivia/Desktop/UNIVERSIDAD/10o_SEMESTRE/ISE/MASTERCHESS/ise_grupo_l7/SW/U1/src/main.h"

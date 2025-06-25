@@ -177,7 +177,7 @@ AJD_CasillaPtr tPromo;
          flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
          printf("RECIBIDO FLAG\n");
          map = malloc(64*sizeof(uint8_t));
-         memset(map, 0, 64*sizeof(uint8_t));
+       //memset(map, 0xFF, 64*sizeof(uint8_t));
          //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
          //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
          //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
@@ -258,7 +258,8 @@ AJD_CasillaPtr tPromo;
            printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
             if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
                predictPosition(&tablero, estado_juego.casilla_origen, predict);
-            
+
+               ledMsg.tipoJugada = ACTUAL;
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                ledMsg.tipoJugada = ACTUAL;
@@ -288,6 +289,7 @@ AJD_CasillaPtr tPromo;
                modo = CompMov;
             }else{
                printf("[Error] Movimiento de pieza invalido: origen\n");
+               ledMsg.tipoJugada = ACTUAL;
                ledMsg.nuevaJugada = true;
                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
                ledMsg.nuevaJugada = false;
@@ -436,12 +438,13 @@ void setMap(const uint8_t* mapIn, size_t len) {
       len = 64;
     }
     osMutexAcquire(mapMutex, osWaitForever);
+    memcpy(map, mapIn, len);
     for (int i = 0; i < 64; i++)
     {
       if (mapIn[i] == EMPTY)
       {
         tablero.casilla[i].pieza = NONE;
-        tablero.casilla[i].color_pieza = NEGRO;
+        tablero.casilla[i].color_pieza = BLANCO;
       }
       else
       {
@@ -449,7 +452,7 @@ void setMap(const uint8_t* mapIn, size_t len) {
         tablero.casilla[i].color_pieza = (mapIn[i] & 0x10) >> 4;
       }
       printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
-             tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "negra" : "blanca");
+             tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "blanca" : "negra");
       osDelay(5);
     }
     osMutexRelease(mapMutex);
