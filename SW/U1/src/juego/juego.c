@@ -57,9 +57,9 @@ modo_t modo = Init;
 osMessageQueueId_t  e_juegoRxMessageId;
 osMutexId_t mapMutex;
 
- osThreadId_t e_juegoThreadId;
+osThreadId_t e_juegoThreadId;
 // osThreadId_t e_juegoEsperaThreadId;
- osThreadId_t e_juegoTestbenchThreadId;
+osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
 MemoriaMsg_t paq;
 MemoriaMsg_t paqIn;
@@ -72,7 +72,7 @@ osStatus_t flag;
 osStatus_t flagPause;
 AJD_Tablero tablero;
 uint8_t predict[64];
-lcdMessage_t lcdMsg;
+//lcdMessage_t lcdMsg;
 LedStripMsg_t ledMsg;
 
 
@@ -96,41 +96,35 @@ LedStripMsg_t ledMsg;
 //}
 
 void tick_segundos_callback(void *argument){
-   if(estado_juego.juegan_blancas){
-      estado_juego.segundos_blancas--;
-      //setTiempoPartida((uint8_t)(estado_juego.segundos_blancas/60), (uint8_t)(estado_juego.segundos_blancas%60));
-//      lcdMsg.printMsg.printLine = PRINT_LINE_1;
-//      sprintf(lcdMsg.printMsg.msg, "BLANCO: %d : %d", estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60);
-//      osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-      if(estado_juego.segundos_blancas == 0){
-         estado_juego.segundos_blancas = 0;
-         estado_juego.segundos_negras = 0;
-         lcdMsg.printMsg.printLine = PRINT_LINE_1;
-         sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
-         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-         lcdMsg.printMsg.printLine = PRINT_LINE_2;
-         sprintf(lcdMsg.printMsg.msg, "NEGRAS GANAN");
-         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-         modo = Win;
-     }
-   }else{
-      estado_juego.segundos_negras--;
-      //setTiempoPartida((uint8_t)(estado_juego.segundos_negras/60), (uint8_t)(estado_juego.segundos_negras%60));
-//      lcdMsg.printMsg.printLine = PRINT_LINE_1;
-//      sprintf(lcdMsg.printMsg.msg, "NEGRO: %d : %d", estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
-//      osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-      if(estado_juego.segundos_negras == 0){
-         estado_juego.segundos_negras = 0;
-         estado_juego.segundos_blancas = 0;
-         lcdMsg.printMsg.printLine = PRINT_LINE_1;
-         sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
-         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-         lcdMsg.printMsg.printLine = PRINT_LINE_2;
-         sprintf(lcdMsg.printMsg.msg, "BLANCAS GANAN");
-         osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
-         modo = Win;
-      }
-   }
+	if(estado_juego.juegan_blancas){
+		estado_juego.segundos_blancas--;
+		
+		if(estado_juego.segundos_blancas == 0){
+			estado_juego.segundos_blancas = 0;
+			estado_juego.segundos_negras = 0;
+//			lcdMsg.printMsg.printLine = PRINT_LINE_1;
+//			sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
+//			osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+//			lcdMsg.printMsg.printLine = PRINT_LINE_2;
+//			sprintf(lcdMsg.printMsg.msg, "NEGRAS GANAN");
+//			osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+			modo = Win;
+		}
+	}else{
+		estado_juego.segundos_negras--;
+		
+		if(estado_juego.segundos_negras == 0){
+			estado_juego.segundos_negras = 0;
+			estado_juego.segundos_blancas = 0;
+//			lcdMsg.printMsg.printLine = PRINT_LINE_1;
+//			sprintf(lcdMsg.printMsg.msg, "FIN DE LA PARTIDA");
+//			osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+//			lcdMsg.printMsg.printLine = PRINT_LINE_2;
+//			sprintf(lcdMsg.printMsg.msg, "BLANCAS GANAN");
+//			osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 1, 0);
+			modo = Win;
+		}
+	}
 	//osThreadFlagsSet(tid_Thread_Principal, ACTUALIZAR_HORA);
 }
 
@@ -154,317 +148,279 @@ ECasilla movedCasilla;
 uint8_t movedId;
 AJD_CasillaPtr tPromo;
 
- while(true){
+	while(true){
 
-   flagPause = osThreadFlagsWait(FLAG_PAUSE | FLAG_STOP | FLAG_FINALIZAR, osFlagsWaitAny, 50U);
-      if(flagPause == FLAG_PAUSE){
-         modot = modo;
-         modo = Pause;
+		flagPause = osThreadFlagsWait(FLAG_PAUSE | FLAG_STOP | FLAG_FINALIZAR, osFlagsWaitAny, 50U);
+			if(flagPause == FLAG_PAUSE){
+				modot = modo;
+				modo = Pause;
 			}
       else if(flagPause == FLAG_STOP){
-          modo = Stop;
+				modo = Stop;
       }
       else if(flagPause == FLAG_FINALIZAR){
-          modo = Win;
+				modo = Win;
       }
       else if (flagPause == FLAG_FINALIZAR) {
         modo = Win;
       }
 
-   switch(modo){
-      case Init:
-        printf("ESTAMOS EN MODO: INIT\n");
-         flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
-         printf("RECIBIDO FLAG\n");
-         map = malloc(64*sizeof(uint8_t));
-       //memset(map, 0xFF, 64*sizeof(uint8_t));
-         //e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
-         //e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
-         //e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
-        //  e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
-        //  e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
-         memset(predict,0,8*8*sizeof(uint8_t));
-         memset(&estado_juego, 0, sizeof(AJD_Estado));
-         memset(&lcdMsg, 0, sizeof(lcdMessage_t));
-         inicializa(&tablero);
-         lcdMsg.mode = PRINT_NORMAL;
-         ledMsg.nuevaJugada  = false;
-         tiempoBlancasMinStr = malloc(2*sizeof(char));
-         tiempoNegrasMinStr  = malloc(2*sizeof(char));
-         tiempoBlancasSegStr = malloc(2*sizeof(char));
-         tiempoNegrasSegStr  = malloc(2*sizeof(char));
-         modo = Espera;
-      break;
+		switch(modo){
+			case Init:
+				printf("ESTAMOS EN MODO: INIT\n");
+				flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
+				printf("RECIBIDO FLAG\n");
+			
+				map = malloc(64*sizeof(uint8_t));
+				//memset(map, 0xFF, 64*sizeof(uint8_t));
+				//e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
+				//e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
+				//e_PiezaLevantada = osMessageQueueNew(5, sizeof(uint8_t), NULL);
+				//e_juegoTxMessageId = osMessageQueueNew(5, sizeof(uint64_t), NULL);
+				//e_juegoRxMessageId = osMessageQueueNew(32, sizeof(uint8_t), NULL);
+				memset(predict,0,8*8*sizeof(uint8_t));
+				memset(&estado_juego, 0, sizeof(AJD_Estado));
+				inicializa(&tablero);
+			
+				ledMsg.nuevaJugada  = false;
+				tiempoBlancasMinStr = malloc(2*sizeof(char));
+				tiempoNegrasMinStr  = malloc(2*sizeof(char));
+				tiempoBlancasSegStr = malloc(2*sizeof(char));
+				tiempoNegrasSegStr  = malloc(2*sizeof(char));
+				modo = Espera;
+			break;
+			
       case Espera:
-        printf("ESTAMOS EN MODO: ESPERA\n");
-         if(flag == FLAG_RETOCAR){
-            //Flagset Placeholder
-//            status = osMessageQueueGet(e_memoriaTxMessageId, &paq, NULL, osWaitForever); //place holder for the consult of positions
-//            memcpy(map, paq.dato, 64 * sizeof(uint8_t));
-//            estado_juego.juegan_blancas = paq.turno_victoria;
-//            memcpy(tiempoBlancasMinStr, paq.tiempoBlancas, 2*sizeof(char));
-//            memcpy(tiempoNegrasMinStr, paq.tiempoNegras, 2*sizeof(char));
-//            memcpy(tiempoBlancasSegStr, paq.tiempoBlancas+2, 2*sizeof(char));
-//            memcpy(tiempoNegrasSegStr, paq.tiempoNegras+2, 2*sizeof(char));
-//            estado_juego.segundos_blancas = atoi(tiempoBlancasMinStr)*60 + atoi(tiempoBlancasSegStr);
-//            estado_juego.segundos_negras = atoi(tiempoNegrasMinStr)*60 + atoi(tiempoNegrasSegStr);
-//            free(tiempoBlancasMinStr);
-//            free(tiempoNegrasMinStr);
-//            free(tiempoBlancasSegStr);
-//            free(tiempoNegrasSegStr);
-            
+				printf("ESTAMOS EN MODO: ESPERA\n");
+				if(flag == FLAG_RETOCAR){
+				// ¿NO DEBERÍAMOS AÑADIR AQUÍ ALGO SIMILAR A CUANDO LLEGA EL START?, SINO ES INÚTIL EL FLAG
              
-         }else if(flag == FLAG_START){
-            
-            newGameMap();
-            nuevoJuego(&tablero);
-            estado_juego.juegan_blancas = 1;
-         }
-         firstRound = 1;
-         modo = Lectura;
-      break;
+				}else if(flag == FLAG_START){
+					newGameMap();
+					nuevoJuego(&tablero);
+					estado_juego.juegan_blancas = 1;
+				}
+				firstRound = 1;
+				modo = Lectura;
+			break;
+				
       case Lectura:
+				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
         printf("ESTAMOS EN MODO: LECTURA\n");
-         _colocaPiezas(&tablero, map);
-         modo = Idle;
-         break;
+        _colocaPiezas(&tablero, map);
+        modo = Idle;
+				break;
+			
       case Idle:
         printf("ESTAMOS EN MODO: IDLE\n");
-         if(!firstRound){
-            estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
-            estado_juego.casilla_seleccionada = NO_SELECCION;
-            // ledMsg.nuevaJugada = true;
-            memset(predict, 0, 64*sizeof(uint8_t));
-            // osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-          } else {
-            osTimerStart(tick_segundos, 1000);
-            firstRound = 0;
-         }
-       //setTurnoActual(estado_juego.turno_blancas == 1);
-         modo = LevantaPieza;
-         break;
+				if(!firstRound){
+					estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
+					estado_juego.casilla_seleccionada = NO_SELECCION;
+					// ledMsg.nuevaJugada = true;
+					memset(predict, 0, 64*sizeof(uint8_t));
+					// osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+				} else {
+					osTimerStart(tick_segundos, 1000);
+					firstRound = 0;
+				}
+				//setTurnoActual(estado_juego.turno_blancas == 1);
+				modo = LevantaPieza;
+			break;
+				
       case LevantaPieza:
-        printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
-         //esperaPausaDetener();
-         status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
-         if(status == osOK && !movedCasilla.ocupada){
-            movedId = convertNum(movedCasilla.casilla);
-            estado_juego.casilla_origen = &(tablero.casilla[movedId]);
-            estado_juego.casilla_seleccionada = ORIGEN_SELECCIONADO;
+				printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
+				//esperaPausaDetener();
+				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
+				status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
+				if(status == osOK && !movedCasilla.ocupada){
+					movedId = convertNum(movedCasilla.casilla);
+					estado_juego.casilla_origen = &(tablero.casilla[movedId]);
+					estado_juego.casilla_seleccionada = ORIGEN_SELECCIONADO;
             
-            // movInfo.srcY = movedId/8;
-            // movInfo.srcX = movedId%8;
-            // movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
-           printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
-            if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
-               predictPosition(&tablero, estado_juego.casilla_origen, predict);
-
-               ledMsg.tipoJugada = ACTUAL;
-               ledMsg.nuevaJugada = true;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-               ledMsg.tipoJugada = ACTUAL;
-               ledMsg.posicion = movedCasilla.casilla;
-               ledMsg.nuevaJugada = false;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-               //predict_64b = 0;
-               for(int i=0; i<64; i++){
-                  if (predict[i] == 1) {
-                     //predict_64b |= (1ULL << i);
-                     if(tablero.casilla[i].pieza == NONE){
-                        ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
-                        ledMsg.posicion = convertNum(i);
-                        ledMsg.nuevaJugada = false;
-                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-                     }else if(tablero.casilla[i].color_pieza != estado_juego.juegan_blancas){
-                        ledMsg.tipoJugada = CAPTURA;
-                        ledMsg.posicion = convertNum(i);
-                        ledMsg.nuevaJugada = false;
-                        osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-                     }
-                     
-                  }
-               } 
-               //status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
-               //if(status == osOK){
-               modo = CompMov;
-            }else{
-               printf("[Error] Movimiento de pieza invalido: origen\n");
-               ledMsg.tipoJugada = ACTUAL;
-               ledMsg.nuevaJugada = true;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-               ledMsg.nuevaJugada = false;
-               ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
-               ledMsg.posicion = movedCasilla.casilla;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            }
-         }
-         //}
-      break;
-      case CompMov:
-        printf("ESTAMOS EN MODO: COMPMOV\n");
-         status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
-         if(status == osOK && movedCasilla.ocupada){
-            //ledMsg.nuevaJugada = true;
-            //osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            movedId = convertNum(movedCasilla.casilla);
-            estado_juego.casilla_destino = &(tablero.casilla[movedId]);
-            estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
-            if(estado_juego.casilla_origen == estado_juego.casilla_destino){
-               ledMsg.nuevaJugada = true;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-              modo = LevantaPieza;
-               break;
-            }else if(esMovimientoValido(&tablero, &estado_juego)){
-               if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
-                  modo = Win;
-                  if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
-                  else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
-                  modo = Win;
-                 continue;
-               }
-               
-               if(peonUltimaFila(&tablero, &estado_juego)){
-						tPromo = estado_juego.casilla_destino;
-						muevePieza(&tablero, &estado_juego);
-                  promocionaPeon(&tablero, tPromo);
-               }else{
-						muevePieza(&tablero, &estado_juego);
+					// movInfo.srcY = movedId/8;
+					// movInfo.srcX = movedId%8;
+					// movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
+					printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
+					if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
+						predictPosition(&tablero, estado_juego.casilla_origen, predict);
+						
+						ledMsg.tipoJugada = ACTUAL;
+						ledMsg.nuevaJugada = true;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						ledMsg.tipoJugada = ACTUAL;
+						ledMsg.posicion = movedCasilla.casilla;
+						ledMsg.nuevaJugada = false;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						
+            //predict_64b = 0;
+						for(int i=0; i<64; i++){
+							if (predict[i] == 1) {
+								//predict_64b |= (1ULL << i);
+								if(tablero.casilla[i].pieza == NONE){
+									ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
+									ledMsg.posicion = convertNum(i);
+									ledMsg.nuevaJugada = false;
+									osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+								}else if(tablero.casilla[i].color_pieza != estado_juego.juegan_blancas){
+									ledMsg.tipoJugada = CAPTURA;
+									ledMsg.posicion = convertNum(i);
+									ledMsg.nuevaJugada = false;
+									osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+								}
+							}
+						} 
+						//status = osMessageQueuePut(e_juegoTxMessageId, &predict_64b, 1, 0);
+						//if(status == osOK){
+						modo = CompMov;
+					}else{
+						printf("[Error] Movimiento de pieza invalido: origen\n");
+						ledMsg.tipoJugada = ACTUAL;
+						ledMsg.nuevaJugada = true;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						ledMsg.nuevaJugada = false;
+						ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
+						ledMsg.posicion = movedCasilla.casilla;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
 					}
-               ledMsg.nuevaJugada = true;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-               checkJaque(&tablero);
-               
-               if(estado_juego.blanco_jaque == 1){
-                  printf(" [Test] Jaque al blanco\n");
-                  estado_juego.blanco_jaque = 0;
-
-               }else if(estado_juego.negro_jaque == 1){
-                 printf(" [Test] Jaque al negro\n");
-                  estado_juego.negro_jaque = 0;
-               } else {
-                printf("Esperando flag distancia\n");
-                osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
-                printf("Recibido flag distancia\n");
-                
-                ComPlacasMsg_t msg = {
-                  .remitente = MENSAJE_JUEGO,
-                  .destinatario = MENSAJE_DISTANCIA,
-                  .mensaje[0] = 0x04U
-                };
-                osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
-                
-                
-                ledMsg.tipoJugada = ACK;
-                osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-               }
-               
-
-            }else{
-               //status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
-               printf("[Error] Movimiento de pieza invalido: destino\n");
-               ledMsg.nuevaJugada = false;
-               ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
-               ledMsg.posicion = movedCasilla.casilla;
-               osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            }
-            
-            //flag = osThreadFlagsWait(FLAG_TURN, osFlagsWaitAny, 200);
-            //modo = flag == FLAG_TURN ? Idle : modo;
-            modo = Idle;
-            // movInfo.dstY = movedId/8;
-            // movInfo.dstX = movedId%8;
-            // movInfo.destino = &(tablero->casillas[movInfo.dstY*8+movInfo.dstX]);
-         }
-      break;
+				}
+			break;
+				
+      case CompMov:
+				printf("ESTAMOS EN MODO: COMPMOV\n");
+				status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
+				if(status == osOK && movedCasilla.ocupada){
+					//ledMsg.nuevaJugada = true;
+					//osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+					movedId = convertNum(movedCasilla.casilla);
+					estado_juego.casilla_destino = &(tablero.casilla[movedId]);
+					estado_juego.casilla_seleccionada = DESTINO_SELECCIONADO;
+					if(estado_juego.casilla_origen == estado_juego.casilla_destino){
+						ledMsg.nuevaJugada = true;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						modo = LevantaPieza;
+						break;
+						
+					}else if(esMovimientoValido(&tablero, &estado_juego)){
+						if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
+							modo = Win;
+							if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
+							else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+							modo = Win;
+							continue;
+						} 
+						if(peonUltimaFila(&tablero, &estado_juego)){
+							tPromo = estado_juego.casilla_destino;
+							muevePieza(&tablero, &estado_juego);
+							promocionaPeon(&tablero, tPromo);
+						}else{
+							muevePieza(&tablero, &estado_juego);
+						}
+						
+						ledMsg.nuevaJugada = true;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						checkJaque(&tablero);
+						
+						if(estado_juego.blanco_jaque == 1){
+							printf(" [Test] Jaque al blanco\n");
+							estado_juego.blanco_jaque = 0;
+							
+						}else if(estado_juego.negro_jaque == 1){
+							printf(" [Test] Jaque al negro\n");
+							estado_juego.negro_jaque = 0;
+							
+						} else {
+							printf("Esperando flag distancia\n");
+							osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
+							printf("Recibido flag distancia\n");
+							
+							ComPlacasMsg_t msg = {
+								.remitente = MENSAJE_JUEGO,
+								.destinatario = MENSAJE_DISTANCIA,
+								.mensaje[0] = 0x04U
+							};
+							osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
+							
+							ledMsg.tipoJugada = ACK;
+							osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+						}
+					}else{
+						//status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
+						printf("[Error] Movimiento de pieza invalido: destino\n");
+						ledMsg.nuevaJugada = false;
+						ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
+						ledMsg.posicion = movedCasilla.casilla;
+						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+					}
+					//flag = osThreadFlagsWait(FLAG_TURN, osFlagsWaitAny, 200);
+					//modo = flag == FLAG_TURN ? Idle : modo;
+					osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
+					modo = Idle;
+					// movInfo.dstY = movedId/8;
+					// movInfo.dstX = movedId%8;
+					// movInfo.destino = &(tablero->casillas[movInfo.dstY*8+movInfo.dstX]);
+				}
+			break;
+				
       case Pause:
-        printf("ESTAMOS EN MODO: PAUSE\n");
-			osTimerStop(tick_segundos);
-         flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
-         if (flag == FLAG_RESUME){
-            modo = modot;
-            modot = 0;
-					 osTimerStart(tick_segundos, 1000);
-         }
+				printf("ESTAMOS EN MODO: PAUSE\n");
+				osTimerStop(tick_segundos);
+				flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
+				if (flag == FLAG_RESUME){
+					modo = modot;
+					modot = 0;
+					osTimerStart(tick_segundos, 1000);
+				}
       break;
+				
       case Stop:
+				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
         printf("ESTAMOS EN MODO: STOP\n");
-			osTimerStop(tick_segundos);
-      // const char* mapa_prueba = GetMap();
-//         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
-//         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-//         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
-//         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
-//         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
-//         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
-//         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
-//         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
-//         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
-//         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
-//         paqIn.turno_victoria = estado_juego.juegan_blancas;
-//         paqIn.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
-//         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
-         modo = Init;
+				osTimerStop(tick_segundos);
+        modo = Init;
       break;
+			
       case Win:
-        printf("ESTAMOS EN MODO: WIN\n");
-         osTimerStop(tick_segundos);
-//         memset(&paqIn, 0, sizeof(MemoriaMsg_t));
-//         for(int i = 0; i < 64; i++) paqIn.dato[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-//         paqIn.tiempoBlancas[0] = (estado_juego.segundos_blancas/60)/10 + '\0';
-//         paqIn.tiempoBlancas[1] = (estado_juego.segundos_blancas/60)%10 + '\0';
-//         paqIn.tiempoBlancas[2] = (estado_juego.segundos_blancas%60)/10 + '\0';
-//         paqIn.tiempoBlancas[3] = (estado_juego.segundos_blancas%60)%10 + '\0';
-//         paqIn.tiempoNegras[0] = (estado_juego.segundos_negras/60)/10 + '\0';
-//         paqIn.tiempoNegras[1] = (estado_juego.segundos_negras/60)%10 + '\0';
-//         paqIn.tiempoNegras[2] = (estado_juego.segundos_negras%60)/10 + '\0';
-//         paqIn.tiempoNegras[3] = (estado_juego.segundos_negras%60)%10 + '\0';
-//         paqIn.turno_victoria = estado_juego.juegan_blancas;
-//         paqIn.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
-//         status = osMessageQueuePut(e_memoriaRxMessageId, &paqIn, 1, 0);
-      
-         ledMsg.tipoJugada = NACK;
-         osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-         modo = Init;
-         //osThreadFlagsSet(e_serverThreadId, FLAG_WIN);
-      break;
-   }
- }
+				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
+				printf("ESTAMOS EN MODO: WIN\n");
+				osTimerStop(tick_segundos);
+				ledMsg.tipoJugada = NACK;
+				osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
+				modo = Init;
+				//osThreadFlagsSet(e_serverThreadId, FLAG_WIN);
+			break;
+		}
+	}
  //osThreadYield();
 }
 
 void setMap(const uint8_t* mapIn, size_t len) {
-    if (len > 64) 
-    {
-      len = 64;
-    }
-    osMutexAcquire(mapMutex, osWaitForever);
-    memcpy(map, mapIn, len);
-    for (int i = 0; i < 64; i++)
-    {
-      if (mapIn[i] == EMPTY)
-      {
-        tablero.casilla[i].pieza = NONE;
-        tablero.casilla[i].color_pieza = BLANCO;
-      }
-      else
-      {
-        tablero.casilla[i].pieza = (mapIn[i] & 0x0F) + 1;
-        tablero.casilla[i].color_pieza = (mapIn[i] & 0x10) >> 4;
-      }
-      printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
-             tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "blanca" : "negra");
-      osDelay(5);
-    }
-    osMutexRelease(mapMutex);
+	if (len > 64) len = 64;
+
+	osMutexAcquire(mapMutex, osWaitForever);
+	memcpy(map, mapIn, len);
+
+	for (int i = 0; i < 64; i++){
+		if (mapIn[i] == EMPTY) {
+			tablero.casilla[i].pieza = NONE;
+			tablero.casilla[i].color_pieza = BLANCO;
+		} else {
+			tablero.casilla[i].pieza = (mapIn[i] & 0x0F) + 1;
+			tablero.casilla[i].color_pieza = (mapIn[i] & 0x10) >> 4;
+		}
+		printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
+		tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "blanca" : "negra");
+		osDelay(5);
+	}
+	osMutexRelease(mapMutex);
 }
 
 void getMap(uint8_t* mapOut, size_t len) {
-  uint8_t map[64];
+	uint8_t map[64];
+	if (len > 64) len = 64;
 
   osMutexAcquire(mapMutex, osWaitForever);
-  if (len > 64) len = 64;
   for (int i = 0; i < 64; i++) {
-    map[i] = ((uint8_t)tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+		map[i] = ((uint8_t)tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
     printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "blanca" : "negra");
     osDelay(5);
   }
@@ -491,7 +447,6 @@ uint8_t GetMinutosNegras(void)
 {
   uint8_t minutosnegras = (uint8_t)(estado_juego.segundos_negras/60);
   printf("segundos bien negras: %d\n", estado_juego.segundos_negras);
-
   printf("MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
   return (uint8_t)(estado_juego.segundos_negras/60);
 }
@@ -522,8 +477,6 @@ void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
   estado_juego.segundos_blancas = minutos * 60 + segundos;
   printf("TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
   printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
-
-
 }
 
 void setTiempoNegras(uint8_t minutos, uint8_t segundos)
@@ -543,37 +496,31 @@ void setTiempoNegras(uint8_t minutos, uint8_t segundos)
 //      casilla inferior derecha es de color blanco
 //
 void checkJaque(AJD_TableroPtr tablero){
-   uint8_t vCaballo[2] = {1, 2};
-   uint8_t vVertHorz[2] = {0, 1};
-   uint8_t vDiag[2] = {1, 1}; 
-   int8_t cz[8] = {+1, +1, +1, -1, -1, +1, -1, -1};
-   AJD_CasillaPtr rey = NULL;
-   //AJD_CasillaPtr reyN = NULL;
+	uint8_t vCaballo[2] = {1, 2};
+	uint8_t vVertHorz[2] = {0, 1};
+	uint8_t vDiag[2] = {1, 1}; 
+	int8_t cz[8] = {+1, +1, +1, -1, -1, +1, -1, -1};
+	AJD_CasillaPtr rey = NULL;
+	//AJD_CasillaPtr reyN = NULL;
 
-   uint8_t id;
-   uint8_t x;
-   uint8_t y;
-   
-   // Localiza el rey
-   for (int i=0; i<64; i++) 
-   {
-     if (tablero->casilla[i].pieza == REY && tablero->casilla[i].color_pieza == !estado_juego.juegan_blancas) 
-     {
-         rey = &(tablero->casilla[i]);
-         break;
-     }
-   }
-   
-   // if(rey == NULL){
-   //   estado_juego.negro_jaque = 0;
-   //   estado_juego.blanco_jaque = 0;
-   //   return;
-   // }
+	uint8_t id;
+	uint8_t x;
+	uint8_t y;
 
-   estado_juego.negro_jaque = estado_juego.juegan_blancas == BLANCO ? amenazaRey(rey, tablero) : 0;
-   estado_juego.blanco_jaque = estado_juego.juegan_blancas == NEGRO ? amenazaRey(rey, tablero) : 0;
-
-
+	// Localiza el rey
+	for (int i=0; i<64; i++) {
+		if (tablero->casilla[i].pieza == REY && tablero->casilla[i].color_pieza == !estado_juego.juegan_blancas) {
+			rey = &(tablero->casilla[i]);
+			break;
+		}
+	}
+	// if(rey == NULL){
+	//   estado_juego.negro_jaque = 0;
+	//   estado_juego.blanco_jaque = 0;
+	//   return;
+	// }
+	estado_juego.negro_jaque = estado_juego.juegan_blancas == BLANCO ? amenazaRey(rey, tablero) : 0;
+	estado_juego.blanco_jaque = estado_juego.juegan_blancas == NEGRO ? amenazaRey(rey, tablero) : 0;
 }
 
 bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero)
