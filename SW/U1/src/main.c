@@ -116,7 +116,7 @@ int main(void)
 	//LED_Initialize();
 	//LCD_Initialize();
 	//MemoriaInitialize();
-  //LedStripManagerInitialize();
+  LedStripManagerInitialize();
 	PositionManagerInitialize();
 	//ComunicacionPlacasInitialize();
   //PrincipalInitialize();
