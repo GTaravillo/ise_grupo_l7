@@ -33,6 +33,8 @@
 	#define WHITE	0X10
 	#define BLACK	0X00
 
+  #define EMPTY 0xFF
+
 	#define FLAG_ERROR_MOV 0X02
 	#define FLAG_SENSOR_DISTANCIA 0X20
 

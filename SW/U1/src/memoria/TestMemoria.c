@@ -7,6 +7,7 @@
 #include "../config/Paths.h"
 #include PATH_COMMON
 #include PATH_TABLERO
+#include PATH_JUEGO
 
 // Poner a 1 para realizar test
 #define TEST_RETOMAR_PARTIDA_1 1
@@ -37,70 +38,70 @@ static const uint8_t tiempoBlancas2[TAM_TIEMPO_JUGADOR] = "03:49";
 static const uint8_t tiempoNegras1[TAM_TIEMPO_JUGADOR] = "12:34";
 static const uint8_t tiempoNegras2[TAM_TIEMPO_JUGADOR] = "43:21";
 
-static const uint8_t tablero1[TAM_DATOS] = {BLANCO | TORRE1, 		
-																						BLANCO | CABALLO1,
-																						BLANCO | ALFIL1,
-																						BLANCO | DAMA,
-																						BLANCO | REY,
-																						BLANCO | ALFIL2,
-																						BLANCO | CABALLO2,
-																						BLANCO | TORRE2,
-																						BLANCO | PEON8,
-																						BLANCO | PEON7,
-																						BLANCO | PEON6,
-																						BLANCO | PEON5,
-																						BLANCO | PEON4,
-																						BLANCO | PEON3,
-																						BLANCO | PEON2,
-																						BLANCO | PEON1,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NONE,
-																						NEGRO | PEON1,
-																						NEGRO | PEON2,
-																						NEGRO | PEON3,
-																						NEGRO | PEON4,
-																						NEGRO | PEON5,
-																						NEGRO | PEON6,
-																						NEGRO | PEON7,
-																						NEGRO | PEON8,
-																						NEGRO | TORRE2,
-																						NEGRO | CABALLO2,
-																						NEGRO | ALFIL2,
-																						NEGRO | REY,
-																						NEGRO | DAMA,
-																						NEGRO | ALFIL1,
-																						NEGRO | CABALLO1,
-																						NEGRO | TORRE1 };
+static const uint8_t tablero1[TAM_DATOS] = {BLANCO | (TORRE1 - 1), 		
+																						BLANCO | (CABALLO1 - 1),
+																						BLANCO | (ALFIL1 - 1),
+																						BLANCO | (DAMA - 1),
+																						BLANCO | (REY - 1),
+																						BLANCO | (ALFIL2 - 1),
+																						BLANCO | (CABALLO2 - 1),
+																						BLANCO | (TORRE2 - 1),
+																						BLANCO | (PEON8 - 1),
+																						BLANCO | (PEON7 - 1),
+																						BLANCO | (PEON6 - 1),
+																						BLANCO | (PEON5 - 1),
+																						BLANCO | (PEON4 - 1),
+																						BLANCO | (PEON3 - 1),
+																						BLANCO | (PEON2 - 1),
+																						BLANCO | (PEON1 - 1),
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NONE - 1,
+																						NEGRO | (PEON1 - 1),
+																						NEGRO | (PEON2 - 1),
+																						NEGRO | (PEON3 - 1),
+																						NEGRO | (PEON4 - 1),
+																						NEGRO | (PEON5 - 1),
+																						NEGRO | (PEON6 - 1),
+																						NEGRO | (PEON7 - 1),
+																						NEGRO | (PEON8 - 1),
+																						NEGRO | (TORRE2 - 1),
+																						NEGRO | (CABALLO2 - 1),
+																						NEGRO | (ALFIL2 - 1),
+																						NEGRO | (REY - 1),
+																						NEGRO | (DAMA - 1),
+																						NEGRO | (ALFIL1 - 1),
+																						NEGRO | (CABALLO1 - 1),
+																						NEGRO | (TORRE1 - 1) };
 
 static const uint8_t tablero2[TAM_DATOS] = {NONE,
 																						NONE,
@@ -173,6 +174,7 @@ static void TestGuardarPartidaFinalizada(int numTest);
 static void TestRetomarUltimaPartida();
 static void TestLimpiarMemoria();
 static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx);
+static bool ConfirmarDatosJuego(MemoriaMsg_t mensajeRx);
 
 void TestMemoriaInitialize(void)
 {
@@ -198,7 +200,11 @@ static void Run(void *argument)
 		flag = osThreadFlagsWait(FLAG_READY, osFlagsWaitAll, osWaitForever);
 		TestRetomarUltimaPartida();
     status = osMessageQueueGet(e_memoriaTxMessageId, &mensajeRx, NULL, osWaitForever);
-    ConfirmarDatosRecibidos(1, mensajeRx);
+    if (ConfirmarDatosRecibidos(1, mensajeRx))
+    {
+      // Test con juego
+      ConfirmarDatosJuego(mensajeRx);
+    }
   #endif
   osDelay(1000);
   memset(&mensajeRx, 0, sizeof(mensajeRx));
@@ -208,7 +214,11 @@ static void Run(void *argument)
 		flag = osThreadFlagsWait(FLAG_READY, osFlagsWaitAll, osWaitForever);
 		TestRetomarUltimaPartida();
     status = osMessageQueueGet(e_memoriaTxMessageId, &mensajeRx, NULL, osWaitForever);
-    ConfirmarDatosRecibidos(2, mensajeRx);
+    if (ConfirmarDatosRecibidos(2, mensajeRx))
+    {
+      // Test con juego
+      ConfirmarDatosJuego(mensajeRx);
+    }
   #endif
 
 	#if TEST_GUARDAR_PARTIDA_FINALIZADA_1 == 1
@@ -395,6 +405,56 @@ static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
     default:
     break;
   }
+
+  printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
+          __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
+  return turnoCorrecto && tiempoBlancasCorrecto && tiempoNegrasCorrecto && datoCorrecto;
+}
+
+static bool ConfirmarDatosJuego(MemoriaMsg_t mensajeRx)
+{
+  printf("[TestMemoria::%s] Seteo datos en el juego:\n", __func__);
+
+  printf("[TestMemoria::%s] Seteo Tiempo Blancas: [%s]\n", __func__, mensajeRx.tiempoBlancas);
+  int minutos, segundos;
+
+  sscanf((const char*)mensajeRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
+  printf("[TestMemoria::%s] Minutos Blancas[%d] Segundos Blancas[%d]\n", __func__, minutos, segundos);
+  setTiempoBlancas(minutos, segundos);
+
+  sscanf((const char*)mensajeRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
+  printf("[TestMemoria::%s] Minutos Negras[%d] Segundos Negras[%d]\n", __func__, minutos, segundos);
+  setTiempoNegras(minutos, segundos);
+
+  printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, mensajeRx.turno_victoria);
+  SetTurno(mensajeRx.turno_victoria);
+
+  printf("[TestMemoria::%s] Seteo mapa\n", __func__);
+  setMap(mensajeRx.dato, TAM_DATOS);
+
+  osDelay(1000);
+
+  printf("[TestMemoria::%s] Obtengo datos del juego:\n", __func__);
+
+  char tiempoBlancas[TAM_TIEMPO_JUGADOR + 1];
+  snprintf(tiempoBlancas, sizeof(tiempoBlancas), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
+  printf("[TestMemoria::%s] Tiempo Blancas [%s]\n", __func__, tiempoBlancas);
+
+  char tiempoNegras[TAM_TIEMPO_JUGADOR + 1];
+  snprintf(tiempoNegras, sizeof(tiempoNegras), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
+  printf("[TestMemoria::%s] Tiempo Negras [%s]\n", __func__, tiempoNegras);
+
+  bool turnoBlancas = GetTurno();
+  printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, turnoBlancas);
+
+  uint8_t mapa[64];
+  printf("[TestMemoria::%s] Obtengo mapa\n", __func__);
+  getMap(mapa, TAM_DATOS);
+
+  const bool turnoCorrecto         = mensajeRx.turno_victoria == turnoBlancas;
+  const bool tiempoBlancasCorrecto = memcmp(mensajeRx.tiempoBlancas, tiempoBlancas, TAM_TIEMPO_JUGADOR) == 0;
+  const bool tiempoNegrasCorrecto  = memcmp(mensajeRx.tiempoNegras, tiempoNegras, TAM_TIEMPO_JUGADOR) == 0;
+  const bool datoCorrecto          = memcmp(mensajeRx.dato, mapa, TAM_DATOS) == 0;
 
   printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
           __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);

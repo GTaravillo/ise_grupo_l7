@@ -108,6 +108,10 @@ static uint32_t RellenarVariablesTopBar(const char *env, char *buf, uint32_t buf
 static uint32_t RellenarVariablesNuevaPartida(const char *env, char *buf, uint32_t buflen);
 static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint32_t buflen);
 static uint32_t RellenarVariablesHistorico(const char *env, char *buf, uint32_t buflen);
+static void ProcesarIniciarPartida(void);
+static void ProcesarSuspenderPartida(void);
+static void ProcesarRetomarPartida(void);
+static void ProcesarFinalizarPartida(void);
 static void Error_Handler(void);
 
 
@@ -322,9 +326,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
          __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado, btnReanudarPulsado);
   if (btnIniciarPulsado)
   {
-		setTiempoBlancas(minutosBlancas, 0);
-		setTiempoNegras(minutosNegras, 0);
-    osThreadFlagsSet(e_juegoThreadId, FLAG_START); 
+    ProcesarIniciarPartida();
   }
   else if (btnPausarPulsado)
   {
@@ -332,73 +334,15 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   }
   else if (btnSuspenderPulsado)
   {
-    char tiempo[TAM_TIEMPO_JUGADOR + 1];
-    MemoriaMsg_t msgTx = {0};
-    msgTx.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
-    
-    strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
-    strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
-    strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
-    strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
-    msgTx.turno_victoria = GetTurno() ? 0 : 1;
-    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
-    strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
-    memset(&tiempo, 0, TAM_TIEMPO_JUGADOR);
-    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
-    strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
-    getMap(msgTx.dato, TAM_DATOS);
-
-    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
-    
-    osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+    ProcesarSuspenderPartida();
   }
   else if (btnRendirsePulsado)
   {
-    MemoriaMsg_t msgTx = {0};
-
-    msgTx.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
-
-    strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
-    strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
-    strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
-    strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
-    msgTx.turno_victoria = GetTurno() ? 0 : 1;
-    char tiempo[TAM_TIEMPO_JUGADOR + 1];
-    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
-    strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
-
-    snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
-    strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
-    
-    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
-
-    osThreadFlagsSet(e_juegoThreadId, FLAG_FINALIZAR);
+    ProcesarFinalizarPartida();
   }
   else if (btnReanudarPulsado)
   {
-    MemoriaMsg_t msgTx = {
-      .tipoPeticion = RETOMAR_ULTIMA_PARTIDA,
-    };
-
-    osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
-
-    MemoriaMsg_t msgRx = {0};
-    osMessageQueueGet(e_memoriaTxMessageId, &msgRx, NULL, osWaitForever);
-
-    if (msgRx.tipoPeticion == ERROR_SIN_DATOS)
-    {
-      printf("[servidor::%s] ERROR!\n", __func__);
-      return;
-    }
-    int minutos = 0, segundos = 0;
-    sscanf((const char*)msgRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
-    setTiempoBlancas(minutos, segundos);
-    sscanf((const char*)msgRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
-    setTiempoNegras(minutos, segundos);
-    SetTurno(msgRx.turno_victoria);
-    setMap(msgRx.dato, TAM_DATOS);
-
-    osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+    ProcesarRetomarPartida();
   }
 }
 
@@ -684,6 +628,98 @@ static uint32_t RellenarVariablesHistorico(const char *env, char *buf, uint32_t 
   uint32_t len = 0;
   
   return len;
+}
+
+static void ProcesarIniciarPartida(void)
+{
+  setTiempoBlancas(minutosBlancas, 0);
+  setTiempoNegras(minutosNegras, 0);
+  osThreadFlagsSet(e_juegoThreadId, FLAG_START);
+}
+
+static void ProcesarSuspenderPartida(void)
+{
+  MemoriaMsg_t msgTx = {0};
+
+  msgTx.tipoPeticion = GUARDAR_PARTIDA_SIN_FINALIZAR;
+
+  strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
+  strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
+
+  strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
+  strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
+
+  msgTx.turno_victoria = GetTurno();
+
+  char tiempo[TAM_TIEMPO_JUGADOR + 1];
+  snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
+  strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
+
+  memset(&tiempo, 0, TAM_TIEMPO_JUGADOR);
+
+  snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
+  strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
+
+  getMap(msgTx.dato, TAM_DATOS);
+
+  osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+  osThreadFlagsSet(e_juegoThreadId, FLAG_STOP);
+}
+
+static void ProcesarRetomarPartida(void)
+{
+  MemoriaMsg_t msgTx = {
+    .tipoPeticion = RETOMAR_ULTIMA_PARTIDA,
+  };
+
+  osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+
+  MemoriaMsg_t msgRx = {0};
+  osMessageQueueGet(e_memoriaTxMessageId, &msgRx, NULL, osWaitForever);
+
+  if (msgRx.tipoPeticion == ERROR_SIN_DATOS)
+  {
+    printf("[servidor::%s] ERROR!\n", __func__);
+    return;
+  }
+
+  int minutos = 0, segundos = 0;
+  sscanf((const char*)msgRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
+  setTiempoBlancas(minutos, segundos);
+  sscanf((const char*)msgRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
+  setTiempoNegras(minutos, segundos);
+  SetTurno(msgRx.turno_victoria);
+  setMap(msgRx.dato, TAM_DATOS);
+
+  osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);
+}
+
+static void ProcesarFinalizarPartida(void)
+{
+  MemoriaMsg_t msgTx = {0};
+
+  msgTx.tipoPeticion = GUARDAR_PARTIDA_FINALIZADA;
+
+  strncpy((char*)msgTx.fechaPartida, GetRtcDate(), TAM_FECHA);
+  strncpy((char*)msgTx.horaPartida, GetRtcTime(), TAM_HORA);
+
+  strncpy((char*)msgTx.nombreBlancas, nombreBlancas, TAM_NOMBRE_JUGADOR);
+  strncpy((char*)msgTx.nombreNegras, nombreNegras, TAM_NOMBRE_JUGADOR);
+
+  msgTx.turno_victoria = GetTurno() ? 0 : 1;  // Gana el contrario
+
+  char tiempo[TAM_TIEMPO_JUGADOR + 1];
+  snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
+  strncpy((char*)msgTx.tiempoBlancas, tiempo, TAM_TIEMPO_JUGADOR);
+
+  memset(&tiempo, 0, TAM_TIEMPO_JUGADOR);
+
+  snprintf(tiempo, sizeof(tiempo), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
+  strncpy((char*)msgTx.tiempoNegras, tiempo, TAM_TIEMPO_JUGADOR);
+  
+  osMessageQueuePut(e_memoriaRxMessageId, &msgTx, 1, 0);
+
+  osThreadFlagsSet(e_juegoThreadId, FLAG_FINALIZAR);
 }
 
 static void Error_Handler(void) 

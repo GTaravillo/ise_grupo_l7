@@ -129,7 +129,7 @@ int main(void)
   //PrincipalInitialize();
   
   // Tests
-  TestMemoriaInitialize();
+  //TestMemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();

@@ -431,22 +431,42 @@ AJD_CasillaPtr tPromo;
 }
 
 void setMap(const uint8_t* mapIn, size_t len) {
-    if (len > 64) len = 64; // Prevent overflow
+    if (len > 64) 
+    {
+      len = 64;
+    }
     osMutexAcquire(mapMutex, osWaitForever);
-    memcpy(map, mapIn, len);
+    for (int i = 0; i < 64; i++)
+    {
+      if (mapIn[i] == EMPTY)
+      {
+        tablero.casilla[i].pieza = NONE;
+        tablero.casilla[i].color_pieza = NEGRO;
+      }
+      else
+      {
+        tablero.casilla[i].pieza = (mapIn[i] & 0x0F) + 1;
+        tablero.casilla[i].color_pieza = (mapIn[i] & 0x10) >> 4;
+      }
+      printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
+             tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "negra" : "blanca");
+      osDelay(5);
+    }
     osMutexRelease(mapMutex);
 }
 
 void getMap(uint8_t* mapOut, size_t len) {
-    uint8_t map[64];
-    if (len > 64) len = 64;
-    for(int i = 0; i < 64; i++) {
-      map[i] = (tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-      printf("Guarda pieza:%d %s como [%x]", tablero.casilla[i].pieza-1, tablero.casilla[i].color_pieza?"negra":"blanca", map[i]);
-    }
-    osMutexAcquire(mapMutex, osWaitForever);
-    memcpy(mapOut, map, len);
-    osMutexRelease(mapMutex);
+  uint8_t map[64];
+
+  osMutexAcquire(mapMutex, osWaitForever);
+  if (len > 64) len = 64;
+  for(int i = 0; i < 64; i++) {
+    map[i] = ((uint8_t)tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
+    printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "negra" : "blanca");
+    osDelay(5);
+  }
+  memcpy(mapOut, map, len);
+  osMutexRelease(mapMutex);
 }
 
 uint8_t GetMinutosBlancas(void)
@@ -485,8 +505,6 @@ void SetTurno(const bool turnoBlancas)
   estado_juego.juegan_blancas = turnoBlancas ? 1 : 0;
   printf("TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
   printf("TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
-
-
 }
 
 bool GetTurno(void)
