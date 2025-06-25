@@ -463,9 +463,9 @@ void getMap(uint8_t* mapOut, size_t len) {
 
   osMutexAcquire(mapMutex, osWaitForever);
   if (len > 64) len = 64;
-  for(int i = 0; i < 64; i++) {
+  for (int i = 0; i < 64; i++) {
     map[i] = ((uint8_t)tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-    printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "negra" : "blanca");
+    printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "blanca" : "negra");
     osDelay(5);
   }
   memcpy(mapOut, map, len);

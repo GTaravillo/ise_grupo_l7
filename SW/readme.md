@@ -49,8 +49,8 @@ Printf:         PB3
   
 ### Expansor GPIO - Posicion
     **I2C1**  
-    SDA:        PB8  
-    SCL:        PB9  
+    SDA:        PB9  
+    SCL:        PB8  
     INT1:       PC9
     INT2:       PF12
     INT3:       PF14

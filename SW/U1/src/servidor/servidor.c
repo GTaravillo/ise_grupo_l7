@@ -686,9 +686,12 @@ static void ProcesarRetomarPartida(void)
   int minutos = 0, segundos = 0;
   sscanf((const char*)msgRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
   setTiempoBlancas(minutos, segundos);
+
   sscanf((const char*)msgRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
   setTiempoNegras(minutos, segundos);
+
   SetTurno(msgRx.turno_victoria);
+  
   setMap(msgRx.dato, TAM_DATOS);
 
   osThreadFlagsSet(e_juegoThreadId, FLAG_RETOCAR);

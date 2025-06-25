@@ -141,7 +141,7 @@
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut>Web.c</pFcarmOut>
-          <pFcarmGrp>Server</pFcarmGrp>
+          <pFcarmGrp>server</pFcarmGrp>
           <pFcArmRoot>.\src\web</pFcArmRoot>
           <FcArmLst>0</FcArmLst>
         </Utilities>
@@ -396,117 +396,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>common</GroupName>
-          <Files>
-            <File>
-              <FileName>CommonDefines.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\common\CommonDefines.h</FilePath>
-            </File>
-            <File>
-              <FileName>CommonDefines.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\common\CommonDefines.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>main</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\main.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Server</GroupName>
-          <Files>
-            <File>
-              <FileName>Web.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>src\web\Web.c</FilePath>
-            </File>
-            <File>
-              <FileName>servidor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\servidor\servidor.c</FilePath>
-            </File>
-            <File>
-              <FileName>servidor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\servidor\servidor.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Web files</GroupName>
-          <Files>
-            <File>
-              <FileName>currentConsumo.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\currentConsumo.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>currentDate.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\currentDate.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>currentTime.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\currentTime.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>favicon.ico</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\favicon.ico</FilePath>
-            </File>
-            <File>
-              <FileName>historico.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\historico.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>index.htm</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\index.htm</FilePath>
-            </File>
-            <File>
-              <FileName>nuevaPartida.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\nuevaPartida.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>nuevaPartida.js</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\nuevaPartida.js</FilePath>
-            </File>
-            <File>
-              <FileName>retomarPartida.cgi</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\retomarPartida.cgi</FilePath>
-            </File>
-            <File>
-              <FileName>retomarPartida.js</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\retomarPartida.js</FilePath>
-            </File>
-            <File>
-              <FileName>tiempoBlancas.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\tiempoBlancas.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>tiempoNegras.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\tiempoNegras.cgx</FilePath>
-            </File>
-            <File>
-              <FileName>turno.cgx</FileName>
-              <FileType>9</FileType>
-              <FilePath>.\src\web\turno.cgx</FilePath>
             </File>
           </Files>
         </Group>
@@ -709,19 +604,114 @@
               <FilePath>.\src\juego\prediction.h</FilePath>
             </File>
             <File>
-              <FileName>principal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\juego\principal.c</FilePath>
-            </File>
-            <File>
-              <FileName>principal.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\juego\principal.h</FilePath>
-            </File>
-            <File>
               <FileName>tablero.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\juego\tablero.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>server</GroupName>
+          <Files>
+            <File>
+              <FileName>servidor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\servidor\servidor.c</FilePath>
+            </File>
+            <File>
+              <FileName>servidor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\servidor\servidor.h</FilePath>
+            </File>
+            <File>
+              <FileName>Web.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\web\Web.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Web</GroupName>
+          <Files>
+            <File>
+              <FileName>currentConsumo.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentConsumo.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>currentDate.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentDate.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>currentTime.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\currentTime.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>favicon.ico</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\favicon.ico</FilePath>
+            </File>
+            <File>
+              <FileName>historico.cgi</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\historico.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>index.htm</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\index.htm</FilePath>
+            </File>
+            <File>
+              <FileName>nuevaPartida.cgi</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\nuevaPartida.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>nuevaPartida.js</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\nuevaPartida.js</FilePath>
+            </File>
+            <File>
+              <FileName>retomarPartida.cgi</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\retomarPartida.cgi</FilePath>
+            </File>
+            <File>
+              <FileName>retomarPartida.js</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\retomarPartida.js</FilePath>
+            </File>
+            <File>
+              <FileName>tiempoBlancas.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\tiempoBlancas.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>tiempoNegras.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\tiempoNegras.cgx</FilePath>
+            </File>
+            <File>
+              <FileName>turno.cgx</FileName>
+              <FileType>9</FileType>
+              <FilePath>.\src\web\turno.cgx</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>common</GroupName>
+          <Files>
+            <File>
+              <FileName>CommonDefines.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\common\CommonDefines.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommonDefines.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\common\CommonDefines.h</FilePath>
             </File>
           </Files>
         </Group>
