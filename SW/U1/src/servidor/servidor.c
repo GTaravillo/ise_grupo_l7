@@ -103,7 +103,7 @@ static  const osThreadAttr_t g_serverAttr =
 };
 
 static void Run(void *argument);
-static const char* GetConsumoActual(void);
+//static const char* GetConsumoActual(void);
 static uint32_t RellenarVariablesTopBar(const char *env, char *buf, uint32_t buflen);
 static uint32_t RellenarVariablesNuevaPartida(const char *env, char *buf, uint32_t buflen);
 static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint32_t buflen);
@@ -130,23 +130,23 @@ void Server_Initialize(void)
   }
 }
 
-void SetConsumoActual(uint8_t consumo)
-{
-  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
-  snprintf(consumoActual, sizeof(consumoActual), "%u", consumo);
-  osSemaphoreRelease(e_consumoSemaphoreId);
-}
+//void SetConsumoActual(uint8_t consumo)
+//{
+//  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
+//  snprintf(consumoActual, sizeof(consumoActual), "%u", consumo);
+//  osSemaphoreRelease(e_consumoSemaphoreId);
+//}
 
 
-static const char* GetConsumoActual(void)
-{
-  const char* consumo;
-  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
-  consumo = consumoActual;
-  osSemaphoreRelease(e_consumoSemaphoreId);
+//static const char* GetConsumoActual(void)
+//{
+//  const char* consumo;
+//  osSemaphoreAcquire(e_consumoSemaphoreId, 0);
+//  consumo = consumoActual;
+//  osSemaphoreRelease(e_consumoSemaphoreId);
 
-  return consumo;
-}
+//  return consumo;
+//}
 
 
 static void Run(void *argument) 

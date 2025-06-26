@@ -696,8 +696,10 @@ static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
 				if(mensajeRx.mensaje[0] > 50)
 				{
 					osThreadFlagsSet(e_juegoThreadId,FLAG_PAUSE );
-				}
+				} else {
+					osThreadFlagsSet(e_juegoThreadId,FLAG_RESUME);
     }
+	}
     break;
 
     case MENSAJE_RTC:

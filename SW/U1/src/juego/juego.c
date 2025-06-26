@@ -44,8 +44,10 @@ void juegoEsperaInitialize(void);
 void tick_segundos_callback(void *argument);
 void checkJaque(AJD_TableroPtr tablero);
 bool amenazaRey(AJD_CasillaPtr rey, AJD_TableroPtr tablero);
-
+void SetConsumoActual(uint8_t consumo);
 void setTiempoNuevaPartida(uint16_t minutos);
+
+const char* GetConsumoActual(void);
 
 ////////////////////////////////////////////////////////////////////////////
 // VARIABLES PRIVADAS AL M�DULO
@@ -75,6 +77,10 @@ AJD_Tablero tablero;
 uint8_t predict[64];
 //lcdMessage_t lcdMsg;
 LedStripMsg_t ledMsg;
+static char consumoActual[4] = { '0', '0', '0' };
+//uint8_t consumoActual ;
+const uint8_t consumoEstatico = 152;
+
 
 
 
@@ -220,6 +226,8 @@ AJD_CasillaPtr tPromo;
 				
       case Lectura:
 				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
+
+			
         printf("ESTAMOS EN MODO: LECTURA\n");
         _colocaPiezas(&tablero, map);
         modo = Idle;
@@ -245,6 +253,7 @@ AJD_CasillaPtr tPromo;
 				printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
 				//esperaPausaDetener();
 				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
+				
 				status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
 				if(status == osOK && !movedCasilla.ocupada){
 					movedId = convertNum(movedCasilla.casilla);
@@ -391,6 +400,7 @@ AJD_CasillaPtr tPromo;
 				
       case Stop:
 				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
+				SetConsumoActual(consumoEstatico);
         printf("ESTAMOS EN MODO: STOP\n");
 				osTimerStop(tick_segundos);
         modo = Init;
@@ -399,6 +409,7 @@ AJD_CasillaPtr tPromo;
       case Win:
 				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
 				printf("ESTAMOS EN MODO: WIN\n");
+				SetConsumoActual(consumoEstatico);
 				osTimerStop(tick_segundos);
 				ledMsg.tipoJugada = NACK;
 				osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
@@ -986,6 +997,23 @@ uint8_t convertNum(uint8_t n){
    m = y * 8 + x;
    return m;
 }
+
+
+void SetConsumoActual(uint8_t consumo)
+{
+
+  snprintf(consumoActual, sizeof(consumoActual), "%u", consumo);
+}
+
+const char* GetConsumoActual(void)
+{
+ const char* consumo;
+
+  consumo = consumoActual;
+
+  return consumo;
+}
+
 
 void juegoInitialize(void)
 {

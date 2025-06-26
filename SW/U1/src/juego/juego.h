@@ -101,6 +101,9 @@ void SetTurno(const bool turnoBlancas);
 bool GetTurno(void);
 void setTiempoBlancas(uint8_t minutos, uint8_t segundos);
 void setTiempoNegras(uint8_t minutos, uint8_t segundos);
+void SetConsumoActual(uint8_t consumo);
+const char* GetConsumoActual(void);
+
 
 #endif // JUEGO_H
 
