@@ -63,7 +63,7 @@ osThreadId_t e_juegoTestbenchThreadId;
 osTimerId_t tick_segundos;
 MemoriaMsg_t paq;
 MemoriaMsg_t paqIn;
-uint8_t* map;
+uint8_t map[64];
 //uint8_t mapa[64];
 uint8_t firstRound = 0;
 
@@ -125,6 +125,8 @@ void tick_segundos_callback(void *argument){
 			modo = Win;
 		}
 	}
+   printf("[juego::%s] blanca: [%02d:%02d] negra: [%02d:%02d]\n" , __func__, estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+   
 	//osThreadFlagsSet(tid_Thread_Principal, ACTUALIZAR_HORA);
 }
 
@@ -149,7 +151,8 @@ uint8_t movedId;
 AJD_CasillaPtr tPromo;
 
 	while(true){
-
+		//uint32_t cap = osThreadGetStackSpace(e_juegoThreadId);
+		//printf("[juego::%s] Consumo : %d\n", __func__, cap);
 		flagPause = osThreadFlagsWait(FLAG_PAUSE | FLAG_STOP | FLAG_FINALIZAR, osFlagsWaitAny, 50U);
 			if(flagPause == FLAG_PAUSE){
 				modot = modo;
@@ -171,7 +174,7 @@ AJD_CasillaPtr tPromo;
 				flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
 				printf("RECIBIDO FLAG\n");
 			
-				map = malloc(64*sizeof(uint8_t));
+				
 				//memset(map, 0xFF, 64*sizeof(uint8_t));
 				//e_ConsultPosition = osMessageQueueNew(5, sizeof(map), NULL);
 				//e_ConsultStatus = osMessageQueueNew(5, sizeof(estado), NULL);
@@ -194,7 +197,11 @@ AJD_CasillaPtr tPromo;
 				printf("ESTAMOS EN MODO: ESPERA\n");
 				if(flag == FLAG_RETOCAR){
 				// ¿NO DEBERÍAMOS AÑADIR AQUÍ ALGO SIMILAR A CUANDO LLEGA EL START?, SINO ES INÚTIL EL FLAG
-             
+               estado_juego.negro_jaque = 0;
+               estado_juego.blanco_jaque = 0;
+               estado_juego.casilla_seleccionada = NO_SELECCION;
+               estado_juego.casilla_origen = NULL;
+               estado_juego.casilla_destino = NULL;
 				}else if(flag == FLAG_START){
 					newGameMap();
 					nuevoJuego(&tablero);
@@ -398,6 +405,12 @@ void setMap(const uint8_t* mapIn, size_t len) {
 
 	osMutexAcquire(mapMutex, osWaitForever);
 	memcpy(map, mapIn, len);
+   printf("[juego::%s] memcpy hecho\n",__func__);
+   for(int i = 0; i < 64; i++){
+      printf("[juego::%s] Recibido Map[%d] == [%02X]\n", __func__, i, map[i]);
+      osDelay(5);
+   }
+
 
 	for (int i = 0; i < 64; i++){
 		if (mapIn[i] == EMPTY) {
@@ -425,6 +438,8 @@ void getMap(uint8_t* mapOut, size_t len) {
     osDelay(5);
   }
   memcpy(mapOut, map, len);
+  for(int i = 0; i < 64; i++)
+    printf("MapOut[%d] = [0x%02X]\n", i, mapOut[i]);
   osMutexRelease(mapMutex);
 }
 
@@ -800,6 +815,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
 {
  osStatus_t status;
  JuegoMsg_t msgRx = { 0 };
+ uint8_t blankMap[64];
  uint8_t placeHolder;
  //uint8_t position;
  ECasilla position;
@@ -807,7 +823,13 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  uint8_t k2 = 0;
  uint8_t found = 0;
  //AJD_Pieza piezasMayores[8] = { TORRE, CABALLO, ALFIL, DAMA, REY, ALFIL, CABALLO, TORRE };
- for (int i = 0; i < 32;) {
+ memset(blankMap, 0xFF, 64);
+ for(int j = 0; j < 64; j++) {
+      printf("[juego::%s] El mapa [%02X] en [%d]\n ", __func__, map[j], j);
+      osDelay(5);
+   }
+ //for (int i = 0; i < 32;) {
+ do{
    status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, osWaitForever);
    printf("[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
 	 //posCl[i] = pos;
@@ -822,8 +844,11 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //       k2=0;
       //    }
       // }while(placeHolder != pos && k1*k2 < 49);
+      
       for (int j=0; j<64; j++) {
-        printf("[RC522::%s] pos[%d] map[%d] = [%d]\n", __func__, pos, j, map[j]);
+        printf("[RC522::%s] pos[%d] map[%d] = [%02X]\n", __func__, pos, j, map[j]);
+        osDelay(5);
+        //printf("[juego::%s] map[%d] = [%d] pos")
          if(map[j] == pos) {
             map[j] = 0xFF;
             tablero->casilla[j].pieza       = (AJD_Pieza)((pos & 0x0F) +1);
@@ -861,7 +886,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
             ledMsg.tipoJugada = ACK;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
-            i++;
+            //i++;
             break;
          }
       }
@@ -886,7 +911,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
       //    tablero->casilla[position].color_pieza = (pos & 0x08) >> 3;
       
    }
- }
+ }while(memcmp(map, blankMap, 64));
  ComPlacasMsg_t msgTx = {
   .remitente    = MENSAJE_JUEGO,
   .destinatario = MENSAJE_NFC,
@@ -913,6 +938,7 @@ void newGameMap(void)
 {
    AJD_Pieza piezasMayores[8] = {TORRE1, CABALLO1, ALFIL1, REY, DAMA, ALFIL2, CABALLO2, TORRE2};
    AJD_Pieza piezaPeon[8] = {PEON1, PEON2, PEON3, PEON4, PEON5, PEON6, PEON7, PEON8};
+   memset(map, 0xFF, 64);
    for (int col=0; col < 8; col++)
   {
       map[col] = ((piezasMayores[col] -1)| BLACK);

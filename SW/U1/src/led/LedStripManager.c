@@ -184,7 +184,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const bool nuevaJugada = mensajeRx.nuevaJugada;
   if (nuevaJugada)
   {
-    printf("[LedStrip::%s] RESET LEDS\n", __func__);
+    //printf("[LedStrip::%s] RESET LEDS\n", __func__);
     memset(g_leds, 0, sizeof(g_leds));
     return;
   }
@@ -194,7 +194,7 @@ static void ProcesarMensaje(LedStripMsg_t mensajeRx)
   const ETipoJugada tipoJugada = mensajeRx.tipoJugada;
   GetColor(tipoJugada, &colores);
 
-  printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
+  //printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
   g_leds[mensajeRx.posicion] = colores;
 }
 
@@ -202,7 +202,7 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
 {
 	if (colores == NULL)
 	{
-		printf("[LedStrip::%s] ERROR! Parametro colores es NULL\n", __func__);
+		//printf("[LedStrip::%s] ERROR! Parametro colores es NULL\n", __func__);
 		return;
 	}
 	
@@ -212,35 +212,35 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
 			colores->red   = 0;
 		  colores->green = 0;
 		  colores->blue  = 255;
-		  printf("[LedStrip::%s] COLOR AZUL\n", __func__);
+		  //printf("[LedStrip::%s] COLOR AZUL\n", __func__);
 		  break;
 		
 		case MOVIMIENTO_ILEGAL:
 			colores->red   = 255;
 		  colores->green = 0;
 		  colores->blue  = 0;
-		  printf("[LedStrip::%s] COLOR ROJO\n", __func__);
+		  //printf("[LedStrip::%s] COLOR ROJO\n", __func__);
 		  break;
 		
 		case CAPTURA:
 			colores->red   = 0;
 		  colores->green = 255;
 		  colores->blue  = 0;
-		  printf("[LedStrip::%s] COLOR VERDE\n", __func__);
+		  //printf("[LedStrip::%s] COLOR VERDE\n", __func__);
 		  break;
 		
 		case ESPECIAL:
 			colores->red   = 255;
 		  colores->green = 0;
 		  colores->blue  = 255;
-		  printf("[LedStrip::%s] COLOR MORADO\n", __func__);
+		  //printf("[LedStrip::%s] COLOR MORADO\n", __func__);
 		  break;
 		
 		case ACTUAL:
 			colores->red   = 255;
 		  colores->green = 255;
 		  colores->blue  = 255;
-		  printf("[LedStrip::%s] COLOR BLANCO\n", __func__);
+		  //printf("[LedStrip::%s] COLOR BLANCO\n", __func__);
       break;
     
     case ACK:
@@ -256,7 +256,7 @@ static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
     break;
 		
 		default:
-			printf("[LedStrip::%s] Tipo de jugada desconocida\n", __func__);
+			//printf("[LedStrip::%s] Tipo de jugada desconocida\n", __func__);
 			break;
 	}
 }
@@ -317,7 +317,7 @@ static void TestLeds(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | brillo);
     EnviarComando(azul);  // B
@@ -337,7 +337,7 @@ static void TurnOff(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | 0);
     EnviarComando(azul);  // B
@@ -361,7 +361,7 @@ static void StartAckPattern(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | brillo);
     EnviarComando(azul);  // B
@@ -386,7 +386,7 @@ static void StartNackPattern(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
+		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
 		EnviarComando(BRIGHTNESS_MASK | brillo);
     EnviarComando(azul);  // B
@@ -407,12 +407,12 @@ void ARM_LedSPI_SignalEvent(uint32_t event)
   }
   if (event & ARM_SPI_EVENT_MODE_FAULT)
   {
-		printf("[LedStrip::%s] ARM_SPI_EVENT_MODE_FAULT", __func__);
+		//printf("[LedStrip::%s] ARM_SPI_EVENT_MODE_FAULT", __func__);
     // Master Mode Fault (SS deactivated when Master)
   }
   if (event & ARM_SPI_EVENT_DATA_LOST)
   {
-		printf("[LedStrip::%s] ARM_SPI_EVENT_DATA_LOST", __func__);
+		//printf("[LedStrip::%s] ARM_SPI_EVENT_DATA_LOST", __func__);
     // Data lost: Receive overflow / Transmit underflow
   }
 }

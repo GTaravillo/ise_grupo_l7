@@ -568,8 +568,9 @@ void RC_RUN(void *argument){
   
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);
   if(flag == FLAG_FINALIZA){
-    HAL_SPI_MspDeInit(&hspi3);
-    break;
+    //HAL_SPI_MspDeInit(&hspi3);
+
+    //break;
   }
 	osDelay(500);
   

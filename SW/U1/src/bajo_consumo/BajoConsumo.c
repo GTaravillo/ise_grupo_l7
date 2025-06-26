@@ -9,13 +9,22 @@ osThreadId_t e_bajoConsumoThreadId;
 void BajoConsumoInitialize(void);
 
 static void Run(void *argument);
-static void GpioInit(void);
+void GpioInit(void);
 static void StopOtheBoard(void);
 static void WakeUpOtherBoard(void);
 
 void BajoConsumoInitialize(void)
 {
   e_bajoConsumoThreadId = osThreadNew(Run, NULL, NULL);
+	
+	const int threadError = e_bajoConsumoThreadId == NULL;
+	
+	if (threadError)
+	{
+		printf("[bajo_consumo::%s] Thread error!\n", __func__);
+	}
+		
+	
 }
 
 void Run(void *argument)
@@ -28,6 +37,7 @@ void Run(void *argument)
     {
       printf("[bajo_consumo::%s] Espero flag bajo consumo\n", __func__);
       uint32_t flags = osThreadFlagsWait(FLAGS_BAJO_CONSUMO, osFlagsWaitAny, osWaitForever);
+			printf("[bajo_consumo::%s] El flag que llega: [0x%02X]\n", __func__, flags);
       if (flags == ENTRADA_BAJO_CONSUMO)
       {
         StopOtheBoard();
