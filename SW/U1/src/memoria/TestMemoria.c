@@ -182,16 +182,16 @@ void TestMemoriaInitialize(void)
 
   if (e_testMemoriaThreadId == NULL)
   {
-    printf("[TestMemoria::%s] ERROR! osThreadNew [%d]\n", __func__, (e_testMemoriaThreadId == NULL));
+    // printf("[TestMemoria::%s] ERROR! osThreadNew [%d]\n", __func__, (e_testMemoriaThreadId == NULL));
   }
 }
 
 static void Run(void *argument)
 {
   osStatus_t status;
-  printf("[TestMemoria::%s] Esperando a que modulo memoria termine de inicializarse\n", __func__);
+  // printf("[TestMemoria::%s] Esperando a que modulo memoria termine de inicializarse\n", __func__);
 	uint32_t flag = osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll, osWaitForever);
-  printf("[TestMemoria::%s] Modulo memoria inicializado\n", __func__);
+  // printf("[TestMemoria::%s] Modulo memoria inicializado\n", __func__);
   
   MemoriaMsg_t mensajeRx = {0};
   #if TEST_RETOMAR_PARTIDA_1 == 1
@@ -238,7 +238,7 @@ static void Run(void *argument)
 static void TestGuardarPartidaSinFinalizar(int numTest)
 {
   osStatus_t status;
-	printf("[TestMemoria::%s] Envio datos:\n", __func__);
+	// printf("[TestMemoria::%s] Envio datos:\n", __func__);
 
   MemoriaMsg_t ultimaPartida = {0};
 
@@ -272,24 +272,24 @@ static void TestGuardarPartidaSinFinalizar(int numTest)
     break;
   }
 	
-  printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, ultimaPartida.tipoPeticion);
-  printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, ultimaPartida.fechaPartida);
-  printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, ultimaPartida.horaPartida);
-  printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, ultimaPartida.nombreBlancas);
-  printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, ultimaPartida.nombreNegras);
-  printf("[TestMemoria::%s] Turno [%d]\n", __func__, ultimaPartida.turno_victoria);
-  printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, ultimaPartida.tiempoBlancas);
-  printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, ultimaPartida.tiempoNegras);
-  printf("[TestMemoria::%s] Tablero [%s]\n", __func__, ultimaPartida.dato);
+  // printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, ultimaPartida.tipoPeticion);
+  // printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, ultimaPartida.fechaPartida);
+  // printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, ultimaPartida.horaPartida);
+  // printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, ultimaPartida.nombreBlancas);
+  // printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, ultimaPartida.nombreNegras);
+  // printf("[TestMemoria::%s] Turno [%d]\n", __func__, ultimaPartida.turno_victoria);
+  // printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, ultimaPartida.tiempoBlancas);
+  // printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, ultimaPartida.tiempoNegras);
+  // printf("[TestMemoria::%s] Tablero [%s]\n", __func__, ultimaPartida.dato);
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &ultimaPartida, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+  // printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestGuardarPartidaFinalizada(int numTest)
 {
 	osStatus_t status;
-	printf("[TestMemoria::%s] Envio datos:\n", __func__);
+	// printf("[TestMemoria::%s] Envio datos:\n", __func__);
 
   MemoriaMsg_t partidaFinalizada = {0};
 
@@ -323,31 +323,31 @@ static void TestGuardarPartidaFinalizada(int numTest)
     break;
   }
 	
-  printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, partidaFinalizada.tipoPeticion);
-  printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, partidaFinalizada.fechaPartida);
-  printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, partidaFinalizada.horaPartida);
-  printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, partidaFinalizada.nombreBlancas);
-  printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, partidaFinalizada.nombreNegras);
-  printf("[TestMemoria::%s] Turno [%d]\n", __func__, partidaFinalizada.turno_victoria);
-  printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, partidaFinalizada.tiempoBlancas);
-  printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, partidaFinalizada.tiempoNegras);
-  printf("[TestMemoria::%s] Tablero [%s]\n", __func__, partidaFinalizada.dato);
+  // printf("[TestMemoria::%s] Tipo peticion [%d]\n", __func__, partidaFinalizada.tipoPeticion);
+  // printf("[TestMemoria::%s] Fecha partida [%s]\n", __func__, partidaFinalizada.fechaPartida);
+  // printf("[TestMemoria::%s] Hora partida [%s]\n", __func__, partidaFinalizada.horaPartida);
+  // printf("[TestMemoria::%s] Nombre blancas [%s]\n", __func__, partidaFinalizada.nombreBlancas);
+  // printf("[TestMemoria::%s] Nombre negras [%s]\n", __func__, partidaFinalizada.nombreNegras);
+  // printf("[TestMemoria::%s] Turno [%d]\n", __func__, partidaFinalizada.turno_victoria);
+  // printf("[TestMemoria::%s] Tiempo blancas [%s]\n", __func__, partidaFinalizada.tiempoBlancas);
+  // printf("[TestMemoria::%s] Tiempo negras [%s]\n", __func__, partidaFinalizada.tiempoNegras);
+  // printf("[TestMemoria::%s] Tablero [%s]\n", __func__, partidaFinalizada.dato);
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &partidaFinalizada, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+  // printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestRetomarUltimaPartida()
 {
   osStatus_t status;
-	printf("[TestMemoria::%s] Peticion retomar ultima partida\n", __func__);
+	// printf("[TestMemoria::%s] Peticion retomar ultima partida\n", __func__);
 
   MemoriaMsg_t ultimaPartida = {0};
 
   ultimaPartida.tipoPeticion = RETOMAR_ULTIMA_PARTIDA;
 
   status = osMessageQueuePut(e_memoriaRxMessageId, &ultimaPartida, 1, 0);
-  printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
+  // printf("[TestMemoria::%s] Mensaje enviado\n", __func__);
 }
 
 static void TestLimpiarMemoria()
@@ -357,34 +357,34 @@ static void TestLimpiarMemoria()
 
 static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
 {
-  printf("[TestMemoria::%s] Confirmo datos recibidos:\n", __func__);
+  // printf("[TestMemoria::%s] Confirmo datos recibidos:\n", __func__);
   bool turnoCorrecto;
   bool tiempoBlancasCorrecto;
   bool tiempoNegrasCorrecto;
   bool datoCorrecto;
 
-	printf("[TestMemoria::%s] Turno: [0x%02X] = [0x%02X]\n", __func__, mensajeRx.turno_victoria, turno_victoria1);
+	// printf("[TestMemoria::%s] Turno: [0x%02X] = [0x%02X]\n", __func__, mensajeRx.turno_victoria, turno_victoria1);
 
-	printf("[TestMemoria::%s] Tiempo blancas:\n", __func__);
+	// printf("[TestMemoria::%s] Tiempo blancas:\n", __func__);
 	for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
 	{
-		printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.tiempoBlancas[i], tiempoBlancas1[i]);
+		// printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.tiempoBlancas[i], tiempoBlancas1[i]);
 		osDelay(10);
 	}
 
-	printf("[TestMemoria::%s] Tiempo negras:\n", __func__);
-	for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
-	{
-		printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.tiempoNegras[i], tiempoNegras1[i]);
-		osDelay(10);
-	}
+	// printf("[TestMemoria::%s] Tiempo negras:\n", __func__);
+	// for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
+	// {
+	// 	printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.tiempoNegras[i], tiempoNegras1[i]);
+	// 	osDelay(10);
+	// }
 
-	printf("[TestMemoria::%s] Tablero:\n", __func__);
-	for (int i = 0; i < TAM_DATOS; i++)
-	{
-		printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.dato[i], tablero1[i]);
-		osDelay(10);
-	}
+	// printf("[TestMemoria::%s] Tablero:\n", __func__);
+	// for (int i = 0; i < TAM_DATOS; i++)
+	// {
+	// 	printf("[TestMemoria::%s] [0x%02X] = [0x%02X]\n", __func__, mensajeRx.dato[i], tablero1[i]);
+	// 	osDelay(10);
+	// }
 
   switch (numTest)
   {
@@ -406,49 +406,49 @@ static bool ConfirmarDatosRecibidos(int numTest, MemoriaMsg_t mensajeRx)
     break;
   }
 
-  printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
-          __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
+  // printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
+          // __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
   return turnoCorrecto && tiempoBlancasCorrecto && tiempoNegrasCorrecto && datoCorrecto;
 }
 
 static bool ConfirmarDatosJuego(MemoriaMsg_t mensajeRx)
 {
-  printf("[TestMemoria::%s] Seteo datos en el juego:\n", __func__);
+  // printf("[TestMemoria::%s] Seteo datos en el juego:\n", __func__);
 
-  printf("[TestMemoria::%s] Seteo Tiempo Blancas: [%s]\n", __func__, mensajeRx.tiempoBlancas);
+  // printf("[TestMemoria::%s] Seteo Tiempo Blancas: [%s]\n", __func__, mensajeRx.tiempoBlancas);
   int minutos, segundos;
 
   sscanf((const char*)mensajeRx.tiempoBlancas, "%2d:%2d", &minutos, &segundos);
-  printf("[TestMemoria::%s] Minutos Blancas[%d] Segundos Blancas[%d]\n", __func__, minutos, segundos);
+  // printf("[TestMemoria::%s] Minutos Blancas[%d] Segundos Blancas[%d]\n", __func__, minutos, segundos);
   setTiempoBlancas(minutos, segundos);
 
   sscanf((const char*)mensajeRx.tiempoNegras, "%2d:%2d", &minutos, &segundos);
-  printf("[TestMemoria::%s] Minutos Negras[%d] Segundos Negras[%d]\n", __func__, minutos, segundos);
+  // printf("[TestMemoria::%s] Minutos Negras[%d] Segundos Negras[%d]\n", __func__, minutos, segundos);
   setTiempoNegras(minutos, segundos);
 
-  printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, mensajeRx.turno_victoria);
+  // printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, mensajeRx.turno_victoria);
   SetTurno(mensajeRx.turno_victoria);
 
-  printf("[TestMemoria::%s] Seteo mapa\n", __func__);
+  // printf("[TestMemoria::%s] Seteo mapa\n", __func__);
   setMap(mensajeRx.dato, TAM_DATOS);
 
   osDelay(1000);
 
-  printf("[TestMemoria::%s] Obtengo datos del juego:\n", __func__);
+  // printf("[TestMemoria::%s] Obtengo datos del juego:\n", __func__);
 
   char tiempoBlancas[TAM_TIEMPO_JUGADOR + 1];
   snprintf(tiempoBlancas, sizeof(tiempoBlancas), "%02d:%02d", GetMinutosBlancas(), GetSegundosBlancas());
-  printf("[TestMemoria::%s] Tiempo Blancas [%s]\n", __func__, tiempoBlancas);
+  // printf("[TestMemoria::%s] Tiempo Blancas [%s]\n", __func__, tiempoBlancas);
 
   char tiempoNegras[TAM_TIEMPO_JUGADOR + 1];
   snprintf(tiempoNegras, sizeof(tiempoNegras), "%02d:%02d", GetMinutosNegras(), GetSegundosNegras());
-  printf("[TestMemoria::%s] Tiempo Negras [%s]\n", __func__, tiempoNegras);
+  // printf("[TestMemoria::%s] Tiempo Negras [%s]\n", __func__, tiempoNegras);
 
   bool turnoBlancas = GetTurno();
-  printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, turnoBlancas);
+  // printf("[TestMemoria::%s] Turno actual[%d]\n", __func__, turnoBlancas);
 
   uint8_t mapa[64];
-  printf("[TestMemoria::%s] Obtengo mapa\n", __func__);
+  // printf("[TestMemoria::%s] Obtengo mapa\n", __func__);
   getMap(mapa, TAM_DATOS);
 
   const bool turnoCorrecto         = mensajeRx.turno_victoria == turnoBlancas;
@@ -456,7 +456,7 @@ static bool ConfirmarDatosJuego(MemoriaMsg_t mensajeRx)
   const bool tiempoNegrasCorrecto  = memcmp(mensajeRx.tiempoNegras, tiempoNegras, TAM_TIEMPO_JUGADOR) == 0;
   const bool datoCorrecto          = memcmp(mensajeRx.dato, mapa, TAM_DATOS) == 0;
 
-  printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
-          __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
+  // printf("[TestMemoria::%s] turnoCorrecto[%d] tiempoBlancasCorrecto[%d] tiempoNegrasCorrecto[%d] datoCorrecto[%d]\n", 
+          // __func__, turnoCorrecto, tiempoBlancasCorrecto, tiempoNegrasCorrecto, datoCorrecto);
   return turnoCorrecto && tiempoBlancasCorrecto && tiempoNegrasCorrecto && datoCorrecto;
 }

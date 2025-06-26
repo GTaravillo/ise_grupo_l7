@@ -406,68 +406,8 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>adc</GroupName>
-          <Files>
-            <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\adc\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>adc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\adc\adc.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>buttons</GroupName>
-          <Files>
-            <File>
-              <FileName>buttons.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\buttons\buttons.c</FilePath>
-            </File>
-            <File>
-              <FileName>buttons.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\buttons\buttons.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>lcd</GroupName>
-          <Files>
-            <File>
-              <FileName>Arial12x12.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lcd\Arial12x12.h</FilePath>
-            </File>
-            <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lcd\lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\lcd\lcd.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>led</GroupName>
           <Files>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\led\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>led.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\led\led.h</FilePath>
-            </File>
             <File>
               <FileName>LedStripManager.c</FileName>
               <FileType>1</FileType>

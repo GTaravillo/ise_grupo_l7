@@ -100,8 +100,8 @@ void MemoriaInitialize(void)
 
   if (error)
   {
-    printf("[memoria::%s] ERROR! thread[%d] queue Rx[%d]Tx[%d] semaphore[%d]\n", __func__, 
-           newThreadError, newRxQueueError, newTxQueueError, newSemaphoreError);
+    // printf("[memoria::%s] ERROR! thread[%d] queue Rx[%d]Tx[%d] semaphore[%d]\n", __func__, 
+          //  newThreadError, newRxQueueError, newTxQueueError, newSemaphoreError);
   }
 }
 
@@ -145,7 +145,7 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
   
   if (direccionPartida == 0)
   {
-    printf("[memoria::%s] ERROR! Dirección de partida vacia\n", __func__);
+    // printf("[memoria::%s] ERROR! Dirección de partida vacia\n", __func__);
     infoPartida.tipoPeticion = ERROR_SIN_DATOS;
     osSemaphoreRelease(e_accessSemaphoreId);
     return infoPartida;
@@ -183,12 +183,12 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
   infoPartida.turno_victoria = LeerByte(direccionPartida + OFFSET_TURNO_VICTORIA);
   osSemaphoreRelease(e_accessSemaphoreId);
 
-  printf("[memoria::%s] Mensaje a devolver:\n", __func__);
-  printf("[memoria::%s] Fecha[%s]\n", __func__, infoPartida.fechaPartida);
-  printf("[memoria::%s] Hora[%s]\n", __func__, infoPartida.horaPartida);
-  printf("[memoria::%s] Nombre blancas[%s]\n", __func__, infoPartida.nombreBlancas);
-  printf("[memoria::%s] Nombre negras[%s]\n", __func__, infoPartida.nombreNegras);
-  printf("[memoria::%s] Victoria[%d]\n", __func__, infoPartida.turno_victoria);
+  // printf("[memoria::%s] Mensaje a devolver:\n", __func__);
+  // printf("[memoria::%s] Fecha[%s]\n", __func__, infoPartida.fechaPartida);
+  // printf("[memoria::%s] Hora[%s]\n", __func__, infoPartida.horaPartida);
+  // printf("[memoria::%s] Nombre blancas[%s]\n", __func__, infoPartida.nombreBlancas);
+  // printf("[memoria::%s] Nombre negras[%s]\n", __func__, infoPartida.nombreNegras);
+  // printf("[memoria::%s] Victoria[%d]\n", __func__, infoPartida.turno_victoria);
 
   return infoPartida;
 }
@@ -196,7 +196,7 @@ MemoriaMsg_t ObtenerInfoPartidaFinalizada(uint16_t numPartida)
 static void Run(void *argument)
 {
   osStatus_t status;
-  printf("[memoria::Run] Initializing I2C\n");
+  // printf("[memoria::Run] Initializing I2C\n");
   status = I2Cdrv->Initialize(I2C_SignalEvent);
   osDelay(10);
   status = I2Cdrv->PowerControl (ARM_POWER_FULL);
@@ -221,7 +221,7 @@ static void Run(void *argument)
   while (1)
   {
     memset(&mensajeRx, 0, sizeof(mensajeRx));
-	  printf("[memoria::%s] ESPERANDO MENSAJE\n", __func__);
+	  // printf("[memoria::%s] ESPERANDO MENSAJE\n", __func__);
     osThreadFlagsSet(e_testMemoriaThreadId, FLAG_READY);
     osThreadFlagsSet(e_serverThreadId, FLAG_READY);
     status = osMessageQueueGet(e_memoriaRxMessageId, &mensajeRx, NULL, osWaitForever);
@@ -229,7 +229,7 @@ static void Run(void *argument)
     {
       continue;
     }
-    printf("[memoria::%s] MENSAJE RECIBIDO\n", __func__);
+    // printf("[memoria::%s] MENSAJE RECIBIDO\n", __func__);
     ProcesarPeticion(mensajeRx);
   }
 }
@@ -237,7 +237,7 @@ static void Run(void *argument)
 static void SoftwareReset(void)
 {
 	int32_t status;
-	printf("[memoria::%s]\n", __func__);
+	// printf("[memoria::%s]\n", __func__);
 	uint8_t buff = 0xFF;
 	status = I2Cdrv->MasterTransmit(SLAVE_ADDR, &buff, 1, false);
 	osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
@@ -253,12 +253,12 @@ static void ActualizarNumPartidasTerminadas(void)
 
   numPartidasTerminadas = msb | lsb;
 
-  printf("[memoria::%s] Numero partidas terminadas [%d]\n", __func__, numPartidasTerminadas);
+  // printf("[memoria::%s] Numero partidas terminadas [%d]\n", __func__, numPartidasTerminadas);
 }
 
 static void ProcesarPeticion(MemoriaMsg_t mensajeRx)
 {
-  printf("[memoria::%s] TIPO MENSAJE: [%d]\n", __func__, mensajeRx.tipoPeticion);
+  // printf("[memoria::%s] TIPO MENSAJE: [%d]\n", __func__, mensajeRx.tipoPeticion);
   
   switch(mensajeRx.tipoPeticion)
   {
@@ -300,53 +300,53 @@ static void ProcesarGuardarPartidaSinFinalizar(MemoriaMsg_t mensajeRx)
   for (int i = 0; i < TAM_FECHA; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_FECHA_PARTIDA + i;
-    printf("[Memoria::%s] Fecha[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.fechaPartida[i]);
+    // printf("[Memoria::%s] Fecha[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.fechaPartida[i]);
     EscribirByte(direccionGuardado, mensajeRx.fechaPartida[i]);
   }
 
   for (int i = 0; i < TAM_HORA; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_HORA_PARTIDA + i;
-    printf("[Memoria::%s] Hora[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.horaPartida[i]);
+    // printf("[Memoria::%s] Hora[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.horaPartida[i]);
     EscribirByte(direccionGuardado, mensajeRx.horaPartida[i]);
   }
 
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_NOMBRE_BLANCAS + i;
-    printf("[Memoria::%s] Nombre blancas[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.nombreBlancas[i]);
+    // printf("[Memoria::%s] Nombre blancas[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.nombreBlancas[i]);
     EscribirByte(direccionGuardado, mensajeRx.nombreBlancas[i]);
   }
 
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_NOMBRE_NEGRAS + i;
-    printf("[Memoria::%s] Nombre negras[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.nombreNegras[i]);
+    // printf("[Memoria::%s] Nombre negras[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.nombreNegras[i]);
     EscribirByte(direccionGuardado, mensajeRx.nombreNegras[i]);
   }
   
   direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_TURNO_VICTORIA;
-  printf("[Memoria::%s] Turno: [0x%04X] = [0x%02X]\n", __func__, direccionGuardado, mensajeRx.turno_victoria);
+  // printf("[Memoria::%s] Turno: [0x%04X] = [0x%02X]\n", __func__, direccionGuardado, mensajeRx.turno_victoria);
   EscribirByte(direccionGuardado, mensajeRx.turno_victoria);
   
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_TIEMPO_BLANCAS + i;
-    printf("[Memoria::%s] Tiempo blancas[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.tiempoBlancas[i]);
+    // printf("[Memoria::%s] Tiempo blancas[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.tiempoBlancas[i]);
     EscribirByte(direccionGuardado, mensajeRx.tiempoBlancas[i]);
   }
 
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_TIEMPO_NEGRAS + i;
-    printf("[Memoria::%s] Tiempo negras[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.tiempoNegras[i]);
+    // printf("[Memoria::%s] Tiempo negras[%d]: [0x%04X] = [0x%02X]\n", __func__, i, direccionGuardado, mensajeRx.tiempoNegras[i]);
     EscribirByte(direccionGuardado, mensajeRx.tiempoNegras[i]);
   }
 
   for (int i = 0; i < TAM_DATOS; i++)
   {
     direccionGuardado = DIRECCION_PARTIDA_RETOMAR + OFFSET_TABLERO + i;
-    printf("[Memoria::%s] Tablero:\n", __func__);
+    // printf("[Memoria::%s] Tablero:\n", __func__);
     EscribirByte(direccionGuardado, mensajeRx.dato[i]);
   }
 
@@ -385,47 +385,47 @@ static void ProcesarGuardarPartidaFinalizada(MemoriaMsg_t mensajeRx)
   
   for (int i = 0; i < TAM_FECHA; i++)
   {
-    printf("[Memoria::%s] Fecha:\n", __func__);
+    // printf("[Memoria::%s] Fecha:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_FECHA_PARTIDA + i, mensajeRx.fechaPartida[i]);
   }
 
   for (int i = 0; i < TAM_HORA; i++)
   {
-    printf("[Memoria::%s] Hora:\n", __func__);
+    // printf("[Memoria::%s] Hora:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_HORA_PARTIDA + i, mensajeRx.horaPartida[i]);
   }
 
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Nombre blancas:\n", __func__);
+    // printf("[Memoria::%s] Nombre blancas:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_NOMBRE_BLANCAS + i, mensajeRx.nombreBlancas[i]);
   }
 
   for (int i = 0; i < TAM_NOMBRE_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Nombre negras:\n", __func__);
+    // printf("[Memoria::%s] Nombre negras:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_NOMBRE_NEGRAS + i, mensajeRx.nombreNegras[i]);
   }
   
-  printf("[Memoria::%s] Turno:\n", __func__);
+  // printf("[Memoria::%s] Turno:\n", __func__);
   EscribirByte(direccionGuardado + OFFSET_TURNO_VICTORIA, mensajeRx.turno_victoria);
   
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Tiempo blancas:\n", __func__);
+    // printf("[Memoria::%s] Tiempo blancas:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_TIEMPO_BLANCAS + i, mensajeRx.tiempoBlancas[i]);
   }
 
   for (int i = 0; i < TAM_TIEMPO_JUGADOR; i++)
   {
-    printf("[Memoria::%s] Tiempo negras:\n", __func__);
+    // printf("[Memoria::%s] Tiempo negras:\n", __func__);
     EscribirByte(direccionGuardado + OFFSET_TIEMPO_NEGRAS + i, mensajeRx.tiempoNegras[i]);
   }
 
-  printf("[Memoria::%s] Num partidas terminadas:\n", __func__);
+  // printf("[Memoria::%s] Num partidas terminadas:\n", __func__);
   EscribirByte(DIRECCION_NUM_PARTIDAS, (numPartidasTerminadas & 0xFF00));
   EscribirByte(DIRECCION_NUM_PARTIDAS + 1, (numPartidasTerminadas & 0x00FF));
-  printf("[Memoria::%s] Direccion partida:\n", __func__);
+  // printf("[Memoria::%s] Direccion partida:\n", __func__);
   EscribirByte(direccionMapa, (direccionGuardado & 0xFF00));
   EscribirByte(direccionMapa + 1, (direccionGuardado & 0x00FF));
 
@@ -502,14 +502,14 @@ static void ProcesarRetomarPartida()
   }
   osSemaphoreRelease(e_accessSemaphoreId);
 
-  printf("[memoria::%s] Mensaje a devolver:\n", __func__);
-  printf("[memoria::%s] Fecha[%s]\n", __func__, mensajeTx.fechaPartida);
-  printf("[memoria::%s] Hora[%s]\n", __func__, mensajeTx.horaPartida);
-  printf("[memoria::%s] Nombre blancas[%s]\n", __func__, mensajeTx.nombreBlancas);
-  printf("[memoria::%s] Nombre negras[%s]\n", __func__, mensajeTx.nombreNegras);
-  printf("[memoria::%s] Turno[%d]\n", __func__, mensajeTx.turno_victoria);
-  printf("[memoria::%s] Tiempo blancas[%s]\n", __func__, mensajeTx.tiempoBlancas);
-  printf("[memoria::%s] Tiempo negras[%s]\n", __func__, mensajeTx.tiempoNegras);
+  // printf("[memoria::%s] Mensaje a devolver:\n", __func__);
+  // printf("[memoria::%s] Fecha[%s]\n", __func__, mensajeTx.fechaPartida);
+  // printf("[memoria::%s] Hora[%s]\n", __func__, mensajeTx.horaPartida);
+  // printf("[memoria::%s] Nombre blancas[%s]\n", __func__, mensajeTx.nombreBlancas);
+  // printf("[memoria::%s] Nombre negras[%s]\n", __func__, mensajeTx.nombreNegras);
+  // printf("[memoria::%s] Turno[%d]\n", __func__, mensajeTx.turno_victoria);
+  // printf("[memoria::%s] Tiempo blancas[%s]\n", __func__, mensajeTx.tiempoBlancas);
+  // printf("[memoria::%s] Tiempo negras[%s]\n", __func__, mensajeTx.tiempoNegras);
 
   status = osMessageQueuePut(e_memoriaTxMessageId, &mensajeTx, 1, 0);
 }
@@ -546,7 +546,7 @@ static void EscribirByte(uint16_t direccion, uint8_t dato)
     dato
   };
 
-  printf("[memoria::%s] direccion dato [0x%04X] = [0x%02X]\n", __func__, ((estructura_Wr[0] << 8) | estructura_Wr[1]), dato);
+  // printf("[memoria::%s] direccion dato [0x%04X] = [0x%02X]\n", __func__, ((estructura_Wr[0] << 8) | estructura_Wr[1]), dato);
 
   status = I2Cdrv->MasterTransmit(SLAVE_ADDR, estructura_Wr, 3, false);
   osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
@@ -572,7 +572,7 @@ static uint8_t LeerByte(uint16_t direccion)
   status = I2Cdrv->MasterReceive(SLAVE_ADDR, &byteLeido, 1, false);  // Read 1 byte of data
   osThreadFlagsWait(ARM_I2C_EVENT_TRANSFER_DONE, osFlagsWaitAll, osWaitForever);
 	
-  printf("[memoria::%s] Direccion [0x%04X]: Dato leido [0x%02X]\n", __func__, direccion, byteLeido);
+  // printf("[memoria::%s] Direccion [0x%04X]: Dato leido [0x%02X]\n", __func__, direccion, byteLeido);
   return byteLeido;
 }
 

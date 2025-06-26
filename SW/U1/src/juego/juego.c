@@ -9,7 +9,6 @@
 #include "../com_placas/ComunicacionPlacas.h"
 #include "../posicion/PositionManager.h"
 #include "../led/LedStripManager.h"
-#include "../lcd/lcd.h"
 #include <stdlib.h>
 
 #include "../bajo_consumo/BajoConsumo.h"
@@ -75,7 +74,6 @@ osStatus_t flag;
 osStatus_t flagPause;
 AJD_Tablero tablero;
 uint8_t predict[64];
-//lcdMessage_t lcdMsg;
 LedStripMsg_t ledMsg;
 static char consumoActual[4] = { '0', '0', '0' };
 //uint8_t consumoActual ;
@@ -135,7 +133,7 @@ void tick_segundos_callback(void *argument){
 			estado_juego.segundos_negras--;
 		}
 	}
-   printf("[juego::%s] blanca: [%02d:%02d] negra: [%02d:%02d]\n" , __func__, estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
+  //  printf("[juego::%s] blanca: [%02d:%02d] negra: [%02d:%02d]\n" , __func__, estado_juego.segundos_blancas/60, estado_juego.segundos_blancas%60, estado_juego.segundos_negras/60, estado_juego.segundos_negras%60);
    // osMutexRelease(timerMutex);
 	//osThreadFlagsSet(tid_Thread_Principal, ACTUALIZAR_HORA);
 }
@@ -178,16 +176,16 @@ AJD_CasillaPtr tPromo;
         modo = Win;
       }
 
-      printf("[juego::%s] Flag Recibido : [%d]\n", __func__, flagPause);
+      // printf("[juego::%s] Flag Recibido : [%d]\n", __func__, flagPause);
      switch(modo){
          case Init:
-            printf("ESTAMOS EN MODO: INIT\n");
+            // printf("ESTAMOS EN MODO: INIT\n");
             memset(predict,0,8*8*sizeof(uint8_t));
             memset(&estado_juego, 0, sizeof(AJD_Estado));
 
 				inicializa(&tablero);
 				flag = osThreadFlagsWait(FLAG_START | FLAG_RETOCAR, osFlagsWaitAny, osWaitForever);
-				printf("RECIBIDO FLAG\n");
+				// printf("RECIBIDO FLAG\n");
 			
 				
 				//memset(map, 0xFF, 64*sizeof(uint8_t));
@@ -207,7 +205,7 @@ AJD_CasillaPtr tPromo;
 			break;
 			
       case Espera:
-				printf("ESTAMOS EN MODO: ESPERA\n");
+				// printf("ESTAMOS EN MODO: ESPERA\n");
 				if(flag == FLAG_RETOCAR){
 				// ¿NO DEBERÍAMOS AÑADIR AQUÍ ALGO SIMILAR A CUANDO LLEGA EL START?, SINO ES INÚTIL EL FLAG
                estado_juego.negro_jaque = 0;
@@ -228,13 +226,13 @@ AJD_CasillaPtr tPromo;
 				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
 
 			
-        printf("ESTAMOS EN MODO: LECTURA\n");
+        // printf("ESTAMOS EN MODO: LECTURA\n");
         _colocaPiezas(&tablero, map);
         modo = Idle;
 				break;
 			
       case Idle:
-        printf("ESTAMOS EN MODO: IDLE\n");
+        // printf("ESTAMOS EN MODO: IDLE\n");
 				if(!firstRound){
 					estado_juego.juegan_blancas = !estado_juego.juegan_blancas;
 					estado_juego.casilla_seleccionada = NO_SELECCION;
@@ -250,7 +248,7 @@ AJD_CasillaPtr tPromo;
 			break;
 				
       case LevantaPieza:
-				printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
+				// printf("ESTAMOS EN MODO: LEVANTAPIEZA\n");
 				//esperaPausaDetener();
 				osThreadFlagsSet(e_bajoConsumoThreadId, SALIDA_BAJO_CONSUMO);
 				
@@ -263,7 +261,7 @@ AJD_CasillaPtr tPromo;
 					// movInfo.srcY = movedId/8;
 					// movInfo.srcX = movedId%8;
 					// movInfo.origen = &(tablero->casillas[movInfo.srcY*8+movInfo.srcX]);
-					printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
+					// printf("Color pieza: %d, Color turno: %d", estado_juego.casilla_origen->color_pieza, estado_juego.juegan_blancas);
 					if(estado_juego.casilla_origen->color_pieza == estado_juego.juegan_blancas){
 						predictPosition(&tablero, estado_juego.casilla_origen, predict);
 						
@@ -296,7 +294,7 @@ AJD_CasillaPtr tPromo;
 						//if(status == osOK){
 						modo = CompMov;
 					}else{
-						printf("[Error] Movimiento de pieza invalido: origen\n");
+						// printf("[Error] Movimiento de pieza invalido: origen\n");
 						ledMsg.tipoJugada = ACTUAL;
 						ledMsg.nuevaJugada = true;
 						osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
@@ -309,7 +307,7 @@ AJD_CasillaPtr tPromo;
 			break;
 				
       case CompMov:
-				printf("ESTAMOS EN MODO: COMPMOV\n");
+				// printf("ESTAMOS EN MODO: COMPMOV\n");
 				status = osMessageQueueGet(e_positionMessageId, &movedCasilla, NULL, 200);
 				if(status == osOK && movedCasilla.ocupada){
 					//ledMsg.nuevaJugada = true;
@@ -326,8 +324,8 @@ AJD_CasillaPtr tPromo;
 					}else if(esMovimientoValido(&tablero, &estado_juego)){
 						if(estado_juego.casilla_destino->pieza == REY && estado_juego.casilla_destino->color_pieza != estado_juego.juegan_blancas){
 							modo = Win;
-							if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
-							else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
+							// if(estado_juego.juegan_blancas) printf(" [Test] White Wins\n");
+							// else if(!estado_juego.juegan_blancas) printf("  [Test] Black Wins\n");
 							modo = Win;
 							continue;
 						} 
@@ -344,17 +342,17 @@ AJD_CasillaPtr tPromo;
 						checkJaque(&tablero);
 						
 						if(estado_juego.blanco_jaque == 1){
-							printf(" [Test] Jaque al blanco\n");
+							// printf(" [Test] Jaque al blanco\n");
 							estado_juego.blanco_jaque = 0;
 							
 						}else if(estado_juego.negro_jaque == 1){
-							printf(" [Test] Jaque al negro\n");
+							// printf(" [Test] Jaque al negro\n");
 							estado_juego.negro_jaque = 0;
 							
 						} else {
-							printf("Esperando flag distancia\n");
+							// printf("Esperando flag distancia\n");
 							osThreadFlagsWait(FLAG_SENSOR_DISTANCIA, osFlagsWaitAny, osWaitForever);
-							printf("Recibido flag distancia\n");
+							// printf("Recibido flag distancia\n");
 							
 							ComPlacasMsg_t msg = {
 								.remitente = MENSAJE_JUEGO,
@@ -370,7 +368,7 @@ AJD_CasillaPtr tPromo;
                   modo = Idle;
 					}else{
 						//status = osThreadFlagsSet(e_comPlacasRxThreadId, FLAG_ERROR_MOV);
-						printf("[Error] Movimiento de pieza invalido: destino\n");
+						// printf("[Error] Movimiento de pieza invalido: destino\n");
 						ledMsg.nuevaJugada = false;
 						ledMsg.tipoJugada = MOVIMIENTO_ILEGAL;
 						ledMsg.posicion = movedCasilla.casilla;
@@ -388,7 +386,7 @@ AJD_CasillaPtr tPromo;
 			break;
 				
       case Pause:
-				printf("ESTAMOS EN MODO: PAUSE\n");
+				// printf("ESTAMOS EN MODO: PAUSE\n");
 				osTimerStop(tick_segundos);
 				flag = osThreadFlagsWait(FLAG_RESUME, osFlagsWaitAny, osWaitForever);
 				if (flag == FLAG_RESUME){
@@ -401,14 +399,14 @@ AJD_CasillaPtr tPromo;
       case Stop:
 				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
 				SetConsumoActual(consumoEstatico);
-        printf("ESTAMOS EN MODO: STOP\n");
+        // printf("ESTAMOS EN MODO: STOP\n");
 				osTimerStop(tick_segundos);
         modo = Init;
       break;
 			
       case Win:
 				osThreadFlagsSet(e_bajoConsumoThreadId, ENTRADA_BAJO_CONSUMO);
-				printf("ESTAMOS EN MODO: WIN\n");
+				// printf("ESTAMOS EN MODO: WIN\n");
 				SetConsumoActual(consumoEstatico);
 				osTimerStop(tick_segundos);
 				ledMsg.tipoJugada = NACK;
@@ -427,11 +425,11 @@ void setMap(const uint8_t* mapIn, size_t len) {
 
 	osMutexAcquire(mapMutex, osWaitForever);
 	memcpy(map, mapIn, len);
-   printf("[juego::%s] memcpy hecho\n",__func__);
-   for(int i = 0; i < 64; i++){
-      printf("[juego::%s] Recibido Map[%d] == [%02X]\n", __func__, i, map[i]);
-      osDelay(5);
-   }
+  //  printf("[juego::%s] memcpy hecho\n",__func__);
+  //  for(int i = 0; i < 64; i++){
+  //     // printf("[juego::%s] Recibido Map[%d] == [%02X]\n", __func__, i, map[i]);
+  //     osDelay(5);
+  //  }
 
 
 	for (int i = 0; i < 64; i++){
@@ -442,8 +440,8 @@ void setMap(const uint8_t* mapIn, size_t len) {
 			tablero.casilla[i].pieza = (mapIn[i] & 0x0F) + 1;
 			tablero.casilla[i].color_pieza = (mapIn[i] & 0x10) >> 4;
 		}
-		printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
-		tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "blanca" : "negra");
+		// printf("Seteo pieza [%d] = [0x%02X] (color: %s)\n", i, 
+		// tablero.casilla[i].pieza, tablero.casilla[i].color_pieza ? "blanca" : "negra");
 		osDelay(5);
 	}
 	osMutexRelease(mapMutex);
@@ -456,12 +454,12 @@ void getMap(uint8_t* mapOut, size_t len) {
   osMutexAcquire(mapMutex, osWaitForever);
   for (int i = 0; i < 64; i++) {
 		map[i] = ((uint8_t)tablero.casilla[i].pieza - 1) | (tablero.casilla[i].color_pieza << 4);
-    printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "blanca" : "negra");
-    osDelay(5);
+    // printf("Devuelvo pieza [%d] = [0x%02X] (color: %s)\n", i, map[i], tablero.casilla[i].color_pieza ? "blanca" : "negra");
+    // osDelay(5);
   }
   memcpy(mapOut, map, len);
-  for(int i = 0; i < 64; i++)
-    printf("MapOut[%d] = [0x%02X]\n", i, mapOut[i]);
+  // for(int i = 0; i < 64; i++)
+    // printf("MapOut[%d] = [0x%02X]\n", i, mapOut[i]);
   osMutexRelease(mapMutex);
 }
 
@@ -469,7 +467,7 @@ uint8_t GetMinutosBlancas(void)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   uint8_t minutosblancas = (uint8_t)(estado_juego.segundos_blancas/60);
-  printf("MINUTOS BLANCAS QUE SE ENVIAN A WEB: %d\n", minutosblancas);
+  // printf("MINUTOS BLANCAS QUE SE ENVIAN A WEB: %d\n", minutosblancas);
   return (uint8_t)(estado_juego.segundos_blancas/60);
 	// osMutexRelease(timerMutex);
 }
@@ -478,8 +476,8 @@ uint8_t GetSegundosBlancas(void)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   uint8_t segundosblancas = (uint8_t)(estado_juego.segundos_blancas%60);
-  printf("SEGUNDOS BLANCAS QUE SE ENVIAN A WEB: %d\n", segundosblancas);
-  printf("segundos bien blancas: %d\n", estado_juego.segundos_blancas);
+  // printf("SEGUNDOS BLANCAS QUE SE ENVIAN A WEB: %d\n", segundosblancas);
+  // printf("segundos bien blancas: %d\n", estado_juego.segundos_blancas);
   return (uint8_t)(estado_juego.segundos_blancas%60);
 	// osMutexRelease(timerMutex);
 }
@@ -488,8 +486,8 @@ uint8_t GetMinutosNegras(void)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   uint8_t minutosnegras = (uint8_t)(estado_juego.segundos_negras/60);
-  printf("segundos bien negras: %d\n", estado_juego.segundos_negras);
-  printf("MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
+  // printf("segundos bien negras: %d\n", estado_juego.segundos_negras);
+  // printf("MINUTOS NEGRAS QUE SE ENVIAN A WEB: %d\n", minutosnegras);
   return (uint8_t)(estado_juego.segundos_negras/60);
 	// osMutexRelease(timerMutex);
 }
@@ -498,7 +496,7 @@ uint8_t GetSegundosNegras(void)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   uint8_t segundosnegras = (uint8_t)(estado_juego.segundos_negras%60);
-  printf("SEGUNDOS NEGRAS QUE SE ENVIAN A WEB: %d\n", segundosnegras);
+  // printf("SEGUNDOS NEGRAS QUE SE ENVIAN A WEB: %d\n", segundosnegras);
   return (uint8_t)(estado_juego.segundos_negras%60);
 	// osMutexRelease(timerMutex);
 }
@@ -506,14 +504,14 @@ uint8_t GetSegundosNegras(void)
 void SetTurno(const bool turnoBlancas)
 {
   estado_juego.juegan_blancas = turnoBlancas ? 1 : 0;
-  printf("TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
-  printf("TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
+  // printf("TURNO RETOCADO DESDE WEB %s\n", turnoBlancas ? "BLANCAS" : "NEGRAS");
+  // printf("TURNO GUARDADO %s\n", estado_juego.juegan_blancas ? "BLANCAS" : "NEGRAS");
 }
 
 bool GetTurno(void)
 {
   bool turno = (estado_juego.juegan_blancas == 1);
-  printf("TURNO QUE SE ENVIA %s\n", turno ? "BLANCAS" : "NEGRAS");
+  // printf("TURNO QUE SE ENVIA %s\n", turno ? "BLANCAS" : "NEGRAS");
   return (estado_juego.juegan_blancas == 1);
 }
 
@@ -521,8 +519,8 @@ void setTiempoBlancas(uint8_t minutos, uint8_t segundos)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   estado_juego.segundos_blancas = minutos * 60 + segundos;
-  printf("TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
-  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
+  // printf("TIEMPO BLANCAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+  // printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_blancas);
 	// osMutexRelease(timerMutex);
 }
 
@@ -530,8 +528,8 @@ void setTiempoNegras(uint8_t minutos, uint8_t segundos)
 {
 	// osMutexAcquire(timerMutex, osWaitForever);
   estado_juego.segundos_negras = minutos * 60 + segundos;
-  printf("TIEMPO NEGRAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
-  printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_negras);
+  // printf("TIEMPO NEGRAS RETOCADO DESDE WEB: minutos %d, segundos %d\n", minutos, segundos);
+  // printf("TIEMPO GUARDADO: segundos totales %d\n", estado_juego.segundos_negras);
 	// osMutexRelease(timerMutex);
 
 }
@@ -799,7 +797,7 @@ void actualizaJuego (AJD_TableroPtr tablero)
    default:
       break;
    }
-	 printf("%d", (uint8_t)(estado_juego.casilla_destino->id));
+	//  printf("%d", (uint8_t)(estado_juego.casilla_destino->id));
 
 }
 
@@ -865,7 +863,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
  //for (int i = 0; i < 32;) {
  do{
    status = osMessageQueueGet(e_juegoRxMessageId, &msgRx, NULL, 1000);
-   printf("[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
+  //  printf("[juego::%s] status[%d] remitente[%d] pieza[%d]\n", __func__, status, msgRx.remitente, msgRx.pieza);
 	 //posCl[i] = pos;
    if(status == osOK) {
       uint8_t pos = msgRx.pieza;
@@ -890,8 +888,8 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
             ledMsg.posicion = convertNum(j);
             ledMsg.nuevaJugada = false;
             ledMsg.tipoJugada = POSIBLE_MOVIMIENTO;
-            printf("[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
-            printf("[juego::%s] Led: posicion[%d]\n", __func__, ledMsg.posicion);
+            // printf("[juego::%s] casilla[%d] pieza[%d] color[%d]\n", __func__, j, tablero->casilla[j].pieza, tablero->casilla[j].color_pieza);
+            // printf("[juego::%s] Led: posicion[%d]\n", __func__, ledMsg.posicion);
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
            do{ 
             status = osMessageQueueGet(e_positionMessageId, &position, NULL, osWaitForever);
@@ -915,8 +913,8 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
               .mensaje[0]   = 0x01U,  // FLAG_PIEZA_LEIDA
               .mensaje[1]   = 0
             };
-            printf("[juego::%s] Mensaje a enviar:\n", __func__);
-            printf("[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
+            // printf("[juego::%s] Mensaje a enviar:\n", __func__);
+            // printf("[juego::%s] Remitente[%d] destinatario[%d] mensaje[0] = [%d] mensaje[1] = [%d]\n", __func__, msgTx.remitente, msgTx.destinatario, msgTx.mensaje[0], msgTx.mensaje[1]);
             osMessageQueuePut(e_comPlacasTxMessageId, &msgTx, 1, 0);
             ledMsg.tipoJugada = ACK;
             osMessageQueuePut(e_ledStripMessageId, &ledMsg, 1, 0);
@@ -925,7 +923,7 @@ void _colocaPiezas(AJD_TableroPtr tablero, uint8_t* map )
          }
       }
       if(!found){
-         printf("[Error] Pieza no encontrado\n");
+        //  printf("[Error] Pieza no encontrado\n");
         ComPlacasMsg_t msgTx = {
           .remitente    = MENSAJE_JUEGO,
           .destinatario = MENSAJE_NFC,
@@ -983,7 +981,7 @@ void newGameMap(void)
   }
   for (int i = 0; i < 64; i++)
   {
-     printf("[juego::%s] map[%d] = [%02X]\n", __func__, i, map[i]);
+    //  printf("[juego::%s] map[%d] = [%02X]\n", __func__, i, map[i]);
      osDelay(5);
   }
 }
@@ -1025,7 +1023,7 @@ void juegoInitialize(void)
 
   if ((e_juegoThreadId == NULL))
   {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoThreadId == NULL));
+    // printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoThreadId == NULL));
   }
 }
 
@@ -1036,7 +1034,7 @@ void juegoTbInitialize(void)
 
   if ((e_juegoTestbenchThreadId == NULL))
   {
-    printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
+    // printf("[position::%s] ERROR! osThreadNew [%d]\n", __func__, (e_juegoTestbenchThreadId == NULL));
   }
 }
 

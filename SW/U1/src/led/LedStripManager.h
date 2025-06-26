@@ -8,12 +8,16 @@
 
 typedef enum {
   POSIBLE_MOVIMIENTO = 0,
-  MOVIMIENTO_ILEGAL  = 1,
-  CAPTURA            = 2,
-  ESPECIAL           = 3,
-  ACTUAL             = 4,
-  ACK                = 5,
-  NACK               = 6
+  MOVIMIENTO_ILEGAL,
+  CAPTURA,
+  ESPECIAL,
+  ACTUAL,
+  APAGAR_CASILLA,
+  APAGAR_TABLERO,
+  ACK,
+  NACK,
+  PIEZA_COMIDA,
+  TABLERO_PUESTO
 } ETipoJugada;
 
 typedef struct {

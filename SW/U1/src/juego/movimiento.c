@@ -344,7 +344,7 @@ void muevePieza (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 //
 void promocionaPeon (AJD_TableroPtr tablero, AJD_CasillaPtr casilla)
 {
-    printf ("Promocionando PEON      ");
+    // printf ("Promocionando PEON      ");
     // TODO: De momento siempre promociona a DAMA, queda pendiente
     //       poder seleccionar (con cursores p.ej.) el tipo de pieza
     casilla->pieza = DAMA;
@@ -380,7 +380,7 @@ int peonUltimaFila (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
     if (idCasilla >= limites[!juegan_blancas][0] 
         &&  idCasilla <= limites[!juegan_blancas][1])
     {
-        printf ("SI!!");
+        // printf ("SI!!");
         return 1;
     }
     return 0;
@@ -392,7 +392,7 @@ void efectuaEnroque (AJD_TableroPtr tablero, AJD_EstadoPtr estado_juego)
 {
     AJD_idCasilla origen, destino;
 
-    printf("ENROCANDO!!!");
+    // printf("ENROCANDO!!!");
     // Mueve primero el rey
     muevePieza (tablero, estado_juego);
 

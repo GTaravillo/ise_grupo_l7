@@ -40,7 +40,7 @@ void I2C_SignalEvent_dis(uint32_t event){
 int ThDistancia(void){
     tid_ThDistancia = osThreadNew(Thread_Dis, NULL, NULL);
     if (tid_ThDistancia == NULL) {
-      printf("[distancia::%s] ERROR HILO!", __func__);
+      // printf("[distancia::%s] ERROR HILO!", __func__);
         return(-1);
     }
     return(0);
@@ -66,7 +66,7 @@ void Thread_Dis(void* argument){
           flag = FLAG_EMPIEZA_DIS;//osThreadFlagsWait(FLAG_EMPIEZA_DIS, osFlagsWaitAny, osWaitForever);
           osThreadFlagsClear(FLAG_EMPIEZA_DIS);
           key = (flag & FLAG_EMPIEZA_DIS) == FLAG_EMPIEZA_DIS ? 1 : 0;
-					printf("[distancia::%s] key[%d]\n", __func__, key);
+					// printf("[distancia::%s] key[%d]\n", __func__, key);
           flag = 0;
           
         } else {
@@ -76,20 +76,20 @@ void Thread_Dis(void* argument){
           if (Range.errorStatus == 0 ){
               
               if (read_h == 0){
-                printf("%d mm\n", Range.range_mm);
+                // printf("%d mm\n", Range.range_mm);
                 msg_dis.mensaje[0] = Range.range_mm;
                 status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg_dis, 0U, 0U);
               }
               read_h = Range.range_mm;
           }else{
               read_h = 0;
-              printf("Error\n");
+              // printf("Error\n");
           }
-          printf("ESPERO FLAG JUEGO\n");
+          // printf("ESPERO FLAG JUEGO\n");
           flag = osThreadFlagsWait(FLAG_PARA_DIS, osFlagsWaitAny, 1000U);
 					VL6180x_ClearErrorInterrupt(dev);
 					VL6180x_Prepare(dev);
-					printf("FLAG [%d] JUEGO RECIBIDA\n", flag);
+					// printf("FLAG [%d] JUEGO RECIBIDA\n", flag);
           osThreadFlagsClear(FLAG_PARA_DIS);
           key = flag == FLAG_PARA_DIS ? 0 : 1;
           flag = 0;
@@ -116,10 +116,10 @@ void dis_sim(void* argument){
   //osDelay(5000);
   do{
     flag[0]=osThreadFlagsSet(tid_ThDistancia, FLAG_EMPIEZA_DIS);
-    printf("dintance ditection on [%d]\n", flag[0]);
+    // printf("dintance ditection on [%d]\n", flag[0]);
     osDelay(20000);
     flag[1] =osThreadFlagsSet(tid_ThDistancia, FLAG_PARA_DIS);
-    printf("dintance ditection off [%d]\n", flag[1]);
+    // printf("dintance ditection off [%d]\n", flag[1]);
     osDelay(3000);
   }while(1);
   osThreadYield(); 

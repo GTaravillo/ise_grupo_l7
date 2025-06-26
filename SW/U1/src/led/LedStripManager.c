@@ -14,7 +14,7 @@
 #define  STOP                 0xFF  // 4
 #define  BRIGHTNESS_MASK      0xE0  // [D7:D5]  // Brightness (0-31)
 /* Flags */
-#define LCD_TRANSFER_COMPLETE 0xFF  // Used to signal the end of SPI transfer
+#define LED_TRANSFER_COMPLETE 0xFF  // Used to signal the end of SPI transfer
 /* Control */
 #define BRILLO_DEFECTO        15
 /* Cola mensajes */
@@ -29,6 +29,7 @@ osThreadId_t        e_ledStripManagerThreadId;
 /* Private */
 
 typedef struct {
+  uint8_t brillo;
   uint8_t red;
   uint8_t green;
   uint8_t blue;
@@ -58,22 +59,33 @@ extern ARM_DRIVER_SPI   Driver_SPI2;
 
 
 static ColorLed_t g_leds[64];  // Almacena datos colores de los LEDs a encender
-static uint8_t brillo = BRILLO_DEFECTO;
 
 static void Run(void *argument);
 static void InitializeSpiDriver(void);
+
 static bool RecepcionCorrecta(osStatus_t status);
 static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx);
+
 static void ProcesarMensaje(LedStripMsg_t mensajeRx);
-static void StartCommunication(void);
-static void StopCommunication(void);
-static void EnviarComando(unsigned char cmd);
-static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores);
-static void EnviarDatos(void);
+static void ProcesarPosibleMovimiento(LedStripMsg_t mensajeRx);
+static void ProcesarMovimientoIlegal(LedStripMsg_t mensajeRx);
+static void ProcesarCaptura(LedStripMsg_t mensajeRx);
+static void ProcesarJugadaEspecial(LedStripMsg_t mensajeRx);
+static void ProcesarPosicionActual(LedStripMsg_t mensajeRx);
+static void ProcesarApagarCasilla(LedStripMsg_t mensajeRx);
+static void ProcesarApagarTablero(void);
+static void ProcesarPatronAck(void);
+static void ProcesarPatronNack(void);
+static void ProcesarPatronPiezaComida(void);
+static void ProcesarPatronTableroPuesto(void);
+
 static void TestLeds(void);
 static void TurnOff(void);
-static void StartAckPattern(void);
-static void StartNackPattern(void);
+
+static void EnviarDatos(void);
+static void StartCommunication(void);
+static void EnviarComando(unsigned char cmd);
+static void StopCommunication(void);
 
 void  ARM_LedSPI_SignalEvent(uint32_t event);
 
@@ -84,9 +96,11 @@ void LedStripManagerInitialize(void)
   e_ledStripManagerThreadId = osThreadNew(Run, NULL, NULL);
   e_ledStripMessageId       = osMessageQueueNew(NUMERO_MENSAJES_MAX, sizeof(LedStripMsg_t), NULL);
 
-  if ((e_ledStripManagerThreadId == NULL) || (e_ledStripMessageId == NULL))
+  const bool errorThread = e_ledStripManagerThreadId == NULL;
+  const bool errorQueue  = e_ledStripMessageId == NULL;
+  if (errorThread || errorQueue)
   {
-    //printf("[lcd::%s] ERROR! osThreadNew [%d]\n", __func__, (e_ledStripManagerThreadId == NULL));
+    // printf("[LED::%s] ERROR! thread[%d] queue[%d]\n", __func__, errorThread, errorQueue);
   }
 }
 
@@ -103,25 +117,11 @@ static void Run(void *argument)
   {
     osStatus_t status;
 
-    memset(&mensajeRx, 0, sizeof(mensajeRx));
-    // EnviarDatos();
     status = osMessageQueueGet(e_ledStripMessageId, &mensajeRx, NULL, osWaitForever);
-    if (mensajeRx.tipoJugada == ACK)
-    {
-      TurnOff();
-      StartAckPattern();
-      TurnOff();
-    }
-    else if (mensajeRx.tipoJugada == NACK)
-    {
-      TurnOff();
-      StartNackPattern();
-      TurnOff();
-    }
-    else if (RecepcionCorrecta(status) && PosicionRecibidaValida(mensajeRx))
+
+    if (RecepcionCorrecta(status))
     {
       ProcesarMensaje(mensajeRx);
-      EnviarDatos();
     }
   }
 }
@@ -145,19 +145,19 @@ static bool RecepcionCorrecta(osStatus_t status)
       return true;
 
     case osErrorTimeout:
-     // printf("[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
+    //  printf("[LedStrip::%s] The message could not be retrieved from the queue in the given time\n", __func__);
       return false;
 
     case osErrorResource:
-     //printf("[LedStrip::%s] Nothing to get from the queue\n", __func__);
+    //  printf("[LedStrip::%s] Nothing to get from the queue\n", __func__);
       return false;
 
     case osErrorParameter:
-      //printf("[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
+      // printf("[LedStrip::%s] Parameter mq_id is NULL or invalid, non-zero timeout specified in an ISR\n", __func__);
       return false;
 
     default:
-      //printf("[LedStrip::%s] Unknown error [%d]\n", __func__, status);
+      // printf("[LedStrip::%s] Unknown error [%d]\n", __func__, status);
       return false;
   }
 }
@@ -165,100 +165,330 @@ static bool RecepcionCorrecta(osStatus_t status)
 static bool PosicionRecibidaValida(LedStripMsg_t mensajeRx)
 {
   const uint8_t posicion  = mensajeRx.posicion;
-	char* posicionStr;
-	PositionToString(posicion, posicionStr);
 
-  //printf("[LedStrip::%s] RECIBIDO: posicion[%d] (%s)\n", __func__, posicion, posicionStr);
   if (posicion < 64)
   {
     return true;
   }
   
-// printf("[LedStrip::%s] ERROR! Posicion [%d] invalida\n", __func__, posicion);
   return false;
 }
 
 static void ProcesarMensaje(LedStripMsg_t mensajeRx)
 {
-  // Si es jugada nueva, vacio array de leds
-  const bool nuevaJugada = mensajeRx.nuevaJugada;
-  if (nuevaJugada)
+  switch(mensajeRx.tipoJugada)
   {
-    //printf("[LedStrip::%s] RESET LEDS\n", __func__);
-    memset(g_leds, 0, sizeof(g_leds));
+    case POSIBLE_MOVIMIENTO:
+      ProcesarPosibleMovimiento(mensajeRx);
+    break;
+
+    case MOVIMIENTO_ILEGAL:
+      ProcesarMovimientoIlegal(mensajeRx);
+    break;
+
+    case CAPTURA:
+      ProcesarCaptura(mensajeRx);
+    break;
+
+    case ESPECIAL:
+      ProcesarJugadaEspecial(mensajeRx);
+    break;
+
+    case ACTUAL:
+      ProcesarPosicionActual(mensajeRx);
+    break;
+
+    case APAGAR_CASILLA:
+      ProcesarApagarCasilla(mensajeRx);
+    break;
+
+    case APAGAR_TABLERO:
+      ProcesarApagarTablero();
+    break;
+
+    case ACK:
+      ProcesarPatronAck();
+    break;
+
+    case NACK:
+      ProcesarPatronNack();
+    break;
+
+    case PIEZA_COMIDA:
+      ProcesarPatronPiezaComida();
+    break;
+
+    case TABLERO_PUESTO:
+      ProcesarPatronTableroPuesto();
+    break;
+
+    default:
+    break;
+  }
+}
+
+static void ProcesarPosibleMovimiento(LedStripMsg_t mensajeRx)
+{
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
     return;
   }
 
-  // Cojo datos mensaje
-  ColorLed_t colores;
-  const ETipoJugada tipoJugada = mensajeRx.tipoJugada;
-  GetColor(tipoJugada, &colores);
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
 
-  //printf("[LedStrip::%s] ENCENDER LED [%d]\n", __func__, mensajeRx.posicion);
-  g_leds[mensajeRx.posicion] = colores;
+  g_leds[mensajeRx.posicion].brillo = BRILLO_DEFECTO;
+  g_leds[mensajeRx.posicion].red   = 0;
+  g_leds[mensajeRx.posicion].green = 0;
+  g_leds[mensajeRx.posicion].blue  = 255;
+  
+  EnviarDatos();
 }
 
-static void GetColor(ETipoJugada tipoJugada, ColorLed_t* colores)
+static void ProcesarMovimientoIlegal(LedStripMsg_t mensajeRx)
 {
-	if (colores == NULL)
-	{
-		//printf("[LedStrip::%s] ERROR! Parametro colores es NULL\n", __func__);
-		return;
-	}
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
+    return;
+  }
+
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
+
+	g_leds[mensajeRx.posicion].brillo = BRILLO_DEFECTO;
+  g_leds[mensajeRx.posicion].red   = 255;
+  g_leds[mensajeRx.posicion].green = 0;
+  g_leds[mensajeRx.posicion].blue  = 0;
+  
+  EnviarDatos();
+}
+
+static void ProcesarCaptura(LedStripMsg_t mensajeRx)
+{
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
+    return;
+  }
+
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
 	
-	switch (tipoJugada)
+	g_leds[mensajeRx.posicion].brillo = BRILLO_DEFECTO;
+  g_leds[mensajeRx.posicion].red   = 0;
+  g_leds[mensajeRx.posicion].green = 255;
+  g_leds[mensajeRx.posicion].blue  = 0;
+  
+  EnviarDatos();
+}
+
+static void ProcesarJugadaEspecial(LedStripMsg_t mensajeRx)
+{
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
+    return;
+  }
+
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
+
+  g_leds[mensajeRx.posicion].brillo = BRILLO_DEFECTO;
+  g_leds[mensajeRx.posicion].red   = 255;
+  g_leds[mensajeRx.posicion].green = 0;
+  g_leds[mensajeRx.posicion].blue  = 255;
+  
+  EnviarDatos();
+}
+
+static void ProcesarPosicionActual(LedStripMsg_t mensajeRx)
+{
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
+    return;
+  }
+
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
+
+  g_leds[mensajeRx.posicion].brillo = BRILLO_DEFECTO;
+  g_leds[mensajeRx.posicion].red   = 255;
+  g_leds[mensajeRx.posicion].green = 255;
+  g_leds[mensajeRx.posicion].blue  = 255;
+  
+  EnviarDatos();
+}
+
+static void ProcesarApagarCasilla(LedStripMsg_t mensajeRx)
+{
+  if (!PosicionRecibidaValida(mensajeRx))
+  {
+    return;
+  }
+
+  if (mensajeRx.nuevaJugada)
+  {
+    TurnOff();
+  }
+
+  g_leds[mensajeRx.posicion].brillo = 0;
+  g_leds[mensajeRx.posicion].red   = 0;
+  g_leds[mensajeRx.posicion].green = 0;
+  g_leds[mensajeRx.posicion].blue  = 0;
+  
+  EnviarDatos();
+}
+
+static void ProcesarApagarTablero(void)
+{
+  TurnOff();
+}
+
+static void ProcesarPatronAck(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
 	{
-		case POSIBLE_MOVIMIENTO:
-			colores->red   = 0;
-		  colores->green = 0;
-		  colores->blue  = 255;
-		  //printf("[LedStrip::%s] COLOR AZUL\n", __func__);
-		  break;
-		
-		case MOVIMIENTO_ILEGAL:
-			colores->red   = 255;
-		  colores->green = 0;
-		  colores->blue  = 0;
-		  //printf("[LedStrip::%s] COLOR ROJO\n", __func__);
-		  break;
-		
-		case CAPTURA:
-			colores->red   = 0;
-		  colores->green = 255;
-		  colores->blue  = 0;
-		  //printf("[LedStrip::%s] COLOR VERDE\n", __func__);
-		  break;
-		
-		case ESPECIAL:
-			colores->red   = 255;
-		  colores->green = 0;
-		  colores->blue  = 255;
-		  //printf("[LedStrip::%s] COLOR MORADO\n", __func__);
-		  break;
-		
-		case ACTUAL:
-			colores->red   = 255;
-		  colores->green = 255;
-		  colores->blue  = 255;
-		  //printf("[LedStrip::%s] COLOR BLANCO\n", __func__);
-      break;
-    
-    case ACK:
-      colores->red   = 0;
-		  colores->green = 255;
-		  colores->blue  = 0;
-    break;
-    
-    case NACK:
-      colores->red   = 255;
-		  colores->green = 0;
-		  colores->blue  = 0;
-    break;
-		
-		default:
-			//printf("[LedStrip::%s] Tipo de jugada desconocida\n", __func__);
-			break;
+    const uint8_t azul  = 0;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 0;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
 	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+}
+
+static void ProcesarPatronNack(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 0;
+    const uint8_t rojo  = 255;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+}
+
+static void ProcesarPatronPiezaComida(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 255;
+    const uint8_t verde = 0;
+    const uint8_t rojo  = 0;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 255;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+}
+
+static void ProcesarPatronTableroPuesto(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 255;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 255;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 255;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 255;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 255;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 255;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(100);
+
+  TurnOff();
 }
 
 static void EnviarDatos(void)
@@ -270,16 +500,54 @@ static void EnviarDatos(void)
     const uint8_t azul  = g_leds[i].blue;
     const uint8_t verde = g_leds[i].green;
     const uint8_t rojo  = g_leds[i].red;
-		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
 
-		EnviarComando(BRIGHTNESS_MASK | brillo);
+		EnviarComando(BRIGHTNESS_MASK | g_leds[i].brillo);
     EnviarComando(azul);  // B
     EnviarComando(verde); // G
     EnviarComando(rojo);  // R
-   // osDelay(5);
 	}
 
 	StopCommunication();
+}
+
+static void TestLeds(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 255;
+    const uint8_t rojo  = 0;
+
+		EnviarComando(BRIGHTNESS_MASK | BRILLO_DEFECTO);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
+  osDelay(1000);
+
+  TurnOff();
+}
+
+static void TurnOff(void)
+{
+  memset(g_leds, 0, sizeof(g_leds));
+  StartCommunication();
+  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
+	{
+    const uint8_t azul  = 0;
+    const uint8_t verde = 0;
+    const uint8_t rojo  = 0;
+
+		EnviarComando(BRIGHTNESS_MASK | 0);
+    EnviarComando(azul);  // B
+    EnviarComando(verde); // G
+    EnviarComando(rojo);  // R
+	}
+  StopCommunication();
 }
 
 static void StartCommunication(void)
@@ -290,6 +558,12 @@ static void StartCommunication(void)
   }
 }
 
+static void EnviarComando(unsigned char cmd)
+{
+  SPIdrv2->Send(&cmd, sizeof(cmd));
+  osThreadFlagsWait(LED_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
+}
+
 static void StopCommunication(void)
 {
   for (int i = 0; i < 4; i++)
@@ -298,112 +572,12 @@ static void StopCommunication(void)
   }
 }
 
-static void EnviarComando(unsigned char cmd)
-{
-  SPIdrv2->Send(&cmd, sizeof(cmd));
-  osThreadFlagsWait(LCD_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
-}
-
-static void TestLeds(void)
-{
-  ColorLed_t colores;
-  const ETipoJugada tipoJugada = CAPTURA;
-  GetColor(tipoJugada, &colores);
-
-  StartCommunication();
-  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
-	{
-    g_leds[i]           = colores;
-    const uint8_t azul  = g_leds[i].blue;
-    const uint8_t verde = g_leds[i].green;
-    const uint8_t rojo  = g_leds[i].red;
-		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
-
-		EnviarComando(BRIGHTNESS_MASK | brillo);
-    EnviarComando(azul);  // B
-    EnviarComando(verde); // G
-    EnviarComando(rojo);  // R
-    osDelay(5);
-	}
-  StopCommunication();
-}
-
-static void TurnOff(void)
-{
-  memset(g_leds, 0, sizeof(g_leds));
-  StartCommunication();
-  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
-	{
-    const uint8_t azul  = g_leds[i].blue;
-    const uint8_t verde = g_leds[i].green;
-    const uint8_t rojo  = g_leds[i].red;
-		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
-
-		EnviarComando(BRIGHTNESS_MASK | 0);
-    EnviarComando(azul);  // B
-    EnviarComando(verde); // G
-    EnviarComando(rojo);  // R
-    osDelay(5);
-	}
-  StopCommunication();
-}
-
-static void StartAckPattern(void)
-{
-  ColorLed_t colores;
-  const ETipoJugada tipoJugada = ACK;
-  GetColor(tipoJugada, &colores);
-
-  StartCommunication();
-  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
-	{
-    g_leds[i]           = colores;
-    const uint8_t azul  = g_leds[i].blue;
-    const uint8_t verde = g_leds[i].green;
-    const uint8_t rojo  = g_leds[i].red;
-		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
-
-		EnviarComando(BRIGHTNESS_MASK | brillo);
-    EnviarComando(azul);  // B
-    EnviarComando(verde); // G
-    EnviarComando(rojo);  // R
-    osDelay(5);
-	}
-  StopCommunication();
-  //osDelay(5);
-}
-
-static void StartNackPattern(void)
-{
-  ColorLed_t colores;
-  const ETipoJugada tipoJugada = NACK;
-  GetColor(tipoJugada, &colores);
-
-  StartCommunication();
-  for (int i = 0; i < sizeof(g_leds)/sizeof(g_leds[0]); i++)
-	{
-    g_leds[i]           = colores;
-    const uint8_t azul  = g_leds[i].blue;
-    const uint8_t verde = g_leds[i].green;
-    const uint8_t rojo  = g_leds[i].red;
-		//printf("[LedStrip::%s] led[%d] R[%d] G[%d] B[%d]\n", __func__, i, azul, verde, rojo);
-
-		EnviarComando(BRIGHTNESS_MASK | brillo);
-    EnviarComando(azul);  // B
-    EnviarComando(verde); // G
-    EnviarComando(rojo);  // R
-    osDelay(5);
-	}
-  StopCommunication();
-  //osDelay(5);
-}
-
 void ARM_LedSPI_SignalEvent(uint32_t event)
 {
   if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE)
   {
     // Data Transfer completed
-    osThreadFlagsSet(e_ledStripManagerThreadId, LCD_TRANSFER_COMPLETE);
+    osThreadFlagsSet(e_ledStripManagerThreadId, LED_TRANSFER_COMPLETE);
   }
   if (event & ARM_SPI_EVENT_MODE_FAULT)
   {

@@ -145,25 +145,25 @@ void ThADC (void *argument) {
 	  value_ruido=ADC_getVoltage(&adchandle , 10 ); //get values from channel 10->ADC123_IN10
 		value_consumo=ADC_getVoltage(&adchandle , 13 );
 		
-		printf(" rudio %f \n", ((3.3*value_ruido)/4096));
+		// printf(" rudio %f \n", ((3.3*value_ruido)/4096));
 		value_ruido = ((((3.3*value_ruido)/4096)-2.1)/(2.7-2.1))*100 ;
 		value_consumo = ((3.3*value_consumo)/4096)*100;
 		
 		
- 		printf("Valor de ruido medido: %f porciento, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
+ 		// printf("Valor de ruido medido: %f porciento, valor de consumo leido : %f mA \n",value_ruido,value_consumo);
 
 		adc_queue_msg.ruido = (uint32_t)(value_ruido);
 		adc_queue_msg.consumo =(uint32_t)(value_consumo);
 		
 
-		printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",adc_queue_msg.ruido,adc_queue_msg.consumo);
+		// printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",adc_queue_msg.ruido,adc_queue_msg.consumo);
 
 		msg.destinatario= MENSAJE_SERVIDOR;
 		msg.remitente = MENSAJE_ADC;
 		msg.mensaje[0] = (uint8_t)adc_queue_msg.ruido;
 		msg.mensaje[1] = (uint8_t)adc_queue_msg.consumo;
     		
-    printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",msg.mensaje[0],msg.mensaje[1]);
+    // printf("Valor de ruido medido: %d porciento, valor de consumo leido : %d mA \n",msg.mensaje[0],msg.mensaje[1]);
     
     //osDelay(1000);
 		

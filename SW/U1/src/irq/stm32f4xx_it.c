@@ -2,7 +2,6 @@
 #include "stm32f4xx_it.h"
 #include "stm32f4xx_hal.h"
 #include "../rtc/rtc.h"
-#include "../led/led.h"
 #include "../posicion/PositionManager.h"
 
 /* Private typedef -----------------------------------------------------------*/

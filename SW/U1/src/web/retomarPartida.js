@@ -20,6 +20,37 @@ const ENDPOINTS = {
 const WEBPAGE_NAME = "retomarPartida.cgi";
 const FORM_NAME    = "retomarPartida";
 
+const STATE_KEY = 'gameButtonState';
+const States = {
+  INIT:      'init',
+  STARTED:   'started',
+  SUSPENDED: 'suspended',
+  RESIGNED:  'resigned'
+};
+const btn = {
+  iniciar:   'btnIniciar',
+  pausar:    'btnPausar',
+  suspender: 'btnSuspender',
+  rendirse:  'btnRendirse'
+};
+// map each state to disabled=true/false for each button
+const stateConfig = {
+  [States.INIT]:      { iniciar:false, pausar:true,  suspender:true,  rendirse:true  },
+  [States.STARTED]:   { iniciar:true,  pausar:false, suspender:false, rendirse:false },
+  [States.SUSPENDED]: { iniciar:false, pausar:false, suspender:true,  rendirse:false },
+  [States.RESIGNED]:  { iniciar:false, pausar:true,  suspender:true,  rendirse:true  },
+};
+
+function applyState(s) {
+  const cfg = stateConfig[s] || stateConfig[States.INIT];
+  Object.entries(cfg).forEach(([key, isDisabled]) => {
+    const b = document.getElementById(btn[key]);
+    if (b) b.disabled = isDisabled;
+  });
+}
+function saveState(s)   { localStorage.setItem(STATE_KEY, s); }
+function loadState()    { return localStorage.getItem(STATE_KEY) || States.INIT; }
+
 function submitFormAjax() {
   // Only send the button state, since all fields are read-only
   var data = [];
@@ -109,6 +140,9 @@ function reanudar(event) {
   buttonStates = {
     btnReanudar:   1,
   };
+
+  applyState(States.SUSPENDED);
+  saveState(States.SUSPENDED);
 
   return submitFormAjax();
 }

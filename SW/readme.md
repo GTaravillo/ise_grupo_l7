@@ -20,14 +20,6 @@ Printf:         PB3
   
 ## <ins>U1</ins>  
   
-### LCD  
-    **SPI1**  
-    MOSI:       PB5  ->  mbed_05  
-    SCK:        PA5  ->  mbed_07  
-    Reset:      PA6  ->  mbed_06  
-    A0:         PF13 ->  mbed_08  
-    nCS:        PD14 ->  mbed_11  
-  
 ### LEDs RGB  
     **SPI2**  
     MOSI:       PB15 ->  DATA  

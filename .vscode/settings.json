@@ -10,6 +10,7 @@
       "testmemoria.h": "c",
       "cstdlib": "c",
       "comunicacionplacas.h": "c",
-      "bajoconsumo.h": "c"
+      "bajoconsumo.h": "c",
+      "tablero.h": "c"
     }
 }

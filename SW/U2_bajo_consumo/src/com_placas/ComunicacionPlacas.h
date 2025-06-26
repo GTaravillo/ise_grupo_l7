@@ -20,16 +20,15 @@
 
 typedef enum
 {
-  MENSAJE_LCD          = 1,
-  MENSAJE_LED_STRIP    = 2,
-  MENSAJE_SERVIDOR     = 3,
-  MENSAJE_RTC          = 4,
-  MENSAJE_POSICION     = 5,
-  MENSAJE_MEMORIA      = 6,
-  MENSAJE_JUEGO        = 7,
-  MENSAJE_DISTANCIA    = 8,
-  MENSAJE_NFC          = 9,
-  MENSAJE_ADC					 = 10,
+  MENSAJE_LED_STRIP    = 1,
+  MENSAJE_SERVIDOR     = 2,
+  MENSAJE_RTC          = 3,
+  MENSAJE_POSICION     = 4,
+  MENSAJE_MEMORIA      = 5,
+  MENSAJE_JUEGO        = 6,
+  MENSAJE_DISTANCIA    = 7,
+  MENSAJE_NFC          = 8,
+  MENSAJE_ADC					 = 9,
 } EModulos;
 
 typedef struct

@@ -11,7 +11,10 @@
 	#endif
 
 	// Color enum (piezas o casillas)
-	typedef enum { NEGRO, BLANCO } AJD_Color;
+	typedef enum { 
+    NEGRO = 0, 
+    BLANCO
+  } AJD_Color;
 
 	// Identificador de pieza
 	//typedef enum { NONE, PEON, TORRE, CABALLO, ALFIL, DAMA, REY } AJD_Pieza;

@@ -404,13 +404,13 @@ static void MX_SPI3_Init(void)
 	
   if (HAL_SPI_Init(&hspi3) == HAL_OK)
   {
-    printf("SPI inicialized succesfully.\n");
+    // printf("SPI inicialized succesfully.\n");
   }else if ((HAL_SPI_Init(&hspi3) == HAL_ERROR))
 	{
-		printf("Error ocurred during SPI inicializing.\n");
+		// printf("Error ocurred during SPI inicializing.\n");
 	}else if ((HAL_SPI_Init(&hspi3) == HAL_TIMEOUT))
 	{
-		printf("Timeout during SPI initialization.\n");
+		// printf("Timeout during SPI initialization.\n");
 	}
 
 }
@@ -486,15 +486,15 @@ void RC_RUN(void *argument){
 		state = MFRC522_Anticoll(readUid, 1);//防冲撞
 		if (state == MI_OK)
 		{
-			printf("Card read: %d %d %d\n",CT[0],CT[1],CT[2]);
-			printf("UID: %d %d %d %d %d ",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
+			// printf("Card read: %d %d %d\n",CT[0],CT[1],CT[2]);
+			// printf("UID: %d %d %d %d %d ",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
 			size = MFRC522_SelectTag(readUid, 1);
 		}
 		
 		state = MFRC522_Anticoll(readUid, 2);//防冲撞2
 		if (state == MI_OK)
 		{
-			printf("%d %d %d %d %d\n",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
+			// printf("%d %d %d %d %d\n",readUid[0],readUid[1],readUid[2],readUid[3],readUid[4]);
 			size = MFRC522_SelectTag(readUid, 2);
 		}
 //		if (size != 0)
@@ -531,23 +531,23 @@ void RC_RUN(void *argument){
 			state = MFRC522_Read(0x04, pData);
 			if (state == MI_OK)
 			{
-				printf("Read: ");
+				// printf("Read: ");
 				for(i = 0; i < 16; i++)
 				{
           if (i < 9)
-					printf("%02x ", pData[i]);
+					// printf("%02x ", pData[i]);
           if (i == 9)
-            printf("\n pieza =");
+            // printf("\n pieza =");
           if (i >= 9)
-            printf("%c ", pData[i]);
+            // printf("%c ", pData[i]);
 				}
-        printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
-				printf("\n");
+        // printf("%c%c%c%c",pData[9],pData[10],pData[11],pData[12]);
+				// printf("\n");
         msg.destinatario = MENSAJE_JUEGO;
 				msg.mensaje[0] = (char)(pData[9]-48);
         
-        printf("[RC522::%s] Mensaje a enviar:\n", __func__);
-        printf("[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
+        // printf("[RC522::%s] Mensaje a enviar:\n", __func__);
+        // printf("[RC522::%s] remitente[%d] mensaje[0] = [0x%02X] mensaje[1] = [0x%02X]\n", __func__, msg.remitente, msg.mensaje[0], msg.mensaje[1]);
         status_cola=osMessageQueuePut(e_comPlacasTxMessageId, &msg, 1, 0);
 				MFRC522_Halt();
         osThreadFlagsWait(FLAG_PIEZA_LEIDA, osFlagsWaitAll, 5000);
@@ -555,13 +555,13 @@ void RC_RUN(void *argument){
 			}
 			else
 			{
-				printf("Fail to read content.\n");
+				// printf("Fail to read content.\n");
 			}
 		}
 		
     
 	}else if(state == MI_NOTAGERR){
-		printf("No card read\n");
+		// printf("No card read\n");
 	}else{
 		//printf("[RC522::%s]Error! State[%d]\n", __func__, state);
 	}
@@ -569,7 +569,6 @@ void RC_RUN(void *argument){
   flag = osThreadFlagsWait(FLAG_FINALIZA , osFlagsWaitAny, 10U);
   if(flag == FLAG_FINALIZA){
     //HAL_SPI_MspDeInit(&hspi3);
-
     //break;
   }
 	osDelay(500);
@@ -598,11 +597,11 @@ void nfc_sim(void* argument){
   
   for(i=0; i<=3; i++){
     flag[1] =osThreadFlagsSet(tid_Thread_NFC, FLAG_PIEZA_LEIDA);
-    printf("Read finished: [%d]\n", flag[1]);
+    // printf("Read finished: [%d]\n", flag[1]);
     osDelay(5000);
   }
   flag[0]=osThreadFlagsSet(tid_Thread_NFC, FLAG_FINALIZA);
-  printf("End reading: [%d]\n", flag[0]);
+  // printf("End reading: [%d]\n", flag[0]);
   osThreadYield(); 
 }
 */

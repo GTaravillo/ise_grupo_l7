@@ -8,9 +8,7 @@
 #include <time.h>
 /* Interfaces */
 #include "../config/Paths.h"
-#include PATH_LED
 #include PATH_IRQ
-#include PATH_LCD
 
 /* Public */
 osThreadId_t     e_rtcThreadId;
@@ -52,8 +50,6 @@ static  bool  HasRTCLostPower(void);
 
 static  void  UpdateTime(void);
 static  void  UpdateDate(void);
-static  void  PrintTimeLCD(void);
-static  void  PrintDateLCD(void);
 
 static  void  GetAlarmTime(int *hours, int *min, int *sec, int secToAdd);
 static  bool  RequestSntpTime(const char* serverIp);
@@ -75,9 +71,9 @@ void RTC_Initialize(void)
 
   if ((e_rtcThreadId == NULL) /*|| (e_writeSemaphoreId == NULL)*/) 
   {
-    printf("[rtc::%s] ERROR! osThreadNew [%d]\n", __func__, 
-                                                       (e_rtcThreadId == NULL)/*, 
-                                                 (e_writeSemaphoreId == NULL)*/);
+    // printf("[rtc::%s] ERROR! osThreadNew [%d]\n", __func__, 
+    //                                                    (e_rtcThreadId == NULL)/*, 
+    //                                              (e_writeSemaphoreId == NULL)*/);
     
     Error_Handler();
   }
@@ -219,11 +215,11 @@ void SetTimerOnce(const int segundos)
   g_alarmConfig.AlarmMask          = RTC_ALARMMASK_DATEWEEKDAY;
   g_alarmConfig.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
 	
-  // s//printf((char *)timeBuffer, "%02d:%02d:%02d", alarmConfig.AlarmTime.Hours, 
-  //                                               alarmConfig.AlarmTime.Minutes, 
-  //                                               alarmConfig.AlarmTime.Seconds);
+//  sprintf((char *)timeBuffer, "%02d:%02d:%02d", alarmConfig.AlarmTime.Hours, 
+//                                                alarmConfig.AlarmTime.Minutes, 
+//                                                alarmConfig.AlarmTime.Seconds);
 
-  // //printf("[rtc::%s] Alarm [%c] set to [%s]\n", __func__, (alarmConfig.Alarm == RTC_ALARM_A) ? 'A' : 'B', timeBuffer);
+  // printf("[rtc::%s] Alarm [%c] set to [%s]\n", __func__, (alarmConfig.Alarm == RTC_ALARM_A) ? 'A' : 'B', timeBuffer);
   
 	//printf("[%02X:%02X:%02X]\n", g_alarmConfig.AlarmTime.Hours, g_alarmConfig.AlarmTime.Minutes, g_alarmConfig.AlarmTime.Seconds);
 
@@ -297,14 +293,6 @@ static void RTC_Config(void)
     
     Error_Handler();
   }
-
-  /* Turn LED1 on */
-  ledMessage_t ledMsg = {
-    .mode        = LED_ON,
-    .ledsOn.leds = LD1
-  };
-
-  osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
 }
 
 static void WakeUpConfig(void)
@@ -353,7 +341,6 @@ static void UpdateTime(void)
   g_timeConfig.Seconds = rtcTime.Seconds;
 
   sprintf((char *)g_time, "%02d:%02d:%02d", g_timeConfig.Hours, g_timeConfig.Minutes, g_timeConfig.Seconds);
-  //printf("[rtc::%s] Time for LCD set to [%s]\n", __func__, g_time);
   
 }
 
@@ -367,34 +354,6 @@ static void UpdateDate(void)
 	g_dateConfig.Year   = rtcDate.Year;
 	
   sprintf((char *)g_date, "%02d/%02d/%4d", g_dateConfig.Date, g_dateConfig.Month, (2000 + g_dateConfig.Year));
-}
-
-static void PrintTimeLCD(void)
-{
-	osStatus_t osStatus;
-	lcdMessage_t lcdMsg;
-	printableMsg_t printMsg;
-	
-  lcdMsg.mode        = PRINT_NORMAL;
-	printMsg.printLine = PRINT_LINE_1;
-	strcpy(printMsg.msg, g_time);
-  lcdMsg.printMsg = printMsg;
-	
-	osStatus = osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 2, 0);
-}
-
-static void PrintDateLCD(void)
-{
-	osStatus_t osStatus;
-	lcdMessage_t lcdMsg;
-	printableMsg_t printMsg;
-	
-  lcdMsg.mode        = PRINT_NORMAL;
-	printMsg.printLine = PRINT_LINE_2;
-	strcpy(printMsg.msg, g_date);
-  lcdMsg.printMsg = printMsg;
-	
-	osStatus = osMessageQueuePut(e_lcdInputMessageId, &lcdMsg, 2, 0);
 }
 
 const char* GetRtcTime()
@@ -481,11 +440,6 @@ void SntpCB(uint32_t seconds, uint32_t fractionSeconds)
 	SetRtcTime(hour, min, sec, FORMATO_24H);
 	
 	g_waitForSntp = false;
-	
-//	ledMessage_t ledMsg = 
-//	{
-//    .ledSequence = { LD1 |  }
-//	};
 }
 
 static void EventCB(ERtcPrivateFlag event)
@@ -501,20 +455,12 @@ static void EventCB(ERtcPrivateFlag event)
     osThreadFlagsClear(WAKE_UP_1s);
     UpdateTime();
     UpdateDate();
-    //PrintTimeLCD();
-    //PrintDateLCD();
   }
 
   if (alarmAEv)
   {
     osThreadFlagsClear(WAKE_UP_ALARM_A);
-    ledMessage_t ledMsg = 
-    {
-      .mode            = LED_TOGGLE,
-      .ledsToggle.leds = LD2
-    };
     
-    osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
     RemoveTimer(RTC_ALARM_A);
     SetTimerOnce(10);
   }
@@ -532,24 +478,12 @@ static void CheckFlags(void)
   /* Check if the Power On Reset flag is set */
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST) != RESET)
 	{
-		/* Turn on LED2: Power on reset occurred */
-		ledMessage_t ledMsg = {
-    .mode        = LED_ON,
-    .ledsOn.leds = LD2
-	  };
-	
-    osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
+
 	}
 	/* Check if Pin Reset flag is set */
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) != RESET)
 	{
-		/* Turn on LED1: External reset occurred */
-		ledMessage_t ledMsg = {
-    .mode        = LED_ON,
-    .ledsOn.leds = LD1
-	  };
-	
-    osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
+
 	}
 	/* Clear source Reset Flag */
 	__HAL_RCC_CLEAR_RESET_FLAGS();
@@ -579,13 +513,6 @@ void HAL_RTC_AlarmBEventCallback(RTC_HandleTypeDef *hrtc)
 {  
   __HAL_RTC_ALARM_CLEAR_FLAG(&g_rtcHandle, RTC_FLAG_ALRBF);
   
-	ledMessage_t ledMsg = {
-    .mode        = LED_TOGGLE,
-    .ledsToggle.leds = LD2
-  };
-	
-  osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
-	
   osThreadFlagsSet (e_rtcThreadId, WAKE_UP_ALARM_B);
 }
 
@@ -606,13 +533,6 @@ static void InitUserButton(void)
 }
 
 static void Error_Handler(void) {
-  /* Turn LED3 on */
-  ledMessage_t ledMsg = {
-    .mode = LED_ON,
-    .ledsOn.leds = LD3
-  };
-
-  osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
   while (1)
   {
   }

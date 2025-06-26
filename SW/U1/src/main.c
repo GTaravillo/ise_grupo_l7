@@ -4,15 +4,12 @@
 #include <stdio.h>
 /* Interfaces */
 #include "config/Paths.h"
-#include PATH_LED
-#include PATH_LCD
 #include PATH_RTC
 #include PATH_SERVER
 #include PATH_LED_STRIP
 #include PATH_POSITION
 #include PATH_MEMORIA
 #include PATH_COM_PLACAS
-#include PATH_PRINCIPAL
 #include PATH_TEST_MEMORIA
 #include PATH_JUEGO
 #include PATH_BAJO_CONSUMO
@@ -117,16 +114,11 @@ int main(void)
 	RTC_Initialize();
   
 	juegoInitialize();
-	//osDelay(1000);
-	//juegoTbInitialize();
-	//LED_Initialize();
-	//LCD_Initialize();
 	MemoriaInitialize();
   LedStripManagerInitialize();
 	PositionManagerInitialize();
 	ComunicacionPlacasInitialize();
 	BajoConsumoInitialize();
-  //PrincipalInitialize();
   
   // Tests
   //TestMemoriaInitialize();
@@ -166,7 +158,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
+    // printf("[main::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -174,7 +166,7 @@ static void SystemClock_Config(void)
 	if(HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
+    // printf("[main::%s] HAL_PWREx_EnableOverDrive ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -189,7 +181,7 @@ static void SystemClock_Config(void)
   if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     /* Initialization Error */
-    printf("[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
+    // printf("[main::%s] HAL_RCC_ClockConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -209,12 +201,6 @@ static void SystemClock_Config(void)
   */
 static void Error_Handler(void)
 {
-  ledMessage_t ledMsg = {
-		.mode = LED_ON,
-		.ledsOn.leds = LD3
-	};
-	
-  osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
   while(1)
   {
   }

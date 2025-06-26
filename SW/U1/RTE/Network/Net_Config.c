@@ -137,38 +137,38 @@ void net_sys_error (NET_ERROR error) {
 
   switch (error) {
     case NET_ERROR_MEM_ALLOC:
-			printf("[Net_Config::%s] ERROR! Out of memory\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Out of memory\n", __func__);
       /* Out of memory */
       break;
 
     case NET_ERROR_MEM_FREE:
-			printf("[Net_Config::%s] ERROR! Trying to release non existing memory block\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Trying to release non existing memory block\n", __func__);
       /* Trying to release non existing memory block */
       break;
 
     case NET_ERROR_MEM_CORRUPT:
-			printf("[Net_Config::%s] ERROR! Memory Link pointer corrupted\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Memory Link pointer corrupted\n", __func__);
       /* Memory Link pointer corrupted */
       /* More data written than the size of allocated memory block */
       break;
 
     case NET_ERROR_CONFIG:
-			printf("[Net_Config::%s] ERROR! Network configuration error detected\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Network configuration error detected\n", __func__);
       /* Network configuration error detected */
       break;
 
     case NET_ERROR_UDP_ALLOC:
-			printf("[Net_Config::%s] ERROR! Out of UDP Sockets\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Out of UDP Sockets\n", __func__);
       /* Out of UDP Sockets */
       break;
 
     case NET_ERROR_TCP_ALLOC:
-			printf("[Net_Config::%s] ERROR! Out of TCP Sockets\n", __func__);
+			// printf("[Net_Config::%s] ERROR! Out of TCP Sockets\n", __func__);
       /* Out of TCP Sockets */
       break;
 
     case NET_ERROR_TCP_STATE:
-			printf("[Net_Config::%s] ERROR! TCP State machine in undefined state\n", __func__);
+			// printf("[Net_Config::%s] ERROR! TCP State machine in undefined state\n", __func__);
       /* TCP State machine in undefined state */
       break;
   }

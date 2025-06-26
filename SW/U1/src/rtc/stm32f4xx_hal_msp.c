@@ -50,7 +50,6 @@
 #include <stdio.h>
 /* interfaces */
 #include "../config/Paths.h"
-#include PATH_LED
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
@@ -107,7 +106,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
   RCC_OscInitStruct.LSEState       = RCC_LSE_ON;
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   { 
-    printf("[msp::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
+    // printf("[msp::%s] HAL_RCC_OscConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -116,7 +115,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
   PeriphClkInitStruct.RTCClockSelection    = RCC_RTCCLKSOURCE_LSE;
   if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
-    printf("[msp::%s] HAL_RCCEx_PeriphCLKConfig ERROR!\n", __func__);
+    // printf("[msp::%s] HAL_RCCEx_PeriphCLKConfig ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -145,13 +144,6 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef *hrtc)
 }
 
 static void Error_Handler(void) {
-  /* Turn LED3 on */
-	ledMessage_t ledMsg = {
-		.mode        = LED_ON,
-		.ledsOn.leds = LD3
-	};
-	
-  osStatus_t osStatus = osMessageQueuePut(e_ledInputMessageId, &ledMsg, 1, 0);
   while (1)
   {
   }

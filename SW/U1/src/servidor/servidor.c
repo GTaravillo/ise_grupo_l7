@@ -1,4 +1,4 @@
-#include "server.h"
+#include "servidor.h"
 /* ARM */
 #include "stm32f4xx_hal.h"
 #include "rl_net.h"
@@ -124,7 +124,7 @@ void Server_Initialize(void)
 
   if ((e_serverThreadId == NULL) /*|| (e_serverInputMessageId == NULL) || (e_serverOutputMessageId == NULL)*/) 
   {
-    printf("[server::%s] osThreadNew ERROR!\n", __func__);
+    // printf("[server::%s] osThreadNew ERROR!\n", __func__);
     
     Error_Handler();
   }
@@ -154,47 +154,47 @@ static void Run(void *argument)
   switch (netInitialize())
   {
     case netOK:
-      printf("[servidor::Run] netInitialize: Operation succeeded\n");
+      // printf("[servidor::Run] netInitialize: Operation succeeded\n");
     break;
 
     case netBusy:
-      printf("[servidor::Run] netInitialize: Process is busy\n");
+      // printf("[servidor::Run] netInitialize: Process is busy\n");
     break;
 
     case netError:
-      printf("[servidor::Run] netInitialize: Unspecified error\n");
+      // printf("[servidor::Run] netInitialize: Unspecified error\n");
     break;
 
     case netInvalidParameter:
-      printf("[servidor::Run] netInitialize: Invalid parameter specified\n");
+      // printf("[servidor::Run] netInitialize: Invalid parameter specified\n");
     break;
 
     case netWrongState:
-      printf("[servidor::Run] netInitialize: Wrong state error\n");
+      // printf("[servidor::Run] netInitialize: Wrong state error\n");
     break;
 
     case netDriverError:
-      printf("[servidor::Run] netInitialize: Driver error\n");
+      // printf("[servidor::Run] netInitialize: Driver error\n");
     break;
 
     case netServerError:
-      printf("[servidor::Run] netInitialize: Server error\n");
+      // printf("[servidor::Run] netInitialize: Server error\n");
     break;
 
     case netAuthenticationFailed:
-      printf("[servidor::Run] netInitialize: User authentication failed\n");
+      // printf("[servidor::Run] netInitialize: User authentication failed\n");
     break;
 
     case netDnsResolverError:
-      printf("[servidor::Run] netInitialize: DNS host resolver failed\n");
+      // printf("[servidor::Run] netInitialize: DNS host resolver failed\n");
     break;
 
     case netFileError:
-      printf("[servidor::Run] netInitialize: File not found or file r/w error\n");
+      // printf("[servidor::Run] netInitialize: File not found or file r/w error\n");
     break;
 
     case netTimeout:
-      printf("[servidor::Run] netInitialize: Operation timeout\n");
+      // printf("[servidor::Run] netInitialize: Operation timeout\n");
     break;
 
     default:
@@ -203,11 +203,11 @@ static void Run(void *argument)
 
   while (!netHTTPs_Running())
   {
-    printf("[servidor::Run] HTTP server aun no esta corriendo\n");
+    // printf("[servidor::Run] HTTP server aun no esta corriendo\n");
     osDelay(100);
   }
 
-  printf("[servidor::Run] HTTP server inicializado correctamente\n");
+  // printf("[servidor::Run] HTTP server inicializado correctamente\n");
   
   // Espera a que la memoria este inicializada y coge datos
   osThreadFlagsWait(FLAG_INIT_COMPLETE, osFlagsWaitAll | osFlagsNoClear , osWaitForever);
@@ -218,7 +218,7 @@ static void Run(void *argument)
 void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
   char var[40];
 
-  printf("[CGI] Received POST data: %s\n", data);
+  // printf("[CGI] Received POST data: %s\n", data);
   btnIniciarPulsado   = 0;
   btnPausarPulsado    = 0;
   btnSuspenderPulsado = 0;
@@ -317,13 +317,13 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
 
   } while (data);
 
-  printf("[servidor::%s] Recibido:\n", __func__);
-  printf("[servidor::%s] player1Name: %s\n", __func__, nombreBlancas);
-  printf("[servidor::%s] player2Name: %s\n", __func__, nombreNegras);
-  printf("[servidor::%s] Minutos blancas: %d\n", __func__, minutosBlancas);
-	printf("[servidor::%s] Minutos negras: %d\n", __func__, minutosNegras);
-  printf("[servidor::%s] Estado botones: INICIAR[%d] PAUSAR[%d] SUSPENDER[%d] RENDIRSE[%d] REANUDAR[%d]\n", 
-         __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado, btnReanudarPulsado);
+  // printf("[servidor::%s] Recibido:\n", __func__);
+  // printf("[servidor::%s] player1Name: %s\n", __func__, nombreBlancas);
+  // printf("[servidor::%s] player2Name: %s\n", __func__, nombreNegras);
+  // printf("[servidor::%s] Minutos blancas: %d\n", __func__, minutosBlancas);
+	// printf("[servidor::%s] Minutos negras: %d\n", __func__, minutosNegras);
+  // printf("[servidor::%s] Estado botones: INICIAR[%d] PAUSAR[%d] SUSPENDER[%d] RENDIRSE[%d] REANUDAR[%d]\n", 
+  //        __func__, btnIniciarPulsado, btnPausarPulsado, btnSuspenderPulsado, btnRendirsePulsado, btnReanudarPulsado);
   if (btnIniciarPulsado)
   {
     ProcesarIniciarPartida();
@@ -348,7 +348,7 @@ void netCGI_ProcessData(uint8_t code, const char *data, uint32_t len) {
 
 uint32_t netCGI_Script(const char *env, char *buf, uint32_t buflen, uint32_t *pcgi) {
   uint32_t len = 0U;
-  printf("[CGI] netCGI_Script called with env: %s\n", env);
+  // printf("[CGI] netCGI_Script called with env: %s\n", env);
 
   // const char* fmt = &env[1];
 
@@ -395,12 +395,12 @@ uint32_t netCGI_Script(const char *env, char *buf, uint32_t buflen, uint32_t *pc
     // break; }
 
     default:
-      printf("[CGI] Unknown script code: %c\n", env[0]);
+      // printf("[CGI] Unknown script code: %c\n", env[0]);
       buf[0] = '\0';
     break; 
   }
 
-  printf("[CGI] Response buffer: %s\n", buf);
+  // printf("[CGI] Response buffer: %s\n", buf);
   return len;
 }
 
@@ -463,7 +463,7 @@ static uint32_t RellenarVariablesRetomarPartida(const char *env, char *buf, uint
 
   if (msgRx.tipoPeticion == ERROR_SIN_DATOS)
   {
-    printf("[servidor::%s] ERROR!\n", __func__);
+    // printf("[servidor::%s] ERROR!\n", __func__);
     return len;
   }
 
@@ -679,7 +679,7 @@ static void ProcesarRetomarPartida(void)
 
   if (msgRx.tipoPeticion == ERROR_SIN_DATOS)
   {
-    printf("[servidor::%s] ERROR!\n", __func__);
+    // printf("[servidor::%s] ERROR!\n", __func__);
     return;
   }
 

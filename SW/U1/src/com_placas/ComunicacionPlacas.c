@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../Config/Paths.h"
+#include "../config/Paths.h"
 #include PATH_JUEGO
 #include PATH_SERVER
 
@@ -25,7 +25,6 @@ static void RunTx(void *argument);
 
 static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx);
 
-static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx);
 static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx);
 static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx);
 static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx);
@@ -50,14 +49,14 @@ void ComunicacionPlacasInitialize(void)	{
   if ((e_comPlacasRxThreadId == NULL)  || (e_comPlacasTxThreadId == NULL) || 
       (e_comPlacasTxMessageId == NULL) || (e_comPlacasRxMessageId == NULL)) 
   {
-    printf("[com::%s] ERROR!\n", __func__);
+    // printf("[com::%s] ERROR!\n", __func__);
   }
 
 }
 
 static void InitUart(void)	
 {
-  printf("[com::%s]\n", __func__);
+  // printf("[com::%s]\n", __func__);
   ARM_USART_CAPABILITIES drv_capabilities;
 	
   /*Initialize the USART driver*/
@@ -81,7 +80,7 @@ static void RunTx(void *argument)
   ComPlacasMsg_t mensajeTx;
   uint32_t flag;
   int bytesMensaje = sizeof(mensajeTx);
-  printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
+  // printf("[com::%s] Bytes mensaje [%d]\n", __func__, bytesMensaje);
   
   while(1) 
   {
@@ -94,10 +93,10 @@ static void RunTx(void *argument)
       continue;
     }
 
-    printf("[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
+    // printf("[com::%s] Mensaje a enviar: remitente[%d] destinatario[%d]\n", __func__, mensajeTx.remitente, mensajeTx.destinatario);
 	  for (int i = 0; i < TAM_MENSAJE_MAX; i++)
 	  {
-	    printf("[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
+	    // printf("[com::%s] Mensaje a enviar: mensaje[%d] = [0x%02X]\n", __func__, i, mensajeTx.mensaje[i]);
 	  }
     USARTdrv->Send(&mensajeTx, sizeof(ComPlacasMsg_t));
 	  flag = osThreadFlagsWait(ERROR_FRAMING | SEND_COMPLETE, osFlagsWaitAll, 1000);
@@ -157,10 +156,6 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.remitente);
   switch (mensajeRx.remitente)
   {
-    case MENSAJE_LCD:
-      ProcesarMensajeLcd(mensajeRx);
-    break;
-
     case MENSAJE_LED_STRIP:
       ProcesarMensajeLedStrip(mensajeRx);
     break;
@@ -203,67 +198,11 @@ static void ProcesarMensajeRecibido(ComPlacasMsg_t mensajeRx)
   }
 }
 
-static void ProcesarMensajeLcd(ComPlacasMsg_t mensajeRx)
-{
-  //printf("[com::%s] Destinatario [%d]\n", __func__, mensajeRx.destinatario);
-  switch (mensajeRx.destinatario)
-  {
-    case MENSAJE_LCD:
-      
-    break;
-
-    case MENSAJE_LED_STRIP:
-      
-    break;
-
-    case MENSAJE_SERVIDOR:
-      
-    break;
-
-    case MENSAJE_RTC:
-      
-    break;
-
-    case MENSAJE_POSICION:
-      
-    break;
-
-    case MENSAJE_MEMORIA:
-      
-    break;
-
-    case MENSAJE_JUEGO:
-      
-    break;
-
-    case MENSAJE_DISTANCIA:
-      
-    break;
-
-    case MENSAJE_NFC:
-      
-    break;
-
-    case MENSAJE_ADC:
-      
-    break;
-
-
-    default:
-      //printf("[com::%s] Destinatario desconocido [%d]\n", __func__, mensajeRx.destinatario);
-    break;
-  }
-}
-
 static void ProcesarMensajeLedStrip(ComPlacasMsg_t mensajeRx)
 {
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -313,10 +252,6 @@ static void ProcesarMensajeServidor(ComPlacasMsg_t mensajeRx)
 	
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -365,10 +300,6 @@ static void ProcesarMensajeRtc(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -416,10 +347,6 @@ static void ProcesarMensajePosicion(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -467,10 +394,6 @@ static void ProcesarMensajeMemoria(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -519,10 +442,6 @@ static void ProcesarMensajeJuego(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -571,10 +490,6 @@ static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -596,6 +511,7 @@ static void ProcesarMensajeDistancia(ComPlacasMsg_t mensajeRx)
     break;
 
     case MENSAJE_JUEGO:
+    if ((2 < mensajeRx.mensaje[0]) && (mensajeRx.mensaje[0] < 15))
       osThreadFlagsSet(e_juegoThreadId, FLAG_SENSOR_DISTANCIA);
     break;
 
@@ -622,10 +538,6 @@ static void ProcesarMensajeNfc(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
@@ -682,10 +594,6 @@ static void ProcesarMensajeAdc(ComPlacasMsg_t mensajeRx)
   //printf("[com::%s] Remitente [%d]\n", __func__, mensajeRx.destinatario);
   switch (mensajeRx.destinatario)
   {
-    case MENSAJE_LCD:
-      
-    break;
-
     case MENSAJE_LED_STRIP:
       
     break;
