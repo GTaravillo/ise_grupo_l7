@@ -113,7 +113,7 @@ int main(void)
   ThDistancia();
   //ThSimNfc();
   Init_ADC();
-	//BajoConsumoInitialize();
+	BajoConsumoInitialize();
   
   /* Start thread execution */
   osKernelStart();

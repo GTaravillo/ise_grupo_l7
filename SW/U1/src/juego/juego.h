@@ -106,4 +106,3 @@ const char* GetConsumoActual(void);
 
 
 #endif // JUEGO_H
-

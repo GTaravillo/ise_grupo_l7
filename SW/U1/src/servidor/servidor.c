@@ -415,8 +415,9 @@ static uint32_t RellenarVariablesTopBar(const char *env, char *buf, uint32_t buf
     case TOPBAR_CONSUMO: {
       char valorConsumo[6];
       sprintf(valorConsumo, "%d", atoi(GetConsumoActual()));
-      const char* consumo = strcat(valorConsumo, "mA");
-      len = snprintf(buf, buflen, xml, consumo); }
+      // const char* consumo = strcat(valorConsumo, "mA");
+      // len = snprintf(buf, buflen, xml, consumo); 
+      }
     break;
     
     case TOPBAR_FECHA:
