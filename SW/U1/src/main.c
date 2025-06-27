@@ -123,13 +123,13 @@ int main(void)
 	//LCD_Initialize();
 	MemoriaInitialize();
   LedStripManagerInitialize();
-	//PositionManagerInitialize();
-	//ComunicacionPlacasInitialize();
+	PositionManagerInitialize();
+	ComunicacionPlacasInitialize();
 	BajoConsumoInitialize();
   //PrincipalInitialize();
   
   // Tests
-  TestMemoriaInitialize();
+  //TestMemoriaInitialize();
 
   /* Start thread execution */
   osKernelStart();
