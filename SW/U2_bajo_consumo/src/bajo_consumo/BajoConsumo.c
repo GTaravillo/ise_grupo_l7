@@ -34,7 +34,7 @@ void BajoConsumoInitialize(void)
 static void Run(void *argument)
 {
     HAL_Init();
-    SystemClock_Config();
+    //SystemClock_Config();
     GpioInitialize();
 
     while (1)
